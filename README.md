@@ -1,36 +1,80 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# HypeTest
 
-## Getting Started
+AI-powered consumer research in minutes, not months. Simulate a panel of 50 diverse consumer personas to get purchase intent, willingness-to-pay estimates, feature priorities, and consumer concerns for any product or idea.
 
-First, run the development server:
+Built on methodology from Brand, Israeli & Ngwe (2025), Harvard Business School — demonstrating that LLM-simulated consumer panels produce WTP estimates comparable to real human panels.
+
+## How it works
+
+1. **Describe your product** — name and free-text description
+2. **Panel simulation** — 50 consumer personas (varied age, income, gender, location, lifestyle) each answer a structured survey with purchase intent, conjoint-style price sensitivity, feature ranking, concerns, and positives
+3. **Results report** — aggregated purchase intent score, WTP range, feature importance, top concerns/positives, and consumer verbatims
+
+## Tech stack
+
+- **Framework:** Next.js 16 (App Router, React 19)
+- **AI:** Anthropic Claude API (Haiku 4.5 for persona queries)
+- **UI:** Tailwind CSS 4, shadcn/ui, Recharts
+- **Auth/DB:** Supabase (SSR) — wired up but not yet fully integrated
+- **Language:** TypeScript
+
+## Getting started
 
 ```bash
+# Install dependencies
+npm install
+
+# Set up environment variables
+cp .env.example .env.local
+# Edit .env.local and add your Anthropic API key
+
+# Run dev server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+You'll need an [Anthropic API key](https://console.anthropic.com/) with access to `claude-haiku-4-5-20251001`.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Project structure
 
-## Learn More
+```
+src/
+├── app/
+│   ├── page.tsx                    # Landing page
+│   ├── (marketing)/
+│   │   ├── methodology/page.tsx    # How it works page
+│   │   └── pricing/page.tsx        # Pricing page
+│   ├── research/
+│   │   ├── new/page.tsx            # New research form + progress UI
+│   │   └── [id]/page.tsx           # Results report page
+│   └── api/
+│       └── research/route.ts       # POST endpoint — runs the research engine
+├── lib/
+│   ├── research-engine.ts          # Core engine: persona querying, aggregation, verbatims
+│   ├── personas.ts                 # Panel generation (demographics, lifestyles)
+│   └── utils.ts                    # Tailwind merge utility
+├── types/
+│   └── research.ts                 # TypeScript interfaces for all research data
+└── components/
+    ├── nav.tsx                     # Site navigation
+    ├── footer.tsx                  # Site footer
+    ├── results-charts.tsx          # Recharts visualizations for results
+    └── ui/                         # shadcn/ui primitives
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Key areas for contribution
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Supabase integration** — auth and persisting research results (Supabase deps are installed but not wired into the research flow yet)
+- **Streaming results** — the API currently returns all results at once; could use SSE for real-time progress
+- **Panel customization** — let users configure panel size, demographics, or target market segments
+- **Result sharing** — shareable links for research reports (requires persistence)
+- **Improved WTP methodology** — the conjoint-style elicitation could be expanded with more price points and attribute trade-offs
+- **Testing** — no tests yet
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Notes
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Results are stored in `sessionStorage` — refreshing the results page loses them (persistence via Supabase is the fix)
+- The research engine batches persona queries (10 at a time) to avoid rate limits
+- Each research run makes ~55 API calls to Claude Haiku (50 persona queries + feature extraction + price inference + verbatims)
+- The `AGENTS.md` and `CLAUDE.md` files are for AI coding assistants (Claude Code) — they contain instructions for working with this codebase
