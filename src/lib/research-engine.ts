@@ -5,7 +5,7 @@ import type {
   ResearchInput,
   ResearchResult,
 } from "@/types/research";
-import { generatePanel } from "./personas";
+import { generatePanel, generateTargetedPanel } from "./personas";
 
 const anthropic = new Anthropic();
 
@@ -17,7 +17,9 @@ export async function runResearch(
   onProgress?: (stage: string, progress: number) => void
 ): Promise<ResearchResult> {
   const category = input.category || inferCategory(input.productDescription);
-  const panel = generatePanel(PANEL_SIZE, category);
+  const panel = input.targetMarket
+    ? await generateTargetedPanel(PANEL_SIZE, category, input.targetMarket)
+    : generatePanel(PANEL_SIZE, category);
   const features = input.keyFeatures?.length
     ? input.keyFeatures
     : await extractFeatures(input);
@@ -279,8 +281,9 @@ function aggregateResults(
     topPositives: positives,
     methodology: {
       panelSize: n,
-      demographicMix:
-        "US general population (varied age, income, gender, location)",
+      demographicMix: input.targetMarket
+        ? `Targeted panel: ${input.targetMarket} (80%) + general population (20%)`
+        : "US general population (varied age, income, gender, location)",
       questionsAsked: n * 5,
       confidenceNote:
         "Results based on LLM-simulated consumer panel. Best used for directional insights and hypothesis generation. See our methodology page for academic references and limitations.",
