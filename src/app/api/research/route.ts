@@ -78,6 +78,10 @@ export async function POST(request: Request) {
       ...(body.priceUnit && {
         priceUnit: body.priceUnit.trim().slice(0, 100),
       }),
+      ...(typeof body.unitsPerPack === "number" &&
+        body.unitsPerPack > 0 && {
+          unitsPerPack: Math.min(Math.round(body.unitsPerPack), 10000),
+        }),
       ...(body.targetMarket && {
         targetMarket: body.targetMarket.trim().slice(0, 500),
       }),

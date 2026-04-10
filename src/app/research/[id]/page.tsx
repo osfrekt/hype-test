@@ -157,7 +157,7 @@ function ResearchResultContent({
   const result = state.result;
   const runAgainParams = new URLSearchParams({
     name: result.input.productName,
-    desc: result.input.productDescription,
+    desc: result.input.productDescription.slice(0, 500),
     ...(result.input.category && { cat: result.input.category }),
   });
 
@@ -170,10 +170,14 @@ function ResearchResultContent({
             <Button
               variant="outline"
               size="sm"
-              onClick={() => {
-                navigator.clipboard.writeText(window.location.href);
-                setCopied(true);
-                setTimeout(() => setCopied(false), 2000);
+              onClick={async () => {
+                try {
+                  await navigator.clipboard.writeText(window.location.href);
+                  setCopied(true);
+                  setTimeout(() => setCopied(false), 2000);
+                } catch {
+                  // Clipboard API not available (HTTP or permissions)
+                }
               }}
             >
               <Link2 className="w-4 h-4 mr-1.5" />

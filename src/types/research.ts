@@ -51,6 +51,7 @@ export interface ResearchInput {
   keyFeatures?: string[];
   priceRange?: { min: number; max: number };
   priceUnit?: string;
+  unitsPerPack?: number;
   targetMarket?: string;
   competitors?: string;
 }

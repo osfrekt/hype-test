@@ -56,25 +56,7 @@ export function ReportView({
             </p>
           </CardContent>
         </Card>
-        <Card>
-          <CardContent className="pt-6">
-            <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-1">
-              Estimated WTP
-            </p>
-            <p className="text-3xl font-bold text-navy">
-              ${result.wtpRange.mid}
-              {result.input.priceUnit && (
-                <span className="text-base font-medium text-muted-foreground ml-1">
-                  {result.input.priceUnit}
-                </span>
-              )}
-            </p>
-            <p className="text-xs text-muted-foreground mt-1">
-              range: ${result.wtpRange.low} — ${result.wtpRange.high}
-              {result.input.priceUnit ? ` ${result.input.priceUnit}` : ""}
-            </p>
-          </CardContent>
-        </Card>
+        <WtpCard result={result} />
         <Card>
           <CardContent className="pt-6">
             <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-1">
@@ -236,5 +218,81 @@ export function ReportView({
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+function WtpCard({ result }: { result: ResearchResult }) {
+  const unit = result.input.priceUnit || "per unit";
+  const unitLabel = unit === "per unit" ? "" : `/${unit.replace("per ", "")}`;
+  const mid = result.wtpRange.mid;
+
+  // Determine user's actual price (midpoint of their price range)
+  const userPrice = result.input.priceRange
+    ? Math.round((result.input.priceRange.min + result.input.priceRange.max) / 2)
+    : null;
+
+  // Price comparison indicator
+  let priceIndicator: { color: string; icon: string; label: string } | null =
+    null;
+  if (userPrice !== null) {
+    const ratio = mid / userPrice;
+    if (ratio >= 1.1) {
+      priceIndicator = {
+        color: "text-emerald-600",
+        icon: "\u2713",
+        label: `your price: $${userPrice}`,
+      };
+    } else if (ratio >= 0.9) {
+      priceIndicator = {
+        color: "text-amber-600",
+        icon: "\u2248",
+        label: `your price: $${userPrice}`,
+      };
+    } else {
+      priceIndicator = {
+        color: "text-red-600",
+        icon: "\u2717",
+        label: `your price: $${userPrice}`,
+      };
+    }
+  }
+
+  // Per-serving calc
+  const unitsPerPack = result.input.unitsPerPack;
+  const perServing =
+    unitsPerPack && unitsPerPack > 1
+      ? (mid / unitsPerPack).toFixed(2)
+      : null;
+
+  return (
+    <Card>
+      <CardContent className="pt-6">
+        <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-1">
+          Estimated WTP
+        </p>
+        <p className="text-3xl font-bold text-navy">
+          ${mid}
+          {unitLabel && (
+            <span className="text-base font-medium text-muted-foreground">
+              {unitLabel}
+            </span>
+          )}
+        </p>
+        {priceIndicator && (
+          <p className={`text-xs font-medium mt-1 ${priceIndicator.color}`}>
+            {priceIndicator.icon} {priceIndicator.label}
+          </p>
+        )}
+        <p className="text-xs text-muted-foreground mt-1">
+          range: ${result.wtpRange.low} — ${result.wtpRange.high}
+          {unitLabel}
+        </p>
+        {perServing && (
+          <p className="text-xs text-muted-foreground mt-1">
+            ${perServing}/serving
+          </p>
+        )}
+      </CardContent>
+    </Card>
   );
 }

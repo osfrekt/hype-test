@@ -98,12 +98,15 @@ async function queryPersona(
   const lowPrice = priceRange.min;
   const highPrice = priceRange.max;
   const unit = input.priceUnit ? ` ${input.priceUnit}` : "";
+  const packContext = input.unitsPerPack && input.priceUnit
+    ? `\n\nPricing context: This product is priced ${input.priceUnit} and contains ${input.unitsPerPack} servings/units.`
+    : "";
 
   const prompt = `You are a ${persona.age}-year-old ${persona.gender} living in ${persona.location} with an annual household income of approximately $${persona.income.toLocaleString()}. ${persona.lifestyle} ${persona.categoryContext}
 
 You are participating in a consumer research study about a product called "${input.productName}".
 
-Product description: ${input.productDescription}
+Product description: ${input.productDescription}${packContext}
 
 Key features: ${features.join(", ")}
 

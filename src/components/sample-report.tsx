@@ -10,6 +10,7 @@ const SAMPLE_RESULT: ResearchResult = {
     productName: "FreshBrew Portable Cold Brew Maker",
     productDescription:
       "A portable cold brew coffee maker that brews in 5 minutes instead of 12-24 hours using pressure extraction. Fits in a backpack, dishwasher safe, made from BPA-free materials. Targeted at coffee enthusiasts who travel or commute. Priced at $45-65.",
+    priceRange: { min: 45, max: 65 },
   },
   panelSize: 50,
   purchaseIntent: {
