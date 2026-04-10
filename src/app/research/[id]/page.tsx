@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useEffect, useState } from "react";
+import { Suspense, use, useEffect, useState } from "react";
 import Link from "next/link";
 import { Nav } from "@/components/nav";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -15,6 +15,27 @@ type FetchState =
   | { status: "ok"; result: ResearchResult };
 
 export default function ResearchResultPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  return (
+    <Suspense
+      fallback={
+        <>
+          <Nav />
+          <main className="flex-1 flex items-center justify-center">
+            <p className="text-muted-foreground">Loading results...</p>
+          </main>
+        </>
+      }
+    >
+      <ResearchResultContent params={params} />
+    </Suspense>
+  );
+}
+
+function ResearchResultContent({
   params,
 }: {
   params: Promise<{ id: string }>;
