@@ -141,12 +141,9 @@ export default function Home() {
             {/* Brand logos / social proof */}
             <div className="text-center">
               <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-5">
-                The same research methodology trusted by leading brands
+                Built on methodology used by
               </p>
               <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-4 text-muted-foreground/40">
-                <span className="text-lg font-bold tracking-tight">Snooz</span>
-                <span className="text-lg font-bold tracking-tight">REKT</span>
-                <span className="text-lg font-bold tracking-tight">Uncaged</span>
                 <span className="text-lg font-bold tracking-tight">Nielsen</span>
                 <span className="text-lg font-bold tracking-tight">Ipsos</span>
                 <span className="text-lg font-bold tracking-tight">McKinsey</span>
