@@ -103,19 +103,21 @@ export function ReportView({
         <CardContent>
           <div className="space-y-3">
             {result.featureImportance.map((f, i) => (
-              <div key={i} className="flex items-center gap-4">
-                <span className="text-sm text-muted-foreground w-48 shrink-0 truncate">
+              <div key={i} className="flex flex-col md:flex-row md:items-center gap-1 md:gap-4">
+                <span className="text-sm text-muted-foreground md:w-56 md:shrink-0 line-clamp-2">
                   {f.feature}
                 </span>
-                <div className="flex-1 bg-muted rounded-full h-2.5">
-                  <div
-                    className="bg-teal h-2.5 rounded-full transition-all"
-                    style={{ width: `${f.score}%` }}
-                  />
+                <div className="flex items-center gap-3 flex-1">
+                  <div className="flex-1 bg-muted rounded-full h-2.5">
+                    <div
+                      className="bg-teal h-2.5 rounded-full transition-all"
+                      style={{ width: `${f.score}%` }}
+                    />
+                  </div>
+                  <span className="text-sm font-medium text-navy w-12 text-right">
+                    {f.score}%
+                  </span>
                 </div>
-                <span className="text-sm font-medium text-navy w-12 text-right">
-                  {f.score}%
-                </span>
               </div>
             ))}
           </div>
