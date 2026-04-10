@@ -38,11 +38,46 @@ export default function NewResearchPage() {
   const [priceMax, setPriceMax] = useState("");
   const [targetMarket, setTargetMarket] = useState("");
   const [competitors, setCompetitors] = useState("");
+  const [url, setUrl] = useState("");
+  const [isExtracting, setIsExtracting] = useState(false);
+  const [extractError, setExtractError] = useState("");
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
   const [progress, setProgress] = useState(0);
   const [stage, setStage] = useState("");
   const [error, setError] = useState("");
+
+  async function handleExtract() {
+    if (!url.trim()) return;
+    setIsExtracting(true);
+    setExtractError("");
+    try {
+      const res = await fetch("/api/extract-product", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: url.trim() }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setExtractError(data.error || "Failed to extract product info.");
+        return;
+      }
+      if (data.productName) setProductName(data.productName);
+      if (data.productDescription) setProductDescription(data.productDescription);
+      if (data.category) setCategory(data.category);
+      if (data.priceMin != null) setPriceMin(String(data.priceMin));
+      if (data.priceMax != null) setPriceMax(String(data.priceMax));
+      if (data.competitors) setCompetitors(data.competitors);
+      if (data.targetMarket) setTargetMarket(data.targetMarket);
+      if (data.competitors || data.targetMarket || data.priceMin != null) {
+        setShowAdvanced(true);
+      }
+    } catch {
+      setExtractError("Failed to extract product info. Check the URL and try again.");
+    } finally {
+      setIsExtracting(false);
+    }
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -179,6 +214,74 @@ export default function NewResearchPage() {
               <CardTitle className="text-base">Product Details</CardTitle>
             </CardHeader>
             <CardContent>
+              {/* URL auto-fill */}
+              <div className="mb-6 pb-6 border-b border-border/50">
+                <Label htmlFor="url" className="mb-2 block">
+                  Auto-fill from URL
+                </Label>
+                <div className="flex gap-2">
+                  <Input
+                    id="url"
+                    type="url"
+                    placeholder="https://example.com/product"
+                    value={url}
+                    onChange={(e) => setUrl(e.target.value)}
+                    className="flex-1"
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={handleExtract}
+                    disabled={isExtracting || !url.trim()}
+                    className="shrink-0"
+                  >
+                    {isExtracting ? (
+                      <>
+                        <svg
+                          className="animate-spin mr-2"
+                          width="14"
+                          height="14"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+                        </svg>
+                        Extracting...
+                      </>
+                    ) : (
+                      <>
+                        <svg
+                          className="mr-2"
+                          width="14"
+                          height="14"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                          <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                        </svg>
+                        Auto-fill
+                      </>
+                    )}
+                  </Button>
+                </div>
+                {extractError && (
+                  <p className="text-xs text-destructive mt-2">{extractError}</p>
+                )}
+                <p className="text-xs text-muted-foreground mt-2">
+                  Paste a product page URL and we&apos;ll extract the details
+                  automatically.
+                </p>
+              </div>
+
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="space-y-2">
                   <Label htmlFor="name">Product Name</Label>
