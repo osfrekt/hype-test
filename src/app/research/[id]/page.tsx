@@ -1,7 +1,10 @@
 "use client";
 
 import { use, useEffect, useState } from "react";
+import Link from "next/link";
 import { Nav } from "@/components/nav";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { Link2, RotateCcw } from "lucide-react";
 import type { ResearchResult } from "@/types/research";
 import { ReportView } from "@/components/report-view";
 import { createClient } from "@/lib/supabase/client";
@@ -18,6 +21,7 @@ export default function ResearchResultPage({
 }) {
   const { id } = use(params);
   const [state, setState] = useState<FetchState>({ status: "loading" });
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -129,12 +133,40 @@ export default function ResearchResultPage({
     );
   }
 
+  const result = state.result;
+  const runAgainParams = new URLSearchParams({
+    name: result.input.productName,
+    desc: result.input.productDescription,
+    ...(result.input.category && { cat: result.input.category }),
+  });
+
   return (
     <>
       <Nav />
       <main className="flex-1 py-8">
         <div className="max-w-5xl mx-auto px-6">
-          <ReportView result={state.result} />
+          <div className="flex justify-end gap-2 mb-6">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                navigator.clipboard.writeText(window.location.href);
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2000);
+              }}
+            >
+              <Link2 className="w-4 h-4 mr-1.5" />
+              {copied ? "Copied!" : "Copy share link"}
+            </Button>
+            <Link
+              href={`/research/new?${runAgainParams.toString()}`}
+              className={buttonVariants({ variant: "outline", size: "sm" })}
+            >
+              <RotateCcw className="w-4 h-4 mr-1.5" />
+              Run again
+            </Link>
+          </div>
+          <ReportView result={result} />
         </div>
       </main>
     </>

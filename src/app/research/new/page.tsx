@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Nav } from "@/components/nav";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -30,7 +30,16 @@ const CATEGORIES = [
 ];
 
 export default function NewResearchPage() {
+  return (
+    <Suspense>
+      <NewResearchForm />
+    </Suspense>
+  );
+}
+
+function NewResearchForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [productName, setProductName] = useState("");
   const [productDescription, setProductDescription] = useState("");
   const [category, setCategory] = useState("");
@@ -47,6 +56,16 @@ export default function NewResearchPage() {
   const [progress, setProgress] = useState(0);
   const [stage, setStage] = useState("");
   const [error, setError] = useState("");
+
+  // Pre-fill from search params (e.g. "Run again" from results page)
+  useEffect(() => {
+    const name = searchParams.get("name");
+    const desc = searchParams.get("desc");
+    const cat = searchParams.get("cat");
+    if (name) setProductName(name);
+    if (desc) setProductDescription(desc);
+    if (cat) setCategory(cat);
+  }, [searchParams]);
 
   async function handleExtract() {
     if (!url.trim()) return;
