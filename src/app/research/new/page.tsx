@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Nav } from "@/components/nav";
 import { Button } from "@/components/ui/button";
@@ -29,6 +29,61 @@ const CATEGORIES = [
   { value: "other", label: "Other" },
 ];
 
+const CATEGORY_DEFAULTS: Record<
+  string,
+  { target: string; competitors: string }
+> = {
+  "food & beverage": {
+    target: "Grocery shoppers 25-55, health-aware, urban/suburban",
+    competitors: "Kind, RXBar, Clif Bar",
+  },
+  "health & wellness": {
+    target: "Health-conscious adults 25-40, fitness enthusiasts",
+    competitors: "Celsius, Ghost, Athletic Greens",
+  },
+  technology: {
+    target: "Tech-savvy professionals 22-45, early adopters",
+    competitors: "Apple, Samsung, Google",
+  },
+  "fashion & apparel": {
+    target: "Style-conscious adults 18-35, urban, mid-to-high income",
+    competitors: "Nike, Zara, Everlane",
+  },
+  "home & garden": {
+    target: "Homeowners 28-55, suburban, mid-to-high income",
+    competitors: "IKEA, West Elm, Wayfair",
+  },
+  "beauty & personal care": {
+    target: "Women 18-40, beauty-aware, social media active",
+    competitors: "The Ordinary, CeraVe, Glossier",
+  },
+  education: {
+    target: "Students and professionals 18-40, career-focused",
+    competitors: "Coursera, Udemy, Skillshare",
+  },
+  finance: {
+    target: "Young professionals 22-40, income $50k+, digitally native",
+    competitors: "Robinhood, Wealthfront, SoFi",
+  },
+};
+
+const EXAMPLES: Record<string, string> = {
+  productName: "REKT Focus Energy Powder",
+  problem:
+    "People want clean energy for work and training without sugar crashes, jitters, or having to drink another can of something",
+  feature1: "200mg natural caffeine from green coffee bean",
+  feature2: "Cognizin citicoline for sustained mental focus",
+  feature3: "Zero sugar, 5 calories, mixes in water in seconds",
+  differentiator:
+    "Only energy powder combining clinical-dose nootropics with clean caffeine — positioned between energy drinks (unhealthy) and pre-workout (too intense)",
+  priceMin: "2",
+  priceMax: "3",
+  priceUnit: "per stick pack",
+  targetMarket:
+    "Health-conscious professionals and gym-goers 22-38, $60k+ income, who currently drink energy drinks but want something cleaner",
+  competitors: "Celsius, Ghost Energy, LMNT, Liquid IV Energy",
+};
+
 export default function NewResearchPage() {
   return (
     <Suspense>
@@ -41,7 +96,11 @@ function NewResearchForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [productName, setProductName] = useState("");
-  const [productDescription, setProductDescription] = useState("");
+  const [problem, setProblem] = useState("");
+  const [feature1, setFeature1] = useState("");
+  const [feature2, setFeature2] = useState("");
+  const [feature3, setFeature3] = useState("");
+  const [differentiator, setDifferentiator] = useState("");
   const [category, setCategory] = useState("");
   const [priceMin, setPriceMin] = useState("");
   const [priceMax, setPriceMax] = useState("");
@@ -51,11 +110,15 @@ function NewResearchForm() {
   const [url, setUrl] = useState("");
   const [isExtracting, setIsExtracting] = useState(false);
   const [extractError, setExtractError] = useState("");
-  const [showAdvanced, setShowAdvanced] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
   const [progress, setProgress] = useState(0);
   const [stage, setStage] = useState("");
   const [error, setError] = useState("");
+  const [showExamples, setShowExamples] = useState<Set<string>>(new Set());
+
+  // Track whether user has manually edited target/competitors
+  const [targetTouched, setTargetTouched] = useState(false);
+  const [competitorsTouched, setCompetitorsTouched] = useState(false);
 
   // Pre-fill from search params (e.g. "Run again" from results page)
   useEffect(() => {
@@ -63,9 +126,74 @@ function NewResearchForm() {
     const desc = searchParams.get("desc");
     const cat = searchParams.get("cat");
     if (name) setProductName(name);
-    if (desc) setProductDescription(desc);
+    if (desc) setProblem(desc); // best effort — put old description into problem field
     if (cat) setCategory(cat);
   }, [searchParams]);
+
+  // Smart defaults when category changes
+  useEffect(() => {
+    const defaults = CATEGORY_DEFAULTS[category];
+    if (!defaults) return;
+    if (!targetTouched && !targetMarket) setTargetMarket(defaults.target);
+    if (!competitorsTouched && !competitors) setCompetitors(defaults.competitors);
+  }, [category, targetTouched, competitorsTouched, targetMarket, competitors]);
+
+  // Assemble structured fields into a single description string
+  const assembledDescription = useMemo(() => {
+    const parts: string[] = [];
+    if (problem.trim()) parts.push(problem.trim());
+    const features = [feature1, feature2, feature3]
+      .map((f) => f.trim())
+      .filter(Boolean);
+    if (features.length) parts.push("Key features: " + features.join(". ") + ".");
+    if (differentiator.trim())
+      parts.push("Differentiator: " + differentiator.trim());
+    return parts.join(" ");
+  }, [problem, feature1, feature2, feature3, differentiator]);
+
+  const isFormValid = productName.trim() && assembledDescription.length > 20;
+
+  // Quality indicator
+  const quality = useMemo(() => {
+    let score = 0;
+    if (productName.trim()) score++;
+    if (problem.trim().length > 20) score++;
+    if ([feature1, feature2, feature3].filter((f) => f.trim()).length >= 2)
+      score++;
+    if (differentiator.trim().length > 10) score++;
+    if (category) score++;
+    if (priceMin && priceMax) score++;
+    if (targetMarket.trim()) score++;
+    if (competitors.trim()) score++;
+
+    if (score <= 3) return { level: "Fair", color: "text-amber-600", bg: "bg-amber-500" };
+    if (score <= 5) return { level: "Good", color: "text-teal", bg: "bg-teal" };
+    return { level: "Excellent", color: "text-emerald-600", bg: "bg-emerald-500" };
+  }, [
+    productName, problem, feature1, feature2, feature3,
+    differentiator, category, priceMin, priceMax, targetMarket, competitors,
+  ]);
+
+  const qualityNudge = useMemo(() => {
+    if (!competitors.trim())
+      return "Adding competitors enables head-to-head analysis";
+    if (!targetMarket.trim())
+      return "Specifying a target consumer skews the panel for more relevant results";
+    if (!priceMin || !priceMax)
+      return "Adding a price range improves willingness-to-pay accuracy";
+    if ([feature1, feature2, feature3].filter((f) => f.trim()).length < 2)
+      return "Adding more features gives consumers more to evaluate";
+    return null;
+  }, [competitors, targetMarket, priceMin, priceMax, feature1, feature2, feature3]);
+
+  function toggleExample(field: string) {
+    setShowExamples((prev) => {
+      const next = new Set(prev);
+      if (next.has(field)) next.delete(field);
+      else next.add(field);
+      return next;
+    });
+  }
 
   async function handleExtract() {
     if (!url.trim()) return;
@@ -83,18 +211,23 @@ function NewResearchForm() {
         return;
       }
       if (data.productName) setProductName(data.productName);
-      if (data.productDescription) setProductDescription(data.productDescription);
+      if (data.productDescription) setProblem(data.productDescription);
       if (data.category) setCategory(data.category);
       if (data.priceMin != null) setPriceMin(String(data.priceMin));
       if (data.priceMax != null) setPriceMax(String(data.priceMax));
       if (data.priceUnit) setPriceUnit(data.priceUnit);
-      if (data.competitors) setCompetitors(data.competitors);
-      if (data.targetMarket) setTargetMarket(data.targetMarket);
-      if (data.competitors || data.targetMarket || data.priceMin != null) {
-        setShowAdvanced(true);
+      if (data.competitors) {
+        setCompetitors(data.competitors);
+        setCompetitorsTouched(true);
+      }
+      if (data.targetMarket) {
+        setTargetMarket(data.targetMarket);
+        setTargetTouched(true);
       }
     } catch {
-      setExtractError("Failed to extract product info. Check the URL and try again.");
+      setExtractError(
+        "Failed to extract product info. Check the URL and try again."
+      );
     } finally {
       setIsExtracting(false);
     }
@@ -102,7 +235,7 @@ function NewResearchForm() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!productName.trim() || !productDescription.trim()) return;
+    if (!isFormValid) return;
 
     setIsRunning(true);
     setError("");
@@ -110,10 +243,7 @@ function NewResearchForm() {
     setStage("Preparing research panel...");
 
     const progressInterval = setInterval(() => {
-      setProgress((p) => {
-        if (p >= 90) return p;
-        return p + Math.random() * 8;
-      });
+      setProgress((p) => (p >= 90 ? p : p + Math.random() * 8));
       setStage((s) => {
         const stages = [
           "Generating consumer personas...",
@@ -132,18 +262,20 @@ function NewResearchForm() {
     try {
       const payload: Record<string, unknown> = {
         productName: productName.trim(),
-        productDescription: productDescription.trim(),
+        productDescription: assembledDescription,
       };
       if (category && category !== "other") payload.category = category;
       if (priceMin && priceMax) {
-        payload.priceRange = {
-          min: Number(priceMin),
-          max: Number(priceMax),
-        };
+        payload.priceRange = { min: Number(priceMin), max: Number(priceMax) };
       }
       if (priceUnit.trim()) payload.priceUnit = priceUnit.trim();
       if (targetMarket.trim()) payload.targetMarket = targetMarket.trim();
       if (competitors.trim()) payload.competitors = competitors.trim();
+
+      const features = [feature1, feature2, feature3]
+        .map((f) => f.trim())
+        .filter(Boolean);
+      if (features.length) payload.keyFeatures = features;
 
       const response = await fetch("/api/research", {
         method: "POST",
@@ -162,11 +294,12 @@ function NewResearchForm() {
       setProgress(100);
       setStage("Complete!");
 
-      sessionStorage.setItem(`research-${result.id}`, JSON.stringify(result));
+      sessionStorage.setItem(
+        `research-${result.id}`,
+        JSON.stringify(result)
+      );
 
-      setTimeout(() => {
-        router.push(`/research/${result.id}`);
-      }, 500);
+      setTimeout(() => router.push(`/research/${result.id}`), 500);
     } catch (err) {
       clearInterval(progressInterval);
       setIsRunning(false);
@@ -225,9 +358,8 @@ function NewResearchForm() {
               New Research Run
             </h1>
             <p className="text-muted-foreground">
-              Describe your product or idea. We&apos;ll simulate a panel of 50
-              consumers and run structured survey methodology to generate your
-              research report.
+              Tell us about your product. The more detail you give, the better
+              your research panel performs.
             </p>
           </div>
 
@@ -257,85 +389,41 @@ function NewResearchForm() {
                     disabled={isExtracting || !url.trim()}
                     className="shrink-0"
                   >
-                    {isExtracting ? (
-                      <>
-                        <svg
-                          className="animate-spin mr-2"
-                          width="14"
-                          height="14"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path d="M21 12a9 9 0 1 1-6.219-8.56" />
-                        </svg>
-                        Extracting...
-                      </>
-                    ) : (
-                      <>
-                        <svg
-                          className="mr-2"
-                          width="14"
-                          height="14"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
-                          <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
-                        </svg>
-                        Auto-fill
-                      </>
-                    )}
+                    {isExtracting ? "Extracting..." : "Auto-fill"}
                   </Button>
                 </div>
                 {extractError && (
-                  <p className="text-xs text-destructive mt-2">{extractError}</p>
+                  <p className="text-xs text-destructive mt-2">
+                    {extractError}
+                  </p>
                 )}
                 <p className="text-xs text-muted-foreground mt-2">
-                  Paste a product page URL and we&apos;ll extract the details
-                  automatically.
+                  Paste a product page URL and we&apos;ll extract the details.
                 </p>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="space-y-2">
-                  <Label htmlFor="name">Product Name</Label>
+              <form onSubmit={handleSubmit} className="space-y-5">
+                {/* Product Name */}
+                <FieldGroup
+                  label="Product Name"
+                  example={showExamples.has("name") ? EXAMPLES.productName : null}
+                  onToggleExample={() => toggleExample("name")}
+                >
                   <Input
-                    id="name"
-                    placeholder="e.g., FreshBrew Portable Cold Brew Maker"
+                    placeholder="e.g., REKT Focus Energy Powder"
                     value={productName}
                     onChange={(e) => setProductName(e.target.value)}
                     required
                   />
-                </div>
+                </FieldGroup>
 
-                <div className="space-y-2">
-                  <Label htmlFor="description">Product Description</Label>
-                  <Textarea
-                    id="description"
-                    placeholder="Describe your product, its key features, target audience, and price point."
-                    value={productDescription}
-                    onChange={(e) => setProductDescription(e.target.value)}
-                    required
-                    rows={5}
-                    className="resize-none"
-                  />
-                  <p className="text-xs text-muted-foreground">
-                    Include details about features, target audience, and price
-                    range for best results.
-                  </p>
-                </div>
-
-                <div className="space-y-2">
+                {/* Category */}
+                <div className="space-y-1.5">
                   <Label>Category</Label>
-                  <Select value={category} onValueChange={(v) => setCategory(v ?? "")}>
+                  <Select
+                    value={category}
+                    onValueChange={(v) => setCategory(v ?? "")}
+                  >
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select a category" />
                     </SelectTrigger>
@@ -347,116 +435,209 @@ function NewResearchForm() {
                       ))}
                     </SelectContent>
                   </Select>
+                </div>
+
+                {/* Problem */}
+                <FieldGroup
+                  label="What problem does this solve?"
+                  example={showExamples.has("problem") ? EXAMPLES.problem : null}
+                  onToggleExample={() => toggleExample("problem")}
+                >
+                  <Textarea
+                    placeholder="e.g. People want clean energy without sugar crashes or jitters"
+                    value={problem}
+                    onChange={(e) => setProblem(e.target.value)}
+                    rows={2}
+                    className="resize-none"
+                    required
+                  />
+                </FieldGroup>
+
+                {/* Top 3 Features */}
+                <FieldGroup
+                  label="Top 3 features"
+                  example={
+                    showExamples.has("features")
+                      ? `1. ${EXAMPLES.feature1}\n2. ${EXAMPLES.feature2}\n3. ${EXAMPLES.feature3}`
+                      : null
+                  }
+                  onToggleExample={() => toggleExample("features")}
+                >
+                  <div className="space-y-2">
+                    <Input
+                      placeholder="e.g. 200mg natural caffeine from green coffee bean"
+                      value={feature1}
+                      onChange={(e) => setFeature1(e.target.value)}
+                    />
+                    <Input
+                      placeholder="e.g. Zero sugar, 5 calories per serving"
+                      value={feature2}
+                      onChange={(e) => setFeature2(e.target.value)}
+                    />
+                    <Input
+                      placeholder="e.g. Mixes instantly in water, no blender needed"
+                      value={feature3}
+                      onChange={(e) => setFeature3(e.target.value)}
+                    />
+                  </div>
+                </FieldGroup>
+
+                {/* Differentiator */}
+                <FieldGroup
+                  label="What makes it different from competitors?"
+                  example={
+                    showExamples.has("diff") ? EXAMPLES.differentiator : null
+                  }
+                  onToggleExample={() => toggleExample("diff")}
+                >
+                  <Textarea
+                    placeholder="e.g. Only energy powder with Cognizin citicoline for focus"
+                    value={differentiator}
+                    onChange={(e) => setDifferentiator(e.target.value)}
+                    rows={2}
+                    className="resize-none"
+                  />
+                </FieldGroup>
+
+                {/* Separator */}
+                <div className="flex items-center gap-3 pt-2">
+                  <div className="flex-1 h-px bg-border" />
+                  <span className="text-xs text-muted-foreground font-medium uppercase tracking-wider">
+                    Research context
+                  </span>
+                  <div className="flex-1 h-px bg-border" />
+                </div>
+
+                {/* Target Consumer */}
+                <FieldGroup
+                  label="Target Consumer"
+                  example={
+                    showExamples.has("target") ? EXAMPLES.targetMarket : null
+                  }
+                  onToggleExample={() => toggleExample("target")}
+                >
+                  <Textarea
+                    placeholder="e.g., Health-conscious women 25-40, metro areas, $80k+ household income"
+                    value={targetMarket}
+                    onChange={(e) => {
+                      setTargetMarket(e.target.value);
+                      setTargetTouched(true);
+                    }}
+                    rows={2}
+                    className="resize-none"
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Skews 80% of the panel toward this demographic.
+                  </p>
+                </FieldGroup>
+
+                {/* Competitors */}
+                <FieldGroup
+                  label="Competitive Products"
+                  example={
+                    showExamples.has("comp") ? EXAMPLES.competitors : null
+                  }
+                  onToggleExample={() => toggleExample("comp")}
+                >
+                  <Input
+                    placeholder="e.g., Celsius, Ghost Energy, LMNT"
+                    value={competitors}
+                    onChange={(e) => {
+                      setCompetitors(e.target.value);
+                      setCompetitorsTouched(true);
+                    }}
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Enables head-to-head competitive preference analysis.
+                  </p>
+                </FieldGroup>
+
+                {/* Price Range */}
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <Label>Price Range</Label>
+                    <button
+                      type="button"
+                      onClick={() => toggleExample("price")}
+                      className="text-xs text-teal hover:underline"
+                    >
+                      {showExamples.has("price") ? "Hide example" : "See example"}
+                    </button>
+                  </div>
+                  {showExamples.has("price") && (
+                    <p className="text-xs text-teal bg-teal/5 rounded px-2 py-1">
+                      ${EXAMPLES.priceMin}-${EXAMPLES.priceMax}{" "}
+                      {EXAMPLES.priceUnit}
+                    </p>
+                  )}
+                  <div className="flex items-center gap-3">
+                    <div className="relative flex-1">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
+                        $
+                      </span>
+                      <Input
+                        type="number"
+                        placeholder="Min"
+                        value={priceMin}
+                        onChange={(e) => setPriceMin(e.target.value)}
+                        className="pl-7"
+                        min="0"
+                      />
+                    </div>
+                    <span className="text-muted-foreground">—</span>
+                    <div className="relative flex-1">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
+                        $
+                      </span>
+                      <Input
+                        type="number"
+                        placeholder="Max"
+                        value={priceMax}
+                        onChange={(e) => setPriceMax(e.target.value)}
+                        className="pl-7"
+                        min="0"
+                      />
+                    </div>
+                  </div>
+                  <Input
+                    placeholder="Pricing unit, e.g. per stick pack, /month, per 4-pack"
+                    value={priceUnit}
+                    onChange={(e) => setPriceUnit(e.target.value)}
+                  />
                   <p className="text-xs text-muted-foreground">
-                    Helps us calibrate persona demographics and category context.
+                    If blank, we&apos;ll estimate from your description.
                   </p>
                 </div>
 
-                {/* Advanced options toggle */}
-                <button
-                  type="button"
-                  onClick={() => setShowAdvanced(!showAdvanced)}
-                  className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className={`transition-transform ${showAdvanced ? "rotate-90" : ""}`}
-                  >
-                    <polyline points="9 18 15 12 9 6" />
-                  </svg>
-                  Advanced options
-                </button>
-
-                {showAdvanced && (
-                  <div className="space-y-5 border-l-2 border-border pl-4">
-                    <div className="space-y-2">
-                      <Label>Price Range (optional)</Label>
-                      <div className="flex items-center gap-3">
-                        <div className="relative flex-1">
-                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
-                            $
-                          </span>
-                          <Input
-                            type="number"
-                            placeholder="Min"
-                            value={priceMin}
-                            onChange={(e) => setPriceMin(e.target.value)}
-                            className="pl-7"
-                            min="0"
-                          />
-                        </div>
-                        <span className="text-muted-foreground">—</span>
-                        <div className="relative flex-1">
-                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
-                            $
-                          </span>
-                          <Input
-                            type="number"
-                            placeholder="Max"
-                            value={priceMax}
-                            onChange={(e) => setPriceMax(e.target.value)}
-                            className="pl-7"
-                            min="0"
-                          />
-                        </div>
-                      </div>
-                      <p className="text-xs text-muted-foreground">
-                        If blank, we&apos;ll estimate a realistic range from
-                        your description.
-                      </p>
-                      <div className="mt-3">
-                        <Label htmlFor="priceUnit">Pricing unit (optional)</Label>
-                        <Input
-                          id="priceUnit"
-                          placeholder="e.g., per drink, per 4-pack, /month, per session"
-                          value={priceUnit}
-                          onChange={(e) => setPriceUnit(e.target.value)}
-                          className="mt-1"
-                        />
-                        <p className="text-xs text-muted-foreground mt-1">
-                          Helps consumers evaluate pricing in the right context.
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="target">Target Consumer (optional)</Label>
-                      <Textarea
-                        id="target"
-                        placeholder="e.g., Health-conscious women 25-40, metro areas, $80k+ household income"
-                        value={targetMarket}
-                        onChange={(e) => setTargetMarket(e.target.value)}
-                        rows={2}
-                        className="resize-none"
-                      />
-                      <p className="text-xs text-muted-foreground">
-                        Skews 80% of the panel toward this demographic.
-                      </p>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="competitors">
-                        Competitive Products (optional)
-                      </Label>
-                      <Input
-                        id="competitors"
-                        placeholder="e.g., Brita, Hydro Flask, Sodastream"
-                        value={competitors}
-                        onChange={(e) => setCompetitors(e.target.value)}
-                      />
-                      <p className="text-xs text-muted-foreground">
-                        Adds competitive preference questions to the survey.
-                      </p>
-                    </div>
+                {/* Quality indicator */}
+                <div className="rounded-xl bg-muted/50 border border-border/50 p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                      Research quality
+                    </span>
+                    <span className={`text-xs font-semibold ${quality.color}`}>
+                      {quality.level}
+                    </span>
                   </div>
-                )}
+                  <div className="w-full bg-muted rounded-full h-1.5">
+                    <div
+                      className={`h-1.5 rounded-full transition-all ${quality.bg}`}
+                      style={{
+                        width:
+                          quality.level === "Fair"
+                            ? "33%"
+                            : quality.level === "Good"
+                              ? "66%"
+                              : "100%",
+                      }}
+                    />
+                  </div>
+                  {qualityNudge && (
+                    <p className="text-xs text-muted-foreground mt-2">
+                      {qualityNudge}
+                    </p>
+                  )}
+                </div>
 
                 {error && (
                   <div className="bg-destructive/10 text-destructive text-sm rounded-lg p-3">
@@ -467,48 +648,53 @@ function NewResearchForm() {
                 <Button
                   type="submit"
                   className="w-full bg-navy hover:bg-navy-light h-11"
-                  disabled={!productName.trim() || !productDescription.trim()}
+                  disabled={!isFormValid}
                 >
                   Run Research (Free)
                 </Button>
 
                 <p className="text-xs text-muted-foreground text-center">
-                  This will simulate 50 consumers using structured survey
-                  methodology. Results typically take 1-2 minutes.
+                  Simulates 50 consumers using structured survey methodology.
+                  Results in 1-2 minutes.
                 </p>
               </form>
             </CardContent>
           </Card>
-
-          <div className="mt-6 bg-muted/50 rounded-xl p-5 border border-border/50">
-            <h3 className="text-sm font-medium text-navy mb-2">
-              Free tier includes
-            </h3>
-            <ul className="text-sm text-muted-foreground space-y-1.5">
-              <li className="flex items-start gap-2">
-                <svg className="w-4 h-4 text-teal mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
-                50 simulated consumer respondents
-              </li>
-              <li className="flex items-start gap-2">
-                <svg className="w-4 h-4 text-teal mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
-                Purchase intent score &amp; WTP range
-              </li>
-              <li className="flex items-start gap-2">
-                <svg className="w-4 h-4 text-teal mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
-                Feature importance ranking
-              </li>
-              <li className="flex items-start gap-2">
-                <svg className="w-4 h-4 text-teal mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
-                Top consumer concerns &amp; verbatims
-              </li>
-              <li className="flex items-start gap-2">
-                <svg className="w-4 h-4 text-teal mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
-                3 runs per month
-              </li>
-            </ul>
-          </div>
         </div>
       </main>
     </>
+  );
+}
+
+function FieldGroup({
+  label,
+  example,
+  onToggleExample,
+  children,
+}: {
+  label: string;
+  example: string | null;
+  onToggleExample: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="space-y-1.5">
+      <div className="flex items-center justify-between">
+        <Label>{label}</Label>
+        <button
+          type="button"
+          onClick={onToggleExample}
+          className="text-xs text-teal hover:underline"
+        >
+          {example !== null ? "Hide example" : "See example"}
+        </button>
+      </div>
+      {example !== null && (
+        <p className="text-xs text-teal bg-teal/5 rounded px-2 py-1.5 whitespace-pre-line">
+          {example}
+        </p>
+      )}
+      {children}
+    </div>
   );
 }
