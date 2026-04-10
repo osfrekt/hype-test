@@ -1,6 +1,24 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export function Nav() {
+  const [hasMultipleResults, setHasMultipleResults] = useState(false);
+
+  useEffect(() => {
+    try {
+      let count = 0;
+      for (let i = 0; i < sessionStorage.length; i++) {
+        if (sessionStorage.key(i)?.startsWith("research-")) count++;
+        if (count >= 2) break;
+      }
+      setHasMultipleResults(count >= 2);
+    } catch {
+      // sessionStorage unavailable
+    }
+  }, []);
+
   return (
     <header className="border-b border-border/50 bg-white/80 backdrop-blur-sm sticky top-0 z-50">
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
@@ -38,6 +56,14 @@ export function Nav() {
           >
             Pricing
           </Link>
+          {hasMultipleResults && (
+            <Link
+              href="/compare"
+              className="hover:text-foreground transition-colors"
+            >
+              Compare
+            </Link>
+          )}
         </nav>
         <div className="flex items-center gap-3">
           <Link
