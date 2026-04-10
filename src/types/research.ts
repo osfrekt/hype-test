@@ -50,6 +50,7 @@ export interface ResearchInput {
   category?: string;
   keyFeatures?: string[];
   priceRange?: { min: number; max: number };
+  priceUnit?: string;
   targetMarket?: string;
   competitors?: string;
 }

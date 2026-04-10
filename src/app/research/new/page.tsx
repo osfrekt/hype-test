@@ -36,6 +36,7 @@ export default function NewResearchPage() {
   const [category, setCategory] = useState("");
   const [priceMin, setPriceMin] = useState("");
   const [priceMax, setPriceMax] = useState("");
+  const [priceUnit, setPriceUnit] = useState("");
   const [targetMarket, setTargetMarket] = useState("");
   const [competitors, setCompetitors] = useState("");
   const [url, setUrl] = useState("");
@@ -67,6 +68,7 @@ export default function NewResearchPage() {
       if (data.category) setCategory(data.category);
       if (data.priceMin != null) setPriceMin(String(data.priceMin));
       if (data.priceMax != null) setPriceMax(String(data.priceMax));
+      if (data.priceUnit) setPriceUnit(data.priceUnit);
       if (data.competitors) setCompetitors(data.competitors);
       if (data.targetMarket) setTargetMarket(data.targetMarket);
       if (data.competitors || data.targetMarket || data.priceMin != null) {
@@ -120,6 +122,7 @@ export default function NewResearchPage() {
           max: Number(priceMax),
         };
       }
+      if (priceUnit.trim()) payload.priceUnit = priceUnit.trim();
       if (targetMarket.trim()) payload.targetMarket = targetMarket.trim();
       if (competitors.trim()) payload.competitors = competitors.trim();
 
@@ -389,6 +392,19 @@ export default function NewResearchPage() {
                         If blank, we&apos;ll estimate a realistic range from
                         your description.
                       </p>
+                      <div className="mt-3">
+                        <Label htmlFor="priceUnit">Pricing unit (optional)</Label>
+                        <Input
+                          id="priceUnit"
+                          placeholder="e.g., per drink, per 4-pack, /month, per session"
+                          value={priceUnit}
+                          onChange={(e) => setPriceUnit(e.target.value)}
+                          className="mt-1"
+                        />
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Helps consumers evaluate pricing in the right context.
+                        </p>
+                      </div>
                     </div>
 
                     <div className="space-y-2">

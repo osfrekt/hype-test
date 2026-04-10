@@ -97,6 +97,7 @@ async function queryPersona(
   const midPrice = Math.round((priceRange.min + priceRange.max) / 2);
   const lowPrice = priceRange.min;
   const highPrice = priceRange.max;
+  const unit = input.priceUnit ? ` ${input.priceUnit}` : "";
 
   const prompt = `You are a ${persona.age}-year-old ${persona.gender} living in ${persona.location} with an annual household income of approximately $${persona.income.toLocaleString()}. ${persona.lifestyle} ${persona.categoryContext}
 
@@ -116,9 +117,9 @@ Please answer the following questions as this consumer would. Be realistic — n
    5 = Definitely would buy
 
 2. PRICE SENSITIVITY: Which of these would you choose?
-   A) Buy at $${lowPrice} (basic version)
-   B) Buy at $${midPrice} (standard version with all features)
-   C) Buy at $${highPrice} (premium version with extras)
+   A) Buy at $${lowPrice}${unit} (basic version)
+   B) Buy at $${midPrice}${unit} (standard version with all features)
+   C) Buy at $${highPrice}${unit} (premium version with extras)
    D) Would not purchase at any of these prices
 
 3. FEATURE IMPORTANCE: Rank these features from most to least important (1 = most important):

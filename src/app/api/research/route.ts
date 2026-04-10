@@ -75,6 +75,9 @@ export async function POST(request: Request) {
             max: Math.min(1_000_000, body.priceRange.max),
           },
         }),
+      ...(body.priceUnit && {
+        priceUnit: body.priceUnit.trim().slice(0, 100),
+      }),
       ...(body.targetMarket && {
         targetMarket: body.targetMarket.trim().slice(0, 500),
       }),

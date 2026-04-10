@@ -73,6 +73,7 @@ export async function POST(request: Request) {
   "category": "one of: food & beverage, health & wellness, technology, fashion & apparel, home & garden, beauty & personal care, education, finance, other",
   "priceMin": number or null,
   "priceMax": number or null,
+  "priceUnit": "the pricing unit if applicable (e.g. 'per drink', 'per 4-pack', '/month', 'per session'), or empty string",
   "competitors": "comma-separated competitor names if mentioned, or empty string",
   "targetMarket": "target audience description if apparent, or empty string"
 }
@@ -101,6 +102,7 @@ ${text}`,
       category: extracted.category || "",
       priceMin: extracted.priceMin ?? null,
       priceMax: extracted.priceMax ?? null,
+      priceUnit: extracted.priceUnit || "",
       competitors: extracted.competitors || "",
       targetMarket: extracted.targetMarket || "",
     });

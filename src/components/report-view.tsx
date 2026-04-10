@@ -63,9 +63,15 @@ export function ReportView({
             </p>
             <p className="text-3xl font-bold text-navy">
               ${result.wtpRange.mid}
+              {result.input.priceUnit && (
+                <span className="text-base font-medium text-muted-foreground ml-1">
+                  {result.input.priceUnit}
+                </span>
+              )}
             </p>
             <p className="text-xs text-muted-foreground mt-1">
               range: ${result.wtpRange.low} — ${result.wtpRange.high}
+              {result.input.priceUnit ? ` ${result.input.priceUnit}` : ""}
             </p>
           </CardContent>
         </Card>
