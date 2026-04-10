@@ -274,15 +274,9 @@ function aggregateResults(
     }))
     .sort((a, b) => b.score - a.score);
 
-  // Concerns and positives — deduplicate by similarity (simple approach: take unique)
-  const concerns = [...new Set(responses.map((r) => r.topConcern))].slice(
-    0,
-    5
-  );
-  const positives = [...new Set(responses.map((r) => r.topPositive))].slice(
-    0,
-    5
-  );
+  // Concerns and positives — deduplicate by prefix similarity and pick from diverse personas
+  const concerns = deduplicateByDiversity(responses, "topConcern");
+  const positives = deduplicateByDiversity(responses, "topPositive");
 
   // Competitive positioning (only when competitors were provided)
   let competitivePosition: ResearchResult["competitivePosition"];
@@ -344,17 +338,105 @@ function aggregateResults(
   };
 }
 
+function deduplicateByDiversity(
+  responses: PanelResponse[],
+  field: "topConcern" | "topPositive"
+): string[] {
+  const isSimilar = (a: string, b: string) =>
+    a.slice(0, 40).toLowerCase() === b.slice(0, 40).toLowerCase();
+
+  const isGeneric = (text: string) =>
+    text === "Need more information before deciding" ||
+    text === "The concept is interesting";
+
+  // Sort by income (parsed from persona label) for quintile diversity
+  const sorted = [...responses].sort((a, b) => {
+    const incA = parseInt(a.personaLabel.match(/\$(\d+)k/)?.[1] ?? "50");
+    const incB = parseInt(b.personaLabel.match(/\$(\d+)k/)?.[1] ?? "50");
+    return incA - incB;
+  });
+
+  const quintileSize = Math.ceil(sorted.length / 5);
+  const selected: string[] = [];
+
+  // Take one from each income quintile
+  for (let q = 0; q < 5 && selected.length < 5; q++) {
+    const slice = sorted.slice(q * quintileSize, (q + 1) * quintileSize);
+    for (const r of slice) {
+      const text = r[field];
+      if (!isGeneric(text) && !selected.some((s) => isSimilar(s, text))) {
+        selected.push(text);
+        break;
+      }
+    }
+  }
+
+  // Fill remaining from full pool
+  for (const r of responses) {
+    if (selected.length >= 5) break;
+    const text = r[field];
+    if (!isGeneric(text) && !selected.some((s) => isSimilar(s, text))) {
+      selected.push(text);
+    }
+  }
+
+  return selected;
+}
+
 async function generateVerbatims(
   input: ResearchInput,
   responses: PanelResponse[]
 ): Promise<{ persona: string; quote: string }[]> {
-  // Pick 5 diverse responses
-  const selected = responses
-    .filter((r) => r.topConcern !== "Need more information before deciding")
-    .sort(() => Math.random() - 0.5)
-    .slice(0, 5);
+  const usable = responses.filter(
+    (r) => r.topConcern !== "Need more information before deciding"
+  );
+  const sample = usable.sort(() => Math.random() - 0.5).slice(0, 10);
 
-  return selected.map((r) => ({
+  const pairsText = sample
+    .map(
+      (r) =>
+        `- ${r.personaLabel}: Positive: "${r.topPositive}" | Concern: "${r.topConcern}"`
+    )
+    .join("\n");
+
+  try {
+    const response = await anthropic.messages.create({
+      model: "claude-haiku-4-5-20251001",
+      max_tokens: 500,
+      temperature: 0.9,
+      messages: [
+        {
+          role: "user",
+          content: `You are writing consumer verbatim quotes for a research report about "${input.productName}".
+
+Here are real positive/concern pairs from simulated consumers:
+${pairsText}
+
+Write exactly 5 verbatim quotes from 5 different consumers. Each should sound like a real person speaking naturally. Rules:
+- Vary structure: some enthusiastic, some skeptical, some practical, some price-focused
+- Do NOT start every quote the same way
+- 1-3 sentences each
+- Include the persona demographic
+
+Return ONLY a JSON array:
+[{"persona": "28yo female, $65k income", "quote": "..."}, ...]`,
+        },
+      ],
+    });
+
+    const text =
+      response.content[0].type === "text" ? response.content[0].text : "";
+    const match = text.match(/\[[\s\S]*\]/);
+    if (match) {
+      const parsed = JSON.parse(match[0]);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed.slice(0, 5);
+    }
+  } catch {
+    // Fall through to mechanical fallback
+  }
+
+  // Fallback: mechanical concatenation
+  return sample.slice(0, 5).map((r) => ({
     persona: r.personaLabel,
     quote: `${r.topPositive} However, ${r.topConcern.charAt(0).toLowerCase()}${r.topConcern.slice(1)}`,
   }));
