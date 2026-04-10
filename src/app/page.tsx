@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Nav } from "@/components/nav";
 import { Footer } from "@/components/footer";
+import { SampleReport } from "@/components/sample-report";
 
 export default function Home() {
   return (
@@ -247,6 +248,20 @@ export default function Home() {
                 </>}
               />
             </div>
+          </div>
+        </section>
+
+        {/* Sample report */}
+        <section className="py-14 bg-white">
+          <div className="max-w-5xl mx-auto px-6">
+            <h2 className="text-2xl md:text-3xl font-bold text-navy text-center mb-3">
+              See a real report
+            </h2>
+            <p className="text-muted-foreground text-center max-w-2xl mx-auto mb-10">
+              Here&apos;s what a HypeTest report looks like — complete with purchase intent,
+              WTP estimates, feature rankings, and consumer verbatims.
+            </p>
+            <SampleReport />
           </div>
         </section>
 
