@@ -59,7 +59,7 @@ export async function runResearch(
   onProgress?.("Analysing results...", 75);
 
   // Aggregate results
-  const result = aggregateResults(input, allResponses, features, priceRange);
+  const result = aggregateResults(input, allResponses, features, priceRange, panel);
 
   onProgress?.("Generating insights...", 90);
 
@@ -226,7 +226,8 @@ function aggregateResults(
   input: ResearchInput,
   responses: PanelResponse[],
   features: string[],
-  priceRange: { min: number; max: number }
+  priceRange: { min: number; max: number },
+  panel: ConsumerPersona[]
 ): Omit<ResearchResult, "verbatims" | "id" | "createdAt" | "status"> {
   const n = responses.length;
   const midPrice = Math.round((priceRange.min + priceRange.max) / 2);
@@ -307,6 +308,30 @@ function aggregateResults(
 
   const questionsPerPersona = input.competitors ? 6 : 5;
 
+  // Panel demographic breakdown
+  const ages = panel.map((p) => p.age).sort((a, b) => a - b);
+  const incomes = panel.map((p) => p.income).sort((a, b) => a - b);
+  const median = (arr: number[]) => {
+    const mid = Math.floor(arr.length / 2);
+    return arr.length % 2 ? arr[mid] : Math.round((arr[mid - 1] + arr[mid]) / 2);
+  };
+  const genderCounts = { male: 0, female: 0, nonBinary: 0 };
+  panel.forEach((p) => {
+    if (p.gender === "male") genderCounts.male++;
+    else if (p.gender === "female") genderCounts.female++;
+    else genderCounts.nonBinary++;
+  });
+  const pn = panel.length;
+  const panelBreakdown = {
+    genderSplit: {
+      male: Math.round((genderCounts.male / pn) * 100),
+      female: Math.round((genderCounts.female / pn) * 100),
+      nonBinary: Math.round((genderCounts.nonBinary / pn) * 100),
+    },
+    ageRange: { min: ages[0], max: ages[ages.length - 1], median: median(ages) },
+    incomeRange: { min: incomes[0], max: incomes[incomes.length - 1], median: median(incomes) },
+  };
+
   return {
     input,
     panelSize: n,
@@ -334,6 +359,7 @@ function aggregateResults(
       questionsAsked: n * questionsPerPersona,
       confidenceNote:
         "Results based on LLM-simulated consumer panel. Best used for directional insights and hypothesis generation. See our methodology page for academic references and limitations.",
+      panelBreakdown,
     },
   };
 }

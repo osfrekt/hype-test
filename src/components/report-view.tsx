@@ -210,6 +210,11 @@ export function ReportView({
             <strong>Demographic mix:</strong>{" "}
             {result.methodology.demographicMix}
           </p>
+          {result.methodology.panelBreakdown && (
+            <p className="text-xs text-muted-foreground">
+              {result.methodology.panelBreakdown.genderSplit.female}% female, {result.methodology.panelBreakdown.genderSplit.male}% male, {result.methodology.panelBreakdown.genderSplit.nonBinary}% non-binary | Ages {result.methodology.panelBreakdown.ageRange.min}-{result.methodology.panelBreakdown.ageRange.max} (median {result.methodology.panelBreakdown.ageRange.median}) | Income ${Math.round(result.methodology.panelBreakdown.incomeRange.min / 1000)}k-${Math.round(result.methodology.panelBreakdown.incomeRange.max / 1000)}k (median ${Math.round(result.methodology.panelBreakdown.incomeRange.median / 1000)}k)
+            </p>
+          )}
           <p>
             <strong>Total survey questions:</strong>{" "}
             {result.methodology.questionsAsked}

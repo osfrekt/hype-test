@@ -81,6 +81,11 @@ export interface ResearchResult {
     demographicMix: string;
     questionsAsked: number;
     confidenceNote: string;
+    panelBreakdown?: {
+      genderSplit: { male: number; female: number; nonBinary: number };
+      ageRange: { min: number; max: number; median: number };
+      incomeRange: { min: number; max: number; median: number };
+    };
   };
   createdAt: string;
   status: "running" | "complete" | "error";
