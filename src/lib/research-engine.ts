@@ -85,6 +85,7 @@ interface PanelResponse {
   featureRankings: { feature: string; importance: number }[];
   topConcern: string;
   topPositive: string;
+  competitivePreference?: "much_better" | "better" | "same" | "worse" | "much_worse" | "unfamiliar";
 }
 
 async function queryPersona(
@@ -126,6 +127,14 @@ ${features.map((f, i) => `   ${String.fromCharCode(65 + i)}) ${f}`).join("\n")}
 4. TOP CONCERN: What is your single biggest concern or hesitation about this product? (One sentence)
 
 5. TOP POSITIVE: What is the single most appealing thing about this product? (One sentence)
+${input.competitors ? `
+6. COMPETITIVE PREFERENCE: Compared to ${input.competitors}, how does ${input.productName} compare?
+   A) Much better than alternatives
+   B) Somewhat better
+   C) About the same
+   D) Somewhat worse
+   E) Much worse
+   F) Not familiar with the alternatives` : ""}
 
 Respond in this exact JSON format:
 {
@@ -133,7 +142,8 @@ Respond in this exact JSON format:
   "priceChoice": "<A, B, C, or D>",
   "featureRanking": [<list of feature letters from most to least important>],
   "topConcern": "<one sentence>",
-  "topPositive": "<one sentence>"
+  "topPositive": "<one sentence>"${input.competitors ? `,
+  "competitiveChoice": "<A, B, C, D, E, or F>"` : ""}
 }`;
 
   try {
@@ -173,6 +183,15 @@ Respond in this exact JSON format:
       }
     );
 
+    const compMap: Record<string, PanelResponse["competitivePreference"]> = {
+      A: "much_better",
+      B: "better",
+      C: "same",
+      D: "worse",
+      E: "much_worse",
+      F: "unfamiliar",
+    };
+
     return {
       personaId: persona.id,
       personaLabel,
@@ -181,6 +200,9 @@ Respond in this exact JSON format:
       featureRankings,
       topConcern: parsed.topConcern || "No specific concern",
       topPositive: parsed.topPositive || "Interesting concept",
+      ...(parsed.competitiveChoice && {
+        competitivePreference: compMap[parsed.competitiveChoice] || "unfamiliar",
+      }),
     };
   } catch {
     // Fallback for parse errors — contribute neutral data
@@ -261,6 +283,35 @@ function aggregateResults(
     5
   );
 
+  // Competitive positioning (only when competitors were provided)
+  let competitivePosition: ResearchResult["competitivePosition"];
+  if (input.competitors) {
+    const compLabels: { key: string; label: string }[] = [
+      { key: "much_better", label: "Much better" },
+      { key: "better", label: "Somewhat better" },
+      { key: "same", label: "About the same" },
+      { key: "worse", label: "Somewhat worse" },
+      { key: "much_worse", label: "Much worse" },
+      { key: "unfamiliar", label: "Not familiar" },
+    ];
+    const compCounts: Record<string, number> = {};
+    compLabels.forEach((l) => (compCounts[l.key] = 0));
+    responses.forEach((r) => {
+      if (r.competitivePreference && compCounts[r.competitivePreference] !== undefined) {
+        compCounts[r.competitivePreference]++;
+      }
+    });
+    competitivePosition = {
+      distribution: compLabels.map((l) => ({
+        label: l.label,
+        count: compCounts[l.key],
+      })),
+      competitors: input.competitors,
+    };
+  }
+
+  const questionsPerPersona = input.competitors ? 6 : 5;
+
   return {
     input,
     panelSize: n,
@@ -279,12 +330,13 @@ function aggregateResults(
     featureImportance,
     topConcerns: concerns,
     topPositives: positives,
+    ...(competitivePosition && { competitivePosition }),
     methodology: {
       panelSize: n,
       demographicMix: input.targetMarket
         ? `Targeted panel: ${input.targetMarket} (80%) + general population (20%)`
         : "US general population (varied age, income, gender, location)",
-      questionsAsked: n * 5,
+      questionsAsked: n * questionsPerPersona,
       confidenceNote:
         "Results based on LLM-simulated consumer panel. Best used for directional insights and hypothesis generation. See our methodology page for academic references and limitations.",
     },

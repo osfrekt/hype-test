@@ -49,6 +49,9 @@ export default function ResearchResultPage({
               topPositives: data.top_positives,
               verbatims: data.verbatims,
               methodology: data.methodology,
+              ...(data.competitive_position && {
+                competitivePosition: data.competitive_position,
+              }),
               status: data.status,
               createdAt: data.created_at,
             },

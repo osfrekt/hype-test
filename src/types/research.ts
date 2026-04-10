@@ -71,6 +71,10 @@ export interface ResearchResult {
   topConcerns: string[];
   topPositives: string[];
   verbatims: { persona: string; quote: string }[];
+  competitivePosition?: {
+    distribution: { label: string; count: number }[];
+    competitors: string;
+  };
   methodology: {
     panelSize: number;
     demographicMix: string;

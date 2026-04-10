@@ -21,11 +21,26 @@ const INTENT_COLORS = [
   "#059669", // Definitely yes - dark green
 ];
 
+const COMP_COLORS = [
+  "#059669", // Much better - dark green
+  "#22c55e", // Better - green
+  "#eab308", // Same - yellow
+  "#f97316", // Worse - orange
+  "#ef4444", // Much worse - red
+  "#94a3b8", // Unfamiliar - gray
+];
+
 export function ResultsCharts({ result }: { result: ResearchResult }) {
   const intentData = result.purchaseIntent.distribution.map((d, i) => ({
     name: d.label,
     count: d.count,
     fill: INTENT_COLORS[i],
+  }));
+
+  const compData = result.competitivePosition?.distribution.map((d, i) => ({
+    name: d.label,
+    count: d.count,
+    fill: COMP_COLORS[i],
   }));
 
   return (
@@ -117,6 +132,48 @@ export function ResultsCharts({ result }: { result: ResearchResult }) {
           </div>
         </CardContent>
       </Card>
+
+      {compData && result.competitivePosition && (
+        <Card className="md:col-span-2">
+          <CardHeader>
+            <CardTitle className="text-base">
+              Competitive Positioning vs {result.competitivePosition.competitors}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="h-64">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  data={compData}
+                  margin={{ top: 5, right: 5, left: -20, bottom: 5 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                  <XAxis
+                    dataKey="name"
+                    tick={{ fontSize: 10 }}
+                    angle={-20}
+                    textAnchor="end"
+                    height={60}
+                  />
+                  <YAxis tick={{ fontSize: 11 }} />
+                  <Tooltip
+                    contentStyle={{
+                      fontSize: 12,
+                      borderRadius: 8,
+                      border: "1px solid #e5e7eb",
+                    }}
+                  />
+                  <Bar dataKey="count" radius={[4, 4, 0, 0]}>
+                    {compData.map((entry, index) => (
+                      <Cell key={index} fill={entry.fill} />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }

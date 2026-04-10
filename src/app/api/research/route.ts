@@ -114,6 +114,7 @@ async function persistResult(result: ResearchResult) {
     top_positives: result.topPositives,
     verbatims: result.verbatims,
     methodology: result.methodology,
+    competitive_position: result.competitivePosition ?? null,
     status: result.status,
     created_at: result.createdAt,
   });
