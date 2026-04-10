@@ -212,16 +212,22 @@ function NewResearchForm() {
         return;
       }
       if (data.productName) setProductName(data.productName);
-      if (data.productDescription) setProblem(data.productDescription);
+      if (data.problem) setProblem(data.problem);
+      if (data.feature1) setFeature1(data.feature1);
+      if (data.feature2) setFeature2(data.feature2);
+      if (data.feature3) setFeature3(data.feature3);
+      if (data.differentiator) setDifferentiator(data.differentiator);
       if (data.category) setCategory(data.category);
       if (data.priceMin != null) setPriceMin(String(data.priceMin));
       if (data.priceMax != null) setPriceMax(String(data.priceMax));
       if (data.priceUnit) {
-        // Try to match to a dropdown option, otherwise default
         const unitOptions = ["per unit", "per pack", "per serving", "per month", "per subscription"];
-        const match = unitOptions.find((o) => data.priceUnit.toLowerCase().includes(o.replace("per ", "")));
+        const match = unitOptions.find((o) =>
+          data.priceUnit.toLowerCase().includes(o.replace("per ", ""))
+        );
         setPriceUnit(match || "per unit");
       }
+      if (data.unitsPerPack != null) setUnitsPerPack(String(data.unitsPerPack));
       if (data.competitors) {
         setCompetitors(data.competitors);
         setCompetitorsTouched(true);

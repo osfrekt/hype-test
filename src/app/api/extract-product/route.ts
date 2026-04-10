@@ -58,24 +58,29 @@ export async function POST(request: Request) {
       );
     }
 
-    // Ask Claude to extract product info
+    // Ask Claude to extract product info into structured fields
     const response = await anthropic.messages.create({
       model: "claude-haiku-4-5-20251001",
-      max_tokens: 500,
+      max_tokens: 700,
       messages: [
         {
           role: "user",
-          content: `Extract product information from this webpage content. Return ONLY a JSON object with these fields:
+          content: `Extract product information from this webpage content. Return ONLY a JSON object with ALL of these fields (use empty string or null if not found, but try hard to infer from context):
 
 {
   "productName": "the product name",
-  "productDescription": "a 2-4 sentence description of the product, its features, and value proposition",
+  "problem": "1-2 sentences: what problem does this product solve for consumers?",
+  "feature1": "the most important feature or benefit (short phrase)",
+  "feature2": "the second most important feature or benefit (short phrase)",
+  "feature3": "the third most important feature or benefit (short phrase)",
+  "differentiator": "1-2 sentences: what makes this different from competitors?",
   "category": "one of: food & beverage, health & wellness, technology, fashion & apparel, home & garden, beauty & personal care, education, finance, other",
-  "priceMin": number or null,
-  "priceMax": number or null,
-  "priceUnit": "the pricing unit if applicable (e.g. 'per drink', 'per 4-pack', '/month', 'per session'), or empty string",
-  "competitors": "comma-separated competitor names if mentioned, or empty string",
-  "targetMarket": "target audience description if apparent, or empty string"
+  "priceMin": number or null (the lowest price shown or inferred),
+  "priceMax": number or null (the highest price shown or inferred),
+  "priceUnit": "one of: per unit, per pack, per serving, per month, per subscription — pick the most appropriate",
+  "unitsPerPack": number or null (e.g. 30 if '30 servings per tub'),
+  "competitors": "comma-separated competitor product/brand names if mentioned or obvious from context, or empty string",
+  "targetMarket": "who is the target customer? infer from language, imagery, and positioning. e.g. 'Health-conscious adults 25-40, fitness enthusiasts'"
 }
 
 Webpage content:
@@ -98,11 +103,16 @@ ${text}`,
 
     return Response.json({
       productName: extracted.productName || "",
-      productDescription: extracted.productDescription || "",
+      problem: extracted.problem || "",
+      feature1: extracted.feature1 || "",
+      feature2: extracted.feature2 || "",
+      feature3: extracted.feature3 || "",
+      differentiator: extracted.differentiator || "",
       category: extracted.category || "",
       priceMin: extracted.priceMin ?? null,
       priceMax: extracted.priceMax ?? null,
       priceUnit: extracted.priceUnit || "",
+      unitsPerPack: extracted.unitsPerPack ?? null,
       competitors: extracted.competitors || "",
       targetMarket: extracted.targetMarket || "",
     });
