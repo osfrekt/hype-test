@@ -9,6 +9,7 @@ import {
   Tooltip,
   ResponsiveContainer,
   Cell,
+  LabelList,
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { ResearchResult } from "@/types/research";
@@ -56,7 +57,7 @@ export function ResultsCharts({ result }: { result: ResearchResult }) {
             <ResponsiveContainer width="100%" height="100%">
               <BarChart
                 data={intentData}
-                margin={{ top: 5, right: 5, left: -20, bottom: 5 }}
+                margin={{ top: 20, right: 5, left: -20, bottom: 5 }}
               >
                 <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                 <XAxis
@@ -78,6 +79,13 @@ export function ResultsCharts({ result }: { result: ResearchResult }) {
                   {intentData.map((entry, index) => (
                     <Cell key={index} fill={entry.fill} />
                   ))}
+                  <LabelList
+                    dataKey="count"
+                    position="top"
+                    fontSize={11}
+                    fill="#374151"
+                    formatter={(v: unknown) => (Number(v) > 0 ? String(v) : "")}
+                  />
                 </Bar>
               </BarChart>
             </ResponsiveContainer>
@@ -105,7 +113,7 @@ export function ResultsCharts({ result }: { result: ResearchResult }) {
                 <div
                   className="absolute top-0 -translate-x-1/2 flex flex-col items-center"
                   style={{
-                    left: `${((result.wtpRange.mid - result.wtpRange.low) / (result.wtpRange.high - result.wtpRange.low)) * 100}%`,
+                    left: `${Math.max(8, result.wtpRange.high === result.wtpRange.low ? 50 : ((result.wtpRange.mid - result.wtpRange.low) / (result.wtpRange.high - result.wtpRange.low)) * 100)}%`,
                   }}
                 >
                   <div className="w-0.5 h-8 bg-white" />
