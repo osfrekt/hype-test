@@ -8,12 +8,37 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import type { ResearchResult } from "@/types/research";
+
+const CATEGORIES = [
+  { value: "food & beverage", label: "Food & Beverage" },
+  { value: "health & wellness", label: "Health & Wellness" },
+  { value: "technology", label: "Technology" },
+  { value: "fashion & apparel", label: "Fashion & Apparel" },
+  { value: "home & garden", label: "Home & Garden" },
+  { value: "beauty & personal care", label: "Beauty & Personal Care" },
+  { value: "education", label: "Education" },
+  { value: "finance", label: "Finance" },
+  { value: "other", label: "Other" },
+];
 
 export default function NewResearchPage() {
   const router = useRouter();
   const [productName, setProductName] = useState("");
   const [productDescription, setProductDescription] = useState("");
+  const [category, setCategory] = useState("");
+  const [priceMin, setPriceMin] = useState("");
+  const [priceMax, setPriceMax] = useState("");
+  const [targetMarket, setTargetMarket] = useState("");
+  const [competitors, setCompetitors] = useState("");
+  const [showAdvanced, setShowAdvanced] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
   const [progress, setProgress] = useState(0);
   const [stage, setStage] = useState("");
@@ -28,7 +53,6 @@ export default function NewResearchPage() {
     setProgress(5);
     setStage("Preparing research panel...");
 
-    // Simulate progress while waiting for API
     const progressInterval = setInterval(() => {
       setProgress((p) => {
         if (p >= 90) return p;
@@ -50,13 +74,24 @@ export default function NewResearchPage() {
     }, 3000);
 
     try {
+      const payload: Record<string, unknown> = {
+        productName: productName.trim(),
+        productDescription: productDescription.trim(),
+      };
+      if (category && category !== "other") payload.category = category;
+      if (priceMin && priceMax) {
+        payload.priceRange = {
+          min: Number(priceMin),
+          max: Number(priceMax),
+        };
+      }
+      if (targetMarket.trim()) payload.targetMarket = targetMarket.trim();
+      if (competitors.trim()) payload.competitors = competitors.trim();
+
       const response = await fetch("/api/research", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          productName: productName.trim(),
-          productDescription: productDescription.trim(),
-        }),
+        body: JSON.stringify(payload),
       });
 
       clearInterval(progressInterval);
@@ -70,7 +105,6 @@ export default function NewResearchPage() {
       setProgress(100);
       setStage("Complete!");
 
-      // Store result in sessionStorage for the results page
       sessionStorage.setItem(`research-${result.id}`, JSON.stringify(result));
 
       setTimeout(() => {
@@ -161,13 +195,11 @@ export default function NewResearchPage() {
                   <Label htmlFor="description">Product Description</Label>
                   <Textarea
                     id="description"
-                    placeholder="Describe your product, its key features, target audience, and price point. The more detail you provide, the better the results.
-
-Example: A portable cold brew coffee maker that brews in 5 minutes instead of 12-24 hours using pressure extraction. Fits in a backpack, dishwasher safe, made from BPA-free materials. Targeted at coffee enthusiasts who travel or commute. Priced at $45-65."
+                    placeholder="Describe your product, its key features, target audience, and price point."
                     value={productDescription}
                     onChange={(e) => setProductDescription(e.target.value)}
                     required
-                    rows={8}
+                    rows={5}
                     className="resize-none"
                   />
                   <p className="text-xs text-muted-foreground">
@@ -175,6 +207,118 @@ Example: A portable cold brew coffee maker that brews in 5 minutes instead of 12
                     range for best results.
                   </p>
                 </div>
+
+                <div className="space-y-2">
+                  <Label>Category</Label>
+                  <Select value={category} onValueChange={(v) => setCategory(v ?? "")}>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select a category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {CATEGORIES.map((cat) => (
+                        <SelectItem key={cat.value} value={cat.value}>
+                          {cat.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <p className="text-xs text-muted-foreground">
+                    Helps us calibrate persona demographics and category context.
+                  </p>
+                </div>
+
+                {/* Advanced options toggle */}
+                <button
+                  type="button"
+                  onClick={() => setShowAdvanced(!showAdvanced)}
+                  className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className={`transition-transform ${showAdvanced ? "rotate-90" : ""}`}
+                  >
+                    <polyline points="9 18 15 12 9 6" />
+                  </svg>
+                  Advanced options
+                </button>
+
+                {showAdvanced && (
+                  <div className="space-y-5 border-l-2 border-border pl-4">
+                    <div className="space-y-2">
+                      <Label>Price Range (optional)</Label>
+                      <div className="flex items-center gap-3">
+                        <div className="relative flex-1">
+                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
+                            $
+                          </span>
+                          <Input
+                            type="number"
+                            placeholder="Min"
+                            value={priceMin}
+                            onChange={(e) => setPriceMin(e.target.value)}
+                            className="pl-7"
+                            min="0"
+                          />
+                        </div>
+                        <span className="text-muted-foreground">—</span>
+                        <div className="relative flex-1">
+                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
+                            $
+                          </span>
+                          <Input
+                            type="number"
+                            placeholder="Max"
+                            value={priceMax}
+                            onChange={(e) => setPriceMax(e.target.value)}
+                            className="pl-7"
+                            min="0"
+                          />
+                        </div>
+                      </div>
+                      <p className="text-xs text-muted-foreground">
+                        If blank, we&apos;ll estimate a realistic range from
+                        your description.
+                      </p>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="target">Target Consumer (optional)</Label>
+                      <Textarea
+                        id="target"
+                        placeholder="e.g., Health-conscious women 25-40, metro areas, $80k+ household income"
+                        value={targetMarket}
+                        onChange={(e) => setTargetMarket(e.target.value)}
+                        rows={2}
+                        className="resize-none"
+                      />
+                      <p className="text-xs text-muted-foreground">
+                        Skews 80% of the panel toward this demographic.
+                      </p>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="competitors">
+                        Competitive Products (optional)
+                      </Label>
+                      <Input
+                        id="competitors"
+                        placeholder="e.g., Brita, Hydro Flask, Sodastream"
+                        value={competitors}
+                        onChange={(e) => setCompetitors(e.target.value)}
+                      />
+                      <p className="text-xs text-muted-foreground">
+                        Adds competitive preference questions to the survey.
+                      </p>
+                    </div>
+                  </div>
+                )}
 
                 {error && (
                   <div className="bg-destructive/10 text-destructive text-sm rounded-lg p-3">

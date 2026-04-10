@@ -78,6 +78,9 @@ export async function POST(request: Request) {
       ...(body.targetMarket && {
         targetMarket: body.targetMarket.trim().slice(0, 500),
       }),
+      ...(body.competitors && {
+        competitors: body.competitors.trim().slice(0, 500),
+      }),
     };
 
     const result = await runResearch(sanitizedInput);
