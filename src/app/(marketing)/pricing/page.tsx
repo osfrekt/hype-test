@@ -8,10 +8,10 @@ export default function PricingPage() {
   return (
     <>
       <Nav />
-      <main className="flex-1 py-16">
-        <div className="max-w-5xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h1 className="text-3xl md:text-4xl font-bold text-navy mb-4">
+      <main className="flex-1 py-12">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <h1 className="text-3xl md:text-4xl font-bold text-navy mb-3">
               Simple, transparent pricing
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -20,15 +20,18 @@ export default function PricingPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-5xl mx-auto">
             {/* Free */}
             <Card className="relative">
               <CardHeader>
+                <div className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center mb-2">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a1f36" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></svg>
+                </div>
                 <CardTitle className="text-lg">Quick Pulse</CardTitle>
                 <div className="mt-2">
                   <span className="text-3xl font-bold text-navy">Free</span>
                 </div>
-                <p className="text-sm text-muted-foreground mt-2">
+                <p className="text-sm text-muted-foreground mt-1">
                   3 research runs per month
                 </p>
               </CardHeader>
@@ -43,27 +46,30 @@ export default function PricingPage() {
                 </ul>
                 <Link
                   href="/research/new"
-                  className="block w-full text-center rounded-lg border border-navy text-navy font-medium py-2.5 text-sm hover:bg-navy hover:text-white transition-colors"
+                  className="block w-full text-center rounded-xl border-2 border-navy text-navy font-semibold py-3 text-sm hover:bg-navy hover:text-white transition-colors"
                 >
                   Get started free
                 </Link>
               </CardContent>
             </Card>
 
-            {/* Pro */}
-            <Card className="relative border-teal shadow-lg shadow-teal/10">
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                <Badge className="bg-teal text-white border-0">
+            {/* Pro — overflow-visible to show the badge */}
+            <Card className="relative border-teal shadow-lg shadow-teal/10 overflow-visible">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
+                <Badge className="bg-teal text-white border-0 shadow-md">
                   Most popular
                 </Badge>
               </div>
               <CardHeader>
+                <div className="w-10 h-10 rounded-xl bg-teal/10 flex items-center justify-center mb-2">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" /></svg>
+                </div>
                 <CardTitle className="text-lg">Pro</CardTitle>
                 <div className="mt-2">
                   <span className="text-3xl font-bold text-navy">$79</span>
                   <span className="text-muted-foreground text-sm">/month</span>
                 </div>
-                <p className="text-sm text-muted-foreground mt-2">
+                <p className="text-sm text-muted-foreground mt-1">
                   20 research runs per month
                 </p>
               </CardHeader>
@@ -79,7 +85,7 @@ export default function PricingPage() {
                   <Feature>Feature trade-off analysis</Feature>
                 </ul>
                 <button
-                  className="block w-full text-center rounded-lg bg-navy text-white font-medium py-2.5 text-sm hover:bg-navy-light transition-colors cursor-not-allowed opacity-60"
+                  className="block w-full text-center rounded-xl bg-navy text-white font-semibold py-3 text-sm hover:bg-navy-light transition-colors cursor-not-allowed opacity-60"
                   disabled
                 >
                   Coming soon
@@ -90,6 +96,9 @@ export default function PricingPage() {
             {/* Teams */}
             <Card className="relative">
               <CardHeader>
+                <div className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center mb-2">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a1f36" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>
+                </div>
                 <CardTitle className="text-lg">Teams</CardTitle>
                 <div className="mt-2">
                   <span className="text-3xl font-bold text-navy">$199</span>
@@ -97,7 +106,7 @@ export default function PricingPage() {
                     /seat/month
                   </span>
                 </div>
-                <p className="text-sm text-muted-foreground mt-2">
+                <p className="text-sm text-muted-foreground mt-1">
                   50 research runs per seat per month
                 </p>
               </CardHeader>
@@ -113,7 +122,7 @@ export default function PricingPage() {
                   <Feature>Team collaboration</Feature>
                 </ul>
                 <button
-                  className="block w-full text-center rounded-lg border border-border text-muted-foreground font-medium py-2.5 text-sm cursor-not-allowed opacity-60"
+                  className="block w-full text-center rounded-xl border border-border text-muted-foreground font-semibold py-3 text-sm cursor-not-allowed opacity-60"
                   disabled
                 >
                   Coming soon
@@ -122,8 +131,8 @@ export default function PricingPage() {
             </Card>
           </div>
 
-          <div className="mt-16 text-center">
-            <p className="text-sm text-muted-foreground mb-2">
+          <div className="mt-12 text-center">
+            <p className="text-sm text-muted-foreground mb-1">
               Need enterprise features? Custom model fine-tuning? SSO?
             </p>
             <p className="text-sm font-medium text-navy">

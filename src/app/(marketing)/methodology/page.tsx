@@ -7,24 +7,31 @@ export default function MethodologyPage() {
   return (
     <>
       <Nav />
-      <main className="flex-1 py-16">
+      <main className="flex-1 py-12">
         <article className="max-w-3xl mx-auto px-6">
-          <h1 className="text-3xl md:text-4xl font-bold text-navy mb-4">
+          <h1 className="text-3xl md:text-4xl font-bold text-navy mb-3">
             The Science Behind Simulated Consumer Research
           </h1>
-          <p className="text-lg text-muted-foreground leading-relaxed mb-10">
+          <p className="text-lg text-muted-foreground leading-relaxed mb-8">
             HypeTest isn&apos;t asking an AI for its opinion on your product.
             It&apos;s running structured survey methodology through hundreds of
             demographically-specific simulated consumers to produce statistically
             aggregable results.
           </p>
 
-          <Separator className="mb-10" />
+          <Separator className="mb-8" />
 
-          <section className="space-y-6 mb-12">
-            <h2 className="text-xl font-bold text-navy">
-              Why LLMs can simulate consumers
-            </h2>
+          <section className="space-y-5 mb-10">
+            <div className="flex items-start gap-3">
+              <div className="w-9 h-9 rounded-lg bg-teal/10 flex items-center justify-center shrink-0 mt-0.5">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><line x1="12" y1="16" x2="12" y2="12" /><line x1="12" y1="8" x2="12.01" y2="8" /></svg>
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-navy">
+                  Why LLMs can simulate consumers
+                </h2>
+              </div>
+            </div>
             <p className="text-muted-foreground leading-relaxed">
               Large language models are trained on vast corpora that include
               millions of product reviews, purchase discussions, price
@@ -40,13 +47,20 @@ export default function MethodologyPage() {
             </p>
           </section>
 
-          <section className="space-y-6 mb-12">
-            <h2 className="text-xl font-bold text-navy">
-              The foundational research
-            </h2>
+          <section className="space-y-5 mb-10">
+            <div className="flex items-start gap-3">
+              <div className="w-9 h-9 rounded-lg bg-teal/10 flex items-center justify-center shrink-0 mt-0.5">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" /><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" /></svg>
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-navy">
+                  The foundational research
+                </h2>
+              </div>
+            </div>
 
-            <div className="bg-muted/50 rounded-xl p-6 border border-border/50">
-              <p className="font-medium text-navy mb-2">
+            <div className="bg-muted/50 rounded-xl p-5 border border-border/50">
+              <p className="font-medium text-navy mb-1.5">
                 Brand, Israeli &amp; Ngwe (2025). &ldquo;Using LLMs for Market
                 Research.&rdquo; Harvard Business School Working Paper 23-062.
               </p>
@@ -61,8 +75,8 @@ export default function MethodologyPage() {
               </p>
             </div>
 
-            <div className="bg-muted/50 rounded-xl p-6 border border-border/50">
-              <p className="font-medium text-navy mb-2">
+            <div className="bg-muted/50 rounded-xl p-5 border border-border/50">
+              <p className="font-medium text-navy mb-1.5">
                 Horton (2023). &ldquo;Large Language Models as Simulated Economic
                 Agents.&rdquo;
               </p>
@@ -73,8 +87,8 @@ export default function MethodologyPage() {
               </p>
             </div>
 
-            <div className="bg-muted/50 rounded-xl p-6 border border-border/50">
-              <p className="font-medium text-navy mb-2">
+            <div className="bg-muted/50 rounded-xl p-5 border border-border/50">
+              <p className="font-medium text-navy mb-1.5">
                 Argyle et al. (2023). &ldquo;Out of One, Many.&rdquo;
               </p>
               <p className="text-sm text-muted-foreground leading-relaxed">
@@ -84,8 +98,8 @@ export default function MethodologyPage() {
               </p>
             </div>
 
-            <div className="bg-muted/50 rounded-xl p-6 border border-border/50">
-              <p className="font-medium text-navy mb-2">
+            <div className="bg-muted/50 rounded-xl p-5 border border-border/50">
+              <p className="font-medium text-navy mb-1.5">
                 Li et al. (2024). LLM-based perceptual maps.
               </p>
               <p className="text-sm text-muted-foreground leading-relaxed">
@@ -95,69 +109,53 @@ export default function MethodologyPage() {
             </div>
           </section>
 
-          <section className="space-y-6 mb-12">
-            <h2 className="text-xl font-bold text-navy">
-              How HypeTest&apos;s methodology works
-            </h2>
+          <section className="space-y-5 mb-10">
+            <div className="flex items-start gap-3">
+              <div className="w-9 h-9 rounded-lg bg-teal/10 flex items-center justify-center shrink-0 mt-0.5">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" /></svg>
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-navy">
+                  How HypeTest&apos;s methodology works
+                </h2>
+              </div>
+            </div>
 
             <div className="space-y-4">
-              <div>
-                <h3 className="font-medium text-navy mb-1">
-                  1. Synthetic consumer panel generation
-                </h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  We generate 50-200 consumer personas with realistic
-                  demographic distributions (age, gender, income, location,
-                  lifestyle, category experience). These are not generic
-                  archetypes — they are grounded in realistic population
-                  distributions for the US market.
-                </p>
-              </div>
-
-              <div>
-                <h3 className="font-medium text-navy mb-1">
-                  2. Conjoint-style indirect elicitation
-                </h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  Rather than asking &ldquo;how much would you pay?&rdquo; (which produces
-                  unreliable results even with real humans), we present choice
-                  tasks: product configurations at different price points, and
-                  ask each simulated consumer to choose. This is the same
-                  methodology used by professional research firms like Nielsen
-                  and Ipsos.
-                </p>
-              </div>
-
-              <div>
-                <h3 className="font-medium text-navy mb-1">
-                  3. Distributional querying
-                </h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  Each persona is queried independently with high temperature
-                  settings, producing natural variation in responses. This is
-                  critical — a single LLM response tells you nothing, but 50+
-                  diverse responses produce a statistically meaningful
-                  distribution.
-                </p>
-              </div>
-
-              <div>
-                <h3 className="font-medium text-navy mb-1">
-                  4. Structured aggregation
-                </h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  We aggregate responses to compute purchase intent scores,
-                  willingness-to-pay estimates, feature importance rankings, and
-                  thematic analysis of concerns and positives.
-                </p>
-              </div>
+              <MethodStep
+                number="1"
+                title="Synthetic consumer panel generation"
+                description="We generate 50-200 consumer personas with realistic demographic distributions (age, gender, income, location, lifestyle, category experience). These are not generic archetypes — they are grounded in realistic population distributions for the US market."
+              />
+              <MethodStep
+                number="2"
+                title="Conjoint-style indirect elicitation"
+                description='Rather than asking "how much would you pay?" (which produces unreliable results even with real humans), we present choice tasks: product configurations at different price points, and ask each simulated consumer to choose. This is the same methodology used by professional research firms like Nielsen and Ipsos.'
+              />
+              <MethodStep
+                number="3"
+                title="Distributional querying"
+                description="Each persona is queried independently with high temperature settings, producing natural variation in responses. This is critical — a single LLM response tells you nothing, but 50+ diverse responses produce a statistically meaningful distribution."
+              />
+              <MethodStep
+                number="4"
+                title="Structured aggregation"
+                description="We aggregate responses to compute purchase intent scores, willingness-to-pay estimates, feature importance rankings, and thematic analysis of concerns and positives."
+              />
             </div>
           </section>
 
-          <section className="space-y-6 mb-12">
-            <h2 className="text-xl font-bold text-navy">
-              Limitations — what HypeTest cannot do
-            </h2>
+          <section className="space-y-5 mb-10">
+            <div className="flex items-start gap-3">
+              <div className="w-9 h-9 rounded-lg bg-red-50 flex items-center justify-center shrink-0 mt-0.5">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" /><line x1="12" y1="9" x2="12" y2="13" /><line x1="12" y1="17" x2="12.01" y2="17" /></svg>
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-navy">
+                  Limitations — what HypeTest cannot do
+                </h2>
+              </div>
+            </div>
             <p className="text-muted-foreground leading-relaxed">
               We believe transparency about limitations is essential to earning
               trust. Here is what this approach cannot reliably do:
@@ -204,15 +202,18 @@ export default function MethodologyPage() {
             </ul>
           </section>
 
-          <section className="space-y-4 mb-12">
+          <section className="space-y-4 mb-10">
             <h2 className="text-xl font-bold text-navy">
               When to use HypeTest
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="bg-emerald-50 rounded-xl p-5 border border-emerald-100">
-                <p className="text-sm font-medium text-emerald-800 mb-2">
-                  Good for
-                </p>
+                <div className="flex items-center gap-2 mb-2">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+                  <p className="text-sm font-medium text-emerald-800">
+                    Good for
+                  </p>
+                </div>
                 <ul className="text-sm text-emerald-700/80 space-y-1">
                   <li>&bull; Early-stage concept validation</li>
                   <li>&bull; Comparing feature trade-offs</li>
@@ -222,9 +223,12 @@ export default function MethodologyPage() {
                 </ul>
               </div>
               <div className="bg-red-50 rounded-xl p-5 border border-red-100">
-                <p className="text-sm font-medium text-red-800 mb-2">
-                  Not for
-                </p>
+                <div className="flex items-center gap-2 mb-2">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
+                  <p className="text-sm font-medium text-red-800">
+                    Not for
+                  </p>
+                </div>
                 <ul className="text-sm text-red-700/80 space-y-1">
                   <li>&bull; Final go/no-go launch decisions</li>
                   <li>&bull; Precise demographic targeting</li>
@@ -235,18 +239,18 @@ export default function MethodologyPage() {
             </div>
           </section>
 
-          <div className="bg-navy text-white rounded-xl p-8 text-center">
-            <h2 className="text-lg font-bold mb-3">
+          <div className="bg-navy text-white rounded-xl p-6 text-center">
+            <h2 className="text-lg font-bold mb-2">
               Try it yourself
             </h2>
-            <p className="text-sm text-blue-200/80 mb-5 max-w-md mx-auto">
+            <p className="text-sm text-blue-200/80 mb-4 max-w-md mx-auto">
               The best way to evaluate this methodology is to run it on a
               product you already have data for — and see how the results
               compare.
             </p>
             <Link
               href="/research/new"
-              className="inline-flex items-center justify-center rounded-lg bg-teal text-white font-medium px-6 h-10 text-sm hover:bg-teal-dark transition-colors"
+              className="inline-flex items-center justify-center rounded-xl bg-teal text-white font-semibold px-8 h-12 text-sm hover:bg-teal-dark transition-colors"
             >
               Run your first study free
             </Link>
@@ -255,5 +259,29 @@ export default function MethodologyPage() {
       </main>
       <Footer />
     </>
+  );
+}
+
+function MethodStep({
+  number,
+  title,
+  description,
+}: {
+  number: string;
+  title: string;
+  description: string;
+}) {
+  return (
+    <div className="flex items-start gap-3">
+      <div className="w-7 h-7 rounded-full bg-navy text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">
+        {number}
+      </div>
+      <div>
+        <h3 className="font-medium text-navy mb-1">{title}</h3>
+        <p className="text-sm text-muted-foreground leading-relaxed">
+          {description}
+        </p>
+      </div>
+    </div>
   );
 }

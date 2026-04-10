@@ -1,4 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
+import { nanoid } from "nanoid";
 import type {
   ConsumerPersona,
   ResearchInput,
@@ -26,18 +27,30 @@ export async function runResearch(
   onProgress?.("Simulating consumer panel responses...", 10);
 
   // Run conjoint-style purchase intent + WTP in batches
+  // Individual persona failures are skipped rather than crashing the run
   const allResponses: PanelResponse[] = [];
   for (let i = 0; i < panel.length; i += BATCH_SIZE) {
     const batch = panel.slice(i, i + BATCH_SIZE);
-    const batchResponses = await Promise.all(
+    const batchResults = await Promise.allSettled(
       batch.map((persona) =>
         queryPersona(persona, input, features, priceRange)
       )
     );
-    allResponses.push(...batchResponses);
+    for (const result of batchResults) {
+      if (result.status === "fulfilled") {
+        allResponses.push(result.value);
+      }
+      // rejected personas are silently skipped
+    }
     onProgress?.(
       "Simulating consumer panel responses...",
       10 + Math.round((i / panel.length) * 60)
+    );
+  }
+
+  if (allResponses.length < 5) {
+    throw new Error(
+      `Too few persona responses (${allResponses.length}/${PANEL_SIZE}). The research panel could not be completed.`
     );
   }
 
@@ -56,7 +69,7 @@ export async function runResearch(
   return {
     ...result,
     verbatims,
-    id: crypto.randomUUID(),
+    id: nanoid(12),
     createdAt: new Date().toISOString(),
     status: "complete",
   };

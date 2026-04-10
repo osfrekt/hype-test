@@ -1,36 +1,134 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { use, useEffect, useState } from "react";
 import { Nav } from "@/components/nav";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import type { ResearchResult } from "@/types/research";
 import { ResultsCharts } from "@/components/results-charts";
+import { createClient } from "@/lib/supabase/client";
 
-export default function ResearchResultPage() {
-  const params = useParams();
-  const [result, setResult] = useState<ResearchResult | null>(null);
+type FetchState =
+  | { status: "loading" }
+  | { status: "error"; message: string }
+  | { status: "ok"; result: ResearchResult };
+
+export default function ResearchResultPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = use(params);
+  const [state, setState] = useState<FetchState>({ status: "loading" });
 
   useEffect(() => {
-    const id = params.id as string;
-    const stored = sessionStorage.getItem(`research-${id}`);
-    if (stored) {
-      setResult(JSON.parse(stored));
-    }
-  }, [params.id]);
+    let cancelled = false;
 
-  if (!result) {
+    async function load() {
+      // Try Supabase first
+      try {
+        const supabase = createClient();
+        const { data, error } = await supabase
+          .from("research_results")
+          .select("*")
+          .eq("id", id)
+          .single();
+
+        if (!error && data && !cancelled) {
+          setState({
+            status: "ok",
+            result: {
+              id: data.id,
+              input: data.input,
+              panelSize: data.panel_size,
+              purchaseIntent: data.purchase_intent,
+              wtpRange: data.wtp_range,
+              featureImportance: data.feature_importance,
+              topConcerns: data.top_concerns,
+              topPositives: data.top_positives,
+              verbatims: data.verbatims,
+              methodology: data.methodology,
+              status: data.status,
+              createdAt: data.created_at,
+            },
+          });
+          return;
+        }
+      } catch {
+        // Supabase fetch failed — fall through to sessionStorage
+      }
+
+      // Fallback: sessionStorage (covers mid-session before DB write completes)
+      try {
+        const stored = sessionStorage.getItem(`research-${id}`);
+        if (stored && !cancelled) {
+          setState({ status: "ok", result: JSON.parse(stored) });
+          return;
+        }
+      } catch {
+        // sessionStorage unavailable (SSR or private browsing)
+      }
+
+      if (!cancelled) {
+        setState({
+          status: "error",
+          message: "Research result not found. The link may be invalid or the result may have expired.",
+        });
+      }
+    }
+
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, [id]);
+
+  if (state.status === "loading") {
     return (
       <>
         <Nav />
         <main className="flex-1 flex items-center justify-center">
-          <p className="text-muted-foreground">Loading results...</p>
+          <div className="text-center">
+            <div className="w-10 h-10 rounded-xl bg-teal/10 flex items-center justify-center mx-auto mb-4">
+              <svg
+                className="animate-spin text-teal"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+              </svg>
+            </div>
+            <p className="text-muted-foreground">Loading results...</p>
+          </div>
         </main>
       </>
     );
   }
+
+  if (state.status === "error") {
+    return (
+      <>
+        <Nav />
+        <main className="flex-1 flex items-center justify-center">
+          <div className="text-center max-w-md px-6">
+            <p className="text-lg font-medium text-navy mb-2">
+              Result not found
+            </p>
+            <p className="text-sm text-muted-foreground">{state.message}</p>
+          </div>
+        </main>
+      </>
+    );
+  }
+
+  const result = state.result;
 
   const intentColor =
     result.purchaseIntent.score >= 60
