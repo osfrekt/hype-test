@@ -19,6 +19,40 @@ export default function MethodologyPage() {
             aggregable results.
           </p>
 
+          {/* What this is and isn't */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+            <div className="bg-emerald-50 rounded-xl p-5 border border-emerald-100">
+              <div className="flex items-center gap-2 mb-3">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+                <p className="text-sm font-semibold text-emerald-800">
+                  What HypeTest does well
+                </p>
+              </div>
+              <ul className="text-sm text-emerald-700/80 space-y-1.5">
+                <li>&bull; Early-stage concept validation</li>
+                <li>&bull; Feature prioritisation and trade-off analysis</li>
+                <li>&bull; Directional pricing and WTP estimation</li>
+                <li>&bull; Surfacing consumer objections before launch</li>
+                <li>&bull; Hypothesis generation for deeper research</li>
+              </ul>
+            </div>
+            <div className="bg-amber-50 rounded-xl p-5 border border-amber-100">
+              <div className="flex items-center gap-2 mb-3">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d97706" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" /><line x1="12" y1="9" x2="12" y2="13" /><line x1="12" y1="17" x2="12.01" y2="17" /></svg>
+                <p className="text-sm font-semibold text-amber-800">
+                  Where HypeTest has limits
+                </p>
+              </div>
+              <ul className="text-sm text-amber-700/80 space-y-1.5">
+                <li>&bull; Precise demographic segment targeting</li>
+                <li>&bull; Truly novel categories with no market precedent</li>
+                <li>&bull; High-stakes final launch decisions</li>
+                <li>&bull; Non-US and non-English markets</li>
+                <li>&bull; Replacing large-scale quantitative studies</li>
+              </ul>
+            </div>
+          </div>
+
           <Separator className="mb-8" />
 
           <section className="space-y-5 mb-10">
@@ -72,6 +106,12 @@ export default function MethodologyPage() {
                 with temperature=1.0, they generated a distribution of responses
                 that simulates the natural variation you&apos;d see in a real
                 consumer panel.
+              </p>
+              <p className="text-xs text-amber-700 bg-amber-50 rounded-lg p-3 mt-3 border border-amber-100">
+                <strong>Note:</strong> The R&sup2; = 0.89 correlation was demonstrated
+                specifically for consumer packaged goods categories. Performance
+                may vary for novel product categories, niche markets, or
+                categories with limited training data representation.
               </p>
             </div>
 
@@ -143,6 +183,67 @@ export default function MethodologyPage() {
                 description="We aggregate responses to compute purchase intent scores, willingness-to-pay estimates, feature importance rankings, and thematic analysis of concerns and positives."
               />
             </div>
+          </section>
+
+          {/* Panel Construction */}
+          <section className="space-y-5 mb-10">
+            <div className="flex items-start gap-3">
+              <div className="w-9 h-9 rounded-lg bg-teal/10 flex items-center justify-center shrink-0 mt-0.5">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-navy">
+                  Panel construction
+                </h2>
+              </div>
+            </div>
+            <p className="text-muted-foreground leading-relaxed">
+              Each simulated panellist is assigned a unique demographic profile
+              drawn from US census-representative distributions across age
+              (22-67), gender (48% male, 48% female, 4% non-binary), household
+              income ($25k-$200k), geographic location (12 region types),
+              lifestyle orientation (10 consumer archetypes), and
+              category-specific purchase experience.
+            </p>
+            <p className="text-muted-foreground leading-relaxed">
+              When a target consumer is specified, 80% of the panel is skewed
+              toward the target demographics while 20% remains general population
+              for contrast. The target skew is derived by asking the LLM to
+              interpret the target description into specific demographic
+              parameters (age range, gender distribution, income bracket,
+              location types, and lifestyle traits).
+            </p>
+          </section>
+
+          {/* Conjoint methodology detail */}
+          <section className="space-y-5 mb-10">
+            <div className="flex items-start gap-3">
+              <div className="w-9 h-9 rounded-lg bg-teal/10 flex items-center justify-center shrink-0 mt-0.5">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" /></svg>
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-navy">
+                  Conjoint methodology detail
+                </h2>
+              </div>
+            </div>
+            <p className="text-muted-foreground leading-relaxed">
+              HypeTest uses a simplified choice-based approach inspired by
+              conjoint analysis. Each panellist is presented with the product at
+              three price points (low, mid, high) and asked to choose. This is
+              structurally simpler than full adaptive conjoint (which uses
+              orthogonal attribute combinations across multiple choice sets), but
+              captures the core insight: indirect elicitation produces more
+              realistic WTP estimates than direct &ldquo;how much would you
+              pay?&rdquo; questions.
+            </p>
+            <p className="text-muted-foreground leading-relaxed">
+              We describe this as &ldquo;conjoint-style&rdquo; to be transparent about
+              both the methodology&apos;s strengths and its simplification. The
+              approach trades some granularity for speed and accessibility —
+              making research-grade directional insights available in minutes
+              rather than weeks.
+            </p>
           </section>
 
           <section className="space-y-5 mb-10">
