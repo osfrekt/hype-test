@@ -54,7 +54,7 @@ export function ResultsCharts({ result }: { result: ResearchResult }) {
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">
+          <CardTitle className="text-lg font-semibold">
             Purchase Intent Distribution
           </CardTitle>
         </CardHeader>
@@ -103,7 +103,7 @@ export function ResultsCharts({ result }: { result: ResearchResult }) {
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">
+          <CardTitle className="text-lg font-semibold">
             Willingness-to-Pay Spectrum
           </CardTitle>
         </CardHeader>
@@ -152,7 +152,7 @@ export function ResultsCharts({ result }: { result: ResearchResult }) {
       {compData && result.competitivePosition && (
         <Card className="md:col-span-2">
           <CardHeader>
-            <CardTitle className="text-base">
+            <CardTitle className="text-lg font-semibold">
               Competitive Positioning vs {result.competitivePosition.competitors}
             </CardTitle>
           </CardHeader>

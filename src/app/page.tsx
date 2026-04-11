@@ -16,7 +16,7 @@ export default function Home() {
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" /></svg>
               Grounded in peer-reviewed research
             </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-navy tracking-tight leading-[1.1] mb-5">
+            <h1 className="font-extrabold text-navy tracking-tight leading-[1.08] mb-5" style={{ fontSize: 'clamp(2.25rem, 1.5rem + 3vw, 3.75rem)' }}>
               Consumer research in
               <br />
               minutes, not months.
@@ -53,7 +53,7 @@ export default function Home() {
                 <p className="text-sm font-semibold text-teal uppercase tracking-wider mb-3">
                   Validated by Harvard Business School research
                 </p>
-                <h2 className="text-3xl md:text-4xl font-bold text-navy leading-tight mb-4">
+                <h2 className="font-bold text-navy leading-tight mb-4" style={{ fontSize: 'clamp(1.75rem, 1.25rem + 2vw, 2.5rem)' }}>
                   R&sup2; = 0.89 correlation with real consumer panels
                 </h2>
                 <p className="text-muted-foreground leading-relaxed mb-5">
@@ -155,7 +155,7 @@ export default function Home() {
         {/* How it works */}
         <section className="py-14 bg-white">
           <div className="max-w-5xl mx-auto px-6">
-            <h2 className="text-2xl md:text-3xl font-bold text-navy mb-3">
+            <h2 className="font-bold text-navy mb-3" style={{ fontSize: 'clamp(1.5rem, 1rem + 1.5vw, 1.875rem)' }}>
               How HypeTest works
             </h2>
             <p className="text-muted-foreground max-w-xl mb-14">
@@ -220,7 +220,7 @@ export default function Home() {
         {/* What you get */}
         <section className="py-14">
           <div className="max-w-5xl mx-auto px-6">
-            <h2 className="text-2xl md:text-3xl font-bold text-navy mb-3">
+            <h2 className="font-bold text-navy mb-3" style={{ fontSize: 'clamp(1.5rem, 1rem + 1.5vw, 1.875rem)' }}>
               What&apos;s in a HypeTest report
             </h2>
             <p className="text-muted-foreground max-w-xl mb-12">
@@ -298,7 +298,7 @@ export default function Home() {
         {/* Sample report */}
         <section className="py-14 bg-white">
           <div className="max-w-5xl mx-auto px-6">
-            <h2 className="text-2xl md:text-3xl font-bold text-navy text-center mb-3">
+            <h2 className="font-bold text-navy text-center mb-3" style={{ fontSize: 'clamp(1.5rem, 1rem + 1.5vw, 1.875rem)' }}>
               See a real report
             </h2>
             <p className="text-muted-foreground text-center max-w-2xl mx-auto mb-10">
@@ -314,7 +314,7 @@ export default function Home() {
           <div className="max-w-5xl mx-auto px-6">
             <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.5fr] gap-12 lg:gap-16">
               <div>
-                <h2 className="text-2xl md:text-3xl font-bold mb-3">
+                <h2 className="font-bold mb-3" style={{ fontSize: 'clamp(1.5rem, 1rem + 1.5vw, 1.875rem)' }}>
                   Why this works
                 </h2>
                 <p className="text-blue-100/70 leading-relaxed mb-6">
@@ -373,7 +373,7 @@ export default function Home() {
         {/* CTA */}
         <section className="py-14">
           <div className="max-w-3xl mx-auto px-6 text-center">
-            <h2 className="text-2xl md:text-3xl font-bold text-navy mb-3">
+            <h2 className="font-bold text-navy mb-3" style={{ fontSize: 'clamp(1.5rem, 1rem + 1.5vw, 1.875rem)' }}>
               Try it now — it&apos;s free
             </h2>
             <p className="text-muted-foreground max-w-xl mx-auto mb-6">

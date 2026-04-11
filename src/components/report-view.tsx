@@ -36,7 +36,7 @@ export function ReportView({
   return (
     <div>
       {/* Header */}
-      <div className="mb-8">
+      <div className="mb-10">
         <div className="flex items-center gap-3 mb-2">
           <h2 className="text-2xl font-bold text-navy">
             {result.input.productName}
@@ -55,34 +55,34 @@ export function ReportView({
       </div>
 
       {/* Executive Summary */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-        <Card>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+        {/* Purchase Intent — featured with tinted background */}
+        <Card className="bg-navy text-white border-navy">
           <CardContent className="pt-6">
-            <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-1">
+            <p className="text-xs font-medium uppercase tracking-wider mb-1 text-blue-200/70">
               Purchase Intent
             </p>
-            <p className={`text-3xl font-bold ${intentColor}`}>
+            <p className="text-4xl font-extrabold tracking-tight">
               {score}%
             </p>
-            <p className="text-xs text-muted-foreground mt-1">
+            <p className="text-xs text-blue-200/60 mt-1.5">
               of simulated consumers likely to buy
             </p>
           </CardContent>
         </Card>
         <WtpCard result={result} />
-        <Card>
-          <CardContent className="pt-6">
-            <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-1">
-              Top Feature
-            </p>
-            <p className="text-lg font-bold text-navy leading-tight">
-              {featureImportance[0]?.feature || "N/A"}
-            </p>
-            <p className="text-xs text-muted-foreground mt-1">
-              most important to consumers
-            </p>
-          </CardContent>
-        </Card>
+        {/* Top Feature — text-dominant, no large number */}
+        <div className="flex flex-col justify-center px-1">
+          <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-2">
+            Top Feature
+          </p>
+          <p className="text-base font-bold text-navy leading-snug mb-1">
+            {featureImportance[0]?.feature || "N/A"}
+          </p>
+          <p className="text-xs text-muted-foreground">
+            most important to consumers
+          </p>
+        </div>
       </div>
 
       {/* Charts */}
@@ -91,9 +91,9 @@ export function ReportView({
       <Separator className="my-8" />
 
       {/* Feature Importance */}
-      <Card className="mb-8">
+      <Card className="mb-10">
         <CardHeader>
-          <CardTitle className="text-base">Feature Importance</CardTitle>
+          <CardTitle className="text-lg font-semibold">Feature Importance</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
@@ -120,10 +120,10 @@ export function ReportView({
       </Card>
 
       {/* Concerns & Positives */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
         <Card>
           <CardHeader>
-            <CardTitle className="text-base text-red-700">
+            <CardTitle className="text-lg font-semibold text-red-700">
               Top Consumer Concerns
             </CardTitle>
           </CardHeader>
@@ -143,7 +143,7 @@ export function ReportView({
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle className="text-base text-emerald-700">
+            <CardTitle className="text-lg font-semibold text-emerald-700">
               Top Consumer Positives
             </CardTitle>
           </CardHeader>
@@ -166,9 +166,9 @@ export function ReportView({
       </div>
 
       {/* Verbatims */}
-      <Card className="mb-8">
+      <Card className="mb-10">
         <CardHeader>
-          <CardTitle className="text-base">Consumer Verbatims</CardTitle>
+          <CardTitle className="text-lg font-semibold">Consumer Verbatims</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
@@ -192,7 +192,7 @@ export function ReportView({
       {/* Methodology */}
       <Card className="border-teal/20 bg-teal/5">
         <CardHeader>
-          <CardTitle className="text-base text-navy">
+          <CardTitle className="text-lg font-semibold text-navy">
             Methodology & Limitations
           </CardTitle>
         </CardHeader>
