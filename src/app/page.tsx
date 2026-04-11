@@ -54,13 +54,15 @@ export default function Home() {
                   Validated by Harvard Business School research
                 </p>
                 <h2 className="font-bold text-primary leading-tight mb-4" style={{ fontSize: 'clamp(1.75rem, 1.25rem + 2vw, 2.5rem)' }}>
-                  R&sup2; = 0.89 correlation with real consumer panels
+                  R&sup2; = 0.89 correlation with real panels in CPG categories
                 </h2>
+                <p className="text-sm text-muted-foreground mb-3">
+                  Demonstrated across consumer packaged goods in Brand, Israeli &amp; Ngwe (2025). Performance varies by category, with strongest results where training data is rich.
+                </p>
                 <p className="text-muted-foreground leading-relaxed mb-5">
                   LLM-simulated consumer panels produce willingness-to-pay
                   estimates that closely match results from real human panels
-                  (n=300). The same methodology used by Nielsen, Ipsos, and
-                  McKinsey — at a fraction of the cost and time.
+                  (n=300). Uses a simplified conjoint-style approach inspired by the same methodology used in professional market research — at a fraction of the cost and time.
                 </p>
                 <ul className="space-y-2 text-sm text-muted-foreground">
                   <li className="flex items-baseline gap-2">
@@ -116,14 +118,17 @@ export default function Home() {
 
             {/* Brand logos / social proof */}
             <div className="text-center">
-              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-5">
-                Built on methodology used by
+              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
+                Methodology inspired by
               </p>
               <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-4 text-muted-foreground/40">
                 <span className="text-lg font-bold tracking-tight">Nielsen</span>
                 <span className="text-lg font-bold tracking-tight">Ipsos</span>
                 <span className="text-lg font-bold tracking-tight">McKinsey</span>
               </div>
+              <p className="text-xs text-muted-foreground mt-3 max-w-md mx-auto">
+                HypeTest uses a simplified version of choice-based conjoint analysis, the methodology standard at leading research firms.
+              </p>
             </div>
           </div>
         </section>
@@ -315,8 +320,9 @@ export default function Home() {
                   </p>
                   <p className="text-sm text-primary-foreground/70 leading-relaxed max-w-prose">
                     Based on Brand, Israeli &amp; Ngwe (2025) from Harvard Business
-                    School, who demonstrated that LLM-generated WTP estimates
-                    closely match real consumer panels.
+                    School, who validated that LLM-simulated conjoint surveys
+                    produce WTP estimates that closely match real consumer panels
+                    in CPG categories (R&sup2; = 0.89, n=300).
                   </p>
                 </div>
                 <div className="w-12 h-px bg-primary-foreground/10" />
@@ -325,9 +331,12 @@ export default function Home() {
                     Real Methodology
                   </p>
                   <p className="text-sm text-primary-foreground/70 leading-relaxed max-w-prose">
-                    We use conjoint-style indirect elicitation — the same approach
-                    used by professional research firms — not direct &quot;how much would
-                    you pay?&quot; questions.
+                    Each product is tested through a simulated panel of 50+
+                    consumer personas, each with realistic demographics and
+                    category experience. Instead of asking &ldquo;how much would
+                    you pay?&rdquo; (which produces unreliable answers even with
+                    real humans), we use forced-choice tasks at different price
+                    points.
                   </p>
                 </div>
                 <div className="w-12 h-px bg-primary-foreground/10" />
@@ -336,10 +345,34 @@ export default function Home() {
                     Honest Limitations
                   </p>
                   <p className="text-sm text-primary-foreground/70 leading-relaxed max-w-prose">
-                    We clearly communicate what this approach can and cannot do.
-                    It&apos;s best for early-stage exploration, not replacing
-                    high-stakes primary research.
+                    Best validated for CPG, food &amp; beverage, and household
+                    products. Less proven for luxury, B2B, or truly novel
+                    categories. We publish{" "}
+                    <Link href="/methodology#confidence-by-category" className="text-teal underline hover:text-teal/80">
+                      confidence levels by category
+                    </Link>{" "}
+                    so you know exactly what you&apos;re getting.
                   </p>
+                </div>
+                <div className="w-12 h-px bg-primary-foreground/10" />
+                {/* Change 5: Validation CTA */}
+                <div className="bg-amber-500/10 border border-amber-400/20 rounded-xl p-4">
+                  <p className="text-sm font-semibold text-amber-300 mb-1">
+                    Already have research data?
+                  </p>
+                  <p className="text-sm text-primary-foreground/70 mb-3">
+                    Run HypeTest on the same product and compare results. It&apos;s
+                    the fastest way to build confidence in the methodology.
+                  </p>
+                  <Link
+                    href="/research/new"
+                    className="inline-flex items-center gap-2 text-sm font-semibold text-amber-300 hover:text-amber-200 hover:underline"
+                  >
+                    Run a validation test
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
+                    </svg>
+                  </Link>
                 </div>
               </div>
             </div>
