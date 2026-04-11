@@ -24,14 +24,14 @@ export default function Home() {
             <p data-animate="3" className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-8 leading-relaxed">
               Simulate a panel of real consumers for any product or idea.
               Get willingness-to-pay estimates, feature priorities, and purchase
-              intent — powered by AI, grounded in academic methodology.
+              intent. Powered by AI, grounded in academic methodology.
             </p>
             <div data-animate="4" className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link
                 href="/research/new"
                 className="inline-flex items-center justify-center rounded-xl bg-primary text-primary-foreground font-semibold px-10 h-14 text-lg hover:bg-primary/90 transition-colors shadow-lg shadow-primary/25"
               >
-                Try it free — no credit card
+                Try it free, no credit card
               </Link>
               <Link
                 href="/methodology"
@@ -50,19 +50,18 @@ export default function Home() {
             {/* Stat + R-squared visual */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center mb-10">
               <div>
-                <p className="text-sm font-semibold text-teal uppercase tracking-wider mb-3">
-                  Validated by Harvard Business School research
-                </p>
+                <div className="inline-flex items-center gap-2 bg-red-900/10 border border-red-900/20 text-red-900 text-sm font-semibold px-3 py-1.5 rounded-full mb-4">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" /><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" /></svg>
+                  Harvard Business School Working Paper
+                </div>
                 <h2 className="font-bold text-primary leading-tight mb-4" style={{ fontSize: 'clamp(1.75rem, 1.25rem + 2vw, 2.5rem)' }}>
-                  R&sup2; = 0.89 correlation with real panels in CPG categories
+                  R&sup2; = 0.89 correlation with real consumer panels
                 </h2>
                 <p className="text-sm text-muted-foreground mb-3">
-                  Demonstrated across consumer packaged goods in Brand, Israeli &amp; Ngwe (2025). Performance varies by category, with strongest results where training data is rich.
+                  In an independent study, Brand, Israeli &amp; Ngwe (Harvard Business School Working Paper 23-062, 2025) found that LLM-simulated conjoint surveys produced WTP estimates closely matching real Prolific panels (n=300) across CPG categories. HypeTest&apos;s methodology is built on their findings.
                 </p>
                 <p className="text-muted-foreground leading-relaxed mb-5">
-                  LLM-simulated consumer panels produce willingness-to-pay
-                  estimates that closely match results from real human panels
-                  (n=300). Uses a simplified conjoint-style approach inspired by the same methodology used in professional market research — at a fraction of the cost and time.
+                  We use a simplified conjoint-style approach inspired by choice-based methods used in professional market research, at a fraction of the cost and time. Results are strongest in categories with rich consumer data.
                 </p>
                 <ul className="space-y-2 text-sm text-muted-foreground">
                   <li className="flex items-baseline gap-2">
@@ -111,23 +110,15 @@ export default function Home() {
                   <text x="315" y="191" textAnchor="middle" className="fill-primary-foreground" fontSize="13" fontWeight="600">R&sup2; = 0.89</text>
                 </svg>
                 <p className="text-xs text-muted-foreground mt-2 text-center">
-                  Based on Brand, Israeli &amp; Ngwe (2025), Harvard Business School
+                  Data from Brand, Israeli &amp; Ngwe (2025), HBS Working Paper 23-062. Illustrative.
                 </p>
               </div>
             </div>
 
             {/* Brand logos / social proof */}
             <div className="text-center">
-              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
-                Methodology inspired by
-              </p>
-              <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-4 text-muted-foreground/40">
-                <span className="text-lg font-bold tracking-tight">Nielsen</span>
-                <span className="text-lg font-bold tracking-tight">Ipsos</span>
-                <span className="text-lg font-bold tracking-tight">McKinsey</span>
-              </div>
-              <p className="text-xs text-muted-foreground mt-3 max-w-md mx-auto">
-                HypeTest uses a simplified version of choice-based conjoint analysis, the methodology standard at leading research firms.
+              <p className="text-xs text-muted-foreground max-w-lg mx-auto">
+                Choice-based conjoint analysis is the methodology standard at firms like Nielsen, Ipsos, and McKinsey. HypeTest uses a simplified, LLM-powered version of this approach.
               </p>
             </div>
           </div>
@@ -148,7 +139,7 @@ export default function Home() {
                 <span className="text-xs font-bold text-teal uppercase tracking-widest">Step 1</span>
                 <h3 className="text-lg font-bold text-primary mt-2 mb-2">Describe your product</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed max-w-[28ch]">
-                  Tell us about your product, feature, or idea. Free-text is fine — we&apos;ll extract what we need.
+                  Tell us about your product, feature, or idea. Free-text is fine. We&apos;ll extract what we need.
                 </p>
               </div>
               <div className="hidden md:flex items-center px-6 pt-8">
@@ -170,7 +161,7 @@ export default function Home() {
                 <span className="text-xs font-bold text-teal uppercase tracking-widest">Step 3</span>
                 <h3 className="text-lg font-bold text-primary mt-2 mb-2">Get your research report</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed max-w-[28ch]">
-                  Purchase intent, willingness-to-pay, feature importance, and consumer concerns — in under 2 minutes.
+                  Purchase intent, willingness-to-pay, feature importance, and consumer concerns, all in under 2 minutes.
                 </p>
               </div>
             </div>
@@ -221,7 +212,7 @@ export default function Home() {
                 <span className="text-xs font-bold text-teal uppercase tracking-widest">Core metric</span>
                 <h3 className="text-lg font-bold mt-2 mb-2">Willingness-to-Pay Range</h3>
                 <p className="text-sm text-primary-foreground/70 leading-relaxed">
-                  Data-derived price estimates from conjoint-style choice tasks — not guesses.
+                  Data-derived price estimates from conjoint-style choice tasks, not guesses.
                 </p>
               </div>
             </div>
@@ -247,7 +238,7 @@ export default function Home() {
                 </span>
                 <div>
                   <h3 className="text-sm font-semibold text-primary mb-1">Consumer Concerns</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">Top objections and hesitations — the things you need to address.</p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">Top objections and hesitations. The things you need to address.</p>
                 </div>
               </div>
               <div className="flex gap-4">
@@ -283,7 +274,7 @@ export default function Home() {
               See a real report
             </h2>
             <p className="text-muted-foreground text-center max-w-2xl mx-auto mb-10">
-              Here&apos;s what a HypeTest report looks like — complete with purchase intent,
+              Here&apos;s what a HypeTest report looks like: purchase intent,
               WTP estimates, feature rankings, and consumer verbatims.
             </p>
             <SampleReport />
@@ -319,10 +310,10 @@ export default function Home() {
                     Academic Foundation
                   </p>
                   <p className="text-sm text-primary-foreground/70 leading-relaxed max-w-prose">
-                    Based on Brand, Israeli &amp; Ngwe (2025) from Harvard Business
-                    School, who validated that LLM-simulated conjoint surveys
-                    produce WTP estimates that closely match real consumer panels
-                    in CPG categories (R&sup2; = 0.89, n=300).
+                    Built on findings from Brand, Israeli &amp; Ngwe (Harvard Business
+                    School Working Paper 23-062, 2025), an independent study that
+                    found LLM-simulated conjoint surveys closely match real
+                    consumer panel WTP estimates in CPG categories (R&sup2; = 0.89, n=300).
                   </p>
                 </div>
                 <div className="w-12 h-px bg-primary-foreground/10" />
@@ -383,7 +374,7 @@ export default function Home() {
         <section className="py-14">
           <div className="max-w-3xl mx-auto px-6 text-center">
             <h2 className="font-bold text-primary mb-3" style={{ fontSize: 'clamp(1.5rem, 1rem + 1.5vw, 1.875rem)' }}>
-              Try it now — it&apos;s free
+              Try it now. It&apos;s free.
             </h2>
             <p className="text-muted-foreground max-w-xl mx-auto mb-6">
               3 free research runs per month. No credit card required.

@@ -55,7 +55,7 @@ export default function MethodologyPage() {
 
           <Separator className="mb-8" />
 
-          {/* Change 3: Why LLMs can simulate consumers — 3 rigorous insights */}
+          {/* Change 3: Why LLMs can simulate consumers */}
           <section className="space-y-5 mb-10">
             <div className="flex items-start gap-3">
               <div className="w-9 h-9 rounded-lg bg-teal/10 flex items-center justify-center shrink-0 mt-0.5">
@@ -76,7 +76,7 @@ export default function MethodologyPage() {
                 <p className="text-muted-foreground leading-relaxed">
                   LLMs were trained on billions of product reviews, pricing
                   discussions, purchase decision threads, and consumer forums.
-                  They haven&apos;t just memorised facts about products — they&apos;ve
+                  They haven&apos;t just memorised facts about products; they&apos;ve
                   internalised the <em>decision patterns</em> that produce those
                   reviews. When you condition an LLM with a specific demographic
                   profile, it draws on these patterns to produce responses that
@@ -93,8 +93,8 @@ export default function MethodologyPage() {
                 <p className="text-muted-foreground leading-relaxed">
                   Even with real humans, asking &ldquo;how much would you pay for
                   X?&rdquo; produces unreliable answers. People consistently
-                  overstate their willingness to pay when asked directly — this
-                  is called hypothetical bias, and it&apos;s well-documented in
+                  overstate their willingness to pay when asked directly (this
+                  is called hypothetical bias) and it&apos;s well-documented in
                   behavioral economics. Professional research firms solved this
                   decades ago by switching to choice-based methods: instead of
                   asking what you&apos;d pay, they show you options at different
@@ -110,7 +110,7 @@ export default function MethodologyPage() {
                   3. Distributional querying is the key innovation
                 </h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  A single LLM response is just a point estimate — not very
+                  A single LLM response is just a point estimate and not very
                   useful on its own. The breakthrough from Brand et al. (2025)
                   was querying the model many times with diverse persona
                   conditioning. Each persona responds slightly differently based
@@ -234,7 +234,7 @@ export default function MethodologyPage() {
               <MethodStep
                 number="1"
                 title="Synthetic consumer panel generation"
-                description="We generate 50-200 consumer personas with realistic demographic distributions (age, gender, income, location, lifestyle, category experience). These are not generic archetypes — they are grounded in realistic population distributions for the US market."
+                description="We generate 50-200 consumer personas with realistic demographic distributions (age, gender, income, location, lifestyle, category experience). These are not generic archetypes. They are grounded in realistic population distributions for the US market."
               />
               <MethodStep
                 number="2"
@@ -244,7 +244,7 @@ export default function MethodologyPage() {
               <MethodStep
                 number="3"
                 title="Distributional querying"
-                description="Each persona is queried independently with high temperature settings, producing natural variation in responses. This is critical — a single LLM response tells you nothing, but 50+ diverse responses produce a statistically meaningful distribution."
+                description="Each persona is queried independently with high temperature settings, producing natural variation in responses. This is critical: a single LLM response tells you nothing, but 50+ diverse responses produce a statistically meaningful distribution."
               />
               <MethodStep
                 number="4"
@@ -304,7 +304,7 @@ export default function MethodologyPage() {
                   ))}
                 </div>
                 <p className="text-xs text-muted-foreground italic">
-                  Standard Likert scale — the same format used in traditional consumer research.
+                  Standard Likert scale, the same format used in traditional consumer research.
                 </p>
               </div>
 
@@ -332,7 +332,7 @@ export default function MethodologyPage() {
                 </div>
                 <p className="text-xs text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/30 rounded-lg p-2.5 border border-amber-100 dark:border-amber-800/30">
                   Indirect elicitation through forced-choice tasks reduces
-                  hypothetical bias — the same reason professional research firms
+                  hypothetical bias, the same reason professional research firms
                   moved away from open-ended WTP questions decades ago.
                 </p>
               </div>
@@ -444,7 +444,7 @@ export default function MethodologyPage() {
             <p className="text-muted-foreground leading-relaxed">
               We describe this as &ldquo;conjoint-style&rdquo; to be transparent about
               both the methodology&apos;s strengths and its simplification. The
-              approach trades some granularity for speed and accessibility —
+              approach trades some granularity for speed and accessibility,
               making research-grade directional insights available in minutes
               rather than weeks.
             </p>
