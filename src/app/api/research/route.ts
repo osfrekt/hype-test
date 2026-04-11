@@ -2,6 +2,7 @@ import { runResearch } from "@/lib/research-engine";
 import { createClient } from "@/lib/supabase/server";
 import { sendResearchReport } from "@/lib/email";
 import { createRateLimiter } from "@/lib/rate-limit";
+import { checkQuota, incrementUsage, getOrCreateUser } from "@/lib/users";
 import type { ResearchInput, ResearchResult } from "@/types/research";
 
 export const maxDuration = 300;
@@ -47,6 +48,17 @@ export async function POST(request: Request) {
       );
     }
 
+    // Quota check
+    const email = typeof body.email === "string" ? body.email.trim().slice(0, 200) : null;
+    if (email) {
+      const quota = await checkQuota(email, "research");
+      if (!quota.allowed) {
+        return Response.json({
+          error: `You've used all ${quota.limit} research runs this month on the ${quota.plan} plan. Upgrade at hypetest.ai/pricing for more.`,
+        }, { status: 403 });
+      }
+    }
+
     const sanitizedInput: ResearchInput = {
       productName,
       productDescription,
@@ -81,7 +93,6 @@ export async function POST(request: Request) {
 
     const result = await runResearch(sanitizedInput);
 
-    const email = typeof body.email === "string" ? body.email.trim().slice(0, 200) : null;
     const userName = typeof body.userName === "string" ? body.userName.trim().slice(0, 200) : null;
     const userCompany = typeof body.userCompany === "string" ? body.userCompany.trim().slice(0, 200) : null;
     const userRole = typeof body.userRole === "string" ? body.userRole.trim().slice(0, 100) : null;
@@ -96,8 +107,11 @@ export async function POST(request: Request) {
       console.error("Failed to persist research result:", err)
     );
 
-    // Send email with report link
+    // Track usage and ensure user record exists
     if (email) {
+      getOrCreateUser(email, userName || undefined, userCompany || undefined, userRole || undefined, userCompanySize || undefined).catch(console.error);
+      incrementUsage(email, "research").catch(console.error);
+
       sendResearchReport(email, sanitizedInput.productName, result.id).catch(
         (err) => console.error("Failed to send research email:", err)
       );

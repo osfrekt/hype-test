@@ -8,23 +8,124 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
+const plans = [
+  {
+    id: "free",
+    name: "Free",
+    price: "$0",
+    period: "",
+    description: "Try HypeTest with basic research",
+    features: [
+      "3 research runs per month",
+      "50 simulated respondents per run",
+      "Purchase intent score",
+      "WTP range estimate",
+      "Feature importance ranking",
+      "Consumer verbatims",
+      "Competitive positioning",
+    ],
+    cta: "Start free",
+    href: "/research/new",
+    highlight: false,
+  },
+  {
+    id: "starter",
+    name: "Starter",
+    price: "$49",
+    period: "/mo",
+    description: "More research runs + discovery",
+    features: [
+      "15 research runs per month",
+      "3 discovery rounds per month",
+      "Everything in Free",
+      "Priority processing",
+      "Email support",
+    ],
+    cta: "Get Starter",
+    href: null,
+    highlight: false,
+  },
+  {
+    id: "pro",
+    name: "Pro",
+    price: "$149",
+    period: "/mo",
+    description: "Unlimited research and discovery",
+    features: [
+      "Unlimited research runs",
+      "Unlimited discovery rounds",
+      "Everything in Starter",
+      "Advanced consumer filtering",
+      "Priority support",
+    ],
+    cta: "Get Pro",
+    href: null,
+    highlight: true,
+  },
+  {
+    id: "team",
+    name: "Team",
+    price: "$349",
+    period: "/mo",
+    description: "For teams building together",
+    features: [
+      "Everything in Pro",
+      "5 team seats",
+      "Shared research library",
+      "Team collaboration",
+      "Dedicated support",
+    ],
+    cta: "Join waitlist",
+    href: null,
+    highlight: false,
+    isWaitlist: true,
+  },
+];
+
 export default function PricingPage() {
-  const [email, setEmail] = useState("");
-  const [waitlistStatus, setWaitlistStatus] = useState<
-    "idle" | "loading" | "success" | "error"
-  >("idle");
+  const [checkoutEmail, setCheckoutEmail] = useState("");
+  const [checkoutPlan, setCheckoutPlan] = useState<string | null>(null);
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [checkoutError, setCheckoutError] = useState("");
+  const [waitlistEmail, setWaitlistEmail] = useState("");
+  const [waitlistStatus, setWaitlistStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [waitlistMessage, setWaitlistMessage] = useState("");
+
+  async function handleCheckout(e: React.FormEvent) {
+    e.preventDefault();
+    if (!checkoutEmail.trim() || !checkoutPlan) return;
+
+    setCheckoutLoading(true);
+    setCheckoutError("");
+    try {
+      const res = await fetch("/api/billing/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: checkoutEmail.trim(), plan: checkoutPlan }),
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        setCheckoutError(data.error || "Something went wrong.");
+        setCheckoutLoading(false);
+      }
+    } catch {
+      setCheckoutError("Something went wrong. Please try again.");
+      setCheckoutLoading(false);
+    }
+  }
 
   async function handleWaitlist(e: React.FormEvent) {
     e.preventDefault();
-    if (!email.trim()) return;
+    if (!waitlistEmail.trim()) return;
 
     setWaitlistStatus("loading");
     try {
       const res = await fetch("/api/waitlist", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email.trim() }),
+        body: JSON.stringify({ email: waitlistEmail.trim() }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -33,7 +134,7 @@ export default function PricingPage() {
       } else {
         setWaitlistStatus("success");
         setWaitlistMessage(data.message);
-        setEmail("");
+        setWaitlistEmail("");
       }
     } catch {
       setWaitlistStatus("error");
@@ -45,115 +146,216 @@ export default function PricingPage() {
     <>
       <Nav />
       <main className="flex-1 py-12">
-        <div className="max-w-3xl mx-auto px-6">
+        <div className="max-w-5xl mx-auto px-6">
           <div className="text-center mb-12">
             <h1 className="text-3xl md:text-4xl font-bold text-primary mb-3">
               Simple, transparent pricing
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Start free today. Pro features are coming soon.
+              Start free. Upgrade when you need more research power.
             </p>
           </div>
 
-          {/* Free tier — prominent */}
-          <Card className="relative border-teal shadow-lg shadow-teal/10 mb-8">
-            <CardHeader>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-teal/10 flex items-center justify-center">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></svg>
-                </div>
-                <div>
-                  <CardTitle className="text-lg">Quick Pulse</CardTitle>
-                  <p className="text-sm text-muted-foreground mt-0.5">
-                    3 research runs per month
-                  </p>
-                </div>
-                <span className="ml-auto text-3xl font-bold text-primary">
-                  Free
-                </span>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                <Feature>50 simulated respondents per run</Feature>
-                <Feature>Purchase intent score</Feature>
-                <Feature>WTP range estimate</Feature>
-                <Feature>Feature importance ranking</Feature>
-                <Feature>Top consumer concerns</Feature>
-                <Feature>Consumer verbatims</Feature>
-                <Feature>Competitive positioning</Feature>
-                <Feature>Target consumer filtering</Feature>
-              </div>
-              <Link
-                href="/research/new"
-                className="block w-full text-center rounded-xl bg-primary text-primary-foreground font-semibold py-3 text-sm hover:bg-primary/90 transition-colors"
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
+            {plans.map((plan) => (
+              <Card
+                key={plan.id}
+                className={`relative flex flex-col ${
+                  plan.highlight ? "border-teal shadow-lg shadow-teal/10" : ""
+                }`}
               >
-                Start free
-              </Link>
-            </CardContent>
-          </Card>
+                {plan.highlight && (
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                    <span className="bg-teal text-white text-xs font-semibold px-3 py-1 rounded-full">
+                      Most popular
+                    </span>
+                  </div>
+                )}
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-base">{plan.name}</CardTitle>
+                  <div className="mt-2">
+                    <span className="text-3xl font-bold text-primary">{plan.price}</span>
+                    {plan.period && (
+                      <span className="text-sm text-muted-foreground">{plan.period}</span>
+                    )}
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-1">{plan.description}</p>
+                </CardHeader>
+                <CardContent className="flex-1 flex flex-col">
+                  <ul className="space-y-2 flex-1 mb-4">
+                    {plan.features.map((feature) => (
+                      <li key={feature} className="flex items-start gap-2 text-sm text-muted-foreground">
+                        <svg
+                          className="w-4 h-4 text-teal mt-0.5 shrink-0"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
 
-          {/* Coming soon / waitlist */}
-          <Card className="bg-muted/30">
-            <CardContent className="py-8">
-              <div className="text-center max-w-lg mx-auto">
-                <div className="w-12 h-12 rounded-2xl bg-primary/5 flex items-center justify-center mx-auto mb-4">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary"><path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" /></svg>
-                </div>
-                <h3 className="text-lg font-bold text-primary mb-2">
-                  More power coming soon
-                </h3>
-                <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
-                  Product Discovery (find what to build next), custom panels of
-                  up to 200 respondents, conjoint WTP breakdown by feature,
-                  competitive positioning for up to 3 competitors, target
-                  demographic selection, PDF &amp; CSV export, team
-                  collaboration, and API access.
-                </p>
-
-                {waitlistStatus === "success" ? (
-                  <p className="text-sm font-medium text-emerald-600">
-                    {waitlistMessage}
-                  </p>
-                ) : (
-                  <form
-                    onSubmit={handleWaitlist}
-                    className="flex gap-2 max-w-sm mx-auto"
-                  >
-                    <Input
-                      type="email"
-                      placeholder="you@company.com"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
-                      className="flex-1"
-                    />
-                    <Button
-                      type="submit"
-                      className="bg-primary hover:bg-primary/90 text-primary-foreground shrink-0"
-                      disabled={waitlistStatus === "loading"}
+                  {plan.href ? (
+                    <Link
+                      href={plan.href}
+                      className={`block w-full text-center rounded-xl font-semibold py-2.5 text-sm transition-colors ${
+                        plan.highlight
+                          ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                          : "bg-muted text-foreground hover:bg-muted/80"
+                      }`}
                     >
-                      {waitlistStatus === "loading"
-                        ? "Joining..."
-                        : "Join the waitlist"}
+                      {plan.cta}
+                    </Link>
+                  ) : plan.isWaitlist ? (
+                    <Button
+                      variant="outline"
+                      className="w-full"
+                      onClick={() => {
+                        const el = document.getElementById("team-waitlist");
+                        el?.scrollIntoView({ behavior: "smooth" });
+                      }}
+                    >
+                      {plan.cta}
                     </Button>
+                  ) : (
+                    <Button
+                      className={`w-full ${plan.highlight ? "" : "bg-muted text-foreground hover:bg-muted/80"}`}
+                      onClick={() => {
+                        setCheckoutPlan(plan.id);
+                        setCheckoutError("");
+                        // Try to pre-fill from sessionStorage
+                        try {
+                          const stored = sessionStorage.getItem("ht-email");
+                          if (stored) setCheckoutEmail(stored);
+                        } catch {
+                          // ignore
+                        }
+                      }}
+                    >
+                      {plan.cta}
+                    </Button>
+                  )}
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          {/* Checkout email modal */}
+          {checkoutPlan && (
+            <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+              <Card className="w-full max-w-md">
+                <CardHeader>
+                  <CardTitle className="text-lg">
+                    Subscribe to {checkoutPlan.charAt(0).toUpperCase() + checkoutPlan.slice(1)}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <form onSubmit={handleCheckout} className="space-y-4">
+                    <div>
+                      <label htmlFor="checkout-email" className="block text-sm font-medium text-foreground mb-1.5">
+                        Email address
+                      </label>
+                      <Input
+                        id="checkout-email"
+                        type="email"
+                        placeholder="you@company.com"
+                        value={checkoutEmail}
+                        onChange={(e) => setCheckoutEmail(e.target.value)}
+                        required
+                        autoFocus
+                      />
+                      <p className="text-xs text-muted-foreground mt-1">
+                        You&apos;ll be redirected to Stripe to complete payment.
+                      </p>
+                    </div>
+                    {checkoutError && (
+                      <p className="text-sm text-destructive">{checkoutError}</p>
+                    )}
+                    <div className="flex gap-2">
+                      <Button type="submit" disabled={checkoutLoading} className="flex-1">
+                        {checkoutLoading ? "Redirecting..." : "Continue to payment"}
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => {
+                          setCheckoutPlan(null);
+                          setCheckoutError("");
+                        }}
+                      >
+                        Cancel
+                      </Button>
+                    </div>
                   </form>
-                )}
+                </CardContent>
+              </Card>
+            </div>
+          )}
 
-                {waitlistStatus !== "success" && (
-                  <p className="text-xs text-muted-foreground mt-2">
-                    By joining, you agree to our <Link href="/privacy">Privacy Policy</Link>.
+          {/* Team waitlist */}
+          <div id="team-waitlist">
+            <Card className="bg-muted/30">
+              <CardContent className="py-8">
+                <div className="text-center max-w-lg mx-auto">
+                  <div className="w-12 h-12 rounded-2xl bg-primary/5 flex items-center justify-center mx-auto mb-4">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary"><path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" /></svg>
+                  </div>
+                  <h3 className="text-lg font-bold text-primary mb-2">
+                    Team plan coming soon
+                  </h3>
+                  <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
+                    Team collaboration, shared research library, 5 seats, and dedicated support.
+                    Join the waitlist to be first in line.
                   </p>
-                )}
 
-                {waitlistStatus === "error" && (
-                  <p className="text-sm text-destructive mt-2">
-                    {waitlistMessage}
-                  </p>
-                )}
-              </div>
-            </CardContent>
-          </Card>
+                  {waitlistStatus === "success" ? (
+                    <p className="text-sm font-medium text-emerald-600">
+                      {waitlistMessage}
+                    </p>
+                  ) : (
+                    <form
+                      onSubmit={handleWaitlist}
+                      className="flex gap-2 max-w-sm mx-auto"
+                    >
+                      <Input
+                        type="email"
+                        placeholder="you@company.com"
+                        value={waitlistEmail}
+                        onChange={(e) => setWaitlistEmail(e.target.value)}
+                        required
+                        className="flex-1"
+                      />
+                      <Button
+                        type="submit"
+                        className="bg-primary hover:bg-primary/90 text-primary-foreground shrink-0"
+                        disabled={waitlistStatus === "loading"}
+                      >
+                        {waitlistStatus === "loading" ? "Joining..." : "Join the waitlist"}
+                      </Button>
+                    </form>
+                  )}
+
+                  {waitlistStatus !== "success" && (
+                    <p className="text-xs text-muted-foreground mt-2">
+                      By joining, you agree to our <Link href="/privacy">Privacy Policy</Link>.
+                    </p>
+                  )}
+
+                  {waitlistStatus === "error" && (
+                    <p className="text-sm text-destructive mt-2">
+                      {waitlistMessage}
+                    </p>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
 
           <div className="mt-10 text-center">
             <p className="text-sm text-muted-foreground mb-1">
@@ -167,24 +369,5 @@ export default function PricingPage() {
       </main>
       <Footer />
     </>
-  );
-}
-
-function Feature({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="flex items-start gap-2 text-sm text-muted-foreground">
-      <svg
-        className="w-4 h-4 text-teal mt-0.5 shrink-0"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <polyline points="20 6 9 17 4 12" />
-      </svg>
-      {children}
-    </div>
   );
 }

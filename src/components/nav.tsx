@@ -86,6 +86,12 @@ export function Nav() {
               Compare
             </Link>
           )}
+          <Link
+            href="/account"
+            className="hover:text-foreground transition-colors"
+          >
+            Account
+          </Link>
         </nav>
         <div className="flex items-center gap-3">
           <button

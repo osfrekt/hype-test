@@ -2,6 +2,7 @@ import { runDiscovery } from "@/lib/discovery-engine";
 import { createClient } from "@/lib/supabase/server";
 import { sendDiscoveryReport } from "@/lib/email";
 import { createRateLimiter } from "@/lib/rate-limit";
+import { checkQuota, incrementUsage, getOrCreateUser } from "@/lib/users";
 import type { DiscoveryInput, DiscoveryResult } from "@/types/discovery";
 
 export const maxDuration = 300;
@@ -59,6 +60,17 @@ export async function POST(request: Request) {
       );
     }
 
+    // Quota check
+    const email = typeof body.email === "string" ? body.email.trim().slice(0, 200) : null;
+    if (email) {
+      const quota = await checkQuota(email, "discovery");
+      if (!quota.allowed) {
+        return Response.json({
+          error: `You've used all ${quota.limit} discovery runs this month on the ${quota.plan} plan. Upgrade at hypetest.ai/pricing for more.`,
+        }, { status: 403 });
+      }
+    }
+
     const sanitizedInput: DiscoveryInput = {
       brandName,
       brandDescription,
@@ -87,7 +99,6 @@ export async function POST(request: Request) {
 
     const result = await runDiscovery(sanitizedInput);
 
-    const email = typeof body.email === "string" ? body.email.trim().slice(0, 200) : null;
     const userName = typeof body.userName === "string" ? body.userName.trim().slice(0, 200) : null;
     const userCompany = typeof body.userCompany === "string" ? body.userCompany.trim().slice(0, 200) : null;
     const userRole = typeof body.userRole === "string" ? body.userRole.trim().slice(0, 100) : null;
@@ -102,8 +113,11 @@ export async function POST(request: Request) {
       console.error("Failed to persist discovery result:", err)
     );
 
-    // Send email with report link
+    // Track usage and ensure user record exists
     if (email) {
+      getOrCreateUser(email, userName || undefined, userCompany || undefined, userRole || undefined, userCompanySize || undefined).catch(console.error);
+      incrementUsage(email, "discovery").catch(console.error);
+
       sendDiscoveryReport(email, sanitizedInput.brandName, result.id).catch(
         (err) => console.error("Failed to send discovery email:", err)
       );
