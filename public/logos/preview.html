@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HypeTest Logo Variations — Preview</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: system-ui, -apple-system, sans-serif; line-height: 1.5; }
+
+  .section { padding: 48px 24px; }
+  .section--light { background: #fafbfc; color: #0c0f1a; }
+  .section--dark  { background: #0f172a; color: #fafbfc; }
+
+  h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+  .subtitle { font-size: 14px; opacity: 0.6; margin-bottom: 40px; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  @media (max-width: 900px)  { .grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px)  { .grid { grid-template-columns: 1fr; } }
+
+  .card {
+    border: 1px solid rgba(128,128,128,0.15);
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .section--dark .card { border-color: rgba(255,255,255,0.1); }
+
+  .card h2 { font-size: 16px; font-weight: 600; }
+  .card .concept { font-size: 12px; opacity: 0.55; margin-top: 2px; }
+
+  .sizes {
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .sizes figure {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+  .sizes figcaption { font-size: 10px; opacity: 0.4; }
+
+  .wordmark-row {
+    border-top: 1px solid rgba(128,128,128,0.12);
+    padding-top: 14px;
+  }
+  .wordmark-row img { height: 36px; }
+
+  .section--dark .card .wordmark-row img {
+    filter: brightness(0) invert(1);
+  }
+</style>
+</head>
+<body>
+
+<section class="section section--light">
+  <div style="max-width:1100px; margin:0 auto;">
+    <h1>HypeTest Logo Variations</h1>
+    <p class="subtitle">6 concepts + 4 pulse variations &mdash; icon at 24 / 48 / 160px + wordmark &mdash; light background</p>
+  </div>
+
+  <div class="grid">
+
+    <div class="card">
+      <div>
+        <h2>1a. Signal Pulse (original)</h2>
+        <p class="concept">EKG-style waveform on a navy rounded square.</p>
+      </div>
+      <div class="sizes">
+        <figure><img src="logo-pulse.svg" width="24" height="24" alt="Pulse 24"><figcaption>24px</figcaption></figure>
+        <figure><img src="logo-pulse.svg" width="48" height="48" alt="Pulse 48"><figcaption>48px</figcaption></figure>
+        <figure><img src="logo-pulse.svg" width="160" height="160" alt="Pulse 160"><figcaption>160px</figcaption></figure>
+      </div>
+      <div class="wordmark-row"><img src="logo-pulse.svg" alt="Pulse wordmark"></div>
+    </div>
+
+    <div class="card">
+      <div>
+        <h2>1b. Circular Pulse</h2>
+        <p class="concept">Waveform cutting across a radar ring &mdash; signal radiating from center.</p>
+      </div>
+      <div class="sizes">
+        <figure><img src="logo-pulse-v2.svg" width="24" height="24" alt=""><figcaption>24px</figcaption></figure>
+        <figure><img src="logo-pulse-v2.svg" width="48" height="48" alt=""><figcaption>48px</figcaption></figure>
+        <figure><img src="logo-pulse-v2.svg" width="160" height="160" alt=""><figcaption>160px</figcaption></figure>
+      </div>
+      <div class="wordmark-row"><img src="logo-pulse-v2.svg" alt=""></div>
+    </div>
+
+    <div class="card">
+      <div>
+        <h2>1c. Stacked Signals</h2>
+        <p class="concept">Three layered waveforms converging &mdash; many consumer signals, one consensus.</p>
+      </div>
+      <div class="sizes">
+        <figure><img src="logo-pulse-v3.svg" width="24" height="24" alt=""><figcaption>24px</figcaption></figure>
+        <figure><img src="logo-pulse-v3.svg" width="48" height="48" alt=""><figcaption>48px</figcaption></figure>
+        <figure><img src="logo-pulse-v3.svg" width="160" height="160" alt=""><figcaption>160px</figcaption></figure>
+      </div>
+      <div class="wordmark-row"><img src="logo-pulse-v3.svg" alt=""></div>
+    </div>
+
+    <div class="card">
+      <div>
+        <h2>1d. Pulse Bubble</h2>
+        <p class="concept">Waveform inside a speech bubble &mdash; signal born from conversation/research.</p>
+      </div>
+      <div class="sizes">
+        <figure><img src="logo-pulse-v4.svg" width="24" height="24" alt=""><figcaption>24px</figcaption></figure>
+        <figure><img src="logo-pulse-v4.svg" width="48" height="48" alt=""><figcaption>48px</figcaption></figure>
+        <figure><img src="logo-pulse-v4.svg" width="160" height="160" alt=""><figcaption>160px</figcaption></figure>
+      </div>
+      <div class="wordmark-row"><img src="logo-pulse-v4.svg" alt=""></div>
+    </div>
+
+    <div class="card">
+      <div>
+        <h2>1e. Pulse Letter H</h2>
+        <p class="concept">The letter H formed from organic pulse strokes &mdash; waveform as typography.</p>
+      </div>
+      <div class="sizes">
+        <figure><img src="logo-pulse-v5.svg" width="24" height="24" alt=""><figcaption>24px</figcaption></figure>
+        <figure><img src="logo-pulse-v5.svg" width="48" height="48" alt=""><figcaption>48px</figcaption></figure>
+        <figure><img src="logo-pulse-v5.svg" width="160" height="160" alt=""><figcaption>160px</figcaption></figure>
+      </div>
+      <div class="wordmark-row"><img src="logo-pulse-v5.svg" alt=""></div>
+    </div>
+
+    <div class="card">
+      <div>
+        <h2>2. Prism / Refraction</h2>
+        <p class="concept">A single idea split into many consumer perspectives through a geometric prism.</p>
+      </div>
+      <div class="sizes">
+        <figure><img src="logo-prism.svg" width="24" height="24" alt="Prism 24"><figcaption>24px</figcaption></figure>
+        <figure><img src="logo-prism.svg" width="48" height="48" alt="Prism 48"><figcaption>48px</figcaption></figure>
+        <figure><img src="logo-prism.svg" width="160" height="160" alt="Prism 160"><figcaption>160px</figcaption></figure>
+      </div>
+      <div class="wordmark-row"><img src="logo-prism.svg" alt="Prism wordmark"></div>
+    </div>
+
+    <div class="card">
+      <div>
+        <h2>3. Abstract Panel</h2>
+        <p class="concept">A cluster of overlapping shapes representing a diverse simulated consumer panel.</p>
+      </div>
+      <div class="sizes">
+        <figure><img src="logo-panel.svg" width="24" height="24" alt="Panel 24"><figcaption>24px</figcaption></figure>
+        <figure><img src="logo-panel.svg" width="48" height="48" alt="Panel 48"><figcaption>48px</figcaption></figure>
+        <figure><img src="logo-panel.svg" width="160" height="160" alt="Panel 160"><figcaption>160px</figcaption></figure>
+      </div>
+      <div class="wordmark-row"><img src="logo-panel.svg" alt="Panel wordmark"></div>
+    </div>
+
+    <div class="card">
+      <div>
+        <h2>4. Research Lens</h2>
+        <p class="concept">A magnifying glass containing a bar chart &mdash; deep research at a glance.</p>
+      </div>
+      <div class="sizes">
+        <figure><img src="logo-lens.svg" width="24" height="24" alt="Lens 24"><figcaption>24px</figcaption></figure>
+        <figure><img src="logo-lens.svg" width="48" height="48" alt="Lens 48"><figcaption>48px</figcaption></figure>
+        <figure><img src="logo-lens.svg" width="160" height="160" alt="Lens 160"><figcaption>160px</figcaption></figure>
+      </div>
+      <div class="wordmark-row"><img src="logo-lens.svg" alt="Lens wordmark"></div>
+    </div>
+
+    <div class="card">
+      <div>
+        <h2>5. Typographic Mark (HT)</h2>
+        <p class="concept">A bold HT monogram with negative space and teal accent.</p>
+      </div>
+      <div class="sizes">
+        <figure><img src="logo-hype.svg" width="24" height="24" alt="Hype 24"><figcaption>24px</figcaption></figure>
+        <figure><img src="logo-hype.svg" width="48" height="48" alt="Hype 48"><figcaption>48px</figcaption></figure>
+        <figure><img src="logo-hype.svg" width="160" height="160" alt="Hype 160"><figcaption>160px</figcaption></figure>
+      </div>
+      <div class="wordmark-row"><img src="logo-hype.svg" alt="Hype wordmark"></div>
+    </div>
+
+    <div class="card">
+      <div>
+        <h2>6. Spark / Ignition</h2>
+        <p class="concept">A growth line with a diamond spark at the peak &mdash; the moment an idea gets validated.</p>
+      </div>
+      <div class="sizes">
+        <figure><img src="logo-spark.svg" width="24" height="24" alt="Spark 24"><figcaption>24px</figcaption></figure>
+        <figure><img src="logo-spark.svg" width="48" height="48" alt="Spark 48"><figcaption>48px</figcaption></figure>
+        <figure><img src="logo-spark.svg" width="160" height="160" alt="Spark 160"><figcaption>160px</figcaption></figure>
+      </div>
+      <div class="wordmark-row"><img src="logo-spark.svg" alt="Spark wordmark"></div>
+    </div>
+
+  </div>
+</section>
+
+<section class="section section--dark">
+  <div style="max-width:1100px; margin:0 auto;">
+    <h1>Dark Background</h1>
+    <p class="subtitle">Same 6 logos on navy background</p>
+  </div>
+
+  <div class="grid">
+
+    <div class="card">
+      <div><h2>1a. Signal Pulse (original)</h2></div>
+      <div class="sizes">
+        <figure><img src="logo-pulse.svg" width="24" height="24" alt=""><figcaption>24px</figcaption></figure>
+        <figure><img src="logo-pulse.svg" width="48" height="48" alt=""><figcaption>48px</figcaption></figure>
+        <figure><img src="logo-pulse.svg" width="160" height="160" alt=""><figcaption>160px</figcaption></figure>
+      </div>
+      <div class="wordmark-row"><img src="logo-pulse.svg" alt=""></div>
+    </div>
+
+    <div class="card">
+      <div><h2>1b. Circular Pulse</h2></div>
+      <div class="sizes">
+        <figure><img src="logo-pulse-v2.svg" width="24" height="24" alt=""><figcaption>24px</figcaption></figure>
+        <figure><img src="logo-pulse-v2.svg" width="48" height="48" alt=""><figcaption>48px</figcaption></figure>
+        <figure><img src="logo-pulse-v2.svg" width="160" height="160" alt=""><figcaption>160px</figcaption></figure>
+      </div>
+      <div class="wordmark-row"><img src="logo-pulse-v2.svg" alt=""></div>
+    </div>
+
+    <div class="card">
+      <div><h2>1c. Stacked Signals</h2></div>
+      <div class="sizes">
+        <figure><img src="logo-pulse-v3.svg" width="24" height="24" alt=""><figcaption>24px</figcaption></figure>
+        <figure><img src="logo-pulse-v3.svg" width="48" height="48" alt=""><figcaption>48px</figcaption></figure>
+        <figure><img src="logo-pulse-v3.svg" width="160" height="160" alt=""><figcaption>160px</figcaption></figure>
+      </div>
+      <div class="wordmark-row"><img src="logo-pulse-v3.svg" alt=""></div>
+    </div>
+
+    <div class="card">
+      <div><h2>1d. Pulse Bubble</h2></div>
+      <div class="sizes">
+        <figure><img src="logo-pulse-v4.svg" width="24" height="24" alt=""><figcaption>24px</figcaption></figure>
+        <figure><img src="logo-pulse-v4.svg" width="48" height="48" alt=""><figcaption>48px</figcaption></figure>
+        <figure><img src="logo-pulse-v4.svg" width="160" height="160" alt=""><figcaption>160px</figcaption></figure>
+      </div>
+      <div class="wordmark-row"><img src="logo-pulse-v4.svg" alt=""></div>
+    </div>
+
+    <div class="card">
+      <div><h2>1e. Pulse Letter H</h2></div>
+      <div class="sizes">
+        <figure><img src="logo-pulse-v5.svg" width="24" height="24" alt=""><figcaption>24px</figcaption></figure>
+        <figure><img src="logo-pulse-v5.svg" width="48" height="48" alt=""><figcaption>48px</figcaption></figure>
+        <figure><img src="logo-pulse-v5.svg" width="160" height="160" alt=""><figcaption>160px</figcaption></figure>
+      </div>
+      <div class="wordmark-row"><img src="logo-pulse-v5.svg" alt=""></div>
+    </div>
+
+    <div class="card">
+      <div><h2>2. Prism / Refraction</h2></div>
+      <div class="sizes">
+        <figure><img src="logo-prism.svg" width="24" height="24" alt=""><figcaption>24px</figcaption></figure>
+        <figure><img src="logo-prism.svg" width="48" height="48" alt=""><figcaption>48px</figcaption></figure>
+        <figure><img src="logo-prism.svg" width="160" height="160" alt=""><figcaption>160px</figcaption></figure>
+      </div>
+      <div class="wordmark-row"><img src="logo-prism.svg" alt=""></div>
+    </div>
+
+    <div class="card">
+      <div><h2>3. Abstract Panel</h2></div>
+      <div class="sizes">
+        <figure><img src="logo-panel.svg" width="24" height="24" alt=""><figcaption>24px</figcaption></figure>
+        <figure><img src="logo-panel.svg" width="48" height="48" alt=""><figcaption>48px</figcaption></figure>
+        <figure><img src="logo-panel.svg" width="160" height="160" alt=""><figcaption>160px</figcaption></figure>
+      </div>
+      <div class="wordmark-row"><img src="logo-panel.svg" alt=""></div>
+    </div>
+
+    <div class="card">
+      <div><h2>4. Research Lens</h2></div>
+      <div class="sizes">
+        <figure><img src="logo-lens.svg" width="24" height="24" alt=""><figcaption>24px</figcaption></figure>
+        <figure><img src="logo-lens.svg" width="48" height="48" alt=""><figcaption>48px</figcaption></figure>
+        <figure><img src="logo-lens.svg" width="160" height="160" alt=""><figcaption>160px</figcaption></figure>
+      </div>
+      <div class="wordmark-row"><img src="logo-lens.svg" alt=""></div>
+    </div>
+
+    <div class="card">
+      <div><h2>5. Typographic Mark (HT)</h2></div>
+      <div class="sizes">
+        <figure><img src="logo-hype.svg" width="24" height="24" alt=""><figcaption>24px</figcaption></figure>
+        <figure><img src="logo-hype.svg" width="48" height="48" alt=""><figcaption>48px</figcaption></figure>
+        <figure><img src="logo-hype.svg" width="160" height="160" alt=""><figcaption>160px</figcaption></figure>
+      </div>
+      <div class="wordmark-row"><img src="logo-hype.svg" alt=""></div>
+    </div>
+
+    <div class="card">
+      <div><h2>6. Spark / Ignition</h2></div>
+      <div class="sizes">
+        <figure><img src="logo-spark.svg" width="24" height="24" alt=""><figcaption>24px</figcaption></figure>
+        <figure><img src="logo-spark.svg" width="48" height="48" alt=""><figcaption>48px</figcaption></figure>
+        <figure><img src="logo-spark.svg" width="160" height="160" alt=""><figcaption>160px</figcaption></figure>
+      </div>
+      <div class="wordmark-row"><img src="logo-spark.svg" alt=""></div>
+    </div>
+
+  </div>
+</section>
+
+</body>
+</html>

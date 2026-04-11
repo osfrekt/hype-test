@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Abstract H made from pulse lines — the letter H constructed from two vertical waveforms and a horizontal bridge -->
+  <g id="icon">
+    <!-- Left vertical pulse stroke -->
+    <path
+      d="M55,35 C55,35 48,60 55,80 C62,100 48,120 55,145 C58,155 55,165 55,165"
+      fill="none" stroke="#0f172a" stroke-width="10" stroke-linecap="round"
+    />
+    <!-- Right vertical pulse stroke -->
+    <path
+      d="M145,35 C145,35 152,55 145,75 C138,95 152,115 145,140 C142,150 145,165 145,165"
+      fill="none" stroke="#0f172a" stroke-width="10" stroke-linecap="round"
+    />
+    <!-- Horizontal bridge — an actual waveform connecting the two strokes -->
+    <path
+      d="M58,100 C68,100 72,72 82,72 C92,72 95,115 100,115 C105,115 108,68 118,68 C128,68 132,100 142,100"
+      fill="none" stroke="#0891b2" stroke-width="6" stroke-linecap="round"
+    />
+    <!-- Small dot accents -->
+    <circle cx="55" cy="35" r="4" fill="#0e7490"/>
+    <circle cx="145" cy="35" r="4" fill="#0e7490"/>
+  </g>
+  <g id="wordmark">
+    <text x="100" y="192" text-anchor="middle" font-family="system-ui, sans-serif" font-weight="700" font-size="22" fill="#0f172a" letter-spacing="-0.5">HypeTest</text>
+  </g>
+</svg>

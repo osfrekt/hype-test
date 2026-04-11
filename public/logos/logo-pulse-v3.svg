@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Stacked signal layers — three offset waveforms creating depth, like layered consumer signals converging -->
+  <g id="icon">
+    <!-- Background shape -->
+    <rect x="20" y="30" width="160" height="130" rx="20" fill="#0f172a"/>
+    <!-- Layer 3 (back, most transparent) -->
+    <polyline
+      points="38,110 55,110 65,85 78,110 88,70 100,110 112,90 125,110 138,78 150,110 162,110"
+      fill="none" stroke="#0891b2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.2"
+    />
+    <!-- Layer 2 (mid) -->
+    <polyline
+      points="38,100 52,100 62,78 72,105 85,55 98,100 108,80 122,100 132,65 148,100 162,100"
+      fill="none" stroke="#0891b2" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.45"
+    />
+    <!-- Layer 1 (front, bold) — the "consensus" signal -->
+    <polyline
+      points="38,95 50,95 60,82 70,95 80,48 92,95 105,72 118,95 128,58 142,95 162,95"
+      fill="none" stroke="#0891b2" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"
+    />
+    <!-- Peak highlight -->
+    <circle cx="80" cy="48" r="4" fill="#fafbfc"/>
+  </g>
+  <g id="wordmark">
+    <text x="100" y="188" text-anchor="middle" font-family="system-ui, sans-serif" font-weight="700" font-size="22" fill="#0f172a" letter-spacing="-0.5">HypeTest</text>
+  </g>
+</svg>

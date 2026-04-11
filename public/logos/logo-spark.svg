@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <g id="icon">
+    <!-- Upward arrow / growth line -->
+    <polyline
+      points="50,140 85,105 110,120 150,60"
+      fill="none"
+      stroke="#0f172a"
+      stroke-width="6"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <!-- Arrow tip -->
+    <polyline
+      points="130,60 150,60 150,80"
+      fill="none"
+      stroke="#0f172a"
+      stroke-width="6"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <!-- Spark diamond at the peak -->
+    <path d="M150,42 L156,54 L150,66 L144,54 Z" fill="#0891b2"/>
+    <!-- Small spark rays -->
+    <line x1="150" y1="32" x2="150" y2="38" stroke="#0891b2" stroke-width="3" stroke-linecap="round"/>
+    <line x1="163" y1="54" x2="168" y2="54" stroke="#0891b2" stroke-width="3" stroke-linecap="round"/>
+    <line x1="137" y1="54" x2="132" y2="54" stroke="#0891b2" stroke-width="3" stroke-linecap="round"/>
+    <line x1="159" y1="43" x2="163" y2="39" stroke="#0891b2" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="141" y1="43" x2="137" y2="39" stroke="#0891b2" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+  <g id="wordmark">
+    <text x="100" y="188" text-anchor="middle" font-family="system-ui, sans-serif" font-weight="700" font-size="22" fill="#0f172a" letter-spacing="-0.5">HypeTest</text>
+  </g>
+</svg>

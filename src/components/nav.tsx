@@ -34,22 +34,24 @@ export function Nav() {
     <header className="border-b border-border/50 bg-card/80 backdrop-blur-sm sticky top-0 z-50">
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-navy flex items-center justify-center">
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
+          <svg
+              className="w-8 h-8 text-foreground"
+              viewBox="0 0 200 200"
               fill="none"
-              stroke="white"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
             >
-              <polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2" />
-              <line x1="12" y1="22" x2="12" y2="15.5" />
-              <polyline points="22 8.5 12 15.5 2 8.5" />
+              {/* Magnifying glass outline — uses currentColor for light/dark */}
+              <circle cx="88" cy="88" r="48" stroke="currentColor" strokeWidth="10" />
+              <line x1="122" y1="122" x2="160" y2="160" stroke="currentColor" strokeWidth="12" strokeLinecap="round" />
+              {/* Bar chart inside the lens */}
+              <rect x="64" y="98" width="10" height="22" rx="2" fill="#0e7490" opacity="0.7" />
+              <rect x="78" y="82" width="10" height="38" rx="2" fill="#0891b2" />
+              <rect x="92" y="90" width="10" height="30" rx="2" fill="#0e7490" opacity="0.7" />
+              <rect x="106" y="72" width="10" height="48" rx="2" fill="#0891b2" opacity="0.85" />
+              {/* Scatter dots */}
+              <circle cx="72" cy="72" r="3" fill="#0891b2" opacity="0.5" />
+              <circle cx="96" cy="65" r="3" fill="#0891b2" opacity="0.5" />
+              <circle cx="108" cy="60" r="2.5" fill="#0891b2" opacity="0.4" />
             </svg>
-          </div>
           <span className="font-semibold text-foreground text-lg tracking-tight">
             HypeTest
           </span>

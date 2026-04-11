@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Circular pulse — waveform wraps around a ring, like a radar sweep -->
+  <g id="icon">
+    <circle cx="100" cy="100" r="70" fill="none" stroke="#0f172a" stroke-width="5"/>
+    <circle cx="100" cy="100" r="70" fill="none" stroke="#1e293b" stroke-width="2" stroke-dasharray="4 8" opacity="0.3"/>
+    <!-- Waveform that follows the circle's curvature (top half) -->
+    <path
+      d="M30,100 C30,100 42,100 50,98 C58,96 62,60 72,58 C82,56 85,120 95,100 C105,80 108,45 115,50 C122,55 125,95 135,100 C145,105 155,100 170,100"
+      fill="none"
+      stroke="#0891b2"
+      stroke-width="4.5"
+      stroke-linecap="round"
+    />
+    <!-- Center dot — the "origin" of the signal -->
+    <circle cx="100" cy="100" r="6" fill="#0f172a"/>
+    <circle cx="100" cy="100" r="3" fill="#0891b2"/>
+    <!-- Faint concentric rings -->
+    <circle cx="100" cy="100" r="35" fill="none" stroke="#0e7490" stroke-width="1" opacity="0.15"/>
+    <circle cx="100" cy="100" r="52" fill="none" stroke="#0e7490" stroke-width="1" opacity="0.1"/>
+  </g>
+  <g id="wordmark">
+    <text x="100" y="192" text-anchor="middle" font-family="system-ui, sans-serif" font-weight="700" font-size="22" fill="#0f172a" letter-spacing="-0.5">HypeTest</text>
+  </g>
+</svg>

@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import type { ResearchResult } from "@/types/research";
 import { ResultsCharts } from "@/components/results-charts";
+import Link from "next/link";
 
 export function ReportView({
   result,
@@ -29,6 +30,11 @@ export function ReportView({
 
   return (
     <div>
+      <div className="bg-amber-50 border border-amber-200/60 rounded-lg px-4 py-2.5 mb-6 text-xs text-amber-800">
+        <strong>Important:</strong> These results are AI-simulated, not from real consumers. Best used for directional insights and hypothesis generation.
+        Not a substitute for professional market research.{" "}
+        <Link href="/methodology#limitations" className="text-amber-900 underline">Learn more</Link>
+      </div>
       {/* Header */}
       <div className="mb-10">
         <div className="flex items-center gap-3 mb-2">

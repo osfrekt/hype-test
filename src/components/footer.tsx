@@ -11,7 +11,7 @@ export function Footer() {
   return (
     <footer className="border-t border-border/50 bg-card mt-auto">
       <div className="max-w-6xl mx-auto px-6 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
             <div className="flex items-center gap-2 mb-3">
               <div className="w-6 h-6 rounded bg-navy flex items-center justify-center">
@@ -57,6 +57,17 @@ export function Footer() {
               >
                 Brand, Israeli & Ngwe (2025)
               </a>
+            </div>
+          </div>
+          <div>
+            <h4 className="text-sm font-medium mb-3">Legal</h4>
+            <div className="flex flex-col gap-2 text-sm text-muted-foreground">
+              <Link href="/terms" className="hover:text-foreground transition-colors">
+                Terms of Service
+              </Link>
+              <Link href="/privacy" className="hover:text-foreground transition-colors">
+                Privacy Policy
+              </Link>
             </div>
           </div>
         </div>

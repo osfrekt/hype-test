@@ -140,6 +140,12 @@ export default function PricingPage() {
                   </form>
                 )}
 
+                {waitlistStatus !== "success" && (
+                  <p className="text-xs text-muted-foreground mt-2">
+                    By joining, you agree to our <Link href="/privacy">Privacy Policy</Link>.
+                  </p>
+                )}
+
                 {waitlistStatus === "error" && (
                   <p className="text-sm text-destructive mt-2">
                     {waitlistMessage}

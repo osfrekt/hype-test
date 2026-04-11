@@ -2,6 +2,7 @@
 
 import { Suspense, useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { Nav } from "@/components/nav";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -687,6 +688,14 @@ function NewResearchForm() {
                   </div>
                 )}
 
+                <p className="text-xs text-muted-foreground">
+                  By running research, you agree to our{" "}
+                  <Link href="/terms" className="text-teal underline">Terms of Service</Link>{" "}
+                  and{" "}
+                  <Link href="/privacy" className="text-teal underline">Privacy Policy</Link>.
+                  Results are AI-simulated and publicly accessible via their unique URL.
+                </p>
+
                 <Button
                   type="submit"
                   className="w-full bg-primary hover:bg-primary/90 text-primary-foreground h-11"
@@ -696,7 +705,7 @@ function NewResearchForm() {
                 </Button>
 
                 <p className="text-xs text-muted-foreground text-center">
-                  Free — no credit card required. Results in 1-2 minutes.
+                  Free - no credit card required. Results in 1-2 minutes.
                 </p>
               </form>
             </CardContent>

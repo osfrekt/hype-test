@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <g id="icon">
+    <rect x="25" y="25" width="150" height="150" rx="32" fill="#0f172a"/>
+    <!-- H letter -->
+    <rect x="50" y="55" width="12" height="90" rx="3" fill="#fafbfc"/>
+    <rect x="88" y="55" width="12" height="90" rx="3" fill="#fafbfc"/>
+    <rect x="50" y="90" width="50" height="12" rx="3" fill="#fafbfc"/>
+    <!-- T letter using negative space / teal accent -->
+    <rect x="115" y="55" width="40" height="12" rx="3" fill="#0891b2"/>
+    <rect x="129" y="55" width="12" height="90" rx="3" fill="#0891b2"/>
+    <!-- Negative-space diagonal cut for style -->
+    <rect x="108" y="25" width="4" height="150" fill="#0f172a" opacity="0.3" transform="rotate(8, 110, 100)"/>
+  </g>
+  <g id="wordmark">
+    <text x="100" y="188" text-anchor="middle" font-family="system-ui, sans-serif" font-weight="700" font-size="22" fill="#0f172a" letter-spacing="-0.5">HypeTest</text>
+  </g>
+</svg>

@@ -557,6 +557,14 @@ function DiscoverNewForm() {
                   </div>
                 )}
 
+                <p className="text-xs text-muted-foreground">
+                  By running discovery, you agree to our{" "}
+                  <a href="/terms" className="text-teal underline">Terms of Service</a>{" "}
+                  and{" "}
+                  <a href="/privacy" className="text-teal underline">Privacy Policy</a>.
+                  Results are AI-simulated and publicly accessible via their unique URL.
+                </p>
+
                 <Button
                   type="submit"
                   className="w-full bg-primary hover:bg-primary/90 text-primary-foreground h-11"
