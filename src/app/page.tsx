@@ -45,7 +45,7 @@ export default function Home() {
         </section>
 
         {/* Social proof + accuracy */}
-        <section className="py-12 border-y border-border/50 bg-white">
+        <section className="py-12 border-y border-border/50 bg-card">
           <div className="max-w-6xl mx-auto px-6">
             {/* Stat + R-squared visual */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center mb-10">
@@ -153,7 +153,7 @@ export default function Home() {
         </section>
 
         {/* How it works */}
-        <section className="py-14 bg-white">
+        <section className="py-14 bg-card">
           <div className="max-w-5xl mx-auto px-6">
             <h2 className="font-bold text-navy mb-3" style={{ fontSize: 'clamp(1.5rem, 1rem + 1.5vw, 1.875rem)' }}>
               How HypeTest works
@@ -296,7 +296,7 @@ export default function Home() {
         </section>
 
         {/* Sample report */}
-        <section className="py-14 bg-white">
+        <section className="py-14 bg-card">
           <div className="max-w-5xl mx-auto px-6">
             <h2 className="font-bold text-navy text-center mb-3" style={{ fontSize: 'clamp(1.5rem, 1rem + 1.5vw, 1.875rem)' }}>
               See a real report

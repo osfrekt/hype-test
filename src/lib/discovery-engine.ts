@@ -327,6 +327,7 @@ function aggregateConcept(
     },
     topExcitement: themes.excitement,
     topHesitation: themes.hesitation,
+    round: 1,
   };
 }
 
@@ -382,7 +383,7 @@ export async function runDiscovery(
       concept
     );
     const aggregated = aggregateConcept(concept, responses, themes);
-    panelResults.push({ ...aggregated, demandRank: 0 });
+    panelResults.push({ ...aggregated, demandRank: 0, round: 1 });
   }
 
   // Rank by purchase intent descending
@@ -400,6 +401,7 @@ export async function runDiscovery(
     id: nanoid(12),
     input,
     concepts: panelResults,
+    rounds: 1,
     panelSize: actualPanelSize,
     methodology: {
       panelSize: actualPanelSize,

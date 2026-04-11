@@ -9,7 +9,7 @@ export function Footer() {
     setYear(String(new Date().getFullYear()));
   }, []);
   return (
-    <footer className="border-t border-border/50 bg-white mt-auto">
+    <footer className="border-t border-border/50 bg-card mt-auto">
       <div className="max-w-6xl mx-auto px-6 py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
