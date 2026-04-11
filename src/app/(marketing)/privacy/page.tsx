@@ -97,10 +97,10 @@ export default function PrivacyPage() {
               unsubscribe or request deletion. You may request deletion of your
               data at any time by contacting us at{" "}
               <a
-                href="mailto:privacy@rfrekt.com"
+                href="mailto:support@hypetest.ai"
                 className="text-primary underline"
               >
-                privacy@rfrekt.com
+                support@hypetest.ai
               </a>
               .
             </p>
@@ -152,10 +152,10 @@ export default function PrivacyPage() {
               You may request access to, correction of, or deletion of your data
               at any time by contacting us at{" "}
               <a
-                href="mailto:privacy@rfrekt.com"
+                href="mailto:support@hypetest.ai"
                 className="text-primary underline"
               >
-                privacy@rfrekt.com
+                support@hypetest.ai
               </a>
               .
             </p>
@@ -195,10 +195,10 @@ export default function PrivacyPage() {
               If you have questions about this Privacy Policy or wish to exercise
               your data rights, please contact us at{" "}
               <a
-                href="mailto:privacy@rfrekt.com"
+                href="mailto:support@hypetest.ai"
                 className="text-primary underline"
               >
-                privacy@rfrekt.com
+                support@hypetest.ai
               </a>
               .
             </p>

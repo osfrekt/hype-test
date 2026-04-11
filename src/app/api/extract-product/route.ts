@@ -22,7 +22,7 @@ export async function POST(request: Request) {
     const pageRes = await fetch(url, {
       headers: {
         "User-Agent":
-          "Mozilla/5.0 (compatible; HypeTest/1.0; +https://hype-test.vercel.app)",
+          "Mozilla/5.0 (compatible; HypeTest/1.0; +https://hypetest.ai)",
         Accept: "text/html,application/xhtml+xml",
       },
       signal: AbortSignal.timeout(10_000),

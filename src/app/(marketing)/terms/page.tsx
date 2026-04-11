@@ -104,10 +104,10 @@ export default function TermsPage() {
               this level of accessibility. You may request deletion of your data
               by contacting us at{" "}
               <a
-                href="mailto:privacy@rfrekt.com"
+                href="mailto:support@hypetest.ai"
                 className="text-primary underline"
               >
-                privacy@rfrekt.com
+                support@hypetest.ai
               </a>
               . For more details, see our Privacy Policy.
             </p>
@@ -178,10 +178,10 @@ export default function TermsPage() {
               If you have questions about these Terms of Service, please contact
               us at{" "}
               <a
-                href="mailto:legal@rfrekt.com"
+                href="mailto:support@hypetest.ai"
                 className="text-primary underline"
               >
-                legal@rfrekt.com
+                support@hypetest.ai
               </a>
               .
             </p>
