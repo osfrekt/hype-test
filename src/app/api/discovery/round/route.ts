@@ -1,23 +1,11 @@
 import { runDiscoveryRound } from "@/lib/discovery-engine";
 import { createClient } from "@/lib/supabase/server";
+import { createRateLimiter } from "@/lib/rate-limit";
 import type { DiscoveryInput, DiscoveryPanelResult } from "@/types/discovery";
 
 export const maxDuration = 300;
 
-// Separate rate limiter for rounds: max 3 per IP per 10 minutes
-const roundRateLimitMap = new Map<string, number[]>();
-const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
-const RATE_LIMIT_MAX = 3;
-
-function isRateLimited(ip: string): boolean {
-  const now = Date.now();
-  const timestamps = roundRateLimitMap.get(ip) ?? [];
-  const recent = timestamps.filter((t) => now - t < RATE_LIMIT_WINDOW_MS);
-  roundRateLimitMap.set(ip, recent);
-  if (recent.length >= RATE_LIMIT_MAX) return true;
-  recent.push(now);
-  return false;
-}
+const isRateLimited = createRateLimiter(3);
 
 const MAX_BRAND_NAME_LENGTH = 200;
 const MAX_DESCRIPTION_LENGTH = 5000;

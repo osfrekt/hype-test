@@ -1,5 +1,8 @@
 import { createClient } from "@/lib/supabase/server";
 import { nanoid } from "nanoid";
+import { createRateLimiter } from "@/lib/rate-limit";
+
+const isRateLimited = createRateLimiter(5);
 
 export async function GET() {
   const supabase = await createClient();
@@ -16,6 +19,16 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  // Rate limiting
+  const forwarded = request.headers.get("x-forwarded-for");
+  const ip = forwarded?.split(",")[0]?.trim() ?? "unknown";
+  if (isRateLimited(ip)) {
+    return Response.json(
+      { error: "Too many requests. Please wait a few minutes before trying again." },
+      { status: 429 }
+    );
+  }
+
   const body = await request.json();
   const { productName, predictedIntent, actualUnits, actualRevenue, actualConversion, notes } = body;
 

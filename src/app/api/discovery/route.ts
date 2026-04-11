@@ -1,24 +1,12 @@
 import { runDiscovery } from "@/lib/discovery-engine";
 import { createClient } from "@/lib/supabase/server";
 import { sendDiscoveryReport } from "@/lib/email";
+import { createRateLimiter } from "@/lib/rate-limit";
 import type { DiscoveryInput, DiscoveryResult } from "@/types/discovery";
 
 export const maxDuration = 300;
 
-// Simple in-memory rate limiter: max 2 requests per IP per 10 minutes
-const rateLimitMap = new Map<string, number[]>();
-const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
-const RATE_LIMIT_MAX = 2;
-
-function isRateLimited(ip: string): boolean {
-  const now = Date.now();
-  const timestamps = rateLimitMap.get(ip) ?? [];
-  const recent = timestamps.filter((t) => now - t < RATE_LIMIT_WINDOW_MS);
-  rateLimitMap.set(ip, recent);
-  if (recent.length >= RATE_LIMIT_MAX) return true;
-  recent.push(now);
-  return false;
-}
+const isRateLimited = createRateLimiter(2);
 
 const MAX_BRAND_NAME_LENGTH = 200;
 const MAX_DESCRIPTION_LENGTH = 5000;

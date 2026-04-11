@@ -1,13 +1,26 @@
 import Anthropic from "@anthropic-ai/sdk";
+import { isValidPublicUrl } from "@/lib/url-validation";
+import { createRateLimiter } from "@/lib/rate-limit";
 
 export const maxDuration = 30;
 
 const URL_RE = /^https?:\/\/.+/;
 
 const anthropic = new Anthropic();
+const isRateLimited = createRateLimiter(10);
 
 export async function POST(request: Request) {
   try {
+    // Rate limiting
+    const forwarded = request.headers.get("x-forwarded-for");
+    const ip = forwarded?.split(",")[0]?.trim() ?? "unknown";
+    if (isRateLimited(ip)) {
+      return Response.json(
+        { error: "Too many requests. Please wait a few minutes before trying again." },
+        { status: 429 }
+      );
+    }
+
     const body = await request.json();
     const url = typeof body.url === "string" ? body.url.trim() : "";
     const query = typeof body.query === "string" ? body.query.trim() : "";
@@ -26,6 +39,13 @@ export async function POST(request: Request) {
       if (!URL_RE.test(url)) {
         return Response.json(
           { error: "Please enter a valid URL starting with http:// or https://" },
+          { status: 400 }
+        );
+      }
+
+      if (!isValidPublicUrl(url)) {
+        return Response.json(
+          { error: "Only public URLs are allowed." },
           { status: 400 }
         );
       }

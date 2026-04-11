@@ -701,10 +701,11 @@ function DiscoverResultContent({
               type="button"
               disabled={deleting}
               onClick={async () => {
-                if (!confirm("Are you sure you want to delete this discovery? This cannot be undone.")) return;
+                const email = window.prompt("Enter the email you used to create this discovery to confirm deletion:");
+                if (!email) return;
                 setDeleting(true);
                 try {
-                  const res = await fetch(`/api/discovery/${id}`, { method: "DELETE" });
+                  const res = await fetch(`/api/discovery/${id}`, { method: "DELETE", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email }) });
                   if (res.ok) {
                     router.push("/");
                   } else {

@@ -1,24 +1,12 @@
 import { runResearch } from "@/lib/research-engine";
 import { createClient } from "@/lib/supabase/server";
 import { sendResearchReport } from "@/lib/email";
+import { createRateLimiter } from "@/lib/rate-limit";
 import type { ResearchInput, ResearchResult } from "@/types/research";
 
 export const maxDuration = 300;
 
-// Simple in-memory rate limiter: max 3 requests per IP per 10 minutes
-const rateLimitMap = new Map<string, number[]>();
-const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
-const RATE_LIMIT_MAX = 3;
-
-function isRateLimited(ip: string): boolean {
-  const now = Date.now();
-  const timestamps = rateLimitMap.get(ip) ?? [];
-  const recent = timestamps.filter((t) => now - t < RATE_LIMIT_WINDOW_MS);
-  rateLimitMap.set(ip, recent);
-  if (recent.length >= RATE_LIMIT_MAX) return true;
-  recent.push(now);
-  return false;
-}
+const isRateLimited = createRateLimiter(3);
 
 const MAX_NAME_LENGTH = 200;
 const MAX_DESCRIPTION_LENGTH = 5000;
