@@ -58,12 +58,14 @@ interface DiscoveryPanelResult {
   topExcitement: string;
   topHesitation: string;
   demandRank: number;
+  round: number;
 }
 
 interface DiscoveryResult {
   id: string;
   input: DiscoveryInput;
   concepts: DiscoveryPanelResult[];
+  rounds: number;
   panelSize: number;
   methodology: {
     panelSize: number;

@@ -50,12 +50,14 @@ interface DiscoveryPanelResult {
   topExcitement: string;
   topHesitation: string;
   demandRank: number;
+  round: number;
 }
 
 interface DiscoveryResult {
   id: string;
   input: DiscoveryInput;
   concepts: DiscoveryPanelResult[];
+  rounds: number;
   panelSize: number;
   methodology: {
     panelSize: number;
@@ -105,6 +107,10 @@ function DiscoverResultContent({
   const [state, setState] = useState<FetchState>({ status: "loading" });
   const [formattedDate, setFormattedDate] = useState("");
   const [mounted, setMounted] = useState(false);
+  const [isRunningRound, setIsRunningRound] = useState(false);
+  const [roundProgress, setRoundProgress] = useState(0);
+  const [roundStage, setRoundStage] = useState("");
+  const [roundError, setRoundError] = useState("");
 
   useEffect(() => {
     setMounted(true);
@@ -130,6 +136,7 @@ function DiscoverResultContent({
               id: data.id,
               input: data.input,
               concepts: data.concepts,
+              rounds: data.rounds ?? 1,
               panelSize: data.panel_size,
               methodology: data.methodology,
               status: data.status,
@@ -176,6 +183,107 @@ function DiscoverResultContent({
       );
     }
   }, [state]);
+
+  async function handleRunRound() {
+    if (state.status !== "ok") return;
+    const result = state.result;
+    const nextRound = (result.rounds ?? 1) + 1;
+
+    setIsRunningRound(true);
+    setRoundError("");
+    setRoundProgress(5);
+    setRoundStage("Analysing top performers...");
+
+    const stages = [
+      "Analysing top performers...",
+      "Evolving winning concepts...",
+      "Testing new concepts with consumer panel...",
+      "Evaluating concept 1 of 8...",
+      "Evaluating concept 2 of 8...",
+      "Evaluating concept 3 of 8...",
+      "Evaluating concept 4 of 8...",
+      "Evaluating concept 5 of 8...",
+      "Evaluating concept 6 of 8...",
+      "Evaluating concept 7 of 8...",
+      "Evaluating concept 8 of 8...",
+      "Ranking all concepts...",
+      "Complete!",
+    ];
+    let stageIdx = 0;
+    const progressInterval = setInterval(() => {
+      stageIdx = Math.min(stageIdx + 1, stages.length - 1);
+      setRoundStage(stages[stageIdx]);
+      setRoundProgress((p) => (p >= 90 ? p : p + Math.random() * 7));
+    }, 3500);
+
+    try {
+      const response = await fetch("/api/discovery/round", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          discoveryId: result.id,
+          input: result.input,
+          previousConcepts: result.concepts,
+          roundNumber: nextRound,
+        }),
+      });
+
+      clearInterval(progressInterval);
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || "Round failed");
+      }
+
+      const { allConcepts } = await response.json();
+      setRoundProgress(100);
+      setRoundStage("Complete!");
+
+      const newConceptsInRound = allConcepts.filter(
+        (c: DiscoveryPanelResult) => c.round === nextRound
+      );
+
+      // Merge into state
+      const updatedResult: DiscoveryResult = {
+        ...result,
+        concepts: allConcepts,
+        rounds: nextRound,
+        methodology: {
+          ...result.methodology,
+          conceptsGenerated:
+            result.methodology.conceptsGenerated + newConceptsInRound.length,
+          conceptsTested:
+            result.methodology.conceptsTested + newConceptsInRound.length,
+        },
+      };
+
+      setState({ status: "ok", result: updatedResult });
+
+      // Update sessionStorage
+      try {
+        sessionStorage.setItem(
+          `discovery-${result.id}`,
+          JSON.stringify(updatedResult)
+        );
+      } catch {
+        // sessionStorage unavailable
+      }
+
+      setTimeout(() => {
+        setIsRunningRound(false);
+        setRoundProgress(0);
+        setRoundStage("");
+      }, 1000);
+    } catch (err) {
+      clearInterval(progressInterval);
+      setIsRunningRound(false);
+      setRoundProgress(0);
+      setRoundStage("");
+      setRoundError(
+        err instanceof Error ? err.message : "Something went wrong"
+      );
+    }
+  }
 
   if (state.status === "loading") {
     return (
@@ -250,6 +358,8 @@ function DiscoverResultContent({
     return "bg-gray-100 text-gray-600";
   }
 
+  const totalRounds = result.rounds ?? 1;
+
   return (
     <>
       <Nav />
@@ -270,6 +380,7 @@ function DiscoverResultContent({
             </p>
             <p className="text-xs text-muted-foreground mt-2">
               Discovery completed {formattedDate}
+              {totalRounds > 1 && ` (${totalRounds} rounds)`}
             </p>
           </div>
 
@@ -307,12 +418,12 @@ function DiscoverResultContent({
                   Concepts Tested
                 </p>
                 <p className="text-lg font-bold text-navy leading-tight">
-                  {result.methodology?.conceptsTested ?? concepts.length}{" "}
-                  concepts
+                  {concepts.length} concepts
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">
                   {result.methodology?.panelSize ?? result.panelSize} panellists
                   each
+                  {totalRounds > 1 && ` across ${totalRounds} rounds`}
                 </p>
               </CardContent>
             </Card>
@@ -326,7 +437,7 @@ function DiscoverResultContent({
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="h-80">
+              <div style={{ height: Math.max(320, concepts.length * 36) }}>
                 {mounted && (
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart
@@ -388,14 +499,21 @@ function DiscoverResultContent({
               Ranked Product Concepts
             </h3>
             {concepts.map((c) => (
-              <Card key={c.demandRank}>
+              <Card key={`${c.concept.name}-${c.round ?? 1}`}>
                 <CardContent className="pt-6">
                   <div className="flex items-start gap-4">
-                    {/* Rank badge */}
-                    <div
-                      className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 text-sm font-bold ${rankColor(c.demandRank)}`}
-                    >
-                      #{c.demandRank}
+                    {/* Rank badge + round indicator */}
+                    <div className="flex flex-col items-center gap-1 shrink-0">
+                      <div
+                        className={`w-10 h-10 rounded-lg flex items-center justify-center text-sm font-bold ${rankColor(c.demandRank)}`}
+                      >
+                        #{c.demandRank}
+                      </div>
+                      {totalRounds > 1 && (
+                        <span className="text-[10px] text-muted-foreground bg-muted rounded px-1.5 py-0.5 font-medium">
+                          Round {c.round ?? 1}
+                        </span>
+                      )}
                     </div>
 
                     <div className="flex-1 min-w-0">
@@ -516,6 +634,11 @@ function DiscoverResultContent({
                 <strong>Concepts tested:</strong>{" "}
                 {result.methodology?.conceptsTested}
               </p>
+              {totalRounds > 1 && (
+                <p>
+                  <strong>Rounds completed:</strong> {totalRounds}
+                </p>
+              )}
               <Separator className="my-3" />
               <p className="text-xs leading-relaxed">
                 {result.methodology?.confidenceNote}
@@ -532,6 +655,80 @@ function DiscoverResultContent({
               </p>
             </CardContent>
           </Card>
+
+          {/* Run Another Round */}
+          <div className="mt-8 mb-8">
+            {isRunningRound ? (
+              <Card className="border-amber-200 bg-amber-50/50">
+                <CardContent className="pt-6 pb-6">
+                  <div className="text-center">
+                    <div className="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center mx-auto mb-4">
+                      <svg
+                        className="animate-spin text-amber-600"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+                      </svg>
+                    </div>
+                    <h3 className="text-base font-bold text-navy mb-1">
+                      Running Round {(result.rounds ?? 1) + 1}
+                    </h3>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      {roundStage}
+                    </p>
+                    <div className="w-full max-w-md mx-auto bg-amber-100 rounded-full h-2 mb-2">
+                      <div
+                        className="bg-amber-500 h-2 rounded-full transition-all duration-1000 ease-out"
+                        style={{
+                          width: `${Math.min(roundProgress, 100)}%`,
+                        }}
+                      />
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Evolving top concepts and testing with 30 consumers each
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            ) : (
+              <Card className="border-amber-200/60 bg-gradient-to-r from-amber-50/50 to-orange-50/30">
+                <CardContent className="pt-6 pb-6">
+                  <div className="text-center">
+                    <h3 className="text-base font-bold text-navy mb-1">
+                      Want better results?
+                    </h3>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Generate &amp; test 8 more concepts based on what scored
+                      best
+                    </p>
+                    {roundError && (
+                      <div className="bg-destructive/10 text-destructive text-sm rounded-lg p-3 mb-4 max-w-md mx-auto">
+                        {roundError}
+                      </div>
+                    )}
+                    <button
+                      type="button"
+                      onClick={handleRunRound}
+                      className="inline-flex items-center justify-center rounded-md bg-amber-600 hover:bg-amber-700 text-white h-11 px-8 text-sm font-medium transition-colors"
+                    >
+                      Run another round
+                    </button>
+                    <p className="text-xs text-muted-foreground mt-3">
+                      Evolves winning concepts and adds wildcards. Takes 2-3
+                      minutes.
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+          </div>
         </div>
       </main>
     </>
