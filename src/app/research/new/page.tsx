@@ -696,8 +696,7 @@ function NewResearchForm() {
                 </Button>
 
                 <p className="text-xs text-muted-foreground text-center">
-                  Simulates 50 consumers using structured survey methodology.
-                  Results in 1-2 minutes.
+                  Free — no credit card required. Results in 1-2 minutes.
                 </p>
               </form>
             </CardContent>
