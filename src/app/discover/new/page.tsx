@@ -101,6 +101,11 @@ function DiscoverNewForm() {
   const [constraints, setConstraints] = useState("");
   const [showAdvanced, setShowAdvanced] = useState(false);
 
+  const [autofillMode, setAutofillMode] = useState<"url" | "search">("url");
+  const [autofillInput, setAutofillInput] = useState("");
+  const [isAutofilling, setIsAutofilling] = useState(false);
+  const [autofillError, setAutofillError] = useState("");
+
   const [isRunning, setIsRunning] = useState(false);
   const [progress, setProgress] = useState(0);
   const [stage, setStage] = useState("");
@@ -111,6 +116,42 @@ function DiscoverNewForm() {
     brandDescription.trim().length > 10 &&
     category &&
     targetAudience.trim().length > 5;
+
+  async function handleAutofill() {
+    if (!autofillInput.trim()) return;
+    setIsAutofilling(true);
+    setAutofillError("");
+    try {
+      const payload =
+        autofillMode === "url"
+          ? { url: autofillInput.trim() }
+          : { query: autofillInput.trim() };
+
+      const res = await fetch("/api/extract-brand", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setAutofillError(data.error || "Failed");
+        return;
+      }
+
+      if (data.brandName) setBrandName(data.brandName);
+      if (data.brandDescription) setBrandDescription(data.brandDescription);
+      if (data.category) setCategory(data.category);
+      if (data.targetAudience) setTargetAudience(data.targetAudience);
+      if (data.existingProducts) setExistingProducts(data.existingProducts);
+      if (data.priceMin != null) setPriceMin(String(data.priceMin));
+      if (data.priceMax != null) setPriceMax(String(data.priceMax));
+      if (data.existingProducts || data.priceMin != null) setShowAdvanced(true);
+    } catch {
+      setAutofillError("Failed to look up brand. Try again.");
+    } finally {
+      setIsAutofilling(false);
+    }
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -278,6 +319,85 @@ function DiscoverNewForm() {
               <CardTitle className="text-base">Brand Details</CardTitle>
             </CardHeader>
             <CardContent>
+              {/* Auto-fill brand info */}
+              <div className="mb-6 pb-6 border-b border-border/50">
+                <div className="flex items-center gap-4 mb-3">
+                  <span className="text-sm font-medium">
+                    Auto-fill brand info
+                  </span>
+                  <div className="flex gap-3 text-sm">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setAutofillMode("url");
+                        setAutofillInput("");
+                        setAutofillError("");
+                      }}
+                      className={
+                        autofillMode === "url"
+                          ? "text-teal font-medium underline underline-offset-4"
+                          : "text-muted-foreground hover:text-foreground"
+                      }
+                    >
+                      From URL
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setAutofillMode("search");
+                        setAutofillInput("");
+                        setAutofillError("");
+                      }}
+                      className={
+                        autofillMode === "search"
+                          ? "text-teal font-medium underline underline-offset-4"
+                          : "text-muted-foreground hover:text-foreground"
+                      }
+                    >
+                      Search by name
+                    </button>
+                  </div>
+                </div>
+                <div className="flex gap-2">
+                  <Input
+                    type={autofillMode === "url" ? "url" : "text"}
+                    placeholder={
+                      autofillMode === "url"
+                        ? "https://example.com"
+                        : "e.g., Nike, Glossier, Athletic Greens"
+                    }
+                    value={autofillInput}
+                    onChange={(e) => setAutofillInput(e.target.value)}
+                    className="flex-1"
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={handleAutofill}
+                    disabled={isAutofilling || !autofillInput.trim()}
+                    className="shrink-0"
+                  >
+                    {isAutofilling
+                      ? autofillMode === "url"
+                        ? "Extracting..."
+                        : "Looking up..."
+                      : autofillMode === "url"
+                        ? "Auto-fill"
+                        : "Look up"}
+                  </Button>
+                </div>
+                {autofillError && (
+                  <p className="text-xs text-destructive mt-2">
+                    {autofillError}
+                  </p>
+                )}
+                <p className="text-xs text-muted-foreground mt-2">
+                  {autofillMode === "url"
+                    ? "Paste your brand's website and we'll extract the details."
+                    : "Enter a brand name and we'll pull what we know about it."}
+                </p>
+              </div>
+
               <form onSubmit={handleSubmit} className="space-y-5">
                 {/* Brand Name */}
                 <div className="space-y-1.5">
