@@ -86,7 +86,7 @@ export default function DiscoverNewPage() {
 
 function DiscoverNewForm() {
   const router = useRouter();
-  const isPro = process.env.NEXT_PUBLIC_UNLOCK_PRO === "true";
+  const isPro = true; // TODO: gate behind auth/billing when ready
 
   const [brandName, setBrandName] = useState("");
   const [brandDescription, setBrandDescription] = useState("");
