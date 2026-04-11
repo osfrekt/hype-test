@@ -15,22 +15,29 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { ResearchResult } from "@/types/research";
 
+// Cohesive palette derived from OKLCH, tinted toward brand hue (260°).
+// Each value computed from oklch(L C H) for Recharts hex compatibility.
+// Semantic: negative → cautious → neutral → positive → strong positive
 const INTENT_COLORS = [
-  "#ef4444", // Definitely not - red
-  "#f97316", // Probably not - orange
-  "#eab308", // Maybe - yellow
-  "#22c55e", // Probably yes - green
-  "#059669", // Definitely yes - dark green
+  "#c0392b", // oklch(0.48 0.16 25)  — Definitely not
+  "#c97a2e", // oklch(0.58 0.14 65)  — Probably not
+  "#8a8a3d", // oklch(0.58 0.10 100) — Maybe
+  "#2e8b6a", // oklch(0.55 0.12 165) — Probably yes
+  "#1a6b5a", // oklch(0.45 0.10 170) — Definitely yes
 ];
 
 const COMP_COLORS = [
-  "#059669", // Much better - dark green
-  "#22c55e", // Better - green
-  "#eab308", // Same - yellow
-  "#f97316", // Worse - orange
-  "#ef4444", // Much worse - red
-  "#94a3b8", // Unfamiliar - gray
+  "#1a6b5a", // oklch(0.45 0.10 170) — Much better
+  "#2e8b6a", // oklch(0.55 0.12 165) — Better
+  "#8a8a3d", // oklch(0.58 0.10 100) — Same
+  "#c97a2e", // oklch(0.58 0.14 65)  — Worse
+  "#c0392b", // oklch(0.48 0.16 25)  — Much worse
+  "#6b7280", // oklch(0.50 0.01 260) — Unfamiliar (brand-tinted gray)
 ];
+
+// Shared chart styling tokens
+const GRID_COLOR = "oklch(0.91 0.005 260)";
+const LABEL_COLOR = "#3d3f54"; // oklch(0.32 0.02 260) — brand-tinted dark
 
 export function ResultsCharts({ result }: { result: ResearchResult }) {
   const [mounted, setMounted] = useState(false);
@@ -66,7 +73,7 @@ export function ResultsCharts({ result }: { result: ResearchResult }) {
                   data={intentData}
                   margin={{ top: 20, right: 5, left: -20, bottom: 5 }}
                 >
-                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                  <CartesianGrid strokeDasharray="3 3" stroke={GRID_COLOR} />
                   <XAxis
                     dataKey="name"
                     tick={{ fontSize: 10 }}
@@ -79,7 +86,7 @@ export function ResultsCharts({ result }: { result: ResearchResult }) {
                     contentStyle={{
                       fontSize: 12,
                       borderRadius: 8,
-                      border: "1px solid #e5e7eb",
+                      border: `1px solid ${GRID_COLOR}`,
                     }}
                   />
                   <Bar dataKey="count" radius={[4, 4, 0, 0]}>
@@ -90,7 +97,7 @@ export function ResultsCharts({ result }: { result: ResearchResult }) {
                       dataKey="count"
                       position="top"
                       fontSize={11}
-                      fill="#374151"
+                      fill={LABEL_COLOR}
                       formatter={(v: unknown) => (Number(v) > 0 ? String(v) : "")}
                     />
                   </Bar>
@@ -164,7 +171,7 @@ export function ResultsCharts({ result }: { result: ResearchResult }) {
                     data={compData}
                     margin={{ top: 5, right: 5, left: -20, bottom: 5 }}
                   >
-                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                    <CartesianGrid strokeDasharray="3 3" stroke={GRID_COLOR} />
                     <XAxis
                       dataKey="name"
                       tick={{ fontSize: 10 }}
@@ -177,7 +184,7 @@ export function ResultsCharts({ result }: { result: ResearchResult }) {
                       contentStyle={{
                         fontSize: 12,
                         borderRadius: 8,
-                        border: "1px solid #e5e7eb",
+                        border: `1px solid ${GRID_COLOR}`,
                       }}
                     />
                     <Bar dataKey="count" radius={[4, 4, 0, 0]}>
