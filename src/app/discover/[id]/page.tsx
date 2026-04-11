@@ -320,7 +320,7 @@ function DiscoverResultContent({
         <Nav />
         <main className="flex-1 flex items-center justify-center">
           <div className="text-center max-w-md px-6">
-            <p className="text-lg font-medium text-navy mb-2">
+            <p className="text-lg font-medium text-primary mb-2">
               Result not found
             </p>
             <p className="text-sm text-muted-foreground">{state.message}</p>
@@ -397,7 +397,7 @@ function DiscoverResultContent({
           {/* Header */}
           <div className="mb-8">
             <div className="flex items-center gap-3 mb-2">
-              <h2 className="text-2xl font-bold text-navy">
+              <h2 className="text-2xl font-bold text-primary">
                 {result.input.brandName}
               </h2>
               <Badge variant="secondary" className="text-xs">
@@ -420,7 +420,7 @@ function DiscoverResultContent({
                 <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-1">
                   Top Opportunity
                 </p>
-                <p className="text-lg font-bold text-navy leading-tight">
+                <p className="text-lg font-bold text-primary leading-tight">
                   {topConcept?.concept.name ?? "N/A"}
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">
@@ -433,7 +433,7 @@ function DiscoverResultContent({
                 <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-1">
                   Highest WTP
                 </p>
-                <p className="text-lg font-bold text-navy leading-tight">
+                <p className="text-lg font-bold text-primary leading-tight">
                   {highestWtp?.concept.name ?? "N/A"}
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">
@@ -446,7 +446,7 @@ function DiscoverResultContent({
                 <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-1">
                   Concepts Tested
                 </p>
-                <p className="text-lg font-bold text-navy leading-tight">
+                <p className="text-lg font-bold text-primary leading-tight">
                   {concepts.length} concepts
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">
@@ -524,7 +524,7 @@ function DiscoverResultContent({
 
           {/* Concept Cards */}
           <div className="space-y-6 mb-8">
-            <h3 className="text-lg font-bold text-navy">
+            <h3 className="text-lg font-bold text-primary">
               Ranked Product Concepts
             </h3>
             {concepts.map((c) => (
@@ -547,7 +547,7 @@ function DiscoverResultContent({
 
                     <div className="flex-1 min-w-0">
                       {/* Name + description */}
-                      <h4 className="text-base font-bold text-navy mb-1">
+                      <h4 className="text-base font-bold text-primary mb-1">
                         {c.concept.name}
                       </h4>
                       <p className="text-sm text-foreground mb-2">
@@ -573,7 +573,7 @@ function DiscoverResultContent({
                           <span className="text-xs text-muted-foreground">
                             WTP
                           </span>
-                          <span className="text-sm font-bold text-navy">
+                          <span className="text-sm font-bold text-primary">
                             ${c.wtpRange.low}-${c.wtpRange.high}
                           </span>
                         </div>
@@ -643,7 +643,7 @@ function DiscoverResultContent({
           {/* Methodology */}
           <Card className="border-teal/20 bg-teal/5">
             <CardHeader>
-              <CardTitle className="text-base text-navy">
+              <CardTitle className="text-base text-primary">
                 Methodology & Limitations
               </CardTitle>
             </CardHeader>
@@ -708,7 +708,7 @@ function DiscoverResultContent({
                         <path d="M21 12a9 9 0 1 1-6.219-8.56" />
                       </svg>
                     </div>
-                    <h3 className="text-base font-bold text-navy mb-1">
+                    <h3 className="text-base font-bold text-primary mb-1">
                       Running Round {(result.rounds ?? 1) + 1}
                     </h3>
                     <p className="text-sm text-muted-foreground mb-4">
@@ -732,7 +732,7 @@ function DiscoverResultContent({
               <Card className="border-amber-200/60 bg-gradient-to-r from-amber-50/50 to-orange-50/30">
                 <CardContent className="pt-6 pb-6">
                   <div className="text-center">
-                    <h3 className="text-base font-bold text-navy mb-1">
+                    <h3 className="text-base font-bold text-primary mb-1">
                       Want better results?
                     </h3>
                     <p className="text-sm text-muted-foreground mb-4">

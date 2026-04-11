@@ -10,13 +10,13 @@ export default function Home() {
       <main className="flex-1">
         {/* Hero */}
         <section className="relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-b from-blue-50/50 to-transparent pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-b from-blue-50/50 dark:from-blue-950/20 to-transparent pointer-events-none" />
           <div className="max-w-5xl mx-auto px-6 pt-16 pb-14 text-center relative">
             <div data-animate="1" className="inline-flex items-center gap-2 bg-teal/10 text-teal-dark text-xs font-medium px-3 py-1.5 rounded-full mb-5">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" /></svg>
               Grounded in peer-reviewed research
             </div>
-            <h1 data-animate="2" className="font-extrabold text-navy tracking-tight leading-[1.08] mb-5" style={{ fontSize: 'clamp(2.25rem, 1.5rem + 3vw, 3.75rem)' }}>
+            <h1 data-animate="2" className="font-extrabold text-primary tracking-tight leading-[1.08] mb-5" style={{ fontSize: 'clamp(2.25rem, 1.5rem + 3vw, 3.75rem)' }}>
               Consumer research in
               <br />
               minutes, not months.
@@ -29,7 +29,7 @@ export default function Home() {
             <div data-animate="4" className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link
                 href="/research/new"
-                className="inline-flex items-center justify-center rounded-xl bg-navy text-white font-semibold px-10 h-14 text-lg hover:bg-navy-light transition-colors shadow-lg shadow-navy/25"
+                className="inline-flex items-center justify-center rounded-xl bg-primary text-primary-foreground font-semibold px-10 h-14 text-lg hover:bg-primary/90 transition-colors shadow-lg shadow-primary/25"
               >
                 Try it free — no credit card
               </Link>
@@ -53,7 +53,7 @@ export default function Home() {
                 <p className="text-sm font-semibold text-teal uppercase tracking-wider mb-3">
                   Validated by Harvard Business School research
                 </p>
-                <h2 className="font-bold text-navy leading-tight mb-4" style={{ fontSize: 'clamp(1.75rem, 1.25rem + 2vw, 2.5rem)' }}>
+                <h2 className="font-bold text-primary leading-tight mb-4" style={{ fontSize: 'clamp(1.75rem, 1.25rem + 2vw, 2.5rem)' }}>
                   R&sup2; = 0.89 correlation with real consumer panels
                 </h2>
                 <p className="text-muted-foreground leading-relaxed mb-5">
@@ -64,15 +64,15 @@ export default function Home() {
                 </p>
                 <ul className="space-y-2 text-sm text-muted-foreground">
                   <li className="flex items-baseline gap-2">
-                    <span className="font-bold text-navy text-base">Free</span>
+                    <span className="font-bold text-primary text-base">Free</span>
                     <span>vs $20-50k for a traditional panel</span>
                   </li>
                   <li className="flex items-baseline gap-2">
-                    <span className="font-bold text-navy text-base">2 minutes</span>
+                    <span className="font-bold text-primary text-base">2 minutes</span>
                     <span>vs 4-6 weeks turnaround</span>
                   </li>
                   <li className="flex items-baseline gap-2">
-                    <span className="font-bold text-navy text-base">50+ panellists</span>
+                    <span className="font-bold text-primary text-base">50+ panellists</span>
                     <span>simulated with demographic diversity</span>
                   </li>
                 </ul>
@@ -131,7 +131,7 @@ export default function Home() {
         {/* How it works */}
         <section className="py-14 bg-card">
           <div className="max-w-5xl mx-auto px-6">
-            <h2 className="font-bold text-navy mb-3" style={{ fontSize: 'clamp(1.5rem, 1rem + 1.5vw, 1.875rem)' }}>
+            <h2 className="font-bold text-primary mb-3" style={{ fontSize: 'clamp(1.5rem, 1rem + 1.5vw, 1.875rem)' }}>
               How HypeTest works
             </h2>
             <p className="text-muted-foreground max-w-xl mb-14">
@@ -141,7 +141,7 @@ export default function Home() {
               {/* Step 1 */}
               <div>
                 <span className="text-xs font-bold text-teal uppercase tracking-widest">Step 1</span>
-                <h3 className="text-lg font-bold text-navy mt-2 mb-2">Describe your product</h3>
+                <h3 className="text-lg font-bold text-primary mt-2 mb-2">Describe your product</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed max-w-[28ch]">
                   Tell us about your product, feature, or idea. Free-text is fine — we&apos;ll extract what we need.
                 </p>
@@ -152,7 +152,7 @@ export default function Home() {
               {/* Step 2 */}
               <div>
                 <span className="text-xs font-bold text-teal uppercase tracking-widest">Step 2</span>
-                <h3 className="text-lg font-bold text-navy mt-2 mb-2">We simulate your consumers</h3>
+                <h3 className="text-lg font-bold text-primary mt-2 mb-2">We simulate your consumers</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed max-w-[28ch]">
                   A diverse panel of 50+ consumer personas runs through structured survey methodology.
                 </p>
@@ -163,7 +163,7 @@ export default function Home() {
               {/* Step 3 */}
               <div>
                 <span className="text-xs font-bold text-teal uppercase tracking-widest">Step 3</span>
-                <h3 className="text-lg font-bold text-navy mt-2 mb-2">Get your research report</h3>
+                <h3 className="text-lg font-bold text-primary mt-2 mb-2">Get your research report</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed max-w-[28ch]">
                   Purchase intent, willingness-to-pay, feature importance, and consumer concerns — in under 2 minutes.
                 </p>
@@ -171,18 +171,18 @@ export default function Home() {
             </div>
 
             {/* Discovery CTA */}
-            <div className="mt-14 bg-amber-50 border border-amber-200/60 rounded-2xl p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div className="mt-14 bg-amber-50 dark:bg-amber-950/30 border border-amber-200/60 dark:border-amber-800/30 rounded-2xl p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
-                <p className="text-sm font-semibold text-amber-800 mb-1">
+                <p className="text-sm font-semibold text-amber-800 dark:text-amber-300 mb-1">
                   Don&apos;t have a product yet?
                 </p>
-                <p className="text-sm text-amber-700/80">
+                <p className="text-sm text-amber-700/80 dark:text-amber-400/70">
                   Use Product Discovery to find what your audience actually wants.
                 </p>
               </div>
               <Link
                 href="/discover/new"
-                className="inline-flex items-center gap-2 text-sm font-semibold text-amber-800 hover:text-amber-900 hover:underline shrink-0"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-amber-800 dark:text-amber-300 hover:text-amber-900 dark:hover:text-amber-200 hover:underline shrink-0"
               >
                 Discover products
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -196,7 +196,7 @@ export default function Home() {
         {/* What you get */}
         <section className="py-14">
           <div className="max-w-5xl mx-auto px-6">
-            <h2 className="font-bold text-navy mb-3" style={{ fontSize: 'clamp(1.5rem, 1rem + 1.5vw, 1.875rem)' }}>
+            <h2 className="font-bold text-primary mb-3" style={{ fontSize: 'clamp(1.5rem, 1rem + 1.5vw, 1.875rem)' }}>
               What&apos;s in a HypeTest report
             </h2>
             <p className="text-muted-foreground max-w-xl mb-12">
@@ -205,17 +205,17 @@ export default function Home() {
 
             {/* Featured: Purchase Intent + WTP side by side */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
-              <div className="bg-navy rounded-2xl p-6 text-white">
+              <div className="bg-primary rounded-2xl p-6 text-primary-foreground">
                 <span className="text-xs font-bold text-teal uppercase tracking-widest">Core metric</span>
                 <h3 className="text-lg font-bold mt-2 mb-2">Purchase Intent Score</h3>
-                <p className="text-sm text-blue-100/70 leading-relaxed">
+                <p className="text-sm text-primary-foreground/70 leading-relaxed">
                   What percentage of consumers would actually buy your product, on a validated 5-point scale.
                 </p>
               </div>
-              <div className="bg-navy rounded-2xl p-6 text-white">
+              <div className="bg-primary rounded-2xl p-6 text-primary-foreground">
                 <span className="text-xs font-bold text-teal uppercase tracking-widest">Core metric</span>
                 <h3 className="text-lg font-bold mt-2 mb-2">Willingness-to-Pay Range</h3>
-                <p className="text-sm text-blue-100/70 leading-relaxed">
+                <p className="text-sm text-primary-foreground/70 leading-relaxed">
                   Data-derived price estimates from conjoint-style choice tasks — not guesses.
                 </p>
               </div>
@@ -230,7 +230,7 @@ export default function Home() {
                   </svg>
                 </span>
                 <div>
-                  <h3 className="text-sm font-semibold text-navy mb-1">Feature Importance</h3>
+                  <h3 className="text-sm font-semibold text-primary mb-1">Feature Importance</h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">Which attributes drive purchase decisions, ranked by preference.</p>
                 </div>
               </div>
@@ -241,7 +241,7 @@ export default function Home() {
                   </svg>
                 </span>
                 <div>
-                  <h3 className="text-sm font-semibold text-navy mb-1">Consumer Concerns</h3>
+                  <h3 className="text-sm font-semibold text-primary mb-1">Consumer Concerns</h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">Top objections and hesitations — the things you need to address.</p>
                 </div>
               </div>
@@ -252,7 +252,7 @@ export default function Home() {
                   </svg>
                 </span>
                 <div>
-                  <h3 className="text-sm font-semibold text-navy mb-1">Consumer Verbatims</h3>
+                  <h3 className="text-sm font-semibold text-primary mb-1">Consumer Verbatims</h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">Open-ended responses from diverse consumer profiles.</p>
                 </div>
               </div>
@@ -263,7 +263,7 @@ export default function Home() {
                   </svg>
                 </span>
                 <div>
-                  <h3 className="text-sm font-semibold text-navy mb-1">Methodology Disclosure</h3>
+                  <h3 className="text-sm font-semibold text-primary mb-1">Methodology Disclosure</h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">Full transparency on panel composition and confidence level.</p>
                 </div>
               </div>
@@ -274,7 +274,7 @@ export default function Home() {
         {/* Sample report */}
         <section className="py-14 bg-card">
           <div className="max-w-5xl mx-auto px-6">
-            <h2 className="font-bold text-navy text-center mb-3" style={{ fontSize: 'clamp(1.5rem, 1rem + 1.5vw, 1.875rem)' }}>
+            <h2 className="font-bold text-primary text-center mb-3" style={{ fontSize: 'clamp(1.5rem, 1rem + 1.5vw, 1.875rem)' }}>
               See a real report
             </h2>
             <p className="text-muted-foreground text-center max-w-2xl mx-auto mb-10">
@@ -286,14 +286,14 @@ export default function Home() {
         </section>
 
         {/* Why this works */}
-        <section className="py-14 bg-navy text-white">
+        <section className="py-14 bg-primary text-primary-foreground">
           <div className="max-w-5xl mx-auto px-6">
             <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.5fr] gap-12 lg:gap-16">
               <div>
                 <h2 className="font-bold mb-3" style={{ fontSize: 'clamp(1.5rem, 1rem + 1.5vw, 1.875rem)' }}>
                   Why this works
                 </h2>
-                <p className="text-blue-100/70 leading-relaxed mb-6">
+                <p className="text-primary-foreground/70 leading-relaxed mb-6">
                   HypeTest is built on peer-reviewed research showing that LLM-simulated
                   consumer panels produce willingness-to-pay estimates comparable to
                   real human panels.
@@ -313,29 +313,29 @@ export default function Home() {
                   <p className="text-sm font-semibold text-teal mb-2">
                     Academic Foundation
                   </p>
-                  <p className="text-sm text-blue-100/70 leading-relaxed max-w-prose">
+                  <p className="text-sm text-primary-foreground/70 leading-relaxed max-w-prose">
                     Based on Brand, Israeli &amp; Ngwe (2025) from Harvard Business
                     School, who demonstrated that LLM-generated WTP estimates
                     closely match real consumer panels.
                   </p>
                 </div>
-                <div className="w-12 h-px bg-white/10" />
+                <div className="w-12 h-px bg-primary-foreground/10" />
                 <div>
                   <p className="text-sm font-semibold text-teal mb-2">
                     Real Methodology
                   </p>
-                  <p className="text-sm text-blue-100/70 leading-relaxed max-w-prose">
+                  <p className="text-sm text-primary-foreground/70 leading-relaxed max-w-prose">
                     We use conjoint-style indirect elicitation — the same approach
                     used by professional research firms — not direct &quot;how much would
                     you pay?&quot; questions.
                   </p>
                 </div>
-                <div className="w-12 h-px bg-white/10" />
+                <div className="w-12 h-px bg-primary-foreground/10" />
                 <div>
                   <p className="text-sm font-semibold text-teal mb-2">
                     Honest Limitations
                   </p>
-                  <p className="text-sm text-blue-100/70 leading-relaxed max-w-prose">
+                  <p className="text-sm text-primary-foreground/70 leading-relaxed max-w-prose">
                     We clearly communicate what this approach can and cannot do.
                     It&apos;s best for early-stage exploration, not replacing
                     high-stakes primary research.
@@ -349,7 +349,7 @@ export default function Home() {
         {/* CTA */}
         <section className="py-14">
           <div className="max-w-3xl mx-auto px-6 text-center">
-            <h2 className="font-bold text-navy mb-3" style={{ fontSize: 'clamp(1.5rem, 1rem + 1.5vw, 1.875rem)' }}>
+            <h2 className="font-bold text-primary mb-3" style={{ fontSize: 'clamp(1.5rem, 1rem + 1.5vw, 1.875rem)' }}>
               Try it now — it&apos;s free
             </h2>
             <p className="text-muted-foreground max-w-xl mx-auto mb-6">
@@ -358,7 +358,7 @@ export default function Home() {
             </p>
             <Link
               href="/research/new"
-              className="inline-flex items-center justify-center rounded-xl bg-navy text-white font-semibold px-10 h-14 text-lg hover:bg-navy-light transition-colors shadow-lg shadow-navy/25"
+              className="inline-flex items-center justify-center rounded-xl bg-primary text-primary-foreground font-semibold px-10 h-14 text-lg hover:bg-primary/90 transition-colors shadow-lg shadow-primary/25"
             >
               Start your first research run
             </Link>

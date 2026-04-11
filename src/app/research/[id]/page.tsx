@@ -144,7 +144,7 @@ function ResearchResultContent({
         <Nav />
         <main className="flex-1 flex items-center justify-center">
           <div className="text-center max-w-md px-6">
-            <p className="text-lg font-medium text-navy mb-2">
+            <p className="text-lg font-medium text-primary mb-2">
               Result not found
             </p>
             <p className="text-sm text-muted-foreground">{state.message}</p>

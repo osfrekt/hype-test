@@ -347,7 +347,7 @@ function NewResearchForm() {
                 />
               ))}
             </div>
-            <h2 className="text-xl font-bold text-navy mb-2">
+            <h2 className="text-xl font-bold text-primary mb-2">
               Running your research
             </h2>
             <p className="text-sm text-muted-foreground mb-8">{stage}</p>
@@ -372,7 +372,7 @@ function NewResearchForm() {
       <main className="flex-1 py-12">
         <div className="max-w-2xl mx-auto px-6">
           <div className="mb-8">
-            <h1 className="text-2xl font-bold text-navy mb-2">
+            <h1 className="text-2xl font-bold text-primary mb-2">
               New Research Run
             </h1>
             <p className="text-muted-foreground">
@@ -689,7 +689,7 @@ function NewResearchForm() {
 
                 <Button
                   type="submit"
-                  className="w-full bg-navy hover:bg-navy-light h-11"
+                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground h-11"
                   disabled={!isFormValid}
                 >
                   Run Research (Free)

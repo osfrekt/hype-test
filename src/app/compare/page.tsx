@@ -127,7 +127,7 @@ export default function ComparePage() {
         <Nav />
         <main className="flex-1 flex items-center justify-center">
           <div className="text-center max-w-md px-6">
-            <p className="text-lg font-medium text-navy mb-2">
+            <p className="text-lg font-medium text-primary mb-2">
               Not enough results to compare
             </p>
             <p className="text-sm text-muted-foreground">
@@ -145,7 +145,7 @@ export default function ComparePage() {
       <main className="flex-1 py-8">
         <div className="max-w-6xl mx-auto px-6">
           <div className="mb-6">
-            <h1 className="text-2xl font-bold text-navy mb-1">
+            <h1 className="text-2xl font-bold text-primary mb-1">
               Compare Research Runs
             </h1>
             <p className="text-sm text-muted-foreground">
@@ -170,7 +170,7 @@ export default function ComparePage() {
                 }`}
                 disabled={!selected.has(r.id) && selected.size >= 3}
               >
-                <p className="font-medium text-navy text-sm truncate">
+                <p className="font-medium text-primary text-sm truncate">
                   {r.input.productName}
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">

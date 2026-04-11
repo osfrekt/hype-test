@@ -47,7 +47,7 @@ export default function PricingPage() {
       <main className="flex-1 py-12">
         <div className="max-w-3xl mx-auto px-6">
           <div className="text-center mb-12">
-            <h1 className="text-3xl md:text-4xl font-bold text-navy mb-3">
+            <h1 className="text-3xl md:text-4xl font-bold text-primary mb-3">
               Simple, transparent pricing
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -68,7 +68,7 @@ export default function PricingPage() {
                     3 research runs per month
                   </p>
                 </div>
-                <span className="ml-auto text-3xl font-bold text-navy">
+                <span className="ml-auto text-3xl font-bold text-primary">
                   Free
                 </span>
               </div>
@@ -86,7 +86,7 @@ export default function PricingPage() {
               </div>
               <Link
                 href="/research/new"
-                className="block w-full text-center rounded-xl bg-navy text-white font-semibold py-3 text-sm hover:bg-navy-light transition-colors"
+                className="block w-full text-center rounded-xl bg-primary text-primary-foreground font-semibold py-3 text-sm hover:bg-primary/90 transition-colors"
               >
                 Start free
               </Link>
@@ -97,10 +97,10 @@ export default function PricingPage() {
           <Card className="bg-muted/30">
             <CardContent className="py-8">
               <div className="text-center max-w-lg mx-auto">
-                <div className="w-12 h-12 rounded-2xl bg-navy/5 flex items-center justify-center mx-auto mb-4">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1a1f36" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" /></svg>
+                <div className="w-12 h-12 rounded-2xl bg-primary/5 flex items-center justify-center mx-auto mb-4">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary"><path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" /></svg>
                 </div>
-                <h3 className="text-lg font-bold text-navy mb-2">
+                <h3 className="text-lg font-bold text-primary mb-2">
                   More power coming soon
                 </h3>
                 <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
@@ -130,7 +130,7 @@ export default function PricingPage() {
                     />
                     <Button
                       type="submit"
-                      className="bg-navy hover:bg-navy-light shrink-0"
+                      className="bg-primary hover:bg-primary/90 text-primary-foreground shrink-0"
                       disabled={waitlistStatus === "loading"}
                     >
                       {waitlistStatus === "loading"
@@ -153,7 +153,7 @@ export default function PricingPage() {
             <p className="text-sm text-muted-foreground mb-1">
               Need enterprise features? Custom model fine-tuning? SSO?
             </p>
-            <p className="text-sm font-medium text-navy">
+            <p className="text-sm font-medium text-primary">
               Contact us for custom pricing.
             </p>
           </div>

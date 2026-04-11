@@ -238,7 +238,7 @@ function DiscoverNewForm() {
             <div className="w-16 h-16 rounded-2xl bg-muted flex items-center justify-center mx-auto mb-6">
               <Lock className="w-8 h-8 text-muted-foreground" />
             </div>
-            <h2 className="text-xl font-bold text-navy mb-2">
+            <h2 className="text-xl font-bold text-primary mb-2">
               Product Discovery is a Pro feature
             </h2>
             <p className="text-sm text-muted-foreground mb-6">
@@ -248,7 +248,7 @@ function DiscoverNewForm() {
             </p>
             <Link
               href="/pricing"
-              className="inline-flex items-center justify-center rounded-md bg-navy hover:bg-navy-light text-white h-11 px-8 text-sm font-medium transition-colors"
+              className="inline-flex items-center justify-center rounded-md bg-primary hover:bg-primary/90 text-primary-foreground h-11 px-8 text-sm font-medium transition-colors"
             >
               View Pricing
             </Link>
@@ -279,7 +279,7 @@ function DiscoverNewForm() {
                 <path d="M21 12a9 9 0 1 1-6.219-8.56" />
               </svg>
             </div>
-            <h2 className="text-xl font-bold text-navy mb-2">
+            <h2 className="text-xl font-bold text-primary mb-2">
               Discovering product opportunities
             </h2>
             <p className="text-sm text-muted-foreground mb-8">{stage}</p>
@@ -304,7 +304,7 @@ function DiscoverNewForm() {
       <main className="flex-1 py-12">
         <div className="max-w-2xl mx-auto px-6">
           <div className="mb-8">
-            <h1 className="text-2xl font-bold text-navy mb-2">
+            <h1 className="text-2xl font-bold text-primary mb-2">
               Product Discovery
             </h1>
             <p className="text-muted-foreground">
@@ -559,7 +559,7 @@ function DiscoverNewForm() {
 
                 <Button
                   type="submit"
-                  className="w-full bg-navy hover:bg-navy-light h-11"
+                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground h-11"
                   disabled={!isFormValid}
                 >
                   Discover Products (Pro)

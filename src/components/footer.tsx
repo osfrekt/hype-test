@@ -28,7 +28,7 @@ export function Footer() {
                   <polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2" />
                 </svg>
               </div>
-              <span className="font-semibold text-navy text-sm">HypeTest</span>
+              <span className="font-semibold text-primary text-sm">HypeTest</span>
             </div>
             <p className="text-sm text-muted-foreground max-w-xs">
               Consumer research in minutes, not months. Grounded in academic

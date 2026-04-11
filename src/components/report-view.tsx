@@ -32,7 +32,7 @@ export function ReportView({
       {/* Header */}
       <div className="mb-10">
         <div className="flex items-center gap-3 mb-2">
-          <h2 className="text-2xl font-bold text-navy">
+          <h2 className="text-2xl font-bold text-primary">
             {result.input.productName}
           </h2>
           <Badge variant="secondary" className="text-xs">
@@ -51,15 +51,15 @@ export function ReportView({
       {/* Executive Summary */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         {/* Purchase Intent — featured with tinted background */}
-        <Card className="bg-navy text-white border-navy">
+        <Card className="bg-primary text-primary-foreground border-primary">
           <CardContent className="pt-6">
-            <p className="text-xs font-medium uppercase tracking-wider mb-1 text-blue-200/70">
+            <p className="text-xs font-medium uppercase tracking-wider mb-1 text-primary-foreground/60">
               Purchase Intent
             </p>
             <p className="text-4xl font-extrabold tracking-tight">
               {score}%
             </p>
-            <p className="text-xs text-blue-200/60 mt-1.5">
+            <p className="text-xs text-primary-foreground/50 mt-1.5">
               of simulated consumers likely to buy
             </p>
           </CardContent>
@@ -70,7 +70,7 @@ export function ReportView({
           <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-2">
             Top Feature
           </p>
-          <p className="text-base font-bold text-navy leading-snug mb-1">
+          <p className="text-base font-bold text-primary leading-snug mb-1">
             {featureImportance[0]?.feature || "N/A"}
           </p>
           <p className="text-xs text-muted-foreground">
@@ -101,7 +101,7 @@ export function ReportView({
                       style={{ width: `${f.score}%` }}
                     />
                   </div>
-                  <span className="text-sm font-medium text-navy w-12 text-right">
+                  <span className="text-sm font-medium text-primary w-12 text-right">
                     {f.score}%
                   </span>
                 </div>
@@ -115,7 +115,7 @@ export function ReportView({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg font-semibold text-red-700">
+            <CardTitle className="text-lg font-semibold text-red-700 dark:text-red-400">
               Top Consumer Concerns
             </CardTitle>
           </CardHeader>
@@ -135,7 +135,7 @@ export function ReportView({
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg font-semibold text-emerald-700">
+            <CardTitle className="text-lg font-semibold text-emerald-700 dark:text-emerald-400">
               Top Consumer Positives
             </CardTitle>
           </CardHeader>
@@ -184,7 +184,7 @@ export function ReportView({
       {/* Methodology */}
       <Card className="border-teal/20 bg-teal/5">
         <CardHeader>
-          <CardTitle className="text-lg font-semibold text-navy">
+          <CardTitle className="text-lg font-semibold text-primary">
             Methodology & Limitations
           </CardTitle>
         </CardHeader>
@@ -275,7 +275,7 @@ function WtpCard({ result }: { result: ResearchResult }) {
         <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-1">
           Estimated WTP
         </p>
-        <p className="text-3xl font-bold text-navy">
+        <p className="text-3xl font-bold text-primary">
           ${mid}
           {unitLabel && (
             <span className="text-base font-medium text-muted-foreground">

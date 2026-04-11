@@ -35,12 +35,29 @@ const COMP_COLORS = [
   "#6b7280", // oklch(0.50 0.01 260) — Unfamiliar (brand-tinted gray)
 ];
 
-// Shared chart styling tokens
-const GRID_COLOR = "oklch(0.91 0.005 260)";
-const LABEL_COLOR = "#3d3f54"; // oklch(0.32 0.02 260) — brand-tinted dark
+// Shared chart styling tokens — resolved at render time for theme awareness
+function useChartTheme() {
+  const [isDark, setIsDark] = useState(false);
+  useEffect(() => {
+    setIsDark(document.documentElement.classList.contains("dark"));
+    const observer = new MutationObserver(() => {
+      setIsDark(document.documentElement.classList.contains("dark"));
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+    return () => observer.disconnect();
+  }, []);
+  return {
+    gridColor: isDark ? "oklch(0.27 0.015 260)" : "oklch(0.91 0.005 260)",
+    labelColor: isDark ? "#b0b3c5" : "#3d3f54",
+    tooltipBg: isDark ? "#1f2237" : "#ffffff",
+    tooltipBorder: isDark ? "oklch(0.27 0.015 260)" : "oklch(0.91 0.005 260)",
+    tooltipColor: isDark ? "#e0e1e8" : "#1a1f36",
+  };
+}
 
 export function ResultsCharts({ result }: { result: ResearchResult }) {
   const [mounted, setMounted] = useState(false);
+  const chart = useChartTheme();
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -73,7 +90,7 @@ export function ResultsCharts({ result }: { result: ResearchResult }) {
                   data={intentData}
                   margin={{ top: 20, right: 5, left: -20, bottom: 5 }}
                 >
-                  <CartesianGrid strokeDasharray="3 3" stroke={GRID_COLOR} />
+                  <CartesianGrid strokeDasharray="3 3" stroke={chart.gridColor} />
                   <XAxis
                     dataKey="name"
                     tick={{ fontSize: 10 }}
@@ -86,7 +103,9 @@ export function ResultsCharts({ result }: { result: ResearchResult }) {
                     contentStyle={{
                       fontSize: 12,
                       borderRadius: 8,
-                      border: `1px solid ${GRID_COLOR}`,
+                      border: `1px solid ${chart.tooltipBorder}`,
+                      backgroundColor: chart.tooltipBg,
+                      color: chart.tooltipColor,
                     }}
                   />
                   <Bar dataKey="count" radius={[4, 4, 0, 0]}>
@@ -97,7 +116,7 @@ export function ResultsCharts({ result }: { result: ResearchResult }) {
                       dataKey="count"
                       position="top"
                       fontSize={11}
-                      fill={LABEL_COLOR}
+                      fill={chart.labelColor}
                       formatter={(v: unknown) => (Number(v) > 0 ? String(v) : "")}
                     />
                   </Bar>
@@ -123,7 +142,7 @@ export function ResultsCharts({ result }: { result: ResearchResult }) {
                 <span>${result.wtpRange?.high}</span>
               </div>
               {/* Bar */}
-              <div className="w-full h-8 bg-gradient-to-r from-emerald-200 via-teal to-navy rounded-lg relative">
+              <div className="w-full h-8 bg-gradient-to-r from-emerald-200 dark:from-emerald-800 via-teal to-primary rounded-lg relative">
                 {/* Mid marker */}
                 <div
                   className="absolute top-0 -translate-x-1/2 flex flex-col items-center"
@@ -132,7 +151,7 @@ export function ResultsCharts({ result }: { result: ResearchResult }) {
                   }}
                 >
                   <div className="w-0.5 h-8 bg-white" />
-                  <div className="mt-2 bg-navy text-white text-xs font-medium px-2 py-1 rounded">
+                  <div className="mt-2 bg-primary text-primary-foreground text-xs font-medium px-2 py-1 rounded">
                     ${result.wtpRange?.mid}
                   </div>
                   <span className="text-xs text-muted-foreground mt-1">
@@ -171,7 +190,7 @@ export function ResultsCharts({ result }: { result: ResearchResult }) {
                     data={compData}
                     margin={{ top: 5, right: 5, left: -20, bottom: 5 }}
                   >
-                    <CartesianGrid strokeDasharray="3 3" stroke={GRID_COLOR} />
+                    <CartesianGrid strokeDasharray="3 3" stroke={chart.gridColor} />
                     <XAxis
                       dataKey="name"
                       tick={{ fontSize: 10 }}
@@ -184,7 +203,7 @@ export function ResultsCharts({ result }: { result: ResearchResult }) {
                       contentStyle={{
                         fontSize: 12,
                         borderRadius: 8,
-                        border: `1px solid ${GRID_COLOR}`,
+                        border: `1px solid ${chart.tooltipBorder}`,
                       }}
                     />
                     <Bar dataKey="count" radius={[4, 4, 0, 0]}>

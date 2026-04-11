@@ -9,7 +9,7 @@ export default function MethodologyPage() {
       <Nav />
       <main className="flex-1 py-12">
         <article className="max-w-3xl mx-auto px-6">
-          <h1 className="text-3xl md:text-4xl font-bold text-navy mb-3">
+          <h1 className="text-3xl md:text-4xl font-bold text-primary mb-3">
             The Science Behind Simulated Consumer Research
           </h1>
           <p className="text-lg text-muted-foreground leading-relaxed mb-8">
@@ -21,14 +21,14 @@ export default function MethodologyPage() {
 
           {/* What this is and isn't */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-            <div className="bg-emerald-50 rounded-xl p-5 border border-emerald-100">
+            <div className="bg-emerald-50 dark:bg-emerald-950/30 rounded-xl p-5 border border-emerald-100 dark:border-emerald-800/30">
               <div className="flex items-center gap-2 mb-3">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
-                <p className="text-sm font-semibold text-emerald-800">
+                <p className="text-sm font-semibold text-emerald-800 dark:text-emerald-300">
                   What HypeTest does well
                 </p>
               </div>
-              <ul className="text-sm text-emerald-700/80 space-y-1.5">
+              <ul className="text-sm text-emerald-700/80 dark:text-emerald-400/70 space-y-1.5">
                 <li>&bull; Early-stage concept validation</li>
                 <li>&bull; Feature prioritisation and trade-off analysis</li>
                 <li>&bull; Directional pricing and WTP estimation</li>
@@ -36,14 +36,14 @@ export default function MethodologyPage() {
                 <li>&bull; Hypothesis generation for deeper research</li>
               </ul>
             </div>
-            <div className="bg-amber-50 rounded-xl p-5 border border-amber-100">
+            <div className="bg-amber-50 dark:bg-amber-950/30 rounded-xl p-5 border border-amber-100 dark:border-amber-800/30">
               <div className="flex items-center gap-2 mb-3">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d97706" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" /><line x1="12" y1="9" x2="12" y2="13" /><line x1="12" y1="17" x2="12.01" y2="17" /></svg>
-                <p className="text-sm font-semibold text-amber-800">
+                <p className="text-sm font-semibold text-amber-800 dark:text-amber-300">
                   Where HypeTest has limits
                 </p>
               </div>
-              <ul className="text-sm text-amber-700/80 space-y-1.5">
+              <ul className="text-sm text-amber-700/80 dark:text-amber-400/70 space-y-1.5">
                 <li>&bull; Precise demographic segment targeting</li>
                 <li>&bull; Truly novel categories with no market precedent</li>
                 <li>&bull; High-stakes final launch decisions</li>
@@ -61,7 +61,7 @@ export default function MethodologyPage() {
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><line x1="12" y1="16" x2="12" y2="12" /><line x1="12" y1="8" x2="12.01" y2="8" /></svg>
               </div>
               <div>
-                <h2 className="text-xl font-bold text-navy">
+                <h2 className="text-xl font-bold text-primary">
                   Why LLMs can simulate consumers
                 </h2>
               </div>
@@ -87,14 +87,14 @@ export default function MethodologyPage() {
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" /><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" /></svg>
               </div>
               <div>
-                <h2 className="text-xl font-bold text-navy">
+                <h2 className="text-xl font-bold text-primary">
                   The foundational research
                 </h2>
               </div>
             </div>
 
             <div className="bg-muted/50 rounded-xl p-5 border border-border/50">
-              <p className="font-medium text-navy mb-1.5">
+              <p className="font-medium text-primary mb-1.5">
                 Brand, Israeli &amp; Ngwe (2025). &ldquo;Using LLMs for Market
                 Research.&rdquo; Harvard Business School Working Paper 23-062.
               </p>
@@ -107,7 +107,7 @@ export default function MethodologyPage() {
                 that simulates the natural variation you&apos;d see in a real
                 consumer panel.
               </p>
-              <p className="text-xs text-amber-700 bg-amber-50 rounded-lg p-3 mt-3 border border-amber-100">
+              <p className="text-xs text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/30 rounded-lg p-3 mt-3 border border-amber-100 dark:border-amber-800/30">
                 <strong>Note:</strong> The R&sup2; = 0.89 correlation was demonstrated
                 specifically for consumer packaged goods categories. Performance
                 may vary for novel product categories, niche markets, or
@@ -116,7 +116,7 @@ export default function MethodologyPage() {
             </div>
 
             <div className="bg-muted/50 rounded-xl p-5 border border-border/50">
-              <p className="font-medium text-navy mb-1.5">
+              <p className="font-medium text-primary mb-1.5">
                 Horton (2023). &ldquo;Large Language Models as Simulated Economic
                 Agents.&rdquo;
               </p>
@@ -128,7 +128,7 @@ export default function MethodologyPage() {
             </div>
 
             <div className="bg-muted/50 rounded-xl p-5 border border-border/50">
-              <p className="font-medium text-navy mb-1.5">
+              <p className="font-medium text-primary mb-1.5">
                 Argyle et al. (2023). &ldquo;Out of One, Many.&rdquo;
               </p>
               <p className="text-sm text-muted-foreground leading-relaxed">
@@ -139,7 +139,7 @@ export default function MethodologyPage() {
             </div>
 
             <div className="bg-muted/50 rounded-xl p-5 border border-border/50">
-              <p className="font-medium text-navy mb-1.5">
+              <p className="font-medium text-primary mb-1.5">
                 Li et al. (2024). LLM-based perceptual maps.
               </p>
               <p className="text-sm text-muted-foreground leading-relaxed">
@@ -155,7 +155,7 @@ export default function MethodologyPage() {
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" /></svg>
               </div>
               <div>
-                <h2 className="text-xl font-bold text-navy">
+                <h2 className="text-xl font-bold text-primary">
                   How HypeTest&apos;s methodology works
                 </h2>
               </div>
@@ -192,7 +192,7 @@ export default function MethodologyPage() {
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>
               </div>
               <div>
-                <h2 className="text-xl font-bold text-navy">
+                <h2 className="text-xl font-bold text-primary">
                   Panel construction
                 </h2>
               </div>
@@ -222,7 +222,7 @@ export default function MethodologyPage() {
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" /></svg>
               </div>
               <div>
-                <h2 className="text-xl font-bold text-navy">
+                <h2 className="text-xl font-bold text-primary">
                   Conjoint methodology detail
                 </h2>
               </div>
@@ -248,11 +248,11 @@ export default function MethodologyPage() {
 
           <section className="space-y-5 mb-10">
             <div className="flex items-start gap-3">
-              <div className="w-9 h-9 rounded-lg bg-red-50 flex items-center justify-center shrink-0 mt-0.5">
+              <div className="w-9 h-9 rounded-lg bg-red-50 dark:bg-red-950/30 flex items-center justify-center shrink-0 mt-0.5">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" /><line x1="12" y1="9" x2="12" y2="13" /><line x1="12" y1="17" x2="12.01" y2="17" /></svg>
               </div>
               <div>
-                <h2 className="text-xl font-bold text-navy">
+                <h2 className="text-xl font-bold text-primary">
                   Limitations — what HypeTest cannot do
                 </h2>
               </div>
@@ -304,18 +304,18 @@ export default function MethodologyPage() {
           </section>
 
           <section className="space-y-4 mb-10">
-            <h2 className="text-xl font-bold text-navy">
+            <h2 className="text-xl font-bold text-primary">
               When to use HypeTest
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="bg-emerald-50 rounded-xl p-5 border border-emerald-100">
+              <div className="bg-emerald-50 dark:bg-emerald-950/30 rounded-xl p-5 border border-emerald-100 dark:border-emerald-800/30">
                 <div className="flex items-center gap-2 mb-2">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
-                  <p className="text-sm font-medium text-emerald-800">
+                  <p className="text-sm font-medium text-emerald-800 dark:text-emerald-300">
                     Good for
                   </p>
                 </div>
-                <ul className="text-sm text-emerald-700/80 space-y-1">
+                <ul className="text-sm text-emerald-700/80 dark:text-emerald-400/70 space-y-1">
                   <li>&bull; Early-stage concept validation</li>
                   <li>&bull; Comparing feature trade-offs</li>
                   <li>&bull; Directional pricing research</li>
@@ -323,14 +323,14 @@ export default function MethodologyPage() {
                   <li>&bull; Generating hypotheses for deeper research</li>
                 </ul>
               </div>
-              <div className="bg-red-50 rounded-xl p-5 border border-red-100">
+              <div className="bg-red-50 dark:bg-red-950/30 rounded-xl p-5 border border-red-100 dark:border-red-800/30">
                 <div className="flex items-center gap-2 mb-2">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
-                  <p className="text-sm font-medium text-red-800">
+                  <p className="text-sm font-medium text-red-800 dark:text-red-300">
                     Not for
                   </p>
                 </div>
-                <ul className="text-sm text-red-700/80 space-y-1">
+                <ul className="text-sm text-red-700/80 dark:text-red-400/70 space-y-1">
                   <li>&bull; Final go/no-go launch decisions</li>
                   <li>&bull; Precise demographic targeting</li>
                   <li>&bull; Regulatory or compliance research</li>
@@ -340,11 +340,11 @@ export default function MethodologyPage() {
             </div>
           </section>
 
-          <div className="bg-navy text-white rounded-xl p-6 text-center">
+          <div className="bg-primary text-primary-foreground rounded-xl p-6 text-center">
             <h2 className="text-lg font-bold mb-2">
               Try it yourself
             </h2>
-            <p className="text-sm text-blue-200/80 mb-4 max-w-md mx-auto">
+            <p className="text-sm text-primary-foreground/70 mb-4 max-w-md mx-auto">
               The best way to evaluate this methodology is to run it on a
               product you already have data for — and see how the results
               compare.
@@ -374,11 +374,11 @@ function MethodStep({
 }) {
   return (
     <div className="flex items-start gap-3">
-      <div className="w-7 h-7 rounded-full bg-navy text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">
+      <div className="w-7 h-7 rounded-full bg-primary text-primary-foreground text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">
         {number}
       </div>
       <div>
-        <h3 className="font-medium text-navy mb-1">{title}</h3>
+        <h3 className="font-medium text-primary mb-1">{title}</h3>
         <p className="text-sm text-muted-foreground leading-relaxed">
           {description}
         </p>
