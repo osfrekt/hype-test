@@ -26,12 +26,6 @@ export function ReportView({
   }, [result.createdAt]);
 
   const score = result.purchaseIntent?.score ?? 0;
-  const intentColor =
-    score >= 60
-      ? "text-emerald-600"
-      : score >= 40
-        ? "text-amber-600"
-        : "text-red-600";
 
   return (
     <div>
@@ -55,7 +49,7 @@ export function ReportView({
       </div>
 
       {/* Executive Summary */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         {/* Purchase Intent — featured with tinted background */}
         <Card className="bg-navy text-white border-navy">
           <CardContent className="pt-6">
@@ -88,10 +82,8 @@ export function ReportView({
       {/* Charts */}
       <ResultsCharts result={result} />
 
-      <Separator className="my-8" />
-
       {/* Feature Importance */}
-      <Card className="mb-10">
+      <Card className="mt-12 mb-8">
         <CardHeader>
           <CardTitle className="text-lg font-semibold">Feature Importance</CardTitle>
         </CardHeader>
@@ -120,7 +112,7 @@ export function ReportView({
       </Card>
 
       {/* Concerns & Positives */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
         <Card>
           <CardHeader>
             <CardTitle className="text-lg font-semibold text-red-700">
@@ -166,7 +158,7 @@ export function ReportView({
       </div>
 
       {/* Verbatims */}
-      <Card className="mb-10">
+      <Card className="mb-8">
         <CardHeader>
           <CardTitle className="text-lg font-semibold">Consumer Verbatims</CardTitle>
         </CardHeader>
