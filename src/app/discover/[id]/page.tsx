@@ -1,6 +1,7 @@
 "use client";
 
 import { Suspense, use, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Nav } from "@/components/nav";
 import { Badge } from "@/components/ui/badge";
@@ -103,6 +104,7 @@ function DiscoverResultContent({
 }: {
   params: Promise<{ id: string }>;
 }) {
+  const router = useRouter();
   const { id } = use(params);
   const [state, setState] = useState<FetchState>({ status: "loading" });
   const [formattedDate, setFormattedDate] = useState("");
@@ -112,6 +114,7 @@ function DiscoverResultContent({
   const [roundStage, setRoundStage] = useState("");
   const [roundError, setRoundError] = useState("");
   const [copied, setCopied] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -691,6 +694,34 @@ function DiscoverResultContent({
               </p>
             </CardContent>
           </Card>
+
+          {/* Delete button */}
+          <div className="mt-12 mb-4 text-center" data-print-hide>
+            <button
+              type="button"
+              disabled={deleting}
+              onClick={async () => {
+                if (!confirm("Are you sure you want to delete this discovery? This cannot be undone.")) return;
+                setDeleting(true);
+                try {
+                  const res = await fetch(`/api/discovery/${id}`, { method: "DELETE" });
+                  if (res.ok) {
+                    router.push("/");
+                  } else {
+                    alert("Failed to delete. Please try again.");
+                    setDeleting(false);
+                  }
+                } catch {
+                  alert("Failed to delete. Please try again.");
+                  setDeleting(false);
+                }
+              }}
+              className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-destructive transition-colors"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6" /><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /></svg>
+              {deleting ? "Deleting..." : "Delete my discovery"}
+            </button>
+          </div>
 
           {/* Run Another Round */}
           <div className="mt-8 mb-8" data-print-hide>

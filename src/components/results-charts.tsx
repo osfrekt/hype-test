@@ -74,112 +74,66 @@ export function ResultsCharts({ result }: { result: ResearchResult }) {
     fill: COMP_COLORS[i],
   }));
 
+  const hasCompetitive = !!(compData && result.competitivePosition);
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg font-semibold">
-            Purchase Intent Distribution
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="h-64">
-            {mounted && (
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart
-                  data={intentData}
-                  margin={{ top: 20, right: 5, left: -20, bottom: 5 }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" stroke={chart.gridColor} />
-                  <XAxis
-                    dataKey="name"
-                    tick={{ fontSize: 10 }}
-                    angle={-20}
-                    textAnchor="end"
-                    height={60}
-                  />
-                  <YAxis tick={{ fontSize: 11 }} />
-                  <Tooltip
-                    contentStyle={{
-                      fontSize: 12,
-                      borderRadius: 8,
-                      border: `1px solid ${chart.tooltipBorder}`,
-                      backgroundColor: chart.tooltipBg,
-                      color: chart.tooltipColor,
-                    }}
-                  />
-                  <Bar dataKey="count" radius={[4, 4, 0, 0]}>
-                    {intentData.map((entry, index) => (
-                      <Cell key={index} fill={entry.fill} />
-                    ))}
-                    <LabelList
-                      dataKey="count"
-                      position="top"
-                      fontSize={11}
-                      fill={chart.labelColor}
-                      formatter={(v: unknown) => (Number(v) > 0 ? String(v) : "")}
-                    />
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
-            )}
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg font-semibold">
-            Willingness-to-Pay Spectrum
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="h-64 flex flex-col justify-center">
-            <div className="relative">
-              {/* Price scale */}
-              <div className="flex justify-between text-xs text-muted-foreground mb-2">
-                <span>${result.wtpRange?.low}</span>
-                <span>${result.wtpRange?.high}</span>
+    <div>
+      {hasCompetitive && (
+        <div className="mb-8">
+          <h3 className="text-xl font-bold text-primary mb-4">
+            How You Stack Up vs {result.competitivePosition!.competitors}
+          </h3>
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg font-semibold">
+                Competitive Positioning
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="h-64">
+                {mounted && (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart
+                      data={compData}
+                      margin={{ top: 5, right: 5, left: -20, bottom: 5 }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" stroke={chart.gridColor} />
+                      <XAxis
+                        dataKey="name"
+                        tick={{ fontSize: 10 }}
+                        angle={-20}
+                        textAnchor="end"
+                        height={60}
+                      />
+                      <YAxis tick={{ fontSize: 11 }} />
+                      <Tooltip
+                        contentStyle={{
+                          fontSize: 12,
+                          borderRadius: 8,
+                          border: `1px solid ${chart.tooltipBorder}`,
+                          backgroundColor: chart.tooltipBg,
+                          color: chart.tooltipColor,
+                        }}
+                      />
+                      <Bar dataKey="count" radius={[4, 4, 0, 0]}>
+                        {compData!.map((entry, index) => (
+                          <Cell key={index} fill={entry.fill} />
+                        ))}
+                      </Bar>
+                    </BarChart>
+                  </ResponsiveContainer>
+                )}
               </div>
-              {/* Bar */}
-              <div className="w-full h-8 bg-gradient-to-r from-emerald-200 dark:from-emerald-800 via-teal to-primary rounded-lg relative">
-                {/* Mid marker */}
-                <div
-                  className="absolute top-0 -translate-x-1/2 flex flex-col items-center"
-                  style={{
-                    left: `${Math.max(8, result.wtpRange?.high === result.wtpRange?.low ? 50 : ((result.wtpRange?.mid - result.wtpRange?.low) / (result.wtpRange?.high - result.wtpRange?.low)) * 100)}%`,
-                  }}
-                >
-                  <div className="w-0.5 h-8 bg-white" />
-                  <div className="mt-2 bg-primary text-primary-foreground text-xs font-medium px-2 py-1 rounded">
-                    ${result.wtpRange?.mid}
-                  </div>
-                  <span className="text-xs text-muted-foreground mt-1">
-                    estimated avg
-                  </span>
-                </div>
-              </div>
-              {/* Labels */}
-              <div className="flex justify-between text-xs text-muted-foreground mt-10">
-                <span>Budget buyers</span>
-                <span>Premium buyers</span>
-              </div>
-            </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
 
-            <div className="mt-8 text-xs text-muted-foreground leading-relaxed">
-              WTP estimated via indirect choice-based methodology. The range
-              reflects the spread of simulated consumer preferences, not a
-              confidence interval.
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {compData && result.competitivePosition && (
-        <Card className="md:col-span-2">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <Card>
           <CardHeader>
             <CardTitle className="text-lg font-semibold">
-              Competitive Positioning vs {result.competitivePosition.competitors}
+              Purchase Intent Distribution
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -187,8 +141,8 @@ export function ResultsCharts({ result }: { result: ResearchResult }) {
               {mounted && (
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart
-                    data={compData}
-                    margin={{ top: 5, right: 5, left: -20, bottom: 5 }}
+                    data={intentData}
+                    margin={{ top: 20, right: 5, left: -20, bottom: 5 }}
                   >
                     <CartesianGrid strokeDasharray="3 3" stroke={chart.gridColor} />
                     <XAxis
@@ -204,12 +158,21 @@ export function ResultsCharts({ result }: { result: ResearchResult }) {
                         fontSize: 12,
                         borderRadius: 8,
                         border: `1px solid ${chart.tooltipBorder}`,
+                        backgroundColor: chart.tooltipBg,
+                        color: chart.tooltipColor,
                       }}
                     />
                     <Bar dataKey="count" radius={[4, 4, 0, 0]}>
-                      {compData.map((entry, index) => (
+                      {intentData.map((entry, index) => (
                         <Cell key={index} fill={entry.fill} />
                       ))}
+                      <LabelList
+                        dataKey="count"
+                        position="top"
+                        fontSize={11}
+                        fill={chart.labelColor}
+                        formatter={(v: unknown) => (Number(v) > 0 ? String(v) : "")}
+                      />
                     </Bar>
                   </BarChart>
                 </ResponsiveContainer>
@@ -217,7 +180,55 @@ export function ResultsCharts({ result }: { result: ResearchResult }) {
             </div>
           </CardContent>
         </Card>
-      )}
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg font-semibold">
+              Willingness-to-Pay Spectrum
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="h-64 flex flex-col justify-center">
+              <div className="relative">
+                {/* Price scale */}
+                <div className="flex justify-between text-xs text-muted-foreground mb-2">
+                  <span>${result.wtpRange?.low}</span>
+                  <span>${result.wtpRange?.high}</span>
+                </div>
+                {/* Bar */}
+                <div className="w-full h-8 bg-gradient-to-r from-emerald-200 dark:from-emerald-800 via-teal to-primary rounded-lg relative">
+                  {/* Mid marker */}
+                  <div
+                    className="absolute top-0 -translate-x-1/2 flex flex-col items-center"
+                    style={{
+                      left: `${Math.max(8, result.wtpRange?.high === result.wtpRange?.low ? 50 : ((result.wtpRange?.mid - result.wtpRange?.low) / (result.wtpRange?.high - result.wtpRange?.low)) * 100)}%`,
+                    }}
+                  >
+                    <div className="w-0.5 h-8 bg-white" />
+                    <div className="mt-2 bg-primary text-primary-foreground text-xs font-medium px-2 py-1 rounded">
+                      ${result.wtpRange?.mid}
+                    </div>
+                    <span className="text-xs text-muted-foreground mt-1">
+                      estimated avg
+                    </span>
+                  </div>
+                </div>
+                {/* Labels */}
+                <div className="flex justify-between text-xs text-muted-foreground mt-10">
+                  <span>Budget buyers</span>
+                  <span>Premium buyers</span>
+                </div>
+              </div>
+
+              <div className="mt-8 text-xs text-muted-foreground leading-relaxed">
+                WTP estimated via indirect choice-based methodology. The range
+                reflects the spread of simulated consumer preferences, not a
+                confidence interval.
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }

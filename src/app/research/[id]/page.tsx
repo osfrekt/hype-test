@@ -1,10 +1,11 @@
 "use client";
 
 import { Suspense, use, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Nav } from "@/components/nav";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { Download, Link2, RotateCcw } from "lucide-react";
+import { Download, Link2, RotateCcw, Trash2 } from "lucide-react";
 import type { ResearchResult } from "@/types/research";
 import { ReportView } from "@/components/report-view";
 import { createClient } from "@/lib/supabase/client";
@@ -40,9 +41,11 @@ function ResearchResultContent({
 }: {
   params: Promise<{ id: string }>;
 }) {
+  const router = useRouter();
   const { id } = use(params);
   const [state, setState] = useState<FetchState>({ status: "loading" });
   const [copied, setCopied] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -202,6 +205,34 @@ function ResearchResultContent({
             </Link>
           </div>
           <ReportView result={result} />
+
+          {/* Delete button */}
+          <div className="mt-12 mb-8 text-center" data-print-hide>
+            <button
+              type="button"
+              disabled={deleting}
+              onClick={async () => {
+                if (!confirm("Are you sure you want to delete this research? This cannot be undone.")) return;
+                setDeleting(true);
+                try {
+                  const res = await fetch(`/api/research/${id}`, { method: "DELETE" });
+                  if (res.ok) {
+                    router.push("/");
+                  } else {
+                    alert("Failed to delete. Please try again.");
+                    setDeleting(false);
+                  }
+                } catch {
+                  alert("Failed to delete. Please try again.");
+                  setDeleting(false);
+                }
+              }}
+              className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-destructive transition-colors"
+            >
+              <Trash2 className="w-3.5 h-3.5" />
+              {deleting ? "Deleting..." : "Delete my research"}
+            </button>
+          </div>
         </div>
       </main>
     </>
