@@ -116,6 +116,12 @@ function DiscoverNewForm() {
   const [stage, setStage] = useState("");
   const [error, setError] = useState("");
 
+  // Capture UTM params and referrer silently
+  const [utmSource] = useState(() => typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("utm_source") || "" : "");
+  const [utmMedium] = useState(() => typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("utm_medium") || "" : "");
+  const [utmCampaign] = useState(() => typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("utm_campaign") || "" : "");
+  const [referrer] = useState(() => typeof window !== "undefined" ? document.referrer || "" : "");
+
   const isFormValid =
     brandName.trim() &&
     brandDescription.trim().length > 10 &&
@@ -212,6 +218,10 @@ function DiscoverNewForm() {
       payload.userCompany = userCompany.trim();
       payload.userRole = userRole;
       if (userCompanySize) payload.userCompanySize = userCompanySize;
+      if (utmSource) payload.utmSource = utmSource;
+      if (utmMedium) payload.utmMedium = utmMedium;
+      if (utmCampaign) payload.utmCampaign = utmCampaign;
+      if (referrer) payload.referrer = referrer;
 
       const response = await fetch("/api/discovery", {
         method: "POST",

@@ -127,6 +127,12 @@ function NewResearchForm() {
   const [targetTouched, setTargetTouched] = useState(false);
   const [competitorsTouched, setCompetitorsTouched] = useState(false);
 
+  // Capture UTM params and referrer silently
+  const [utmSource] = useState(() => typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("utm_source") || "" : "");
+  const [utmMedium] = useState(() => typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("utm_medium") || "" : "");
+  const [utmCampaign] = useState(() => typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("utm_campaign") || "" : "");
+  const [referrer] = useState(() => typeof window !== "undefined" ? document.referrer || "" : "");
+
   // Pre-fill from search params (e.g. "Run again" from results page)
   useEffect(() => {
     const name = searchParams.get("name");
@@ -301,6 +307,10 @@ function NewResearchForm() {
       payload.userCompany = userCompany.trim();
       payload.userRole = userRole;
       if (userCompanySize) payload.userCompanySize = userCompanySize;
+      if (utmSource) payload.utmSource = utmSource;
+      if (utmMedium) payload.utmMedium = utmMedium;
+      if (utmCampaign) payload.utmCampaign = utmCampaign;
+      if (referrer) payload.referrer = referrer;
 
       const response = await fetch("/api/research", {
         method: "POST",

@@ -49,7 +49,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const body: DiscoveryInput & { email?: string; userName?: string; userCompany?: string; userRole?: string; userCompanySize?: string } = await request.json();
+    const body: DiscoveryInput & { email?: string; userName?: string; userCompany?: string; userRole?: string; userCompanySize?: string; utmSource?: string; utmMedium?: string; utmCampaign?: string; referrer?: string } = await request.json();
 
     // Input validation and sanitization
     const brandName = body.brandName?.trim().slice(0, MAX_BRAND_NAME_LENGTH);
@@ -104,9 +104,13 @@ export async function POST(request: Request) {
     const userCompany = typeof body.userCompany === "string" ? body.userCompany.trim().slice(0, 200) : null;
     const userRole = typeof body.userRole === "string" ? body.userRole.trim().slice(0, 100) : null;
     const userCompanySize = typeof body.userCompanySize === "string" ? body.userCompanySize.trim().slice(0, 50) : null;
+    const utmSource = typeof body.utmSource === "string" ? body.utmSource.slice(0, 200) : null;
+    const utmMedium = typeof body.utmMedium === "string" ? body.utmMedium.slice(0, 200) : null;
+    const utmCampaign = typeof body.utmCampaign === "string" ? body.utmCampaign.slice(0, 200) : null;
+    const referrerUrl = typeof body.referrer === "string" ? body.referrer.slice(0, 500) : null;
 
     // Persist to Supabase (non-blocking — don't fail the response if DB write fails)
-    persistResult(result, { email, userName, userCompany, userRole, userCompanySize }).catch((err) =>
+    persistResult(result, { email, userName, userCompany, userRole, userCompanySize, utmSource, utmMedium, utmCampaign, referrer: referrerUrl }).catch((err) =>
       console.error("Failed to persist discovery result:", err)
     );
 
@@ -134,6 +138,10 @@ interface UserInfo {
   userCompany: string | null;
   userRole: string | null;
   userCompanySize: string | null;
+  utmSource: string | null;
+  utmMedium: string | null;
+  utmCampaign: string | null;
+  referrer: string | null;
 }
 
 async function persistResult(result: DiscoveryResult, user: UserInfo) {
@@ -149,6 +157,10 @@ async function persistResult(result: DiscoveryResult, user: UserInfo) {
     user_company: user.userCompany,
     user_role: user.userRole,
     user_company_size: user.userCompanySize,
+    utm_source: user.utmSource,
+    utm_medium: user.utmMedium,
+    utm_campaign: user.utmCampaign,
+    referrer: user.referrer,
     status: result.status,
     created_at: result.createdAt,
   });
