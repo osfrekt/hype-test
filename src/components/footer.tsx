@@ -1,6 +1,13 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import Link from "next/link";
 
 export function Footer() {
+  const [year, setYear] = useState("");
+  useEffect(() => {
+    setYear(String(new Date().getFullYear()));
+  }, []);
   return (
     <footer className="border-t border-border/50 bg-white mt-auto">
       <div className="max-w-6xl mx-auto px-6 py-12">
@@ -54,7 +61,7 @@ export function Footer() {
           </div>
         </div>
         <div className="mt-8 pt-6 border-t border-border/50 text-xs text-muted-foreground">
-          &copy; {new Date().getFullYear()} HypeTest. All rights reserved.
+          &copy; {year} HypeTest. All rights reserved.
         </div>
       </div>
     </footer>

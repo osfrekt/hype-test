@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
@@ -18,6 +19,11 @@ export function ReportView({
   const topConcerns = result.topConcerns || [];
   const topPositives = result.topPositives || [];
   const verbatims = result.verbatims || [];
+
+  const [formattedDate, setFormattedDate] = useState("");
+  useEffect(() => {
+    setFormattedDate(new Date(result.createdAt).toLocaleDateString());
+  }, [result.createdAt]);
 
   const intentColor =
     result.purchaseIntent?.score >= 60
@@ -43,7 +49,7 @@ export function ReportView({
           {result.input.productDescription}
         </p>
         <p className="text-xs text-muted-foreground mt-2">
-          Research completed {new Date(result.createdAt).toLocaleDateString()}
+          Research completed {formattedDate}
         </p>
       </div>
 

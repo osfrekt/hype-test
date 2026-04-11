@@ -174,7 +174,7 @@ export default function ComparePage() {
                   {r.input.productName}
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">
-                  {new Date(r.createdAt).toLocaleDateString()} &middot;{" "}
+                  {new Date(r.createdAt).toLocaleDateString("en-US")} &middot;{" "}
                   {r.panelSize} respondents
                 </p>
                 {selected.has(r.id) && (
