@@ -280,7 +280,7 @@ function NewResearchForm() {
       if (priceMin && priceMax) {
         payload.priceRange = { min: Number(priceMin), max: Number(priceMax) };
       }
-      if (priceUnit && priceUnit !== "per unit") payload.priceUnit = priceUnit;
+      if (priceUnit) payload.priceUnit = priceUnit;
       if (unitsPerPack && Number(unitsPerPack) > 0)
         payload.unitsPerPack = Number(unitsPerPack);
       if (targetMarket.trim()) payload.targetMarket = targetMarket.trim();

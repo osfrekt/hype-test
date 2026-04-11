@@ -13,10 +13,16 @@ export function ReportView({
   result: ResearchResult;
   badge?: React.ReactNode;
 }) {
+  // Defensive: ensure arrays exist even if data is malformed
+  const featureImportance = result.featureImportance || [];
+  const topConcerns = result.topConcerns || [];
+  const topPositives = result.topPositives || [];
+  const verbatims = result.verbatims || [];
+
   const intentColor =
-    result.purchaseIntent.score >= 60
+    result.purchaseIntent?.score >= 60
       ? "text-emerald-600"
-      : result.purchaseIntent.score >= 40
+      : result.purchaseIntent?.score >= 40
         ? "text-amber-600"
         : "text-red-600";
 
@@ -49,7 +55,7 @@ export function ReportView({
               Purchase Intent
             </p>
             <p className={`text-3xl font-bold ${intentColor}`}>
-              {result.purchaseIntent.score}%
+              {result.purchaseIntent?.score ?? 0}%
             </p>
             <p className="text-xs text-muted-foreground mt-1">
               of simulated consumers likely to buy
@@ -63,7 +69,7 @@ export function ReportView({
               Top Feature
             </p>
             <p className="text-lg font-bold text-navy leading-tight">
-              {result.featureImportance[0]?.feature || "N/A"}
+              {featureImportance[0]?.feature || "N/A"}
             </p>
             <p className="text-xs text-muted-foreground mt-1">
               most important to consumers
@@ -84,7 +90,7 @@ export function ReportView({
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            {result.featureImportance.map((f, i) => (
+            {featureImportance.map((f, i) => (
               <div key={i} className="flex flex-col md:flex-row md:items-center gap-1 md:gap-4">
                 <span className="text-sm text-muted-foreground md:w-56 md:shrink-0 line-clamp-2">
                   {f.feature}
@@ -116,7 +122,7 @@ export function ReportView({
           </CardHeader>
           <CardContent>
             <ul className="space-y-3">
-              {result.topConcerns.map((c, i) => (
+              {topConcerns.map((c, i) => (
                 <li
                   key={i}
                   className="text-sm text-muted-foreground flex items-start gap-2"
@@ -136,7 +142,7 @@ export function ReportView({
           </CardHeader>
           <CardContent>
             <ul className="space-y-3">
-              {result.topPositives.map((p, i) => (
+              {topPositives.map((p, i) => (
                 <li
                   key={i}
                   className="text-sm text-muted-foreground flex items-start gap-2"
@@ -159,7 +165,7 @@ export function ReportView({
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {result.verbatims.map((v, i) => (
+            {verbatims.map((v, i) => (
               <div
                 key={i}
                 className="bg-muted/50 rounded-lg p-4 border border-border/50"
@@ -185,7 +191,7 @@ export function ReportView({
         </CardHeader>
         <CardContent className="text-sm text-muted-foreground space-y-2">
           <p>
-            <strong>Panel size:</strong> {result.methodology.panelSize}{" "}
+            <strong>Panel size:</strong> {result.methodology?.panelSize ?? result.panelSize}{" "}
             simulated consumers
           </p>
           <p>
@@ -222,8 +228,8 @@ export function ReportView({
 }
 
 function WtpCard({ result }: { result: ResearchResult }) {
-  const unit = result.input.priceUnit || "per unit";
-  const unitLabel = unit === "per unit" ? "" : `/${unit.replace("per ", "")}`;
+  const unit = result.input.priceUnit || "";
+  const unitLabel = unit ? `/${unit.replace("per ", "")}` : "";
   const mid = result.wtpRange.mid;
 
   // Determine user's actual price (midpoint of their price range)
