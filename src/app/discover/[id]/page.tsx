@@ -6,7 +6,7 @@ import { Nav } from "@/components/nav";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/client";
 import {
   BarChart,
@@ -111,6 +111,7 @@ function DiscoverResultContent({
   const [roundProgress, setRoundProgress] = useState(0);
   const [roundStage, setRoundStage] = useState("");
   const [roundError, setRoundError] = useState("");
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -365,6 +366,34 @@ function DiscoverResultContent({
       <Nav />
       <main className="flex-1 py-8">
         <div className="max-w-5xl mx-auto px-6">
+          {/* Action buttons */}
+          <div className="flex justify-end gap-2 mb-6" data-print-hide>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={async () => {
+                try {
+                  await navigator.clipboard.writeText(window.location.href);
+                  setCopied(true);
+                  setTimeout(() => setCopied(false), 2000);
+                } catch {
+                  // Clipboard API not available
+                }
+              }}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" /><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" /></svg>
+              {copied ? "Copied!" : "Copy share link"}
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => window.print()}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" x2="12" y1="15" y2="3" /></svg>
+              Download PDF
+            </Button>
+          </div>
+
           {/* Header */}
           <div className="mb-8">
             <div className="flex items-center gap-3 mb-2">
@@ -593,15 +622,17 @@ function DiscoverResultContent({
                       </div>
 
                       {/* CTA */}
-                      <Link
-                        href={`/research/new?name=${encodeURIComponent(c.concept.name)}&desc=${encodeURIComponent(c.concept.description)}&cat=${encodeURIComponent(result.input.category)}`}
-                        className={buttonVariants({
-                          variant: "outline",
-                          size: "sm",
-                        })}
-                      >
-                        Test this concept
-                      </Link>
+                      <div data-print-hide>
+                        <Link
+                          href={`/research/new?name=${encodeURIComponent(c.concept.name)}&desc=${encodeURIComponent(c.concept.description)}&cat=${encodeURIComponent(result.input.category)}`}
+                          className={buttonVariants({
+                            variant: "outline",
+                            size: "sm",
+                          })}
+                        >
+                          Test this concept
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 </CardContent>
@@ -657,7 +688,7 @@ function DiscoverResultContent({
           </Card>
 
           {/* Run Another Round */}
-          <div className="mt-8 mb-8">
+          <div className="mt-8 mb-8" data-print-hide>
             {isRunningRound ? (
               <Card className="border-amber-200 bg-amber-50/50">
                 <CardContent className="pt-6 pb-6">

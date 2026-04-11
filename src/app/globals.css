@@ -130,3 +130,53 @@
     transform: none;
   }
 }
+
+/* Print styles for PDF export */
+@media print {
+  /* Hide non-content elements */
+  header, footer, nav,
+  [data-print-hide] {
+    display: none !important;
+  }
+
+  /* Reset background and layout */
+  body {
+    background: white !important;
+    color: black !important;
+    font-size: 11pt;
+  }
+
+  main {
+    padding: 0 !important;
+  }
+
+  /* Ensure cards have visible borders */
+  [class*="Card"], [class*="card"] {
+    border: 1px solid #d1d5db !important;
+    box-shadow: none !important;
+    break-inside: avoid;
+  }
+
+  /* Keep concept cards together */
+  [data-print-card] {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Charts: give them room */
+  [class*="recharts"] {
+    break-inside: avoid;
+  }
+
+  /* Force colors in print */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Page margins */
+  @page {
+    margin: 1.5cm;
+    size: A4;
+  }
+}

@@ -4,7 +4,7 @@ import { Suspense, use, useEffect, useState } from "react";
 import Link from "next/link";
 import { Nav } from "@/components/nav";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { Link2, RotateCcw } from "lucide-react";
+import { Download, Link2, RotateCcw } from "lucide-react";
 import type { ResearchResult } from "@/types/research";
 import { ReportView } from "@/components/report-view";
 import { createClient } from "@/lib/supabase/client";
@@ -166,7 +166,7 @@ function ResearchResultContent({
       <Nav />
       <main className="flex-1 py-8">
         <div className="max-w-5xl mx-auto px-6">
-          <div className="flex justify-end gap-2 mb-6">
+          <div className="flex justify-end gap-2 mb-6" data-print-hide>
             <Button
               variant="outline"
               size="sm"
@@ -183,9 +183,19 @@ function ResearchResultContent({
               <Link2 className="w-4 h-4 mr-1.5" />
               {copied ? "Copied!" : "Copy share link"}
             </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => window.print()}
+              data-print-hide
+            >
+              <Download className="w-4 h-4 mr-1.5" />
+              Download PDF
+            </Button>
             <Link
               href={`/research/new?${runAgainParams.toString()}`}
               className={buttonVariants({ variant: "outline", size: "sm" })}
+              data-print-hide
             >
               <RotateCcw className="w-4 h-4 mr-1.5" />
               Run again
