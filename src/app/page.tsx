@@ -62,22 +62,20 @@ export default function Home() {
                   (n=300). The same methodology used by Nielsen, Ipsos, and
                   McKinsey — at a fraction of the cost and time.
                 </p>
-                <div className="flex items-center gap-6 text-sm">
-                  <div>
-                    <p className="text-2xl font-bold text-navy">$0</p>
-                    <p className="text-muted-foreground">vs $20-50k traditional</p>
-                  </div>
-                  <div className="w-px h-10 bg-border" />
-                  <div>
-                    <p className="text-2xl font-bold text-navy">2 min</p>
-                    <p className="text-muted-foreground">vs 4-6 weeks</p>
-                  </div>
-                  <div className="w-px h-10 bg-border" />
-                  <div>
-                    <p className="text-2xl font-bold text-navy">50+</p>
-                    <p className="text-muted-foreground">simulated panellists</p>
-                  </div>
-                </div>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li className="flex items-baseline gap-2">
+                    <span className="font-bold text-navy text-base">Free</span>
+                    <span>vs $20-50k for a traditional panel</span>
+                  </li>
+                  <li className="flex items-baseline gap-2">
+                    <span className="font-bold text-navy text-base">2 minutes</span>
+                    <span>vs 4-6 weeks turnaround</span>
+                  </li>
+                  <li className="flex items-baseline gap-2">
+                    <span className="font-bold text-navy text-base">50+ panellists</span>
+                    <span>simulated with demographic diversity</span>
+                  </li>
+                </ul>
               </div>
 
               {/* Scatter plot / best-fit illustration */}
