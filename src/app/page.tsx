@@ -87,50 +87,28 @@ export default function Home() {
                 </p>
                 <svg viewBox="0 0 400 250" className="w-full h-auto" aria-label="Scatter plot showing correlation between LLM-estimated and actual consumer willingness-to-pay">
                   {/* Axes */}
-                  <line x1="50" y1="210" x2="380" y2="210" stroke="#d1d5db" strokeWidth="1" />
-                  <line x1="50" y1="210" x2="50" y2="20" stroke="#d1d5db" strokeWidth="1" />
+                  <line x1="50" y1="210" x2="380" y2="210" className="stroke-border" strokeWidth="1" />
+                  <line x1="50" y1="210" x2="50" y2="20" className="stroke-border" strokeWidth="1" />
                   {/* Axis labels */}
                   <text x="215" y="245" textAnchor="middle" className="fill-muted-foreground" fontSize="11">Actual consumer WTP ($)</text>
                   <text x="15" y="115" textAnchor="middle" className="fill-muted-foreground" fontSize="11" transform="rotate(-90, 15, 115)">HypeTest WTP ($)</text>
                   {/* Grid lines */}
-                  <line x1="50" y1="163" x2="380" y2="163" stroke="#e5e7eb" strokeWidth="0.5" strokeDasharray="4" />
-                  <line x1="50" y1="115" x2="380" y2="115" stroke="#e5e7eb" strokeWidth="0.5" strokeDasharray="4" />
-                  <line x1="50" y1="68" x2="380" y2="68" stroke="#e5e7eb" strokeWidth="0.5" strokeDasharray="4" />
+                  <line x1="50" y1="163" x2="380" y2="163" className="stroke-border" strokeWidth="0.5" strokeDasharray="4" />
+                  <line x1="50" y1="115" x2="380" y2="115" className="stroke-border" strokeWidth="0.5" strokeDasharray="4" />
+                  <line x1="50" y1="68" x2="380" y2="68" className="stroke-border" strokeWidth="0.5" strokeDasharray="4" />
                   {/* Best-fit line */}
-                  <line x1="70" y1="195" x2="365" y2="35" stroke="#0ea5e9" strokeWidth="2.5" strokeDasharray="6 3" opacity="0.7" />
-                  {/* Scatter points (realistic-looking distribution around the line) */}
-                  <circle cx="85" cy="188" r="5" fill="#0ea5e9" opacity="0.5" />
-                  <circle cx="95" cy="178" r="5" fill="#0ea5e9" opacity="0.5" />
-                  <circle cx="110" cy="182" r="5" fill="#0ea5e9" opacity="0.5" />
-                  <circle cx="120" cy="168" r="5" fill="#0ea5e9" opacity="0.5" />
-                  <circle cx="130" cy="160" r="5" fill="#0ea5e9" opacity="0.5" />
-                  <circle cx="145" cy="155" r="5" fill="#0ea5e9" opacity="0.5" />
-                  <circle cx="155" cy="148" r="5" fill="#0ea5e9" opacity="0.5" />
-                  <circle cx="160" cy="140" r="5" fill="#0ea5e9" opacity="0.5" />
-                  <circle cx="175" cy="138" r="5" fill="#0ea5e9" opacity="0.5" />
-                  <circle cx="190" cy="125" r="5" fill="#0ea5e9" opacity="0.5" />
-                  <circle cx="195" cy="118" r="5" fill="#0ea5e9" opacity="0.5" />
-                  <circle cx="210" cy="120" r="5" fill="#0ea5e9" opacity="0.5" />
-                  <circle cx="225" cy="108" r="5" fill="#0ea5e9" opacity="0.5" />
-                  <circle cx="238" cy="98" r="5" fill="#0ea5e9" opacity="0.5" />
-                  <circle cx="250" cy="100" r="5" fill="#0ea5e9" opacity="0.5" />
-                  <circle cx="265" cy="88" r="5" fill="#0ea5e9" opacity="0.5" />
-                  <circle cx="278" cy="82" r="5" fill="#0ea5e9" opacity="0.5" />
-                  <circle cx="290" cy="75" r="5" fill="#0ea5e9" opacity="0.5" />
-                  <circle cx="305" cy="68" r="5" fill="#0ea5e9" opacity="0.5" />
-                  <circle cx="315" cy="58" r="5" fill="#0ea5e9" opacity="0.5" />
-                  <circle cx="330" cy="52" r="5" fill="#0ea5e9" opacity="0.5" />
-                  <circle cx="345" cy="48" r="5" fill="#0ea5e9" opacity="0.5" />
-                  <circle cx="360" cy="38" r="5" fill="#0ea5e9" opacity="0.5" />
-                  {/* Outliers for realism */}
-                  <circle cx="105" cy="170" r="5" fill="#0ea5e9" opacity="0.35" />
-                  <circle cx="165" cy="152" r="5" fill="#0ea5e9" opacity="0.35" />
-                  <circle cx="215" cy="130" r="5" fill="#0ea5e9" opacity="0.35" />
-                  <circle cx="270" cy="95" r="5" fill="#0ea5e9" opacity="0.35" />
-                  <circle cx="325" cy="60" r="5" fill="#0ea5e9" opacity="0.35" />
+                  <line x1="70" y1="195" x2="365" y2="35" className="stroke-teal" strokeWidth="2.5" strokeDasharray="6 3" opacity="0.7" />
+                  {/* Scatter points */}
+                  {[[85,188],[95,178],[110,182],[120,168],[130,160],[145,155],[155,148],[160,140],[175,138],[190,125],[195,118],[210,120],[225,108],[238,98],[250,100],[265,88],[278,82],[290,75],[305,68],[315,58],[330,52],[345,48],[360,38]].map(([cx,cy], i) => (
+                    <circle key={i} cx={cx} cy={cy} r="5" className="fill-teal" opacity="0.5" />
+                  ))}
+                  {/* Outliers */}
+                  {[[105,170],[165,152],[215,130],[270,95],[325,60]].map(([cx,cy], i) => (
+                    <circle key={`o${i}`} cx={cx} cy={cy} r="5" className="fill-teal" opacity="0.35" />
+                  ))}
                   {/* R-squared annotation */}
-                  <rect x="260" y="170" width="110" height="32" rx="6" fill="#1a1f36" />
-                  <text x="315" y="191" textAnchor="middle" fill="white" fontSize="13" fontWeight="600">R&sup2; = 0.89</text>
+                  <rect x="260" y="170" width="110" height="32" rx="6" className="fill-navy" />
+                  <text x="315" y="191" textAnchor="middle" className="fill-primary-foreground" fontSize="13" fontWeight="600">R&sup2; = 0.89</text>
                 </svg>
                 <p className="text-xs text-muted-foreground mt-2 text-center">
                   Based on Brand, Israeli &amp; Ngwe (2025), Harvard Business School

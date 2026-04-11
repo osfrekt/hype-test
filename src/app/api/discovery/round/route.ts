@@ -1,4 +1,4 @@
-import { runDiscovery } from "@/lib/discovery-engine";
+import { runDiscoveryRound } from "@/lib/discovery-engine";
 import { createClient } from "@/lib/supabase/server";
 import type { DiscoveryInput, DiscoveryPanelResult } from "@/types/discovery";
 
@@ -121,8 +121,11 @@ export async function POST(request: Request) {
       }),
     };
 
-    const discoveryResult = await runDiscovery(sanitizedInput);
-    const newConcepts = discoveryResult.concepts;
+    const newConcepts = await runDiscoveryRound(
+      sanitizedInput,
+      previousConcepts,
+      roundNumber
+    );
 
     // Merge and re-rank all concepts
     const allConcepts = [...previousConcepts, ...newConcepts];

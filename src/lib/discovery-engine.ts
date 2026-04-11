@@ -417,3 +417,210 @@ export async function runDiscovery(
     status: "complete",
   };
 }
+
+// ---------------------------------------------------------------------------
+// Iterative Round — Evolve top concepts + add wildcards
+// ---------------------------------------------------------------------------
+
+async function generateRoundConcepts(
+  input: DiscoveryInput,
+  previousConcepts: DiscoveryPanelResult[]
+): Promise<ProductConcept[]> {
+  const priceContext = input.priceRange
+    ? `\nPrice range to target: $${input.priceRange.min} – $${input.priceRange.max}${input.priceUnit ? ` ${input.priceUnit}` : ""}`
+    : "";
+  const existingContext = input.existingProducts
+    ? `\nExisting products the brand already sells: ${input.existingProducts}`
+    : "";
+  const constraintContext = input.constraints
+    ? `\nConstraints or requirements: ${input.constraints}`
+    : "";
+
+  const sorted = [...previousConcepts].sort(
+    (a, b) => b.purchaseIntent.score - a.purchaseIntent.score
+  );
+  const top3 = sorted.slice(0, 3);
+  const previousNames = previousConcepts.map((c) => c.concept.name);
+
+  const topConceptsSummary = top3
+    .map(
+      (c, i) =>
+        `${i + 1}. "${c.concept.name}" — Purchase intent: ${c.purchaseIntent.score}%, Excitement: "${c.topExcitement}", Hesitation: "${c.topHesitation}", Price: $${c.wtpRange.low}-$${c.wtpRange.high}\n   Description: ${c.concept.description}`
+    )
+    .join("\n");
+
+  try {
+    const response = await anthropic.messages.create({
+      model: "claude-haiku-4-5-20251001",
+      max_tokens: 3000,
+      temperature: 0.9,
+      messages: [
+        {
+          role: "user",
+          content: `You are a product innovation strategist running an iterative discovery process. A previous round of concept testing has been completed. Your job is to evolve the best concepts and introduce fresh wildcards.
+
+Brand name: ${input.brandName}
+Brand description: ${input.brandDescription}
+Category: ${input.category}
+Target audience: ${input.targetAudience}${priceContext}${existingContext}${constraintContext}
+
+TOP 3 CONCEPTS FROM PREVIOUS ROUND(S):
+${topConceptsSummary}
+
+PREVIOUS CONCEPT NAMES (do NOT reuse these names):
+${previousNames.map((n) => `- "${n}"`).join("\n")}
+
+Generate exactly 8 new product concepts:
+
+1. EVOLVED VARIANTS (5-6 concepts): Take the top 3 concepts above and create evolved variants. Tweak their positioning, features, pricing, or target sub-audience to address the hesitations while amplifying the excitement themes. Generate roughly 2 variants per top concept, but cap at 5-6 total to maintain diversity.
+
+2. WILDCARDS (2-3 concepts): Generate completely new concepts that are informed by what scored well and poorly in previous rounds, but take a fresh angle. These should explore adjacent opportunities.
+
+IMPORTANT: Each concept must have a UNIQUE name that is NOT in the previous concept names list above.
+
+For each concept, provide:
+- name: A compelling product name (MUST be different from all previous names)
+- description: 2-3 sentence description of the product
+- rationale: Why this product would resonate, referencing learnings from previous rounds
+- estimatedPricePoint: { low: number, high: number } realistic price range
+
+Return ONLY a JSON array of exactly 8 objects:
+[{"name": "...", "description": "...", "rationale": "...", "estimatedPricePoint": {"low": 10, "high": 25}}, ...]`,
+        },
+      ],
+    });
+
+    const text =
+      response.content[0].type === "text" ? response.content[0].text : "";
+    const match = text.match(/\[[\s\S]*\]/);
+    if (!match) throw new Error("No JSON array in response");
+
+    const parsed = JSON.parse(match[0]);
+    if (!Array.isArray(parsed) || parsed.length === 0) {
+      throw new Error("Empty concepts array");
+    }
+    return parsed.slice(0, 8).map((c: Record<string, unknown>) => ({
+      name: String(c.name || "Unnamed Concept"),
+      description: String(c.description || ""),
+      rationale: String(c.rationale || ""),
+      estimatedPricePoint: {
+        low: Number(
+          (c.estimatedPricePoint as Record<string, unknown>)?.low ?? 10
+        ),
+        high: Number(
+          (c.estimatedPricePoint as Record<string, unknown>)?.high ?? 50
+        ),
+      },
+    }));
+  } catch {
+    const top = top3[0];
+    return [
+      {
+        name: `${input.brandName} ${top?.concept.name ?? "Core"} Plus`,
+        description: `An enhanced version of the top concept, addressing key hesitations while maintaining the core appeal.`,
+        rationale:
+          "Iterates on the highest-scoring concept from the previous round.",
+        estimatedPricePoint: {
+          low: top?.wtpRange.low ?? 10,
+          high: top?.wtpRange.high ?? 50,
+        },
+      },
+      {
+        name: `${input.brandName} Next Gen`,
+        description: `A next-generation ${input.category} product for ${input.targetAudience}.`,
+        rationale: "Fresh concept informed by previous round learnings.",
+        estimatedPricePoint: { low: 15, high: 40 },
+      },
+      {
+        name: `${input.brandName} Flex`,
+        description: `A flexible ${input.category} offering designed to adapt to different use cases.`,
+        rationale: "Wildcard concept exploring adjacent opportunities.",
+        estimatedPricePoint: { low: 12, high: 35 },
+      },
+      {
+        name: `${input.brandName} Micro`,
+        description: `A compact, accessible entry point into ${input.category} for first-time buyers.`,
+        rationale: "Addresses price sensitivity seen in previous rounds.",
+        estimatedPricePoint: { low: 5, high: 20 },
+      },
+    ];
+  }
+}
+
+export async function runDiscoveryRound(
+  input: DiscoveryInput,
+  previousConcepts: DiscoveryPanelResult[],
+  roundNumber: number,
+  onProgress?: (stage: string, progress: number) => void
+): Promise<DiscoveryPanelResult[]> {
+  onProgress?.("Analysing top performers...", 5);
+  onProgress?.("Evolving winning concepts...", 10);
+  const concepts = await generateRoundConcepts(input, previousConcepts);
+
+  onProgress?.("Testing new concepts with consumer panel...", 15);
+  const panel = input.targetAudience
+    ? await generateTargetedPanel(
+        PANEL_SIZE,
+        input.category,
+        input.targetAudience
+      )
+    : generatePanel(PANEL_SIZE, input.category);
+
+  const conceptTestResults = await Promise.allSettled(
+    concepts.map((concept) => testConcept(concept, panel, input.brandName))
+  );
+
+  const conceptResponses: {
+    concept: ProductConcept;
+    responses: MiniPanelResponse[];
+  }[] = [];
+  for (let i = 0; i < concepts.length; i++) {
+    const result = conceptTestResults[i];
+    if (result.status === "fulfilled" && result.value.length > 0) {
+      conceptResponses.push({ concept: concepts[i], responses: result.value });
+    }
+    onProgress?.(
+      `Evaluating concept ${i + 1} of ${concepts.length}...`,
+      15 + Math.round((i / concepts.length) * 55)
+    );
+  }
+
+  if (conceptResponses.length === 0) {
+    throw new Error(
+      "All concept tests failed. The round could not be completed."
+    );
+  }
+
+  onProgress?.("Ranking all concepts...", 80);
+
+  const newResults: DiscoveryPanelResult[] = [];
+  for (const { concept, responses } of conceptResponses) {
+    const reactions = responses
+      .map((r) => r.reaction)
+      .filter(
+        (r) => r !== "The concept is interesting but I need more information."
+      );
+
+    const themes = await extractThemes(
+      reactions.length > 0 ? reactions : ["Interesting concept"],
+      concept
+    );
+    const aggregated = aggregateConcept(concept, responses, themes);
+    newResults.push({ ...aggregated, demandRank: 0, round: roundNumber });
+  }
+
+  const allConcepts = [...previousConcepts, ...newResults];
+  allConcepts.sort((a, b) => b.purchaseIntent.score - a.purchaseIntent.score);
+  allConcepts.forEach((r, i) => (r.demandRank = i + 1));
+
+  for (const nr of newResults) {
+    const match = allConcepts.find(
+      (c) => c.concept.name === nr.concept.name && c.round === nr.round
+    );
+    if (match) nr.demandRank = match.demandRank;
+  }
+
+  onProgress?.("Complete!", 100);
+
+  return newResults;
+}
