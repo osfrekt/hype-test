@@ -50,7 +50,7 @@ export default function Home() {
             {/* Stat + R-squared visual */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center mb-10">
               <div>
-                <div className="inline-flex items-center gap-2 bg-red-900/10 border border-red-900/20 text-red-900 text-sm font-semibold px-3 py-1.5 rounded-full mb-4">
+                <div className="inline-flex items-center gap-2 bg-teal/10 border border-teal/20 text-teal-dark text-sm font-semibold px-3 py-1.5 rounded-full mb-4">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" /><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" /></svg>
                   Harvard Business School Working Paper
                 </div>
@@ -189,8 +189,43 @@ export default function Home() {
           </div>
         </section>
 
-        {/* What you get */}
+        {/* Why HypeTest */}
         <section className="py-14">
+          <div className="max-w-5xl mx-auto px-6">
+            <h2 className="font-bold text-primary mb-8" style={{ fontSize: 'clamp(1.5rem, 1rem + 1.5vw, 1.875rem)' }}>
+              Why HypeTest
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              <div className="bg-card rounded-2xl border border-border/50 p-6">
+                <h3 className="text-base font-bold text-primary mb-2">Real accuracy, not AI guesswork</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  Built on peer-reviewed methodology that achieved R&sup2; = 0.89
+                  correlation with real consumer panels. This isn&apos;t a chatbot
+                  opinion. It&apos;s structured research.
+                </p>
+              </div>
+              <div className="bg-card rounded-2xl border border-border/50 p-6">
+                <h3 className="text-base font-bold text-primary mb-2">Save months and thousands</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  Traditional consumer panels cost $20-50k and take 4-6 weeks.
+                  HypeTest gives you comparable directional insights in under 2
+                  minutes, completely free.
+                </p>
+              </div>
+              <div className="bg-card rounded-2xl border border-border/50 p-6">
+                <h3 className="text-base font-bold text-primary mb-2">Know before you launch</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  Test product ideas, pricing, and positioning before spending a
+                  penny on production. Find out what consumers actually want, not
+                  what you hope they want.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* What you get */}
+        <section className="py-14 bg-card">
           <div className="max-w-5xl mx-auto px-6">
             <h2 className="font-bold text-primary mb-3" style={{ fontSize: 'clamp(1.5rem, 1rem + 1.5vw, 1.875rem)' }}>
               What&apos;s in a HypeTest report
