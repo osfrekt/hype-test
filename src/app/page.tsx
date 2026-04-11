@@ -271,11 +271,11 @@ export default function Home() {
         <section className="py-14 bg-card">
           <div className="max-w-5xl mx-auto px-6">
             <h2 className="font-bold text-primary text-center mb-3" style={{ fontSize: 'clamp(1.5rem, 1rem + 1.5vw, 1.875rem)' }}>
-              See a real report
+              See how it compares
             </h2>
             <p className="text-muted-foreground text-center max-w-2xl mx-auto mb-10">
-              Here&apos;s what a HypeTest report looks like: purchase intent,
-              WTP estimates, feature rankings, and consumer verbatims.
+              We ran Celsius Energy Drink through HypeTest and compared results
+              to publicly available panel data. Here&apos;s what we found.
             </p>
             <SampleReport />
           </div>

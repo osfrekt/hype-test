@@ -143,8 +143,16 @@ export default function MethodologyPage() {
             </p>
             <div className="bg-muted/50 rounded-xl p-5 border-2 border-teal/30">
               <p className="font-medium text-primary mb-1.5">
-                Brand, Israeli &amp; Ngwe (2025). &ldquo;Using LLMs for Market
-                Research.&rdquo; Harvard Business School Working Paper 23-062.
+                <a
+                  href="https://www.hbs.edu/ris/Publication%20Files/23-062_b8e4c6b3-27b2-4131-929a-85636faf8024.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline decoration-muted-foreground/40 underline-offset-2 hover:decoration-primary transition-colors"
+                >
+                  Brand, Israeli &amp; Ngwe (2025). &ldquo;Using LLMs for Market
+                  Research.&rdquo;
+                </a>{" "}
+                Harvard Business School Working Paper 23-062.
               </p>
               <p className="text-sm text-muted-foreground leading-relaxed">
                 This is the direct foundation for HypeTest&apos;s approach. The
@@ -165,6 +173,17 @@ export default function MethodologyPage() {
                 may vary for novel product categories, niche markets, or
                 categories with limited training data representation.
               </p>
+              <p className="text-xs text-muted-foreground mt-3">
+                For an accessible overview, see the{" "}
+                <a
+                  href="https://hbr.org/2025/07/using-gen-ai-for-early-stage-market-research"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline decoration-muted-foreground/40 underline-offset-2 hover:decoration-primary transition-colors"
+                >
+                  HBR summary of this research
+                </a>.
+              </p>
             </div>
 
             {/* Supporting research */}
@@ -179,8 +198,15 @@ export default function MethodologyPage() {
             <div className="grid grid-cols-1 gap-3">
               <div className="bg-muted/50 rounded-xl p-4 border border-border/50">
                 <p className="font-medium text-primary text-sm mb-1">
-                  Horton (2023). &ldquo;Large Language Models as Simulated Economic
-                  Agents.&rdquo;
+                  <a
+                    href="https://www.nber.org/papers/w31122"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline decoration-muted-foreground/40 underline-offset-2 hover:decoration-primary transition-colors"
+                  >
+                    Horton (2023). &ldquo;Large Language Models as Simulated Economic
+                    Agents.&rdquo;
+                  </a>
                 </p>
                 <p className="text-xs text-muted-foreground leading-relaxed">
                   Demonstrated that LLMs replicate classic behavioral economics
@@ -191,7 +217,14 @@ export default function MethodologyPage() {
 
               <div className="bg-muted/50 rounded-xl p-4 border border-border/50">
                 <p className="font-medium text-primary text-sm mb-1">
-                  Argyle et al. (2023). &ldquo;Out of One, Many.&rdquo;
+                  <a
+                    href="https://doi.org/10.1093/pnasnexus/pgad032"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline decoration-muted-foreground/40 underline-offset-2 hover:decoration-primary transition-colors"
+                  >
+                    Argyle et al. (2023). &ldquo;Out of One, Many.&rdquo;
+                  </a>
                 </p>
                 <p className="text-xs text-muted-foreground leading-relaxed">
                   Showed that LLMs can simulate political preference distributions
@@ -202,7 +235,14 @@ export default function MethodologyPage() {
 
               <div className="bg-muted/50 rounded-xl p-4 border border-border/50">
                 <p className="font-medium text-primary text-sm mb-1">
-                  Li et al. (2024). LLM-based perceptual maps.
+                  <a
+                    href="https://scholar.google.com/scholar?q=Li+LLM+perceptual+maps+brand+similarity+2024"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline decoration-muted-foreground/40 underline-offset-2 hover:decoration-primary transition-colors"
+                  >
+                    Li et al. (2024). LLM-based perceptual maps.
+                  </a>
                 </p>
                 <p className="text-xs text-muted-foreground leading-relaxed">
                   Demonstrated that LLMs can construct perceptual maps with brand
