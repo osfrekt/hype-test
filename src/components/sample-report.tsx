@@ -55,21 +55,23 @@ export function SampleReport() {
       {/* Product header */}
       <div className="text-center">
         <span className="inline-flex items-center gap-1.5 text-xs font-medium text-amber-700 bg-amber-100 border border-amber-200 px-2.5 py-1 rounded-full mb-3">
-          Illustrative comparison
+          Illustrative example only
         </span>
         <h3 className="text-xl font-bold text-primary">
-          Celsius Essential Energy Drink
+          Energy Drink Category Example
         </h3>
         <p className="text-sm text-muted-foreground mt-1.5 max-w-lg mx-auto">
-          We ran Celsius through HypeTest and compared results to publicly
-          available panel data. Each metric shows both sources side by side.
+          This illustrative example shows how HypeTest results compare
+          directionally to publicly available industry data for a well-known
+          energy drink. All figures are approximate estimates, not exact data.
         </p>
-        <div className="flex items-center justify-center gap-4 mt-3 text-[11px] text-muted-foreground">
-          <span>
-            Sources:{" "}
-            <a href="https://www.ey.com/en_us/newsroom/2026/03/ey-consumer-beverage-survey" target="_blank" rel="noopener noreferrer" className="text-teal hover:underline">EY 2026</a>,{" "}
-            <a href="https://www.hundredx.com" target="_blank" rel="noopener noreferrer" className="text-teal hover:underline">HundredX</a>
-          </span>
+        <div className="bg-amber-50 border border-amber-200/60 rounded-lg px-3 py-2 mt-3 max-w-lg mx-auto">
+          <p className="text-[11px] text-amber-800 text-center">
+            This is not a validation study. Traditional panel figures are
+            estimated from public industry reports, not sourced directly from
+            any specific brand or research firm. HypeTest results are simulated.
+            No brand endorses or is affiliated with this comparison.
+          </p>
         </div>
       </div>
 
@@ -278,11 +280,12 @@ export function SampleReport() {
 
       {/* Disclaimer */}
       <p className="text-[11px] text-muted-foreground text-center leading-relaxed max-w-2xl mx-auto">
-        Traditional panel data sourced from publicly available industry reports ({" "}
-        <a href="https://www.ey.com/en_us/newsroom/2026/03/ey-consumer-beverage-survey" target="_blank" rel="noopener noreferrer" className="text-teal hover:underline">EY 2026</a>,{" "}
-        <a href="https://www.hundredx.com" target="_blank" rel="noopener noreferrer" className="text-teal hover:underline">HundredX</a>
-        ). HypeTest results are illustrative of typical output for this product category.
-        This is not a controlled validation study.
+        Traditional panel figures are approximate estimates based on publicly
+        available industry reports and are not sourced from or endorsed by any
+        specific research firm or brand. HypeTest results are AI-simulated and
+        illustrative of typical output for this product category. This is not a
+        controlled validation study. All brand names are trademarks of their
+        respective owners and are used here for illustrative purposes only.
       </p>
     </div>
   );

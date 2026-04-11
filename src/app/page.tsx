@@ -110,7 +110,7 @@ export default function Home() {
                   <text x="315" y="191" textAnchor="middle" className="fill-primary-foreground" fontSize="13" fontWeight="600">R&sup2; = 0.89</text>
                 </svg>
                 <p className="text-xs text-muted-foreground mt-2 text-center">
-                  Data from Brand, Israeli &amp; Ngwe (2025), HBS Working Paper 23-062. Illustrative.
+                  Illustrative chart inspired by findings in Brand, Israeli &amp; Ngwe (2025), HBS Working Paper 23-062. Not a representation of HypeTest validation data.
                 </p>
               </div>
             </div>
@@ -118,7 +118,7 @@ export default function Home() {
             {/* Brand logos / social proof */}
             <div className="text-center">
               <p className="text-xs text-muted-foreground max-w-lg mx-auto">
-                Choice-based conjoint analysis is the methodology standard at firms like Nielsen, Ipsos, and McKinsey. HypeTest uses a simplified, LLM-powered version of this approach.
+                Choice-based conjoint analysis is an industry-standard methodology in professional market research. HypeTest uses a simplified, LLM-powered version of this approach. HypeTest is not affiliated with or endorsed by any research firm.
               </p>
             </div>
           </div>
@@ -274,8 +274,9 @@ export default function Home() {
               See how it compares
             </h2>
             <p className="text-muted-foreground text-center max-w-2xl mx-auto mb-10">
-              We ran Celsius Energy Drink through HypeTest and compared results
-              to publicly available panel data. Here&apos;s what we found.
+              How do HypeTest results compare to publicly available industry
+              data? Here&apos;s an illustrative example using the energy drink
+              category.
             </p>
             <SampleReport />
           </div>

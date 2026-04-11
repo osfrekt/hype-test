@@ -223,9 +223,27 @@ export default function TermsPage() {
             </p>
           </section>
 
+          <section className="space-y-4 mb-10">
+            <h2 className="text-xl font-bold text-primary">
+              12. Trademarks and Third-Party Content
+            </h2>
+            <p className="text-muted-foreground leading-relaxed">
+              All brand names, product names, and trademarks mentioned on this
+              website or within research results (including but not limited to
+              names of consumer products, research firms, and academic
+              institutions) are the property of their respective owners. Their
+              use on this website is for illustrative, informational, or
+              comparative purposes only and does not imply any endorsement,
+              sponsorship, or affiliation. Data and statistics attributed to
+              third-party sources are approximate estimates based on publicly
+              available information and may not reflect exact figures from those
+              sources.
+            </p>
+          </section>
+
           <section className="space-y-4">
             <h2 className="text-xl font-bold text-primary">
-              12. Contact
+              13. Contact
             </h2>
             <p className="text-muted-foreground leading-relaxed">
               If you have questions about these Terms of Service, please contact
