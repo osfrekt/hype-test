@@ -44,7 +44,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const body: ResearchInput & { email?: string } = await request.json();
+    const body: ResearchInput & { email?: string; userName?: string; userCompany?: string; userRole?: string; userCompanySize?: string } = await request.json();
 
     // Input validation and sanitization
     const productName = body.productName?.trim().slice(0, MAX_NAME_LENGTH);
@@ -94,9 +94,13 @@ export async function POST(request: Request) {
     const result = await runResearch(sanitizedInput);
 
     const email = typeof body.email === "string" ? body.email.trim().slice(0, 200) : null;
+    const userName = typeof body.userName === "string" ? body.userName.trim().slice(0, 200) : null;
+    const userCompany = typeof body.userCompany === "string" ? body.userCompany.trim().slice(0, 200) : null;
+    const userRole = typeof body.userRole === "string" ? body.userRole.trim().slice(0, 100) : null;
+    const userCompanySize = typeof body.userCompanySize === "string" ? body.userCompanySize.trim().slice(0, 50) : null;
 
     // Persist to Supabase (non-blocking — don't fail the response if DB write fails)
-    persistResult(result, email).catch((err) =>
+    persistResult(result, { email, userName, userCompany, userRole, userCompanySize }).catch((err) =>
       console.error("Failed to persist research result:", err)
     );
 
@@ -118,7 +122,15 @@ export async function POST(request: Request) {
   }
 }
 
-async function persistResult(result: ResearchResult, email: string | null) {
+interface UserInfo {
+  email: string | null;
+  userName: string | null;
+  userCompany: string | null;
+  userRole: string | null;
+  userCompanySize: string | null;
+}
+
+async function persistResult(result: ResearchResult, user: UserInfo) {
   const supabase = await createClient();
   const { error } = await supabase.from("research_results").insert({
     id: result.id,
@@ -132,7 +144,11 @@ async function persistResult(result: ResearchResult, email: string | null) {
     verbatims: result.verbatims,
     methodology: result.methodology,
     competitive_position: result.competitivePosition ?? null,
-    email: email ?? null,
+    email: user.email,
+    user_name: user.userName,
+    user_company: user.userCompany,
+    user_role: user.userRole,
+    user_company_size: user.userCompanySize,
     status: result.status,
     created_at: result.createdAt,
   });

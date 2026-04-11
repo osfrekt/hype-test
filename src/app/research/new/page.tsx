@@ -117,6 +117,10 @@ function NewResearchForm() {
   const [stage, setStage] = useState("");
   const [error, setError] = useState("");
   const [email, setEmail] = useState("");
+  const [userName, setUserName] = useState("");
+  const [userCompany, setUserCompany] = useState("");
+  const [userRole, setUserRole] = useState("");
+  const [userCompanySize, setUserCompanySize] = useState("");
   const [showExamples, setShowExamples] = useState<Set<string>>(new Set());
 
   // Track whether user has manually edited target/competitors
@@ -154,7 +158,7 @@ function NewResearchForm() {
     return parts.join(" ");
   }, [problem, feature1, feature2, feature3, differentiator]);
 
-  const isFormValid = productName.trim() && assembledDescription.length > 20 && email.trim() && email.includes("@");
+  const isFormValid = productName.trim() && assembledDescription.length > 20 && email.trim() && email.includes("@") && userName.trim() && userCompany.trim() && userRole;
 
   // Quality indicator
   const quality = useMemo(() => {
@@ -293,6 +297,10 @@ function NewResearchForm() {
         .filter(Boolean);
       if (features.length) payload.keyFeatures = features;
       payload.email = email.trim();
+      payload.userName = userName.trim();
+      payload.userCompany = userCompany.trim();
+      payload.userRole = userRole;
+      if (userCompanySize) payload.userCompanySize = userCompanySize;
 
       const response = await fetch("/api/research", {
         method: "POST",
@@ -654,20 +662,84 @@ function NewResearchForm() {
                   </p>
                 </div>
 
-                {/* Email for report delivery */}
-                <div className="space-y-1.5 bg-teal/5 rounded-xl p-4 border border-teal/20">
-                  <Label htmlFor="email">Email address</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="you@company.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
-                  <p className="text-xs text-muted-foreground">
-                    We&apos;ll send your report link to this email. No account needed.
-                  </p>
+                {/* About you */}
+                <div className="bg-teal/5 rounded-xl p-4 border border-teal/20 space-y-4">
+                  <div>
+                    <p className="text-sm font-semibold text-primary mb-1">About you</p>
+                    <p className="text-xs text-muted-foreground">
+                      We&apos;ll send your report link to your email. No account needed.
+                    </p>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="space-y-1.5">
+                      <Label htmlFor="userName">Name</Label>
+                      <Input
+                        id="userName"
+                        placeholder="Jane Smith"
+                        value={userName}
+                        onChange={(e) => setUserName(e.target.value)}
+                        required
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label htmlFor="email">Work email</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        placeholder="jane@company.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label htmlFor="userCompany">Company</Label>
+                      <Input
+                        id="userCompany"
+                        placeholder="Acme Corp"
+                        value={userCompany}
+                        onChange={(e) => setUserCompany(e.target.value)}
+                        required
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label>Role</Label>
+                      <Select value={userRole} onValueChange={(v) => setUserRole(v ?? "")}>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Select your role" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="founder">Founder / CEO</SelectItem>
+                          <SelectItem value="product">Product / CPO</SelectItem>
+                          <SelectItem value="marketing">Marketing / CMO</SelectItem>
+                          <SelectItem value="brand">Brand Manager</SelectItem>
+                          <SelectItem value="innovation">Innovation / R&amp;D</SelectItem>
+                          <SelectItem value="insights">Consumer Insights / Research</SelectItem>
+                          <SelectItem value="growth">Growth / Strategy</SelectItem>
+                          <SelectItem value="consultant">Consultant / Agency</SelectItem>
+                          <SelectItem value="investor">Investor / VC</SelectItem>
+                          <SelectItem value="student">Student / Academic</SelectItem>
+                          <SelectItem value="other">Other</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label>Company size</Label>
+                    <Select value={userCompanySize} onValueChange={(v) => setUserCompanySize(v ?? "")}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select company size (optional)" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="1">Just me</SelectItem>
+                        <SelectItem value="2-10">2-10</SelectItem>
+                        <SelectItem value="11-50">11-50</SelectItem>
+                        <SelectItem value="51-200">51-200</SelectItem>
+                        <SelectItem value="201-1000">201-1,000</SelectItem>
+                        <SelectItem value="1000+">1,000+</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
 
                 {/* Quality indicator */}
