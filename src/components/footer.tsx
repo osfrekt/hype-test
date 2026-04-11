@@ -72,7 +72,7 @@ export function Footer() {
           </div>
         </div>
         <div className="mt-8 pt-6 border-t border-border/50 text-xs text-muted-foreground">
-          &copy; {year} HypeTest. All rights reserved.
+          &copy; {year} Rekt Brands Inc. All rights reserved.
         </div>
       </div>
     </footer>

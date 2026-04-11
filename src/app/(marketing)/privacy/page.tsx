@@ -15,6 +15,14 @@ export default function PrivacyPage() {
           </p>
 
           <section className="space-y-4 mb-10">
+            <p className="text-muted-foreground leading-relaxed">
+              HypeTest is operated by Rekt Brands Inc., 1207 Delaware Ave,
+              #4069, Wilmington, DE 19806. This Privacy Policy describes how we
+              collect, use, and protect your information.
+            </p>
+          </section>
+
+          <section className="space-y-4 mb-10">
             <h2 className="text-xl font-bold text-primary">
               1. Data We Collect
             </h2>
@@ -89,10 +97,10 @@ export default function PrivacyPage() {
               unsubscribe or request deletion. You may request deletion of your
               data at any time by contacting us at{" "}
               <a
-                href="mailto:privacy@hypetest.com"
+                href="mailto:privacy@rfrekt.com"
                 className="text-primary underline"
               >
-                privacy@hypetest.com
+                privacy@rfrekt.com
               </a>
               .
             </p>
@@ -144,10 +152,10 @@ export default function PrivacyPage() {
               You may request access to, correction of, or deletion of your data
               at any time by contacting us at{" "}
               <a
-                href="mailto:privacy@hypetest.com"
+                href="mailto:privacy@rfrekt.com"
                 className="text-primary underline"
               >
-                privacy@hypetest.com
+                privacy@rfrekt.com
               </a>
               .
             </p>
@@ -187,10 +195,10 @@ export default function PrivacyPage() {
               If you have questions about this Privacy Policy or wish to exercise
               your data rights, please contact us at{" "}
               <a
-                href="mailto:privacy@hypetest.com"
+                href="mailto:privacy@rfrekt.com"
                 className="text-primary underline"
               >
-                privacy@hypetest.com
+                privacy@rfrekt.com
               </a>
               .
             </p>

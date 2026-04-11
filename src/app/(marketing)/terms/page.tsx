@@ -19,11 +19,13 @@ export default function TermsPage() {
               1. Acceptance of Terms
             </h2>
             <p className="text-muted-foreground leading-relaxed">
-              By accessing or using HypeTest (&quot;the Service&quot;), you agree
-              to be bound by these Terms of Service. If you do not agree to these
-              terms, do not use the Service. We may update these terms at any
-              time, and continued use of the Service after changes are posted
-              constitutes your acceptance of the revised terms.
+              By accessing or using HypeTest (&quot;the Service&quot;), operated
+              by Rekt Brands Inc., 1207 Delaware Ave, #4069, Wilmington, DE
+              19806, you agree to be bound by these Terms of Service. If you do
+              not agree to these terms, do not use the Service. We may update
+              these terms at any time, and continued use of the Service after
+              changes are posted constitutes your acceptance of the revised
+              terms.
             </p>
           </section>
 
@@ -102,10 +104,10 @@ export default function TermsPage() {
               this level of accessibility. You may request deletion of your data
               by contacting us at{" "}
               <a
-                href="mailto:privacy@hypetest.com"
+                href="mailto:privacy@rfrekt.com"
                 className="text-primary underline"
               >
-                privacy@hypetest.com
+                privacy@rfrekt.com
               </a>
               . For more details, see our Privacy Policy.
             </p>
@@ -176,10 +178,10 @@ export default function TermsPage() {
               If you have questions about these Terms of Service, please contact
               us at{" "}
               <a
-                href="mailto:legal@hypetest.com"
+                href="mailto:legal@rfrekt.com"
                 className="text-primary underline"
               >
-                legal@hypetest.com
+                legal@rfrekt.com
               </a>
               .
             </p>
