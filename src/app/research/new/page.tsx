@@ -106,7 +106,6 @@ function NewResearchForm() {
   const [priceMin, setPriceMin] = useState("");
   const [priceMax, setPriceMax] = useState("");
   const [priceUnit, setPriceUnit] = useState("per unit");
-  const [unitsPerPack, setUnitsPerPack] = useState("");
   const [targetMarket, setTargetMarket] = useState("");
   const [competitors, setCompetitors] = useState("");
   const [url, setUrl] = useState("");
@@ -239,7 +238,7 @@ function NewResearchForm() {
         );
         setPriceUnit(match || "per unit");
       }
-      if (data.unitsPerPack != null) setUnitsPerPack(String(data.unitsPerPack));
+
       if (data.competitors) {
         setCompetitors(data.competitors);
         setCompetitorsTouched(true);
@@ -293,8 +292,6 @@ function NewResearchForm() {
         payload.priceRange = { min: Number(priceMin), max: Number(priceMax) };
       }
       if (priceUnit) payload.priceUnit = priceUnit;
-      if (unitsPerPack && Number(unitsPerPack) > 0)
-        payload.unitsPerPack = Number(unitsPerPack);
       if (targetMarket.trim()) payload.targetMarket = targetMarket.trim();
       if (competitors.trim()) payload.competitors = competitors.trim();
 
@@ -638,38 +635,21 @@ function NewResearchForm() {
                       />
                     </div>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <div className="flex-1">
-                      <Select
-                        value={priceUnit}
-                        onValueChange={(v) => setPriceUnit(v ?? "per unit")}
-                      >
-                        <SelectTrigger className="w-full">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="per unit">per unit</SelectItem>
-                          <SelectItem value="per pack">per pack</SelectItem>
-                          <SelectItem value="per serving">per serving</SelectItem>
-                          <SelectItem value="per month">per month</SelectItem>
-                          <SelectItem value="per subscription">per subscription</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="flex-1">
-                      <Input
-                        type="number"
-                        placeholder="e.g. 30 servings per tub"
-                        value={unitsPerPack}
-                        onChange={(e) => setUnitsPerPack(e.target.value)}
-                        min="1"
-                      />
-                    </div>
-                  </div>
-                  <p className="text-xs text-muted-foreground">
-                    Pricing unit and servings/units per pack (optional). Helps
-                    consumers evaluate pricing in the right context.
-                  </p>
+                  <Select
+                    value={priceUnit}
+                    onValueChange={(v) => setPriceUnit(v ?? "per unit")}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="per unit">per unit</SelectItem>
+                      <SelectItem value="per pack">per pack</SelectItem>
+                      <SelectItem value="per serving">per serving</SelectItem>
+                      <SelectItem value="per month">per month</SelectItem>
+                      <SelectItem value="per subscription">per subscription</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
 
                 {/* About you */}
