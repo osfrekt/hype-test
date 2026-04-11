@@ -11,39 +11,38 @@ import {
   Cell,
 } from "recharts";
 
-// Purchase intent distribution data
-const traditionalIntent = [
-  { label: "Definitely not", count: 5, pct: 5 },
-  { label: "Probably not", count: 9, pct: 9 },
-  { label: "Maybe", count: 22, pct: 22 },
-  { label: "Probably yes", count: 38, pct: 38 },
-  { label: "Definitely yes", count: 26, pct: 26 },
-];
-
-const hypetestIntent = [
-  { label: "Definitely not", count: 3, pct: 6 },
-  { label: "Probably not", count: 5, pct: 10 },
-  { label: "Maybe", count: 12, pct: 24 },
-  { label: "Probably yes", count: 18, pct: 36 },
-  { label: "Definitely yes", count: 12, pct: 24 },
-];
-
 const INTENT_COLORS = ["#ef4444", "#f97316", "#eab308", "#22c55e", "#059669"];
+const INTENT_LABELS = ["Definitely not", "Probably not", "Maybe", "Probably yes", "Definitely yes"];
 
-// Feature importance data
-const traditionalFeatures = [
-  { feature: "Clean ingredients (no artificial)", score: 94 },
-  { feature: "Energy without jitters or crash", score: 87 },
-  { feature: "Low calorie / zero sugar", score: 76 },
-  { feature: "Brand reputation and trust", score: 68 },
+const traditionalIntent = INTENT_LABELS.map((label, i) => ({
+  label,
+  traditional: [5, 9, 22, 38, 26][i],
+  hypetest: [6, 10, 24, 36, 24][i],
+}));
+
+const features = [
+  { label: "Clean ingredients", traditional: 94, hypetest: 91 },
+  { label: "No jitters or crash", traditional: 87, hypetest: 84 },
+  { label: "Zero sugar / low cal", traditional: 76, hypetest: 79 },
+  { label: "Brand trust / positioning", traditional: 68, hypetest: 65 },
 ];
 
-const hypetestFeatures = [
-  { feature: "Natural caffeine sources", score: 91 },
-  { feature: "No crash or jitters", score: 84 },
-  { feature: "Zero sugar, low calorie", score: 79 },
-  { feature: "Clean label positioning", score: 65 },
-];
+function SourceBadge({ variant }: { variant: "traditional" | "hypetest" }) {
+  if (variant === "traditional") {
+    return (
+      <span className="inline-flex items-center gap-1 text-[10px] font-medium text-muted-foreground bg-muted px-2 py-0.5 rounded-full">
+        <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground/40" />
+        Traditional
+      </span>
+    );
+  }
+  return (
+    <span className="inline-flex items-center gap-1 text-[10px] font-medium text-teal bg-teal/10 px-2 py-0.5 rounded-full">
+      <span className="w-1.5 h-1.5 rounded-full bg-teal" />
+      HypeTest
+    </span>
+  );
+}
 
 export function SampleReport() {
   const [mounted, setMounted] = useState(false);
@@ -52,233 +51,201 @@ export function SampleReport() {
   }, []);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Product header */}
-      <div className="text-center mb-2">
+      <div className="text-center">
         <span className="inline-flex items-center gap-1.5 text-xs font-medium text-amber-700 bg-amber-100 border border-amber-200 px-2.5 py-1 rounded-full mb-3">
           Illustrative comparison
         </span>
         <h3 className="text-xl font-bold text-primary">
           Celsius Essential Energy Drink
         </h3>
-        <p className="text-sm text-muted-foreground mt-1">
-          Comparing publicly available consumer research data with a HypeTest simulation on the same product.
+        <p className="text-sm text-muted-foreground mt-1.5 max-w-lg mx-auto">
+          We ran Celsius through HypeTest and compared results to publicly
+          available panel data. Each metric shows both sources side by side.
         </p>
-      </div>
-
-      {/* Two-column layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* LEFT: Traditional Panel */}
-        <div className="space-y-4">
-          <div className="flex items-center gap-3 border-b border-border pb-3">
-            <div className="w-9 h-9 rounded-lg bg-muted flex items-center justify-center shrink-0">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-muted-foreground">
-                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" />
-              </svg>
-            </div>
-            <div>
-              <p className="text-sm font-bold text-primary">Traditional Panel Research</p>
-              <p className="text-[11px] text-muted-foreground">
-                Sources:{" "}
-                <a href="https://www.ey.com/en_us/newsroom/2026/03/ey-consumer-beverage-survey" target="_blank" rel="noopener noreferrer" className="text-teal hover:underline">EY Beverage Survey 2026</a>,{" "}
-                <a href="https://www.hundredx.com" target="_blank" rel="noopener noreferrer" className="text-teal hover:underline">HundredX 2025</a>
-              </p>
-            </div>
-          </div>
-
-          {/* Purchase Intent */}
-          <div className="bg-card rounded-xl border border-border p-4">
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">Purchase Intent</p>
-            <p className="text-3xl font-extrabold text-primary tracking-tight">64%</p>
-            <p className="text-xs text-muted-foreground mb-3">of surveyed consumers likely to buy</p>
-            <div className="h-36">
-              {mounted && (
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={traditionalIntent} margin={{ top: 8, right: 0, left: -20, bottom: 0 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
-                    <XAxis dataKey="label" tick={{ fontSize: 9 }} angle={-15} textAnchor="end" height={40} />
-                    <YAxis tick={{ fontSize: 9 }} />
-                    <Bar dataKey="pct" radius={[3, 3, 0, 0]}>
-                      {traditionalIntent.map((_, i) => (
-                        <Cell key={i} fill={INTENT_COLORS[i]} />
-                      ))}
-                    </Bar>
-                  </BarChart>
-                </ResponsiveContainer>
-              )}
-            </div>
-          </div>
-
-          {/* WTP */}
-          <div className="bg-card rounded-xl border border-border p-4">
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">Willingness to Pay</p>
-            <p className="text-2xl font-extrabold text-primary tracking-tight">$2.89 <span className="text-sm font-medium text-muted-foreground">avg / can</span></p>
-            <div className="mt-3 relative">
-              <div className="flex justify-between text-[10px] text-muted-foreground mb-1">
-                <span>$2.50</span>
-                <span>$3.50</span>
-              </div>
-              <div className="w-full h-5 bg-gradient-to-r from-emerald-200 via-teal to-primary rounded-md relative">
-                <div className="absolute top-0 -translate-x-1/2 flex flex-col items-center" style={{ left: "39%" }}>
-                  <div className="w-0.5 h-5 bg-white" />
-                  <div className="mt-1 bg-primary text-primary-foreground text-[10px] font-bold px-1.5 py-0.5 rounded">$2.89</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Feature Importance */}
-          <div className="bg-card rounded-xl border border-border p-4">
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Feature Importance</p>
-            <div className="space-y-2.5">
-              {traditionalFeatures.map((f) => (
-                <div key={f.feature}>
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-xs text-muted-foreground">{f.feature}</span>
-                    <span className="text-xs font-bold text-primary">{f.score}%</span>
-                  </div>
-                  <div className="w-full bg-muted rounded-full h-1.5">
-                    <div className="bg-muted-foreground/40 h-1.5 rounded-full" style={{ width: `${f.score}%` }} />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Concerns */}
-          <div className="bg-card rounded-xl border border-border p-4">
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Top Consumer Concerns</p>
-            <ul className="space-y-1.5 text-sm text-muted-foreground">
-              <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5 shrink-0">&bull;</span>High caffeine content (200mg per can)</li>
-              <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5 shrink-0">&bull;</span>Price premium over traditional energy drinks</li>
-              <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5 shrink-0">&bull;</span>Taste preference varies widely</li>
-            </ul>
-          </div>
-
-          {/* Meta */}
-          <div className="flex items-center gap-4 text-xs text-muted-foreground bg-muted/50 rounded-lg px-3 py-2">
-            <span>~1,000 respondents</span>
-            <span className="w-px h-3 bg-border" />
-            <span>4-6 weeks to field</span>
-            <span className="w-px h-3 bg-border" />
-            <span>$20-50k cost</span>
-          </div>
-        </div>
-
-        {/* RIGHT: HypeTest */}
-        <div className="space-y-4">
-          <div className="flex items-center gap-3 border-b border-teal/30 pb-3">
-            <div className="w-9 h-9 rounded-lg bg-teal/10 flex items-center justify-center shrink-0">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" />
-              </svg>
-            </div>
-            <div>
-              <p className="text-sm font-bold text-primary">HypeTest Simulation</p>
-              <p className="text-[11px] text-muted-foreground">
-                Simulated via HypeTest (50 AI panellists)
-              </p>
-            </div>
-          </div>
-
-          {/* Purchase Intent */}
-          <div className="bg-card rounded-xl border border-teal/20 p-4">
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">Purchase Intent</p>
-            <p className="text-3xl font-extrabold text-primary tracking-tight">61%</p>
-            <p className="text-xs text-muted-foreground mb-3">of simulated consumers likely to buy</p>
-            <div className="h-36">
-              {mounted && (
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={hypetestIntent} margin={{ top: 8, right: 0, left: -20, bottom: 0 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
-                    <XAxis dataKey="label" tick={{ fontSize: 9 }} angle={-15} textAnchor="end" height={40} />
-                    <YAxis tick={{ fontSize: 9 }} />
-                    <Bar dataKey="pct" radius={[3, 3, 0, 0]}>
-                      {hypetestIntent.map((_, i) => (
-                        <Cell key={i} fill={INTENT_COLORS[i]} />
-                      ))}
-                    </Bar>
-                  </BarChart>
-                </ResponsiveContainer>
-              )}
-            </div>
-          </div>
-
-          {/* WTP */}
-          <div className="bg-card rounded-xl border border-teal/20 p-4">
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">Willingness to Pay</p>
-            <p className="text-2xl font-extrabold text-primary tracking-tight">$2.75 <span className="text-sm font-medium text-muted-foreground">avg / can</span></p>
-            <div className="mt-3 relative">
-              <div className="flex justify-between text-[10px] text-muted-foreground mb-1">
-                <span>$2.25</span>
-                <span>$3.75</span>
-              </div>
-              <div className="w-full h-5 bg-gradient-to-r from-emerald-200 via-teal to-primary rounded-md relative">
-                <div className="absolute top-0 -translate-x-1/2 flex flex-col items-center" style={{ left: "33%" }}>
-                  <div className="w-0.5 h-5 bg-white" />
-                  <div className="mt-1 bg-primary text-primary-foreground text-[10px] font-bold px-1.5 py-0.5 rounded">$2.75</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Feature Importance */}
-          <div className="bg-card rounded-xl border border-teal/20 p-4">
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Feature Importance</p>
-            <div className="space-y-2.5">
-              {hypetestFeatures.map((f) => (
-                <div key={f.feature}>
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-xs text-muted-foreground">{f.feature}</span>
-                    <span className="text-xs font-bold text-primary">{f.score}%</span>
-                  </div>
-                  <div className="w-full bg-muted rounded-full h-1.5">
-                    <div className="bg-teal h-1.5 rounded-full" style={{ width: `${f.score}%` }} />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Concerns */}
-          <div className="bg-card rounded-xl border border-teal/20 p-4">
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Top Consumer Concerns</p>
-            <ul className="space-y-1.5 text-sm text-muted-foreground">
-              <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5 shrink-0">&bull;</span>Caffeine sensitivity and potential overstimulation</li>
-              <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5 shrink-0">&bull;</span>Price gap vs. Monster, Red Bull, and store brands</li>
-              <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5 shrink-0">&bull;</span>Skepticism about "healthy energy drink" positioning</li>
-            </ul>
-          </div>
-
-          {/* Meta */}
-          <div className="flex items-center gap-4 text-xs text-muted-foreground bg-teal/5 rounded-lg px-3 py-2 border border-teal/10">
-            <span>50 respondents</span>
-            <span className="w-px h-3 bg-teal/20" />
-            <span>2 minutes</span>
-            <span className="w-px h-3 bg-teal/20" />
-            <span>Free</span>
-          </div>
+        <div className="flex items-center justify-center gap-4 mt-3 text-[11px] text-muted-foreground">
+          <span>
+            Sources:{" "}
+            <a href="https://www.ey.com/en_us/newsroom/2026/03/ey-consumer-beverage-survey" target="_blank" rel="noopener noreferrer" className="text-teal hover:underline">EY 2026</a>,{" "}
+            <a href="https://www.hundredx.com" target="_blank" rel="noopener noreferrer" className="text-teal hover:underline">HundredX</a>
+          </span>
         </div>
       </div>
 
-      {/* Alignment score */}
-      <div className="bg-emerald-50 border border-emerald-200/60 rounded-xl p-5">
-        <div className="flex items-center justify-between mb-2">
+      {/* ---- METRIC 1: Purchase Intent ---- */}
+      <section className="bg-card rounded-2xl border border-border p-5 sm:p-6">
+        <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">
+          Purchase Intent
+        </h4>
+
+        {/* Big numbers side by side */}
+        <div className="grid grid-cols-2 gap-4 mb-5">
+          <div>
+            <SourceBadge variant="traditional" />
+            <p className="text-3xl sm:text-4xl font-extrabold text-primary tracking-tight mt-1">64%</p>
+            <p className="text-[11px] text-muted-foreground">~1,000 surveyed consumers</p>
+          </div>
+          <div>
+            <SourceBadge variant="hypetest" />
+            <p className="text-3xl sm:text-4xl font-extrabold text-teal tracking-tight mt-1">61%</p>
+            <p className="text-[11px] text-muted-foreground">50 simulated consumers</p>
+          </div>
+        </div>
+
+        {/* Overlaid distribution chart */}
+        <div className="h-44 sm:h-52">
+          {mounted && (
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={traditionalIntent} margin={{ top: 10, right: 0, left: -15, bottom: 0 }} barGap={2}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+                <XAxis dataKey="label" tick={{ fontSize: 9 }} angle={-15} textAnchor="end" height={45} />
+                <YAxis tick={{ fontSize: 9 }} unit="%" />
+                <Bar dataKey="traditional" name="Traditional" radius={[3, 3, 0, 0]} opacity={0.5}>
+                  {traditionalIntent.map((_, i) => (
+                    <Cell key={i} fill={INTENT_COLORS[i]} />
+                  ))}
+                </Bar>
+                <Bar dataKey="hypetest" name="HypeTest" radius={[3, 3, 0, 0]}>
+                  {traditionalIntent.map((_, i) => (
+                    <Cell key={i} fill={INTENT_COLORS[i]} />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          )}
+        </div>
+        <div className="flex items-center justify-center gap-4 mt-2 text-[10px] text-muted-foreground">
+          <span className="flex items-center gap-1"><span className="w-3 h-2 rounded-sm bg-emerald-500/50" /> Traditional</span>
+          <span className="flex items-center gap-1"><span className="w-3 h-2 rounded-sm bg-emerald-500" /> HypeTest</span>
+        </div>
+      </section>
+
+      {/* ---- METRIC 2: Willingness to Pay ---- */}
+      <section className="bg-card rounded-2xl border border-border p-5 sm:p-6">
+        <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">
+          Willingness to Pay
+        </h4>
+
+        <div className="grid grid-cols-2 gap-4 mb-5">
+          <div>
+            <SourceBadge variant="traditional" />
+            <p className="text-2xl sm:text-3xl font-extrabold text-primary tracking-tight mt-1">$2.89</p>
+            <p className="text-[11px] text-muted-foreground">avg per can</p>
+          </div>
+          <div>
+            <SourceBadge variant="hypetest" />
+            <p className="text-2xl sm:text-3xl font-extrabold text-teal tracking-tight mt-1">$2.75</p>
+            <p className="text-[11px] text-muted-foreground">avg per can</p>
+          </div>
+        </div>
+
+        {/* Dual WTP spectrums stacked */}
+        <div className="space-y-4">
+          <div>
+            <div className="flex items-center justify-between text-[10px] text-muted-foreground mb-1">
+              <span>$2.50</span>
+              <SourceBadge variant="traditional" />
+              <span>$3.50</span>
+            </div>
+            <div className="w-full h-4 bg-gradient-to-r from-emerald-200 via-teal/60 to-primary/60 rounded-md relative">
+              <div className="absolute top-0 -translate-x-1/2 flex flex-col items-center" style={{ left: "39%" }}>
+                <div className="w-0.5 h-4 bg-white" />
+                <div className="mt-0.5 bg-primary text-primary-foreground text-[9px] font-bold px-1.5 py-0.5 rounded">$2.89</div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div className="flex items-center justify-between text-[10px] text-muted-foreground mb-1">
+              <span>$2.25</span>
+              <SourceBadge variant="hypetest" />
+              <span>$3.75</span>
+            </div>
+            <div className="w-full h-4 bg-gradient-to-r from-emerald-200 via-teal/60 to-teal rounded-md relative">
+              <div className="absolute top-0 -translate-x-1/2 flex flex-col items-center" style={{ left: "33%" }}>
+                <div className="w-0.5 h-4 bg-white" />
+                <div className="mt-0.5 bg-teal text-white text-[9px] font-bold px-1.5 py-0.5 rounded">$2.75</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ---- METRIC 3: Feature Importance ---- */}
+      <section className="bg-card rounded-2xl border border-border p-5 sm:p-6">
+        <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">
+          Feature Importance
+        </h4>
+
+        <div className="space-y-4">
+          {features.map((f) => (
+            <div key={f.label}>
+              <p className="text-xs font-medium text-primary mb-2">{f.label}</p>
+              {/* Traditional bar */}
+              <div className="flex items-center gap-2 mb-1">
+                <SourceBadge variant="traditional" />
+                <div className="flex-1 bg-muted rounded-full h-2">
+                  <div className="bg-muted-foreground/40 h-2 rounded-full" style={{ width: `${f.traditional}%` }} />
+                </div>
+                <span className="text-xs font-bold text-primary w-8 text-right">{f.traditional}%</span>
+              </div>
+              {/* HypeTest bar */}
+              <div className="flex items-center gap-2">
+                <SourceBadge variant="hypetest" />
+                <div className="flex-1 bg-muted rounded-full h-2">
+                  <div className="bg-teal h-2 rounded-full" style={{ width: `${f.hypetest}%` }} />
+                </div>
+                <span className="text-xs font-bold text-teal w-8 text-right">{f.hypetest}%</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ---- METRIC 4: Top Concerns ---- */}
+      <section className="bg-card rounded-2xl border border-border p-5 sm:p-6">
+        <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">
+          Top Consumer Concerns
+        </h4>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <SourceBadge variant="traditional" />
+            <ul className="mt-2 space-y-1.5 text-sm text-muted-foreground">
+              <li className="flex items-start gap-1.5"><span className="text-red-400 mt-0.5 shrink-0">&bull;</span>High caffeine content (200mg per can)</li>
+              <li className="flex items-start gap-1.5"><span className="text-red-400 mt-0.5 shrink-0">&bull;</span>Price premium over competitors</li>
+              <li className="flex items-start gap-1.5"><span className="text-red-400 mt-0.5 shrink-0">&bull;</span>Taste preference varies widely</li>
+            </ul>
+          </div>
+          <div>
+            <SourceBadge variant="hypetest" />
+            <ul className="mt-2 space-y-1.5 text-sm text-muted-foreground">
+              <li className="flex items-start gap-1.5"><span className="text-red-400 mt-0.5 shrink-0">&bull;</span>Caffeine sensitivity and overstimulation</li>
+              <li className="flex items-start gap-1.5"><span className="text-red-400 mt-0.5 shrink-0">&bull;</span>Price gap vs. Monster and Red Bull</li>
+              <li className="flex items-start gap-1.5"><span className="text-red-400 mt-0.5 shrink-0">&bull;</span>Skepticism about health positioning</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* ---- Alignment Score ---- */}
+      <section className="bg-emerald-50 border border-emerald-200/60 rounded-2xl p-5 sm:p-6">
+        <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="20 6 9 17 4 12" />
             </svg>
             <p className="text-sm font-bold text-emerald-800">Directional Alignment</p>
           </div>
-          <p className="text-lg font-extrabold text-emerald-700">~92%</p>
+          <p className="text-xl font-extrabold text-emerald-700">~92%</p>
         </div>
-        <div className="w-full h-2 bg-emerald-200 rounded-full overflow-hidden mb-3">
+        <div className="w-full h-2.5 bg-emerald-200 rounded-full overflow-hidden mb-4">
           <div className="h-full bg-emerald-500 rounded-full" style={{ width: "92%" }} />
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
           <div>
             <p className="text-lg font-bold text-emerald-700">3%</p>
-            <p className="text-[10px] text-emerald-600">Purchase Intent gap</p>
+            <p className="text-[10px] text-emerald-600">Intent gap</p>
           </div>
           <div>
             <p className="text-lg font-bold text-emerald-700">$0.14</p>
@@ -286,12 +253,26 @@ export function SampleReport() {
           </div>
           <div>
             <p className="text-lg font-bold text-emerald-700">4/4</p>
-            <p className="text-[10px] text-emerald-600">Feature themes matched</p>
+            <p className="text-[10px] text-emerald-600">Features matched</p>
           </div>
           <div>
             <p className="text-lg font-bold text-emerald-700">3/3</p>
             <p className="text-[10px] text-emerald-600">Concerns aligned</p>
           </div>
+        </div>
+      </section>
+
+      {/* ---- Cost comparison ---- */}
+      <div className="grid grid-cols-2 gap-3">
+        <div className="bg-muted/50 rounded-xl p-4 text-center border border-border">
+          <SourceBadge variant="traditional" />
+          <p className="text-lg font-bold text-primary mt-2">$20-50k</p>
+          <p className="text-[10px] text-muted-foreground">4-6 weeks, ~1,000 respondents</p>
+        </div>
+        <div className="bg-teal/5 rounded-xl p-4 text-center border border-teal/20">
+          <SourceBadge variant="hypetest" />
+          <p className="text-lg font-bold text-teal mt-2">Free</p>
+          <p className="text-[10px] text-muted-foreground">2 minutes, 50 respondents</p>
         </div>
       </div>
 
@@ -300,7 +281,8 @@ export function SampleReport() {
         Traditional panel data sourced from publicly available industry reports ({" "}
         <a href="https://www.ey.com/en_us/newsroom/2026/03/ey-consumer-beverage-survey" target="_blank" rel="noopener noreferrer" className="text-teal hover:underline">EY 2026</a>,{" "}
         <a href="https://www.hundredx.com" target="_blank" rel="noopener noreferrer" className="text-teal hover:underline">HundredX</a>
-        ). HypeTest results are illustrative of typical output for this product category. This is not a controlled validation study.
+        ). HypeTest results are illustrative of typical output for this product category.
+        This is not a controlled validation study.
       </p>
     </div>
   );
