@@ -38,13 +38,13 @@ export function ResultsCharts({ result }: { result: ResearchResult }) {
     setMounted(true);
   }, []);
 
-  const intentData = result.purchaseIntent.distribution.map((d, i) => ({
+  const intentData = (result.purchaseIntent?.distribution ?? []).map((d, i) => ({
     name: d.label,
     count: d.count,
     fill: INTENT_COLORS[i],
   }));
 
-  const compData = result.competitivePosition?.distribution.map((d, i) => ({
+  const compData = result.competitivePosition?.distribution?.map((d, i) => ({
     name: d.label,
     count: d.count,
     fill: COMP_COLORS[i],
@@ -112,8 +112,8 @@ export function ResultsCharts({ result }: { result: ResearchResult }) {
             <div className="relative">
               {/* Price scale */}
               <div className="flex justify-between text-xs text-muted-foreground mb-2">
-                <span>${result.wtpRange.low}</span>
-                <span>${result.wtpRange.high}</span>
+                <span>${result.wtpRange?.low}</span>
+                <span>${result.wtpRange?.high}</span>
               </div>
               {/* Bar */}
               <div className="w-full h-8 bg-gradient-to-r from-emerald-200 via-teal to-navy rounded-lg relative">
@@ -121,12 +121,12 @@ export function ResultsCharts({ result }: { result: ResearchResult }) {
                 <div
                   className="absolute top-0 -translate-x-1/2 flex flex-col items-center"
                   style={{
-                    left: `${Math.max(8, result.wtpRange.high === result.wtpRange.low ? 50 : ((result.wtpRange.mid - result.wtpRange.low) / (result.wtpRange.high - result.wtpRange.low)) * 100)}%`,
+                    left: `${Math.max(8, result.wtpRange?.high === result.wtpRange?.low ? 50 : ((result.wtpRange?.mid - result.wtpRange?.low) / (result.wtpRange?.high - result.wtpRange?.low)) * 100)}%`,
                   }}
                 >
                   <div className="w-0.5 h-8 bg-white" />
                   <div className="mt-2 bg-navy text-white text-xs font-medium px-2 py-1 rounded">
-                    ${result.wtpRange.mid}
+                    ${result.wtpRange?.mid}
                   </div>
                   <span className="text-xs text-muted-foreground mt-1">
                     estimated avg

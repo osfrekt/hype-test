@@ -25,10 +25,11 @@ export function ReportView({
     setFormattedDate(new Date(result.createdAt).toLocaleDateString());
   }, [result.createdAt]);
 
+  const score = result.purchaseIntent?.score ?? 0;
   const intentColor =
-    result.purchaseIntent?.score >= 60
+    score >= 60
       ? "text-emerald-600"
-      : result.purchaseIntent?.score >= 40
+      : score >= 40
         ? "text-amber-600"
         : "text-red-600";
 
@@ -61,7 +62,7 @@ export function ReportView({
               Purchase Intent
             </p>
             <p className={`text-3xl font-bold ${intentColor}`}>
-              {result.purchaseIntent?.score ?? 0}%
+              {score}%
             </p>
             <p className="text-xs text-muted-foreground mt-1">
               of simulated consumers likely to buy
@@ -202,20 +203,20 @@ export function ReportView({
           </p>
           <p>
             <strong>Demographic mix:</strong>{" "}
-            {result.methodology.demographicMix}
+            {result.methodology?.demographicMix}
           </p>
-          {result.methodology.panelBreakdown && (
+          {result.methodology?.panelBreakdown && (
             <p className="text-xs text-muted-foreground">
               {result.methodology.panelBreakdown.genderSplit.female}% female, {result.methodology.panelBreakdown.genderSplit.male}% male, {result.methodology.panelBreakdown.genderSplit.nonBinary}% non-binary | Ages {result.methodology.panelBreakdown.ageRange.min}-{result.methodology.panelBreakdown.ageRange.max} (median {result.methodology.panelBreakdown.ageRange.median}) | Income ${Math.round(result.methodology.panelBreakdown.incomeRange.min / 1000)}k-${Math.round(result.methodology.panelBreakdown.incomeRange.max / 1000)}k (median ${Math.round(result.methodology.panelBreakdown.incomeRange.median / 1000)}k)
             </p>
           )}
           <p>
             <strong>Total survey questions:</strong>{" "}
-            {result.methodology.questionsAsked}
+            {result.methodology?.questionsAsked}
           </p>
           <Separator className="my-3" />
           <p className="text-xs leading-relaxed">
-            {result.methodology.confidenceNote}
+            {result.methodology?.confidenceNote}
           </p>
           <p className="text-xs leading-relaxed">
             This research uses methodology informed by Brand, Israeli &amp; Ngwe
@@ -234,9 +235,9 @@ export function ReportView({
 }
 
 function WtpCard({ result }: { result: ResearchResult }) {
-  const unit = result.input.priceUnit || "";
+  const unit = result.input?.priceUnit || "";
   const unitLabel = unit ? `/${unit.replace("per ", "")}` : "";
-  const mid = result.wtpRange.mid;
+  const mid = result.wtpRange?.mid ?? 0;
 
   // Determine user's actual price (midpoint of their price range)
   const userPrice = result.input.priceRange
@@ -296,7 +297,7 @@ function WtpCard({ result }: { result: ResearchResult }) {
           </p>
         )}
         <p className="text-xs text-muted-foreground mt-1">
-          range: ${result.wtpRange.low} — ${result.wtpRange.high}
+          range: ${result.wtpRange?.low ?? 0} — ${result.wtpRange?.high ?? 0}
           {unitLabel}
         </p>
         {perServing && (
