@@ -12,21 +12,21 @@ export default function Home() {
         <section className="relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-b from-blue-50/50 to-transparent pointer-events-none" />
           <div className="max-w-5xl mx-auto px-6 pt-16 pb-14 text-center relative">
-            <div className="inline-flex items-center gap-2 bg-teal/10 text-teal-dark text-xs font-medium px-3 py-1.5 rounded-full mb-5">
+            <div data-animate="1" className="inline-flex items-center gap-2 bg-teal/10 text-teal-dark text-xs font-medium px-3 py-1.5 rounded-full mb-5">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" /></svg>
               Grounded in peer-reviewed research
             </div>
-            <h1 className="font-extrabold text-navy tracking-tight leading-[1.08] mb-5" style={{ fontSize: 'clamp(2.25rem, 1.5rem + 3vw, 3.75rem)' }}>
+            <h1 data-animate="2" className="font-extrabold text-navy tracking-tight leading-[1.08] mb-5" style={{ fontSize: 'clamp(2.25rem, 1.5rem + 3vw, 3.75rem)' }}>
               Consumer research in
               <br />
               minutes, not months.
             </h1>
-            <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-8 leading-relaxed">
+            <p data-animate="3" className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-8 leading-relaxed">
               Simulate a panel of real consumers for any product or idea.
               Get willingness-to-pay estimates, feature priorities, and purchase
               intent — powered by AI, grounded in academic methodology.
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <div data-animate="4" className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link
                 href="/research/new"
                 className="inline-flex items-center justify-center rounded-xl bg-navy text-white font-semibold px-10 h-14 text-lg hover:bg-navy-light transition-colors shadow-lg shadow-navy/25"

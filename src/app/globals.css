@@ -101,3 +101,32 @@
     font-family: var(--font-display);
   }
 }
+
+/* Fade-up entrance animation for sections */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+[data-animate] {
+  animation: fade-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+[data-animate="1"] { animation-delay: 0ms; }
+[data-animate="2"] { animation-delay: 80ms; }
+[data-animate="3"] { animation-delay: 160ms; }
+[data-animate="4"] { animation-delay: 240ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  [data-animate] {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
