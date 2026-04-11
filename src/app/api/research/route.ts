@@ -1,5 +1,6 @@
 import { runResearch } from "@/lib/research-engine";
 import { createClient } from "@/lib/supabase/server";
+import { sendResearchReport } from "@/lib/email";
 import type { ResearchInput, ResearchResult } from "@/types/research";
 
 export const maxDuration = 300;
@@ -43,7 +44,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const body: ResearchInput = await request.json();
+    const body: ResearchInput & { email?: string } = await request.json();
 
     // Input validation and sanitization
     const productName = body.productName?.trim().slice(0, MAX_NAME_LENGTH);
@@ -92,10 +93,19 @@ export async function POST(request: Request) {
 
     const result = await runResearch(sanitizedInput);
 
+    const email = typeof body.email === "string" ? body.email.trim().slice(0, 200) : null;
+
     // Persist to Supabase (non-blocking — don't fail the response if DB write fails)
-    persistResult(result).catch((err) =>
+    persistResult(result, email).catch((err) =>
       console.error("Failed to persist research result:", err)
     );
+
+    // Send email with report link
+    if (email) {
+      sendResearchReport(email, sanitizedInput.productName, result.id).catch(
+        (err) => console.error("Failed to send research email:", err)
+      );
+    }
 
     return Response.json(result);
   } catch (error) {
@@ -108,7 +118,7 @@ export async function POST(request: Request) {
   }
 }
 
-async function persistResult(result: ResearchResult) {
+async function persistResult(result: ResearchResult, email: string | null) {
   const supabase = await createClient();
   const { error } = await supabase.from("research_results").insert({
     id: result.id,
@@ -122,6 +132,7 @@ async function persistResult(result: ResearchResult) {
     verbatims: result.verbatims,
     methodology: result.methodology,
     competitive_position: result.competitivePosition ?? null,
+    email: email ?? null,
     status: result.status,
     created_at: result.createdAt,
   });

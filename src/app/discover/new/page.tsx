@@ -99,6 +99,7 @@ function DiscoverNewForm() {
   const [priceMax, setPriceMax] = useState("");
   const [priceUnit, setPriceUnit] = useState("");
   const [constraints, setConstraints] = useState("");
+  const [email, setEmail] = useState("");
   const [showAdvanced, setShowAdvanced] = useState(false);
 
   const [autofillMode, setAutofillMode] = useState<"url" | "search">("url");
@@ -115,7 +116,9 @@ function DiscoverNewForm() {
     brandName.trim() &&
     brandDescription.trim().length > 10 &&
     category &&
-    targetAudience.trim().length > 5;
+    targetAudience.trim().length > 5 &&
+    email.trim() &&
+    email.includes("@");
 
   async function handleAutofill() {
     if (!autofillInput.trim()) return;
@@ -197,6 +200,7 @@ function DiscoverNewForm() {
       }
       if (priceUnit.trim()) payload.priceUnit = priceUnit.trim();
       if (constraints.trim()) payload.constraints = constraints.trim();
+      payload.email = email.trim();
 
       const response = await fetch("/api/discovery", {
         method: "POST",
@@ -549,6 +553,22 @@ function DiscoverNewForm() {
                       </div>
                     </div>
                   )}
+                </div>
+
+                {/* Email for report delivery */}
+                <div className="space-y-1.5 bg-teal/5 rounded-xl p-4 border border-teal/20">
+                  <Label htmlFor="email">Email address</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="you@company.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    We&apos;ll send your report link to this email. No account needed.
+                  </p>
                 </div>
 
                 {error && (

@@ -116,6 +116,7 @@ function NewResearchForm() {
   const [progress, setProgress] = useState(0);
   const [stage, setStage] = useState("");
   const [error, setError] = useState("");
+  const [email, setEmail] = useState("");
   const [showExamples, setShowExamples] = useState<Set<string>>(new Set());
 
   // Track whether user has manually edited target/competitors
@@ -153,7 +154,7 @@ function NewResearchForm() {
     return parts.join(" ");
   }, [problem, feature1, feature2, feature3, differentiator]);
 
-  const isFormValid = productName.trim() && assembledDescription.length > 20;
+  const isFormValid = productName.trim() && assembledDescription.length > 20 && email.trim() && email.includes("@");
 
   // Quality indicator
   const quality = useMemo(() => {
@@ -291,6 +292,7 @@ function NewResearchForm() {
         .map((f) => f.trim())
         .filter(Boolean);
       if (features.length) payload.keyFeatures = features;
+      payload.email = email.trim();
 
       const response = await fetch("/api/research", {
         method: "POST",
@@ -649,6 +651,22 @@ function NewResearchForm() {
                   <p className="text-xs text-muted-foreground">
                     Pricing unit and servings/units per pack (optional). Helps
                     consumers evaluate pricing in the right context.
+                  </p>
+                </div>
+
+                {/* Email for report delivery */}
+                <div className="space-y-1.5 bg-teal/5 rounded-xl p-4 border border-teal/20">
+                  <Label htmlFor="email">Email address</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="you@company.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    We&apos;ll send your report link to this email. No account needed.
                   </p>
                 </div>
 

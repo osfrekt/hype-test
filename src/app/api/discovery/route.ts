@@ -1,5 +1,6 @@
 import { runDiscovery } from "@/lib/discovery-engine";
 import { createClient } from "@/lib/supabase/server";
+import { sendDiscoveryReport } from "@/lib/email";
 import type { DiscoveryInput, DiscoveryResult } from "@/types/discovery";
 
 export const maxDuration = 300;
@@ -48,7 +49,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const body: DiscoveryInput = await request.json();
+    const body: DiscoveryInput & { email?: string } = await request.json();
 
     // Input validation and sanitization
     const brandName = body.brandName?.trim().slice(0, MAX_BRAND_NAME_LENGTH);
@@ -98,10 +99,19 @@ export async function POST(request: Request) {
 
     const result = await runDiscovery(sanitizedInput);
 
+    const email = typeof body.email === "string" ? body.email.trim().slice(0, 200) : null;
+
     // Persist to Supabase (non-blocking — don't fail the response if DB write fails)
-    persistResult(result).catch((err) =>
+    persistResult(result, email).catch((err) =>
       console.error("Failed to persist discovery result:", err)
     );
+
+    // Send email with report link
+    if (email) {
+      sendDiscoveryReport(email, sanitizedInput.brandName, result.id).catch(
+        (err) => console.error("Failed to send discovery email:", err)
+      );
+    }
 
     return Response.json(result);
   } catch (error) {
@@ -114,7 +124,7 @@ export async function POST(request: Request) {
   }
 }
 
-async function persistResult(result: DiscoveryResult) {
+async function persistResult(result: DiscoveryResult, email: string | null) {
   const supabase = await createClient();
   const { error } = await supabase.from("discovery_results").insert({
     id: result.id,
@@ -122,6 +132,7 @@ async function persistResult(result: DiscoveryResult) {
     concepts: result.concepts,
     panel_size: result.panelSize,
     methodology: result.methodology,
+    email: email ?? null,
     status: result.status,
     created_at: result.createdAt,
   });
