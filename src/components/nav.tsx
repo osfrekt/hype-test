@@ -51,6 +51,15 @@ export function Nav() {
             Methodology
           </Link>
           <Link
+            href="/discover/new"
+            className="hover:text-foreground transition-colors"
+          >
+            Discover
+            <span className="text-[10px] bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-full font-medium ml-1">
+              Pro
+            </span>
+          </Link>
+          <Link
             href="/pricing"
             className="hover:text-foreground transition-colors"
           >

@@ -104,9 +104,10 @@ export default function PricingPage() {
                   More power coming soon
                 </h3>
                 <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
-                  Custom panels of up to 200 respondents, conjoint WTP breakdown
-                  by feature, competitive positioning for up to 3 competitors,
-                  target demographic selection, PDF &amp; CSV export, team
+                  Product Discovery (find what to build next), custom panels of
+                  up to 200 respondents, conjoint WTP breakdown by feature,
+                  competitive positioning for up to 3 competitors, target
+                  demographic selection, PDF &amp; CSV export, team
                   collaboration, and API access.
                 </p>
 

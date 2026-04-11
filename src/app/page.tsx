@@ -181,6 +181,28 @@ export default function Home() {
                 icon={<><path d="M21.21 15.89A10 10 0 1 1 8 2.83" /><path d="M22 12A10 10 0 0 0 12 2v10z" /></>}
               />
             </div>
+
+            {/* Discovery CTA */}
+            <div className="mt-12 max-w-2xl mx-auto">
+              <div className="bg-amber-50 border border-amber-200/60 rounded-2xl p-6 text-center">
+                <p className="text-sm font-semibold text-amber-800 mb-1">
+                  Don&apos;t have a product yet?
+                </p>
+                <p className="text-sm text-amber-700/80 mb-4">
+                  Use Product Discovery to find out what your audience actually
+                  wants — then test the top concepts instantly.
+                </p>
+                <Link
+                  href="/discover/new"
+                  className="inline-flex items-center gap-2 text-sm font-semibold text-amber-800 hover:text-amber-900 hover:underline"
+                >
+                  Discover products
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
+                  </svg>
+                </Link>
+              </div>
+            </div>
           </div>
         </section>
 
