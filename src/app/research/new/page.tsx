@@ -326,35 +326,39 @@ function NewResearchForm() {
     return (
       <>
         <Nav />
+        <style>{`
+          @keyframes dot-pulse {
+            0%, 100% { opacity: 0.15; transform: scale(0.85); }
+            50% { opacity: 0.7; transform: scale(1); }
+          }
+          .dot-grid span {
+            animation: dot-pulse 1.8s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+          }
+        `}</style>
         <main className="flex-1 flex items-center justify-center">
-          <div className="max-w-md mx-auto px-6 text-center">
-            <div className="w-16 h-16 rounded-2xl bg-teal/10 flex items-center justify-center mx-auto mb-6">
-              <svg
-                className="animate-spin text-teal"
-                width="28"
-                height="28"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M21 12a9 9 0 1 1-6.219-8.56" />
-              </svg>
+          <div className="max-w-sm mx-auto px-6 text-center">
+            {/* Pulsing dot grid — suggests distributed consumer simulation */}
+            <div className="dot-grid grid grid-cols-6 gap-2 w-fit mx-auto mb-8">
+              {Array.from({ length: 18 }, (_, i) => (
+                <span
+                  key={i}
+                  className="block w-2.5 h-2.5 rounded-full bg-teal"
+                  style={{ animationDelay: `${i * 100}ms` }}
+                />
+              ))}
             </div>
             <h2 className="text-xl font-bold text-navy mb-2">
               Running your research
             </h2>
             <p className="text-sm text-muted-foreground mb-8">{stage}</p>
-            <div className="w-full bg-muted rounded-full h-2 mb-3">
+            <div className="w-full bg-muted rounded-full h-1.5 mb-3 overflow-hidden">
               <div
-                className="bg-teal h-2 rounded-full transition-all duration-1000 ease-out"
-                style={{ width: `${Math.min(progress, 100)}%` }}
+                className="bg-teal h-1.5 rounded-full origin-left transition-transform duration-1000 ease-out"
+                style={{ transform: `scaleX(${Math.min(progress, 100) / 100})` }}
               />
             </div>
             <p className="text-xs text-muted-foreground">
-              Simulating 50 consumers with structured methodology
+              {progress >= 95 ? "Finalizing report..." : `Surveying simulated panel (${Math.round(progress)}%)`}
             </p>
           </div>
         </main>
