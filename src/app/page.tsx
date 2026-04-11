@@ -154,118 +154,143 @@ export default function Home() {
 
         {/* How it works */}
         <section className="py-14 bg-white">
-          <div className="max-w-6xl mx-auto px-6">
-            <h2 className="text-2xl md:text-3xl font-bold text-navy text-center mb-3">
+          <div className="max-w-5xl mx-auto px-6">
+            <h2 className="text-2xl md:text-3xl font-bold text-navy mb-3">
               How HypeTest works
             </h2>
-            <p className="text-muted-foreground text-center max-w-2xl mx-auto mb-12">
+            <p className="text-muted-foreground max-w-xl mb-14">
               Three steps to insights that used to cost $20-50k and take weeks.
             </p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <Step
-                number="1"
-                title="Describe your product"
-                description="Tell us about your product, feature, or business idea. Free-text is fine — we'll extract what we need."
-                icon={<><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" /><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" /></>}
-              />
-              <Step
-                number="2"
-                title="We simulate your consumers"
-                description="We generate a diverse panel of 50+ consumer personas and run structured survey methodology through each one."
-                icon={<><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></>}
-              />
-              <Step
-                number="3"
-                title="Get your research report"
-                description="Receive purchase intent, willingness-to-pay, feature importance, and consumer concerns — in under 2 minutes."
-                icon={<><path d="M21.21 15.89A10 10 0 1 1 8 2.83" /><path d="M22 12A10 10 0 0 0 12 2v10z" /></>}
-              />
+            <div className="space-y-10 md:space-y-0 md:grid md:grid-cols-[1fr_auto_1fr_auto_1fr] md:items-start md:gap-0">
+              {/* Step 1 */}
+              <div>
+                <span className="text-xs font-bold text-teal uppercase tracking-widest">Step 1</span>
+                <h3 className="text-lg font-bold text-navy mt-2 mb-2">Describe your product</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed max-w-[28ch]">
+                  Tell us about your product, feature, or idea. Free-text is fine — we&apos;ll extract what we need.
+                </p>
+              </div>
+              <div className="hidden md:flex items-center px-6 pt-8">
+                <svg width="32" height="12" viewBox="0 0 32 12" fill="none"><path d="M0 6h28m0 0l-4-4m4 4l-4 4" stroke="currentColor" strokeWidth="1.5" className="text-border" /></svg>
+              </div>
+              {/* Step 2 */}
+              <div>
+                <span className="text-xs font-bold text-teal uppercase tracking-widest">Step 2</span>
+                <h3 className="text-lg font-bold text-navy mt-2 mb-2">We simulate your consumers</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed max-w-[28ch]">
+                  A diverse panel of 50+ consumer personas runs through structured survey methodology.
+                </p>
+              </div>
+              <div className="hidden md:flex items-center px-6 pt-8">
+                <svg width="32" height="12" viewBox="0 0 32 12" fill="none"><path d="M0 6h28m0 0l-4-4m4 4l-4 4" stroke="currentColor" strokeWidth="1.5" className="text-border" /></svg>
+              </div>
+              {/* Step 3 */}
+              <div>
+                <span className="text-xs font-bold text-teal uppercase tracking-widest">Step 3</span>
+                <h3 className="text-lg font-bold text-navy mt-2 mb-2">Get your research report</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed max-w-[28ch]">
+                  Purchase intent, willingness-to-pay, feature importance, and consumer concerns — in under 2 minutes.
+                </p>
+              </div>
             </div>
 
             {/* Discovery CTA */}
-            <div className="mt-12 max-w-2xl mx-auto">
-              <div className="bg-amber-50 border border-amber-200/60 rounded-2xl p-6 text-center">
+            <div className="mt-14 bg-amber-50 border border-amber-200/60 rounded-2xl p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div>
                 <p className="text-sm font-semibold text-amber-800 mb-1">
                   Don&apos;t have a product yet?
                 </p>
-                <p className="text-sm text-amber-700/80 mb-4">
-                  Use Product Discovery to find out what your audience actually
-                  wants — then test the top concepts instantly.
+                <p className="text-sm text-amber-700/80">
+                  Use Product Discovery to find what your audience actually wants.
                 </p>
-                <Link
-                  href="/discover/new"
-                  className="inline-flex items-center gap-2 text-sm font-semibold text-amber-800 hover:text-amber-900 hover:underline"
-                >
-                  Discover products
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
-                  </svg>
-                </Link>
               </div>
+              <Link
+                href="/discover/new"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-amber-800 hover:text-amber-900 hover:underline shrink-0"
+              >
+                Discover products
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
+                </svg>
+              </Link>
             </div>
           </div>
         </section>
 
         {/* What you get */}
         <section className="py-14">
-          <div className="max-w-6xl mx-auto px-6">
-            <h2 className="text-2xl md:text-3xl font-bold text-navy text-center mb-3">
+          <div className="max-w-5xl mx-auto px-6">
+            <h2 className="text-2xl md:text-3xl font-bold text-navy mb-3">
               What&apos;s in a HypeTest report
             </h2>
-            <p className="text-muted-foreground text-center max-w-2xl mx-auto mb-12">
+            <p className="text-muted-foreground max-w-xl mb-12">
               Not another AI opinion. Structured research methodology with aggregated results.
             </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-              <ResultCard
-                title="Purchase Intent Score"
-                description="What percentage of consumers would actually buy your product, on a validated 5-point scale."
-                icon={<>
-                  <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-                </>}
-              />
-              <ResultCard
-                title="Willingness-to-Pay Range"
-                description="Data-derived price estimates from conjoint-style choice tasks — not guesses."
-                icon={<>
-                  <line x1="12" y1="1" x2="12" y2="23" />
-                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-                </>}
-              />
-              <ResultCard
-                title="Feature Importance"
-                description="Which product attributes drive purchase decisions, ranked by simulated consumer preference."
-                icon={<>
-                  <line x1="18" y1="20" x2="18" y2="10" />
-                  <line x1="12" y1="20" x2="12" y2="4" />
-                  <line x1="6" y1="20" x2="6" y2="14" />
-                </>}
-              />
-              <ResultCard
-                title="Consumer Concerns"
-                description="The top objections and hesitations from your simulated panel — the things you need to address."
-                icon={<>
-                  <circle cx="12" cy="12" r="10" />
-                  <line x1="12" y1="8" x2="12" y2="12" />
-                  <line x1="12" y1="16" x2="12.01" y2="16" />
-                </>}
-              />
-              <ResultCard
-                title="Consumer Verbatims"
-                description="Simulated open-ended responses from diverse consumer profiles, giving you qualitative texture."
-                icon={<>
-                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-                </>}
-              />
-              <ResultCard
-                title="Methodology Disclosure"
-                description="Full transparency on panel composition, question design, and confidence level. Always."
-                icon={<>
-                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                  <polyline points="14 2 14 8 20 8" />
-                  <line x1="16" y1="13" x2="8" y2="13" />
-                  <line x1="16" y1="17" x2="8" y2="17" />
-                </>}
-              />
+
+            {/* Featured: Purchase Intent + WTP side by side */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+              <div className="bg-navy rounded-2xl p-6 text-white">
+                <span className="text-xs font-bold text-teal uppercase tracking-widest">Core metric</span>
+                <h3 className="text-lg font-bold mt-2 mb-2">Purchase Intent Score</h3>
+                <p className="text-sm text-blue-100/70 leading-relaxed">
+                  What percentage of consumers would actually buy your product, on a validated 5-point scale.
+                </p>
+              </div>
+              <div className="bg-navy rounded-2xl p-6 text-white">
+                <span className="text-xs font-bold text-teal uppercase tracking-widest">Core metric</span>
+                <h3 className="text-lg font-bold mt-2 mb-2">Willingness-to-Pay Range</h3>
+                <p className="text-sm text-blue-100/70 leading-relaxed">
+                  Data-derived price estimates from conjoint-style choice tasks — not guesses.
+                </p>
+              </div>
+            </div>
+
+            {/* Secondary outputs as a compact list */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-6">
+              <div className="flex gap-4">
+                <span className="text-teal text-lg mt-0.5 shrink-0">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="18" y1="20" x2="18" y2="10" /><line x1="12" y1="20" x2="12" y2="4" /><line x1="6" y1="20" x2="6" y2="14" />
+                  </svg>
+                </span>
+                <div>
+                  <h3 className="text-sm font-semibold text-navy mb-1">Feature Importance</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">Which attributes drive purchase decisions, ranked by preference.</p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <span className="text-teal text-lg mt-0.5 shrink-0">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" />
+                  </svg>
+                </span>
+                <div>
+                  <h3 className="text-sm font-semibold text-navy mb-1">Consumer Concerns</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">Top objections and hesitations — the things you need to address.</p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <span className="text-teal text-lg mt-0.5 shrink-0">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                  </svg>
+                </span>
+                <div>
+                  <h3 className="text-sm font-semibold text-navy mb-1">Consumer Verbatims</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">Open-ended responses from diverse consumer profiles.</p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <span className="text-teal text-lg mt-0.5 shrink-0">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" />
+                  </svg>
+                </span>
+                <div>
+                  <h3 className="text-sm font-semibold text-navy mb-1">Methodology Disclosure</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">Full transparency on panel composition and confidence level.</p>
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -286,65 +311,62 @@ export default function Home() {
 
         {/* Why this works */}
         <section className="py-14 bg-navy text-white">
-          <div className="max-w-5xl mx-auto px-6 text-center">
-            <h2 className="text-2xl md:text-3xl font-bold mb-3">
-              Why this works
-            </h2>
-            <p className="text-blue-200/80 max-w-2xl mx-auto mb-10 leading-relaxed">
-              HypeTest is built on peer-reviewed research showing that LLM-simulated
-              consumer panels produce willingness-to-pay estimates comparable to
-              real human panels.
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
-              <div className="bg-white/5 rounded-xl p-5 border border-white/10">
-                <div className="w-9 h-9 rounded-lg bg-teal/20 flex items-center justify-center mb-3">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" /><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" /></svg>
-                </div>
-                <p className="text-sm font-medium text-teal mb-2">
-                  Academic Foundation
+          <div className="max-w-5xl mx-auto px-6">
+            <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.5fr] gap-12 lg:gap-16">
+              <div>
+                <h2 className="text-2xl md:text-3xl font-bold mb-3">
+                  Why this works
+                </h2>
+                <p className="text-blue-100/70 leading-relaxed mb-6">
+                  HypeTest is built on peer-reviewed research showing that LLM-simulated
+                  consumer panels produce willingness-to-pay estimates comparable to
+                  real human panels.
                 </p>
-                <p className="text-sm text-blue-100/70 leading-relaxed">
-                  Based on Brand, Israeli &amp; Ngwe (2025) from Harvard Business
-                  School, who demonstrated that LLM-generated WTP estimates
-                  closely match real consumer panels.
-                </p>
+                <Link
+                  href="/methodology"
+                  className="inline-flex items-center gap-2 text-teal text-sm font-medium hover:underline"
+                >
+                  Read the full methodology
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
+                  </svg>
+                </Link>
               </div>
-              <div className="bg-white/5 rounded-xl p-5 border border-white/10">
-                <div className="w-9 h-9 rounded-lg bg-teal/20 flex items-center justify-center mb-3">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" /></svg>
+              <div className="space-y-8">
+                <div>
+                  <p className="text-sm font-semibold text-teal mb-2">
+                    Academic Foundation
+                  </p>
+                  <p className="text-sm text-blue-100/70 leading-relaxed max-w-prose">
+                    Based on Brand, Israeli &amp; Ngwe (2025) from Harvard Business
+                    School, who demonstrated that LLM-generated WTP estimates
+                    closely match real consumer panels.
+                  </p>
                 </div>
-                <p className="text-sm font-medium text-teal mb-2">
-                  Real Methodology
-                </p>
-                <p className="text-sm text-blue-100/70 leading-relaxed">
-                  We use conjoint-style indirect elicitation — the same approach
-                  used by professional research firms — not direct &quot;how much would
-                  you pay?&quot; questions.
-                </p>
-              </div>
-              <div className="bg-white/5 rounded-xl p-5 border border-white/10">
-                <div className="w-9 h-9 rounded-lg bg-teal/20 flex items-center justify-center mb-3">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>
+                <div className="w-12 h-px bg-white/10" />
+                <div>
+                  <p className="text-sm font-semibold text-teal mb-2">
+                    Real Methodology
+                  </p>
+                  <p className="text-sm text-blue-100/70 leading-relaxed max-w-prose">
+                    We use conjoint-style indirect elicitation — the same approach
+                    used by professional research firms — not direct &quot;how much would
+                    you pay?&quot; questions.
+                  </p>
                 </div>
-                <p className="text-sm font-medium text-teal mb-2">
-                  Honest Limitations
-                </p>
-                <p className="text-sm text-blue-100/70 leading-relaxed">
-                  We clearly communicate what this approach can and cannot do.
-                  It&apos;s best for early-stage exploration, not replacing
-                  high-stakes primary research.
-                </p>
+                <div className="w-12 h-px bg-white/10" />
+                <div>
+                  <p className="text-sm font-semibold text-teal mb-2">
+                    Honest Limitations
+                  </p>
+                  <p className="text-sm text-blue-100/70 leading-relaxed max-w-prose">
+                    We clearly communicate what this approach can and cannot do.
+                    It&apos;s best for early-stage exploration, not replacing
+                    high-stakes primary research.
+                  </p>
+                </div>
               </div>
             </div>
-            <Link
-              href="/methodology"
-              className="inline-flex items-center gap-2 text-teal text-sm font-medium mt-8 hover:underline"
-            >
-              Read the full methodology
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
-              </svg>
-            </Link>
           </div>
         </section>
 
@@ -372,55 +394,3 @@ export default function Home() {
   );
 }
 
-function Step({
-  number,
-  title,
-  description,
-  icon,
-}: {
-  number: string;
-  title: string;
-  description: string;
-  icon: React.ReactNode;
-}) {
-  return (
-    <div className="text-center">
-      <div className="w-14 h-14 rounded-2xl bg-teal/10 flex items-center justify-center mx-auto mb-4">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          {icon}
-        </svg>
-      </div>
-      <div className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-navy text-white text-xs font-bold mb-3">
-        {number}
-      </div>
-      <h3 className="font-semibold text-navy mb-2">{title}</h3>
-      <p className="text-sm text-muted-foreground leading-relaxed">
-        {description}
-      </p>
-    </div>
-  );
-}
-
-function ResultCard({
-  title,
-  description,
-  icon,
-}: {
-  title: string;
-  description: string;
-  icon: React.ReactNode;
-}) {
-  return (
-    <div className="bg-white rounded-xl border border-border/50 p-5 hover:border-teal/30 transition-colors group">
-      <div className="w-10 h-10 rounded-xl bg-teal/10 flex items-center justify-center mb-3 group-hover:bg-teal/15 transition-colors">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          {icon}
-        </svg>
-      </div>
-      <h3 className="font-semibold text-navy mb-1.5">{title}</h3>
-      <p className="text-sm text-muted-foreground leading-relaxed">
-        {description}
-      </p>
-    </div>
-  );
-}
