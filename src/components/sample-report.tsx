@@ -214,8 +214,8 @@ export function SampleReport() {
           <div>
             <SourceBadge variant="traditional" />
             <ul className="mt-2 space-y-1.5 text-sm text-muted-foreground">
-              <li className="flex items-start gap-1.5"><span className="text-red-400 mt-0.5 shrink-0">&bull;</span>High caffeine content (200mg per can)</li>
-              <li className="flex items-start gap-1.5"><span className="text-red-400 mt-0.5 shrink-0">&bull;</span>Price premium over competitors</li>
+              <li className="flex items-start gap-1.5"><span className="text-red-400 mt-0.5 shrink-0">&bull;</span>High caffeine content concerns</li>
+              <li className="flex items-start gap-1.5"><span className="text-red-400 mt-0.5 shrink-0">&bull;</span>Price premium over category average</li>
               <li className="flex items-start gap-1.5"><span className="text-red-400 mt-0.5 shrink-0">&bull;</span>Taste preference varies widely</li>
             </ul>
           </div>
@@ -223,7 +223,7 @@ export function SampleReport() {
             <SourceBadge variant="hypetest" />
             <ul className="mt-2 space-y-1.5 text-sm text-muted-foreground">
               <li className="flex items-start gap-1.5"><span className="text-red-400 mt-0.5 shrink-0">&bull;</span>Caffeine sensitivity and overstimulation</li>
-              <li className="flex items-start gap-1.5"><span className="text-red-400 mt-0.5 shrink-0">&bull;</span>Price gap vs. Monster and Red Bull</li>
+              <li className="flex items-start gap-1.5"><span className="text-red-400 mt-0.5 shrink-0">&bull;</span>Price gap vs. mainstream competitors</li>
               <li className="flex items-start gap-1.5"><span className="text-red-400 mt-0.5 shrink-0">&bull;</span>Skepticism about health positioning</li>
             </ul>
           </div>

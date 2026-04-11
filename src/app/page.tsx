@@ -22,7 +22,7 @@ export default function Home() {
               minutes, not months.
             </h1>
             <p data-animate="3" className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-8 leading-relaxed">
-              Simulate a panel of real consumers for any product or idea.
+              Simulate a panel of AI consumer personas for any product or idea.
               Get willingness-to-pay estimates, feature priorities, and purchase
               intent. Powered by AI, grounded in academic methodology.
             </p>
@@ -55,10 +55,10 @@ export default function Home() {
                   Harvard Business School Working Paper
                 </div>
                 <h2 className="font-bold text-primary leading-tight mb-4" style={{ fontSize: 'clamp(1.75rem, 1.25rem + 2vw, 2.5rem)' }}>
-                  R&sup2; = 0.89 correlation with real consumer panels
+                  Independent research found R&sup2; = 0.89 between LLM and real panels
                 </h2>
                 <p className="text-sm text-muted-foreground mb-3">
-                  In an independent study, Brand, Israeli &amp; Ngwe (Harvard Business School Working Paper 23-062, 2025) found that LLM-simulated conjoint surveys produced WTP estimates closely matching real Prolific panels (n=300) across CPG categories. HypeTest&apos;s methodology is built on their findings.
+                  In an independent study, Brand, Israeli &amp; Ngwe (Harvard Business School Working Paper 23-062, 2025) found that LLM-simulated conjoint surveys produced WTP estimates closely matching real Prolific panels (n=300) across CPG categories. HypeTest&apos;s methodology is inspired by their findings. HypeTest is not affiliated with or endorsed by Harvard Business School or the paper&apos;s authors.
                 </p>
                 <p className="text-muted-foreground leading-relaxed mb-5">
                   We use a simplified conjoint-style approach inspired by choice-based methods used in professional market research, at a fraction of the cost and time. Results are strongest in categories with rich consumer data.

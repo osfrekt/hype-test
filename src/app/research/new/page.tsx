@@ -793,7 +793,8 @@ function NewResearchForm() {
                   <Link href="/terms" className="text-teal underline">Terms of Service</Link>{" "}
                   and{" "}
                   <Link href="/privacy" className="text-teal underline">Privacy Policy</Link>.
-                  Results are AI-simulated and accessible to anyone with the link.
+                  Results are AI-simulated (not real consumers) and accessible to anyone
+                  with the link. Not suitable for high-stakes business decisions.
                   Do not submit trade secrets or confidential information.
                 </p>
 
