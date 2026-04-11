@@ -2,9 +2,20 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { Sun, Moon, Monitor } from "lucide-react";
+import { useTheme } from "@/components/theme-provider";
 
 export function Nav() {
+  const { theme, setTheme } = useTheme();
   const [hasMultipleResults, setHasMultipleResults] = useState(false);
+
+  function cycleTheme() {
+    const next = theme === "light" ? "dark" : theme === "dark" ? "system" : "light";
+    setTheme(next);
+  }
+
+  const themeIcon = theme === "light" ? <Sun size={16} /> : theme === "dark" ? <Moon size={16} /> : <Monitor size={16} />;
+  const themeLabel = theme === "light" ? "Light mode" : theme === "dark" ? "Dark mode" : "System theme";
 
   useEffect(() => {
     try {
@@ -39,7 +50,7 @@ export function Nav() {
               <polyline points="22 8.5 12 15.5 2 8.5" />
             </svg>
           </div>
-          <span className="font-semibold text-navy text-lg tracking-tight">
+          <span className="font-semibold text-foreground text-lg tracking-tight">
             HypeTest
           </span>
         </Link>
@@ -55,7 +66,7 @@ export function Nav() {
             className="hover:text-foreground transition-colors"
           >
             Discover
-            <span className="text-[10px] bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-full font-medium ml-1">
+            <span className="text-[10px] bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400 px-1.5 py-0.5 rounded-full font-medium ml-1">
               Pro
             </span>
           </Link>
@@ -75,9 +86,16 @@ export function Nav() {
           )}
         </nav>
         <div className="flex items-center gap-3">
+          <button
+            onClick={cycleTheme}
+            title={themeLabel}
+            className="p-2 rounded-lg hover:bg-muted transition-colors text-foreground"
+          >
+            {themeIcon}
+          </button>
           <Link
             href="/research/new"
-            className="inline-flex items-center justify-center rounded-lg bg-navy text-white text-sm font-medium px-4 h-9 hover:bg-navy-light transition-colors"
+            className="inline-flex items-center justify-center rounded-lg bg-primary text-primary-foreground text-sm font-medium px-4 h-9 hover:bg-primary/90 transition-colors"
           >
             Try it free
           </Link>
