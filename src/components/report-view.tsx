@@ -192,179 +192,178 @@ export function ReportView({
 
       {/* NPS Score */}
       {result.npsScore !== undefined && (
-        <Card className="mt-12 mb-8">
-          <CardContent className="pt-6">
-            <div className="text-center mb-4">
-              <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-2">
-                Net Promoter Score
-              </p>
-              <p
-                className={`text-5xl font-bold tracking-tight ${
-                  result.npsScore > 30
-                    ? "text-emerald-600 dark:text-emerald-400"
-                    : result.npsScore >= 0
-                    ? "text-amber-600 dark:text-amber-400"
-                    : "text-red-600 dark:text-red-400"
-                }`}
-              >
-                {result.npsScore > 0 ? "+" : ""}
-                {result.npsScore}
-              </p>
-              <p className="text-sm text-muted-foreground mt-2">
-                Would consumers recommend this to friends?
-              </p>
-            </div>
-            {/* NPS Scale */}
-            <div className="relative mt-4 pt-2">
-              <div className="flex h-3 rounded-full overflow-hidden">
-                <div className="bg-red-400 flex-1" />
-                <div className="bg-amber-400 flex-1" />
-                <div className="bg-emerald-300 flex-1" />
-                <div className="bg-emerald-500 flex-1" />
+        <CollapsibleSection title="Net Promoter Score">
+          <Card>
+            <CardContent className="pt-6">
+              <div className="text-center mb-4">
+                <p
+                  className={`text-5xl font-bold tracking-tight ${
+                    result.npsScore > 30
+                      ? "text-emerald-600 dark:text-emerald-400"
+                      : result.npsScore >= 0
+                      ? "text-amber-600 dark:text-amber-400"
+                      : "text-red-600 dark:text-red-400"
+                  }`}
+                >
+                  {result.npsScore > 0 ? "+" : ""}
+                  {result.npsScore}
+                </p>
+                <p className="text-sm text-muted-foreground mt-2">
+                  Would consumers recommend this to friends?
+                </p>
               </div>
-              {/* Marker */}
-              <div
-                className="absolute top-0 -translate-x-1/2"
-                style={{ left: `${Math.max(2, Math.min(98, ((result.npsScore + 100) / 200) * 100))}%` }}
-              >
-                <div className="w-0.5 h-5 bg-foreground" />
-                <div className="w-2 h-2 rounded-full bg-foreground -mt-0.5 -ml-[3px]" />
+              {/* NPS Scale */}
+              <div className="relative mt-4 pt-2">
+                <div className="flex h-3 rounded-full overflow-hidden">
+                  <div className="bg-red-400 flex-1" />
+                  <div className="bg-amber-400 flex-1" />
+                  <div className="bg-emerald-300 flex-1" />
+                  <div className="bg-emerald-500 flex-1" />
+                </div>
+                {/* Marker */}
+                <div
+                  className="absolute top-0 -translate-x-1/2"
+                  style={{ left: `${Math.max(2, Math.min(98, ((result.npsScore + 100) / 200) * 100))}%` }}
+                >
+                  <div className="w-0.5 h-5 bg-foreground" />
+                  <div className="w-2 h-2 rounded-full bg-foreground -mt-0.5 -ml-[3px]" />
+                </div>
+                <div className="flex justify-between mt-2 text-[10px] text-muted-foreground">
+                  <span>-100</span>
+                  <span>0</span>
+                  <span>+50</span>
+                  <span>+100</span>
+                </div>
+                <div className="flex justify-between mt-0.5 text-[9px] text-muted-foreground">
+                  <span>Needs work</span>
+                  <span>Good</span>
+                  <span>Great</span>
+                  <span>Excellent</span>
+                </div>
               </div>
-              <div className="flex justify-between mt-2 text-[10px] text-muted-foreground">
-                <span>-100</span>
-                <span>0</span>
-                <span>+50</span>
-                <span>+100</span>
-              </div>
-              <div className="flex justify-between mt-0.5 text-[9px] text-muted-foreground">
-                <span>Needs work</span>
-                <span>Good</span>
-                <span>Great</span>
-                <span>Excellent</span>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </CollapsibleSection>
       )}
 
       {/* Purchase Frequency & Channel Preference */}
       {(result.purchaseFrequency || result.channelPreference) && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          {result.purchaseFrequency && (
-            <HorizontalBarChart
-              data={result.purchaseFrequency}
-              title="Repurchase Intent"
-            />
-          )}
-          {result.channelPreference && (
-            <HorizontalBarChart
-              data={result.channelPreference}
-              title="Where Consumers Would Buy"
-            />
-          )}
-        </div>
+        <CollapsibleSection title="Purchase Frequency & Channel Preference">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {result.purchaseFrequency && (
+              <HorizontalBarChart
+                data={result.purchaseFrequency}
+                title="Repurchase Intent"
+              />
+            )}
+            {result.channelPreference && (
+              <HorizontalBarChart
+                data={result.channelPreference}
+                title="Where Consumers Would Buy"
+              />
+            )}
+          </div>
+        </CollapsibleSection>
       )}
 
       {/* Top Words */}
       {result.topWords && result.topWords.length > 0 && (
-        <Card className="mb-8">
-          <CardHeader>
-            <CardTitle className="text-lg font-semibold">
-              How Consumers Describe This Product
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex flex-wrap gap-3 justify-center">
-              {result.topWords.map((w, i) => {
-                const maxCount = result.topWords![0].count;
-                const scale = 0.75 + (w.count / maxCount) * 0.5;
-                return (
-                  <span
-                    key={i}
-                    className="inline-block bg-teal/10 text-teal border border-teal/20 rounded-full px-4 py-1.5 font-medium"
-                    style={{ fontSize: `${scale}rem` }}
-                  >
-                    {w.word}
-                    <span className="text-teal/50 ml-1.5 text-xs font-normal">
-                      {w.count}
+        <CollapsibleSection title="How Consumers Describe This Product">
+          <Card>
+            <CardContent className="pt-6">
+              <div className="flex flex-wrap gap-3 justify-center">
+                {result.topWords.map((w, i) => {
+                  const maxCount = result.topWords![0].count;
+                  const scale = 0.75 + (w.count / maxCount) * 0.5;
+                  return (
+                    <span
+                      key={i}
+                      className="inline-block bg-teal/10 text-teal border border-teal/20 rounded-full px-4 py-1.5 font-medium"
+                      style={{ fontSize: `${scale}rem` }}
+                    >
+                      {w.word}
+                      <span className="text-teal/50 ml-1.5 text-xs font-normal">
+                        {w.count}
+                      </span>
                     </span>
-                  </span>
-                );
-              })}
-            </div>
-          </CardContent>
-        </Card>
+                  );
+                })}
+              </div>
+            </CardContent>
+          </Card>
+        </CollapsibleSection>
       )}
 
       {/* Concerns & Positives */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg font-semibold text-red-700 dark:text-red-400">
-              Top Consumer Concerns
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ul className="space-y-3">
-              {topConcerns.map((c, i) => (
-                <li
-                  key={i}
-                  className="text-sm text-muted-foreground flex items-start gap-2"
-                >
-                  <span className="text-red-400 mt-0.5 shrink-0">&bull;</span>
-                  {c}
-                </li>
-              ))}
-            </ul>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg font-semibold text-emerald-700 dark:text-emerald-400">
-              Top Consumer Positives
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ul className="space-y-3">
-              {topPositives.map((p, i) => (
-                <li
-                  key={i}
-                  className="text-sm text-muted-foreground flex items-start gap-2"
-                >
-                  <span className="text-emerald-400 mt-0.5 shrink-0">
-                    &bull;
-                  </span>
-                  {p}
-                </li>
-              ))}
-            </ul>
-          </CardContent>
-        </Card>
-      </div>
+      <CollapsibleSection title="Concerns & Positives">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg font-semibold text-red-700 dark:text-red-400">
+                Top Consumer Concerns
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ul className="space-y-3">
+                {topConcerns.map((c, i) => (
+                  <li
+                    key={i}
+                    className="text-sm text-muted-foreground flex items-start gap-2"
+                  >
+                    <span className="text-red-400 mt-0.5 shrink-0">&bull;</span>
+                    {c}
+                  </li>
+                ))}
+              </ul>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg font-semibold text-emerald-700 dark:text-emerald-400">
+                Top Consumer Positives
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ul className="space-y-3">
+                {topPositives.map((p, i) => (
+                  <li
+                    key={i}
+                    className="text-sm text-muted-foreground flex items-start gap-2"
+                  >
+                    <span className="text-emerald-400 mt-0.5 shrink-0">
+                      &bull;
+                    </span>
+                    {p}
+                  </li>
+                ))}
+              </ul>
+            </CardContent>
+          </Card>
+        </div>
+      </CollapsibleSection>
 
       {/* Verbatims */}
-      <Card className="mb-8">
-        <CardHeader>
-          <CardTitle className="text-lg font-semibold">Consumer Verbatims</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {verbatims.map((v, i) => (
-              <div
-                key={i}
-                className="bg-muted/50 rounded-lg p-4 border border-border/50"
-              >
-                <p className="text-sm text-foreground italic leading-relaxed">
-                  &ldquo;{v.quote}&rdquo;
-                </p>
-                <p className="text-xs text-muted-foreground mt-2">
-                  — {v.persona}
-                </p>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+      <CollapsibleSection title="Consumer Verbatims">
+        <Card>
+          <CardContent className="pt-6">
+            <div className="space-y-4">
+              {verbatims.map((v, i) => (
+                <div
+                  key={i}
+                  className="bg-muted/50 rounded-lg p-4 border border-border/50"
+                >
+                  <p className="text-sm text-foreground italic leading-relaxed">
+                    &ldquo;{v.quote}&rdquo;
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-2">
+                    — {v.persona}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </CollapsibleSection>
 
       {/* AI panel disclaimer */}
       <div className="bg-muted/30 border border-border/50 rounded-lg px-4 py-2.5 text-xs text-muted-foreground mb-8">

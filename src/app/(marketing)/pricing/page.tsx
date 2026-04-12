@@ -329,7 +329,7 @@ export default function PricingPage() {
               Everything you get with each plan, at a glance.
             </p>
 
-            <div className="overflow-x-auto">
+            <div className="hidden md:block overflow-x-auto">
               <table className="w-full text-sm">
                 {/* Sticky header */}
                 <thead>
@@ -378,6 +378,37 @@ export default function PricingPage() {
                   ))}
                 </tbody>
               </table>
+            </div>
+
+            {/* Mobile card view */}
+            <div className="md:hidden space-y-6">
+              {plans.map((plan) => (
+                <div key={plan.id} className="bg-card rounded-xl border border-border p-5">
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="font-bold text-primary">{plan.name}</h3>
+                    <span className="text-lg font-bold text-primary">{plan.price}{plan.period}</span>
+                  </div>
+                  <p className="text-xs text-muted-foreground mb-4">{plan.description}</p>
+                  {featureCategories.map(cat => (
+                    <div key={cat.category} className="mb-3">
+                      <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-1.5">{cat.category}</p>
+                      {cat.features.map(feat => {
+                        const val = feat[plan.id as keyof typeof feat];
+                        return val ? (
+                          <div key={feat.name} className="flex items-center gap-2 text-xs text-muted-foreground py-0.5">
+                            {val === true ? (
+                              <svg className="w-4 h-4 text-teal shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+                            ) : (
+                              <span className="text-xs font-semibold text-primary">{String(val)}</span>
+                            )}
+                            <span>{feat.name}</span>
+                          </div>
+                        ) : null;
+                      })}
+                    </div>
+                  ))}
+                </div>
+              ))}
             </div>
           </div>
 

@@ -213,7 +213,7 @@ function ResearchResultContent({
     <>
       <Nav />
       <main className="flex-1 py-8">
-        <div className="max-w-5xl mx-auto px-6">
+        <div className="max-w-5xl mx-auto px-6 pb-16 md:pb-0">
           <div className="flex justify-end gap-2 mb-6" data-print-hide>
             <Button
               variant="outline"
@@ -283,6 +283,21 @@ function ResearchResultContent({
               {deleting ? "Deleting..." : "Delete my research"}
             </button>
           </div>
+        </div>
+
+        {/* Mobile sticky summary */}
+        <div className="md:hidden fixed bottom-0 left-0 right-0 bg-card border-t border-border px-4 py-2.5 z-40 flex items-center justify-between" data-print-hide>
+          <div className="flex items-center gap-4">
+            <div>
+              <p className="text-[10px] text-muted-foreground">Intent</p>
+              <p className="text-sm font-bold text-primary">{result.purchaseIntent?.score ?? 0}%</p>
+            </div>
+            <div>
+              <p className="text-[10px] text-muted-foreground">WTP</p>
+              <p className="text-sm font-bold text-primary">${result.wtpRange?.mid ?? 0}</p>
+            </div>
+          </div>
+          <Link href="/pricing" className="text-xs font-medium text-teal">Upgrade</Link>
         </div>
       </main>
     </>

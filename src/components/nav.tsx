@@ -87,12 +87,15 @@ export function Nav() {
               Tools
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6" /></svg>
             </button>
-            <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 hidden group-hover:block z-50">
+            <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50">
               <div className="bg-card border border-border rounded-xl shadow-lg p-1.5 w-64">
+                <p className="px-3 py-1 text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Free</p>
                 <Link href="/research/new" className="flex items-center justify-between px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">
                   Consumer Research
                   <span className="text-[10px] bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 px-1.5 py-0.5 rounded-full font-medium">Free</span>
                 </Link>
+                <div className="h-px bg-border mx-3 my-1" />
+                <p className="px-3 py-1 text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Starter</p>
                 <Link href="/ab-test/new" className="flex items-center justify-between px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">
                   A/B Concept Testing
                   <span className="text-[10px] bg-teal/10 text-teal-dark dark:text-teal px-1.5 py-0.5 rounded-full font-medium">Starter</span>
@@ -106,6 +109,7 @@ export function Nav() {
                   <span className="text-[10px] bg-teal/10 text-teal-dark dark:text-teal px-1.5 py-0.5 rounded-full font-medium">Starter</span>
                 </Link>
                 <div className="h-px bg-border mx-3 my-1" />
+                <p className="px-3 py-1 text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Pro</p>
                 <Link href="/ad-test/new" className="flex items-center justify-between px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">
                   Ad Testing
                   <span className="text-[10px] bg-primary text-primary-foreground px-1.5 py-0.5 rounded-full font-medium">Pro</span>
