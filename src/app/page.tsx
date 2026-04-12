@@ -139,11 +139,12 @@ export default function Home() {
                   <img src="/brands/rekt-yellow.svg" alt="REKT" className="h-5 hidden dark:block" />
                 </a>
                 <a href="https://yeet.com" target="_blank" rel="noopener noreferrer" className="opacity-40 hover:opacity-70 transition-opacity">
-                  <span className="text-lg font-extrabold tracking-tight text-foreground">YEET</span>
-                </a>
-                <a href="https://snoozlife.co.uk" target="_blank" rel="noopener noreferrer" className="opacity-40 hover:opacity-70 transition-opacity flex items-center gap-1.5">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="https://snoozlife.co.uk/wp-content/uploads/2024/07/Snooz_Logo_grad_01-13.svg" alt="Snooz" className="h-5" />
+                  <img src="/brands/yeet.svg" alt="YEET" className="h-5" />
+                </a>
+                <a href="https://snoozlife.co.uk" target="_blank" rel="noopener noreferrer" className="opacity-40 hover:opacity-70 transition-opacity">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/brands/snooz.svg" alt="Snooz" className="h-5" />
                 </a>
               </div>
             </div>
