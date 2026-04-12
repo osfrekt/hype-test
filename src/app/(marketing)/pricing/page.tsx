@@ -82,6 +82,7 @@ const featureCategories: { category: string; features: FeatureRow[] }[] = [
       { name: "Name testing (rank 3-5 options)", free: false, starter: true, pro: true, team: true },
       { name: "Pricing optimizer (demand curve)", free: false, starter: true, pro: true, team: true },
       { name: "Ad/creative testing", free: false, starter: true, pro: true, team: true },
+      { name: "Logo testing", free: false, starter: true, pro: true, team: true },
     ],
   },
   {
@@ -298,6 +299,7 @@ export default function PricingPage() {
                   <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-teal shrink-0" />Name testing (rank 3-5 options)</li>
                   <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-teal shrink-0" />Pricing optimizer with demand curve</li>
                   <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-teal shrink-0" />Ad/creative testing with click likelihood</li>
+                  <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-teal shrink-0" />Logo testing with 5 design metrics</li>
                   <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-teal shrink-0" />30 research runs per month</li>
                 </ul>
               </div>
@@ -421,6 +423,13 @@ export default function PricingPage() {
                 title="Ad / Creative Testing"
                 description="Test ad creatives with a 50-person panel. Get attention, clarity, persuasion, brand fit, and click likelihood scores."
                 href="/ad-test/new"
+                badge="Starter"
+                badgeColor="bg-teal/10 text-teal-dark"
+              />
+              <ToolCard
+                title="Logo Testing"
+                description="Test 1-5 logo designs with a 30-person panel. Get first impression, memorability, brand fit, distinctiveness, and trust scores."
+                href="/logo-test/new"
                 badge="Starter"
                 badgeColor="bg-teal/10 text-teal-dark"
               />
