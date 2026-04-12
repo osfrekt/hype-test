@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Nav } from "@/components/nav";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import type { LogoTestResult, LogoOptionResult } from "@/types/logo-test";
 
 const SAMPLE_RESULT: LogoTestResult = {
@@ -269,12 +270,36 @@ const SAMPLE_RESULT: LogoTestResult = {
   status: "complete",
 };
 
+const LOGO_COLORS = ["bg-teal", "bg-cyan-500", "bg-violet-500"];
+
+function DistributionBar({ distribution, panelSize }: { distribution: { label: string; count: number }[]; panelSize: number }) {
+  return (
+    <div className="flex items-end gap-0.5 h-8">
+      {distribution.map((d, i) => {
+        const pct = panelSize > 0 ? (d.count / panelSize) * 100 : 0;
+        return (
+          <div key={i} className="flex-1 flex flex-col items-center gap-0.5">
+            <div
+              className="w-full bg-teal/60 rounded-sm min-h-[2px]"
+              style={{ height: `${Math.max(2, pct * 0.8)}px` }}
+              title={`${d.label}: ${d.count} (${Math.round(pct)}%)`}
+            />
+            <span className="text-[8px] text-muted-foreground leading-none">{d.count}</span>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 function LogoCard({
   logoResult,
   isWinner,
+  panelSize,
 }: {
   logoResult: LogoOptionResult;
   isWinner: boolean;
+  panelSize: number;
 }) {
   const metrics = [
     { label: "First Impression", data: logoResult.firstImpression },
@@ -306,25 +331,36 @@ function LogoCard({
         )}
       </CardHeader>
       <CardContent className="space-y-5">
-        {/* Score metrics as horizontal bars */}
-        <div className="space-y-3">
+        {/* Score metrics with bars and distributions */}
+        <div className="space-y-4">
           {metrics.map((m) => (
             <div key={m.label}>
               <div className="flex items-center justify-between mb-1">
                 <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider">{m.label}</p>
                 <p className="text-sm font-bold text-primary">{m.data.score}%</p>
               </div>
-              <div className="w-full bg-muted rounded-full h-2">
+              <div className="w-full bg-muted rounded-full h-2 mb-2">
                 <div className="bg-teal h-2 rounded-full" style={{ width: `${m.data.score}%` }} />
+              </div>
+              {/* Distribution histogram */}
+              <div className="px-1">
+                <DistributionBar distribution={m.data.distribution} panelSize={panelSize} />
+                <div className="flex gap-0.5 mt-0.5">
+                  {["1", "2", "3", "4", "5"].map((n) => (
+                    <span key={n} className="flex-1 text-center text-[7px] text-muted-foreground/60">{n}</span>
+                  ))}
+                </div>
               </div>
             </div>
           ))}
         </div>
 
+        <Separator />
+
         {/* Engagement likelihood */}
         <div>
           <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-2">Would Engage</p>
-          <div className="flex rounded-full overflow-hidden h-5 text-[10px] font-medium">
+          <div className="flex rounded-full overflow-hidden h-6 text-[10px] font-medium">
             {logoResult.engageLikelihood.yes > 0 && (
               <div
                 className="bg-emerald-500 text-white flex items-center justify-center"
@@ -350,38 +386,60 @@ function LogoCard({
               </div>
             )}
           </div>
+          <div className="flex justify-between mt-1.5 text-[10px] text-muted-foreground">
+            <span>Yes: {logoResult.engageLikelihood.yes}%</span>
+            <span>Maybe: {logoResult.engageLikelihood.maybe}%</span>
+            <span>No: {logoResult.engageLikelihood.no}%</span>
+          </div>
         </div>
+
+        <Separator />
 
         {/* One-word reactions */}
         <div>
-          <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-2">One-Word Reactions</p>
-          <div className="flex flex-wrap gap-1.5">
-            {logoResult.reactions.map((r) => (
-              <span
-                key={r.word}
-                className="inline-flex items-center gap-1 bg-muted px-2 py-0.5 rounded-full text-xs text-foreground"
-                style={{ fontSize: `${Math.min(14, 10 + r.count)}px` }}
-              >
-                {r.word}
-                <span className="text-muted-foreground">{r.count}</span>
-              </span>
-            ))}
+          <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-2">Top 5 One-Word Reactions</p>
+          <div className="space-y-1.5">
+            {logoResult.reactions.slice(0, 5).map((r) => {
+              const maxCount = logoResult.reactions[0]?.count ?? 1;
+              return (
+                <div key={r.word} className="flex items-center gap-2">
+                  <span className="text-xs text-foreground w-24 shrink-0 capitalize">{r.word}</span>
+                  <div className="flex-1 bg-muted rounded-full h-2.5">
+                    <div
+                      className="bg-teal/70 h-2.5 rounded-full"
+                      style={{ width: `${(r.count / maxCount) * 100}%` }}
+                    />
+                  </div>
+                  <span className="text-xs text-muted-foreground w-6 text-right">{r.count}</span>
+                </div>
+              );
+            })}
           </div>
         </div>
+
+        <Separator />
 
         {/* Industry guesses */}
         {logoResult.industryGuesses.length > 0 && (
           <div>
-            <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-2">Industry Associations</p>
-            <ul className="space-y-1">
-              {logoResult.industryGuesses.map((g, i) => (
-                <li key={i} className="text-xs text-foreground flex items-center gap-1.5">
-                  <span className="text-teal shrink-0">&bull;</span>
-                  {g.industry}
-                  <span className="text-muted-foreground">({g.count})</span>
-                </li>
-              ))}
-            </ul>
+            <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-2">Top 3 Industry Guesses</p>
+            <div className="space-y-1.5">
+              {logoResult.industryGuesses.slice(0, 3).map((g, i) => {
+                const maxCount = logoResult.industryGuesses[0]?.count ?? 1;
+                return (
+                  <div key={i} className="flex items-center gap-2">
+                    <span className="text-xs text-foreground w-28 shrink-0">{g.industry}</span>
+                    <div className="flex-1 bg-muted rounded-full h-2.5">
+                      <div
+                        className="bg-cyan-500/70 h-2.5 rounded-full"
+                        style={{ width: `${(g.count / maxCount) * 100}%` }}
+                      />
+                    </div>
+                    <span className="text-xs text-muted-foreground w-6 text-right">{g.count}</span>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         )}
       </CardContent>
@@ -417,6 +475,14 @@ export default function SampleRektLogoTest() {
             <p className="text-sm text-muted-foreground">
               3 logos tested with simulated consumer panel
             </p>
+            {result.input.brandDescription && (
+              <p className="text-sm text-muted-foreground mt-1">
+                <span className="font-medium">Brand:</span> {result.input.brandDescription}
+              </p>
+            )}
+            <p className="text-sm text-muted-foreground mt-0.5">
+              <span className="font-medium">Category:</span> {result.input.category} | <span className="font-medium">Audience:</span> {result.input.targetAudience}
+            </p>
           </div>
 
           {/* Winner Banner */}
@@ -447,7 +513,7 @@ export default function SampleRektLogoTest() {
                       </span>
                       <div className="flex-1 bg-muted rounded-full h-4">
                         <div
-                          className={`h-4 rounded-full transition-all ${lr.rank === 1 ? "bg-teal" : "bg-cyan-500"}`}
+                          className={`h-4 rounded-full transition-all ${LOGO_COLORS[idx] ?? "bg-teal"}`}
                           style={{ width: `${(lr.overallScore / maxScore) * 100}%` }}
                         />
                       </div>
@@ -459,18 +525,66 @@ export default function SampleRektLogoTest() {
             </CardContent>
           </Card>
 
-          {/* Logo cards */}
+          {/* Engagement Comparison */}
+          <Card className="mb-8">
+            <CardHeader>
+              <CardTitle className="text-lg font-semibold">Engagement Likelihood Comparison</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {result.results.map((lr, idx) => (
+                  <div key={idx}>
+                    <p className="text-xs text-muted-foreground font-medium mb-1.5">{lr.logo.name}</p>
+                    <div className="flex rounded-full overflow-hidden h-5 text-[10px] font-medium">
+                      {lr.engageLikelihood.yes > 0 && (
+                        <div
+                          className="bg-emerald-500 text-white flex items-center justify-center"
+                          style={{ width: `${lr.engageLikelihood.yes}%` }}
+                        >
+                          {lr.engageLikelihood.yes}%
+                        </div>
+                      )}
+                      {lr.engageLikelihood.maybe > 0 && (
+                        <div
+                          className="bg-amber-400 text-amber-900 flex items-center justify-center"
+                          style={{ width: `${lr.engageLikelihood.maybe}%` }}
+                        >
+                          {lr.engageLikelihood.maybe}%
+                        </div>
+                      )}
+                      {lr.engageLikelihood.no > 0 && (
+                        <div
+                          className="bg-red-400 text-white flex items-center justify-center"
+                          style={{ width: `${lr.engageLikelihood.no}%` }}
+                        >
+                          {lr.engageLikelihood.no}%
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="flex items-center gap-4 mt-4 text-[10px] text-muted-foreground">
+                <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block" /> Yes</span>
+                <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-amber-400 inline-block" /> Maybe</span>
+                <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-red-400 inline-block" /> No</span>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Logo cards (detailed per-logo) */}
           <div className="space-y-6 mb-8">
             {result.results.map((lr, idx) => (
               <LogoCard
                 key={idx}
                 logoResult={lr}
                 isWinner={lr.rank === 1}
+                panelSize={result.panelSize}
               />
             ))}
           </div>
 
-          {/* Metric comparison */}
+          {/* Head-to-head metric comparison */}
           <Card className="mb-8">
             <CardHeader>
               <CardTitle className="text-lg font-semibold">Metric Comparison</CardTitle>
@@ -495,7 +609,7 @@ export default function SampleRektLogoTest() {
                             <span className="text-xs text-muted-foreground w-32 shrink-0 truncate">{lr.logo.name}</span>
                             <div className="flex-1 bg-muted rounded-full h-3">
                               <div
-                                className={`h-3 rounded-full transition-all ${idx === 0 ? "bg-teal" : idx === 1 ? "bg-cyan-500" : "bg-violet-500"}`}
+                                className={`h-3 rounded-full transition-all ${LOGO_COLORS[idx] ?? "bg-teal"}`}
                                 style={{ width: `${(lr[metric].score / maxVal) * 100}%` }}
                               />
                             </div>
@@ -507,6 +621,85 @@ export default function SampleRektLogoTest() {
                   );
                 })}
               </div>
+            </CardContent>
+          </Card>
+
+          {/* Reactions Comparison */}
+          <Card className="mb-8">
+            <CardHeader>
+              <CardTitle className="text-lg font-semibold">Reactions Comparison</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {result.results.map((lr, idx) => (
+                  <div key={idx}>
+                    <p className="text-sm font-medium text-primary mb-3">{lr.logo.name}</p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {lr.reactions.slice(0, 5).map((r) => (
+                        <span
+                          key={r.word}
+                          className="inline-flex items-center gap-1 bg-muted px-2 py-0.5 rounded-full text-xs text-foreground"
+                          style={{ fontSize: `${Math.min(14, 10 + r.count)}px` }}
+                        >
+                          {r.word}
+                          <span className="text-muted-foreground">{r.count}</span>
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Industry Guesses Comparison */}
+          <Card className="mb-8">
+            <CardHeader>
+              <CardTitle className="text-lg font-semibold">Industry Associations Comparison</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {result.results.map((lr, idx) => (
+                  <div key={idx}>
+                    <p className="text-sm font-medium text-primary mb-3">{lr.logo.name}</p>
+                    <ul className="space-y-1.5">
+                      {lr.industryGuesses.slice(0, 3).map((g, i) => (
+                        <li key={i} className="text-xs text-foreground flex items-center gap-1.5">
+                          <span className={`shrink-0 ${idx === 0 ? "text-teal" : idx === 1 ? "text-cyan-500" : "text-violet-500"}`}>&bull;</span>
+                          {g.industry}
+                          <span className="text-muted-foreground">({g.count}/{result.panelSize})</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Methodology */}
+          <Card className="border-teal/20 bg-teal/5 mb-8">
+            <CardHeader>
+              <CardTitle className="text-lg font-semibold text-primary">Methodology &amp; Limitations</CardTitle>
+            </CardHeader>
+            <CardContent className="text-sm text-muted-foreground space-y-2">
+              <p><strong>Panel size:</strong> {result.methodology.panelSize} simulated consumers</p>
+              <p><strong>Demographic mix:</strong> {result.methodology.demographicMix}</p>
+              <p><strong>Total survey questions:</strong> {result.methodology.questionsAsked}</p>
+              <Separator className="my-3" />
+              <p className="text-xs leading-relaxed">{result.methodology.confidenceNote}</p>
+              <p className="text-xs leading-relaxed">
+                This research uses methodology informed by Brand, Israeli &amp; Ngwe (2025),
+                &ldquo;Using LLMs for Market Research,&rdquo; Harvard Business School Working Paper 23-062.
+              </p>
+              <p className="text-xs leading-relaxed">
+                Logo images were evaluated using Claude&apos;s multimodal vision capabilities.
+                Each panellist received both the image and text description for context-rich evaluation.
+              </p>
+              <p className="text-xs leading-relaxed font-medium">
+                Important: These results are best used for directional insights and hypothesis generation.
+                They should not replace high-stakes primary consumer research for major business decisions.
+              </p>
             </CardContent>
           </Card>
 
