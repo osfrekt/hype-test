@@ -259,17 +259,17 @@ export default function Home() {
 
             {/* Featured: Purchase Intent + WTP side by side */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
-              <div className="bg-primary rounded-2xl p-6 text-primary-foreground">
-                <span className="text-xs font-bold text-teal uppercase tracking-widest">Core metric</span>
+              <div className="bg-navy dark:bg-navy-light rounded-2xl p-6 text-white">
+                <span className="text-xs font-bold text-teal-light uppercase tracking-widest">Core metric</span>
                 <h3 className="text-lg font-bold mt-2 mb-2">Purchase Intent Score</h3>
-                <p className="text-sm text-primary-foreground/70 leading-relaxed">
+                <p className="text-sm text-white/70 leading-relaxed">
                   What percentage of consumers would actually buy your product, on a validated 5-point scale.
                 </p>
               </div>
-              <div className="bg-primary rounded-2xl p-6 text-primary-foreground">
-                <span className="text-xs font-bold text-teal uppercase tracking-widest">Core metric</span>
+              <div className="bg-navy dark:bg-navy-light rounded-2xl p-6 text-white">
+                <span className="text-xs font-bold text-teal-light uppercase tracking-widest">Core metric</span>
                 <h3 className="text-lg font-bold mt-2 mb-2">Willingness-to-Pay Range</h3>
-                <p className="text-sm text-primary-foreground/70 leading-relaxed">
+                <p className="text-sm text-white/70 leading-relaxed">
                   Data-derived price estimates from conjoint-style choice tasks, not guesses.
                 </p>
               </div>
@@ -429,14 +429,14 @@ export default function Home() {
         </section>
 
         {/* Why this works */}
-        <section className="py-14 bg-primary text-primary-foreground">
+        <section className="py-14 bg-navy dark:bg-navy-light text-white">
           <div className="max-w-5xl mx-auto px-6">
             <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.5fr] gap-12 lg:gap-16">
               <div>
                 <h2 className="font-bold mb-3" style={{ fontSize: 'clamp(1.5rem, 1rem + 1.5vw, 1.875rem)' }}>
                   Why this works
                 </h2>
-                <p className="text-primary-foreground/70 leading-relaxed mb-6">
+                <p className="text-white/70 leading-relaxed mb-6">
                   HypeTest is built on peer-reviewed research showing that LLM-simulated
                   consumer panels produce willingness-to-pay estimates comparable to
                   real human panels.
@@ -456,19 +456,19 @@ export default function Home() {
                   <p className="text-sm font-semibold text-teal mb-2">
                     Academic Foundation
                   </p>
-                  <p className="text-sm text-primary-foreground/70 leading-relaxed max-w-prose">
+                  <p className="text-sm text-white/70 leading-relaxed max-w-prose">
                     Built on findings from Brand, Israeli &amp; Ngwe (Harvard Business
                     School Working Paper 23-062, 2025), an independent study that
                     found LLM-simulated conjoint surveys closely match real
                     consumer panel WTP estimates in CPG categories (R&sup2; = 0.89, n=300).
                   </p>
                 </div>
-                <div className="w-12 h-px bg-primary-foreground/10" />
+                <div className="w-12 h-px bg-white/10" />
                 <div>
                   <p className="text-sm font-semibold text-teal mb-2">
                     Real Methodology
                   </p>
-                  <p className="text-sm text-primary-foreground/70 leading-relaxed max-w-prose">
+                  <p className="text-sm text-white/70 leading-relaxed max-w-prose">
                     Each product is tested through a simulated panel of 50+
                     consumer personas, each with realistic demographics and
                     category experience. Instead of asking &ldquo;how much would
@@ -477,12 +477,12 @@ export default function Home() {
                     points.
                   </p>
                 </div>
-                <div className="w-12 h-px bg-primary-foreground/10" />
+                <div className="w-12 h-px bg-white/10" />
                 <div>
                   <p className="text-sm font-semibold text-teal mb-2">
                     Honest Limitations
                   </p>
-                  <p className="text-sm text-primary-foreground/70 leading-relaxed max-w-prose">
+                  <p className="text-sm text-white/70 leading-relaxed max-w-prose">
                     Best validated for CPG, food &amp; beverage, and household
                     products. Less proven for luxury, B2B, or truly novel
                     categories. We publish{" "}
@@ -492,13 +492,13 @@ export default function Home() {
                     so you know exactly what you&apos;re getting.
                   </p>
                 </div>
-                <div className="w-12 h-px bg-primary-foreground/10" />
+                <div className="w-12 h-px bg-white/10" />
                 {/* Change 5: Validation CTA */}
-                <div className="bg-primary-foreground/10 border border-primary-foreground/20 rounded-xl p-4">
-                  <p className="text-sm font-semibold text-primary-foreground mb-1">
+                <div className="bg-white/10 border border-white/20 rounded-xl p-4">
+                  <p className="text-sm font-semibold text-white mb-1">
                     Already have research data?
                   </p>
-                  <p className="text-sm text-primary-foreground/70 mb-3">
+                  <p className="text-sm text-white/70 mb-3">
                     Run HypeTest on the same product and compare results. It&apos;s
                     the fastest way to build confidence in the methodology.
                   </p>

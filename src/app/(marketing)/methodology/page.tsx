@@ -249,6 +249,121 @@ export default function MethodologyPage() {
                   similarities that closely match human responses.
                 </p>
               </div>
+
+              <div className="bg-muted/50 rounded-xl p-4 border border-border/50">
+                <p className="font-medium text-primary text-sm mb-1">
+                  <a
+                    href="https://onlinelibrary.wiley.com/doi/10.1002/mar.21982"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline decoration-muted-foreground/40 underline-offset-2 hover:decoration-primary transition-colors"
+                  >
+                    Sarstedt et al. (2024). &ldquo;Using large language models to
+                    generate silicon samples in consumer and marketing
+                    research.&rdquo;
+                  </a>{" "}
+                  Psychology &amp; Marketing (Wiley).
+                </p>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  Demonstrated that LLM-generated consumer samples can replicate
+                  key patterns found in traditional survey research.
+                </p>
+              </div>
+
+              <div className="bg-muted/50 rounded-xl p-4 border border-border/50">
+                <p className="font-medium text-primary text-sm mb-1">
+                  <a
+                    href="https://www.sciencedirect.com/special-issue/324829/generative-ai-synthetic-data-and-synthetic-respondents-in-marketing-research"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline decoration-muted-foreground/40 underline-offset-2 hover:decoration-primary transition-colors"
+                  >
+                    International Journal of Research in Marketing (2025).
+                    &ldquo;Generative AI, Synthetic Data, and Synthetic
+                    Respondents in Marketing Research&rdquo; (Special Issue).
+                  </a>
+                </p>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  A dedicated academic special issue exploring the validity and
+                  applications of AI-generated synthetic respondents.
+                </p>
+              </div>
+
+              <div className="bg-muted/50 rounded-xl p-4 border border-border/50">
+                <p className="font-medium text-primary text-sm mb-1">
+                  Stanford/Google DeepMind (working paper). Digital agents
+                  matching human survey responses.
+                </p>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  Digital agents matched human survey responses with 85% accuracy
+                  and 98% social behaviour correlation.
+                </p>
+              </div>
+            </div>
+
+            {/* Industry research */}
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mt-6">
+              Industry research
+            </p>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Leading consultancies and research firms are independently
+              validating synthetic consumer methods.
+            </p>
+
+            <div className="grid grid-cols-1 gap-3">
+              <div className="bg-muted/50 rounded-xl p-4 border border-border/50">
+                <p className="font-medium text-primary text-sm mb-1">
+                  <a
+                    href="https://www.bain.com/insights/how-synthetic-customers-bring-companies-closer-to-the-real-ones/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline decoration-muted-foreground/40 underline-offset-2 hover:decoration-primary transition-colors"
+                  >
+                    Bain &amp; Company (2025). &ldquo;How Synthetic Customers
+                    Bring Companies Closer to the Real Ones.&rdquo;
+                  </a>
+                </p>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  Synthetic customer research can accelerate product development
+                  cycles while maintaining directional accuracy.
+                </p>
+              </div>
+
+              <div className="bg-muted/50 rounded-xl p-4 border border-border/50">
+                <p className="font-medium text-primary text-sm mb-1">
+                  <a
+                    href="https://nielseniq.com/global/en/insights/education/2024/the-rise-of-synthetic-respondents/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline decoration-muted-foreground/40 underline-offset-2 hover:decoration-primary transition-colors"
+                  >
+                    NielsenIQ (2024). &ldquo;The Rise of Synthetic Respondents in
+                    Market Research.&rdquo;
+                  </a>
+                </p>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  Industry validation that synthetic respondents are becoming a
+                  standard tool in market research.
+                </p>
+              </div>
+
+              <div className="bg-muted/50 rounded-xl p-4 border border-border/50">
+                <p className="font-medium text-primary text-sm mb-1">
+                  <a
+                    href="https://www.pymc-labs.com/blog-posts/AI-based-Customer-Research"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline decoration-muted-foreground/40 underline-offset-2 hover:decoration-primary transition-colors"
+                  >
+                    PyMC Labs. &ldquo;AI Synthetic Consumers Now Rival Real
+                    Surveys.&rdquo;
+                  </a>
+                </p>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  90% correlation with product ranking, 85%+ distributional
+                  similarity between AI and real consumer panels.
+                </p>
+              </div>
             </div>
 
             <p className="text-xs text-muted-foreground italic mt-2">

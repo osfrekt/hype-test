@@ -20,9 +20,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "HypeTest — Consumer Research in Minutes",
+  title: "HypeTest | Consumer Research in Minutes",
   description:
-    "Simulate a panel of real consumers for any product or idea. Powered by AI, grounded in academic research.",
+    "AI-simulated consumer research for any product or idea. Purchase intent, willingness-to-pay, and feature importance in under 2 minutes.",
 };
 
 export default function RootLayout({

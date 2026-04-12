@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "New Discovery — HypeTest",
+  title: "New Discovery | HypeTest",
   description:
     "Discover product opportunities for your brand. AI generates and tests concepts with simulated consumer panels.",
 };

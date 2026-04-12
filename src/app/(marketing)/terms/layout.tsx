@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Terms of Service — HypeTest",
+  title: "Terms of Service | HypeTest",
   description: "HypeTest terms of service.",
 };
 
