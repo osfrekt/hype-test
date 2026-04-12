@@ -215,7 +215,7 @@ function NewResearchForm() {
     return parts.join(" ");
   }, [problem, feature1, feature2, feature3, differentiator]);
 
-  const isFormValid = productName.trim() && assembledDescription.length > 20 && email.trim() && email.includes("@") && userName.trim() && userCompany.trim() && userRole;
+  const isFormValid = productName.trim() && assembledDescription.length > 10 && email.trim() && email.includes("@") && (isAuthUser || (userName.trim() && userCompany.trim() && userRole));
 
   // Quality indicator
   const quality = useMemo(() => {
@@ -662,7 +662,7 @@ function NewResearchForm() {
                 <div className="flex items-center gap-3 pt-2">
                   <div className="flex-1 h-px bg-border" />
                   <span className="text-xs text-muted-foreground font-medium uppercase tracking-wider">
-                    Research context
+                    Optional (improves accuracy)
                   </span>
                   <div className="flex-1 h-px bg-border" />
                 </div>
