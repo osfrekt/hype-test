@@ -46,9 +46,9 @@ interface TestResult {
 
 const PLAN_LIMITS: Record<string, { research: number; discovery: number }> = {
   free: { research: 3, discovery: 0 },
-  starter: { research: 15, discovery: 3 },
-  pro: { research: -1, discovery: -1 },
-  team: { research: -1, discovery: -1 },
+  starter: { research: 30, discovery: 10 },
+  pro: { research: 100, discovery: 50 },
+  team: { research: 500, discovery: 200 },
 };
 
 export default function AccountPage() {
