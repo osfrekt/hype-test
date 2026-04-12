@@ -534,45 +534,45 @@ export default function Home() {
                 </div>
                 <p className="text-xs text-muted-foreground leading-relaxed">50-person AI panel with purchase intent, WTP, feature ranking, concerns, and a Go/No-Go verdict.</p>
               </Link>
-              <Link href="/discover/new" className="block bg-background rounded-2xl border border-border/50 p-5 hover:border-teal/30 hover:shadow-sm transition-all group">
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-sm font-bold text-primary group-hover:text-teal transition-colors">Product Discovery</h3>
-                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-teal/10 text-teal-dark">Starter+</span>
-                </div>
-                <p className="text-xs text-muted-foreground leading-relaxed">AI generates product concepts for your brand and tests them. Keep iterating until you find a winner.</p>
-              </Link>
               <Link href="/ab-test/new" className="block bg-background rounded-2xl border border-border/50 p-5 hover:border-teal/30 hover:shadow-sm transition-all group">
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="text-sm font-bold text-primary group-hover:text-teal transition-colors">A/B Concept Testing</h3>
-                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-teal/10 text-teal-dark">Starter+</span>
+                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-teal/10 text-teal-dark">Starter</span>
                 </div>
                 <p className="text-xs text-muted-foreground leading-relaxed">Test two product concepts head-to-head against the same panel. Clear winner with side-by-side metrics.</p>
-              </Link>
-              <Link href="/pricing-test/new" className="block bg-background rounded-2xl border border-border/50 p-5 hover:border-teal/30 hover:shadow-sm transition-all group">
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-sm font-bold text-primary group-hover:text-teal transition-colors">Pricing Optimizer</h3>
-                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-teal/10 text-teal-dark">Starter+</span>
-                </div>
-                <p className="text-xs text-muted-foreground leading-relaxed">Test 5 price points and see the demand curve. Find the revenue-maximizing price for your product.</p>
               </Link>
               <Link href="/name-test/new" className="block bg-background rounded-2xl border border-border/50 p-5 hover:border-teal/30 hover:shadow-sm transition-all group">
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="text-sm font-bold text-primary group-hover:text-teal transition-colors">Name Testing</h3>
-                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-teal/10 text-teal-dark">Starter+</span>
+                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-teal/10 text-teal-dark">Starter</span>
                 </div>
                 <p className="text-xs text-muted-foreground leading-relaxed">Test 3-5 product name options. Ranked by consumer appeal with first impressions.</p>
+              </Link>
+              <Link href="/pricing-test/new" className="block bg-background rounded-2xl border border-border/50 p-5 hover:border-teal/30 hover:shadow-sm transition-all group">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-sm font-bold text-primary group-hover:text-teal transition-colors">Pricing Optimizer</h3>
+                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-teal/10 text-teal-dark">Starter</span>
+                </div>
+                <p className="text-xs text-muted-foreground leading-relaxed">Test 5 price points and see the demand curve. Find the revenue-maximizing price for your product.</p>
+              </Link>
+              <Link href="/discover/new" className="block bg-background rounded-2xl border border-border/50 p-5 hover:border-teal/30 hover:shadow-sm transition-all group">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-sm font-bold text-primary group-hover:text-teal transition-colors">Product Discovery</h3>
+                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-primary/10 text-primary">Pro</span>
+                </div>
+                <p className="text-xs text-muted-foreground leading-relaxed">AI generates product concepts for your brand and tests them. Keep iterating until you find a winner.</p>
               </Link>
               <Link href="/audience-test/new" className="block bg-background rounded-2xl border border-border/50 p-5 hover:border-teal/30 hover:shadow-sm transition-all group">
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="text-sm font-bold text-primary group-hover:text-teal transition-colors">Audience Finder</h3>
-                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-teal/10 text-teal-dark">Starter+</span>
+                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-primary/10 text-primary">Pro</span>
                 </div>
                 <p className="text-xs text-muted-foreground leading-relaxed">Test your product across 5 audience segments. Find which demographic has the highest intent.</p>
               </Link>
               <Link href="/competitive/new" className="block bg-background rounded-2xl border border-border/50 p-5 hover:border-teal/30 hover:shadow-sm transition-all group sm:col-span-2 lg:col-span-1">
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="text-sm font-bold text-primary group-hover:text-teal transition-colors">Competitive Teardown</h3>
-                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-teal/10 text-teal-dark">Starter+</span>
+                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-primary/10 text-primary">Pro</span>
                 </div>
                 <p className="text-xs text-muted-foreground leading-relaxed">Compare your product vs a competitor with a radar chart across 5 dimensions.</p>
               </Link>

@@ -76,22 +76,23 @@ const featureCategories: { category: string; features: FeatureRow[] }[] = [
     ],
   },
   {
-    category: "Pro Testing Tools",
+    category: "Starter Testing Tools",
     features: [
       { name: "A/B concept testing", free: false, starter: true, pro: true, team: true },
       { name: "Name testing (rank 3-5 options)", free: false, starter: true, pro: true, team: true },
       { name: "Pricing optimizer (demand curve)", free: false, starter: true, pro: true, team: true },
-      { name: "Audience finder (5 segments)", free: false, starter: true, pro: true, team: true },
-      { name: "Competitive teardown (radar chart)", free: false, starter: true, pro: true, team: true },
     ],
   },
   {
-    category: "Product Discovery",
+    category: "Pro Tools",
     features: [
-      { name: "Discovery rounds per month", free: false, starter: "10", pro: "50", team: "200" },
-      { name: "AI concept generation", free: false, starter: true, pro: true, team: true },
-      { name: "Iterative refinement rounds", free: false, starter: true, pro: true, team: true },
-      { name: "Brand auto-fill (URL + search)", free: false, starter: true, pro: true, team: true },
+      { name: "Product Discovery", free: false, starter: false, pro: true, team: true },
+      { name: "Discovery rounds per month", free: false, starter: false, pro: "50", team: "200" },
+      { name: "AI concept generation", free: false, starter: false, pro: true, team: true },
+      { name: "Iterative refinement rounds", free: false, starter: false, pro: true, team: true },
+      { name: "Audience finder (5 segments)", free: false, starter: false, pro: true, team: true },
+      { name: "Competitive teardown (radar chart)", free: false, starter: false, pro: true, team: true },
+      { name: "Brand auto-fill (URL + search)", free: false, starter: false, pro: true, team: true },
     ],
   },
   {
@@ -268,41 +269,48 @@ export default function PricingPage() {
               What you unlock with a paid plan
             </h2>
             <p className="text-muted-foreground text-center max-w-2xl mx-auto mb-8">
-              Free gets you core consumer research. Paid plans add specialized testing tools
-              and AI-powered product discovery.
+              Free gets you core consumer research. Starter adds testing tools.
+              Pro unlocks strategic research and product discovery.
             </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
               <div className="bg-card rounded-2xl border border-border p-6">
-                <span className="text-xs font-bold text-teal uppercase tracking-wider">Pro Testing Tools</span>
-                <h3 className="text-lg font-bold text-primary mt-2 mb-3">Test every angle of your product</h3>
+                <span className="text-xs font-bold text-emerald-600 uppercase tracking-wider">Free</span>
+                <h3 className="text-base font-bold text-primary mt-2 mb-3">Core consumer research</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed mb-4">
-                  Five specialized tools that go beyond basic consumer research. Test
-                  two concepts head-to-head, find the perfect name, optimize your
-                  price point, discover your best audience, and see how you stack up
-                  against competitors.
+                  50-person AI panel with purchase intent, WTP, feature ranking,
+                  Go/No-Go verdict, and demographic breakdown.
                 </p>
                 <ul className="space-y-2 text-sm text-muted-foreground">
-                  <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-teal shrink-0" />A/B concept testing with same panel</li>
-                  <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-teal shrink-0" />Name testing ranked by appeal</li>
-                  <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-teal shrink-0" />Pricing optimizer with demand curve</li>
-                  <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-teal shrink-0" />Audience finder across 5 segments</li>
-                  <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-teal shrink-0" />Competitive teardown with radar chart</li>
+                  <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />3 research runs per month</li>
+                  <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />Shareable reports and PDF export</li>
                 </ul>
               </div>
               <div className="bg-card rounded-2xl border border-border p-6">
-                <span className="text-xs font-bold text-amber-600 uppercase tracking-wider">Product Discovery</span>
-                <h3 className="text-lg font-bold text-primary mt-2 mb-3">Find what to build next</h3>
+                <span className="text-xs font-bold text-teal uppercase tracking-wider">Starter</span>
+                <h3 className="text-base font-bold text-primary mt-2 mb-3">Test every angle</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed mb-4">
-                  Don&apos;t have a product yet? Enter your brand and audience, and our AI
-                  generates product concepts then tests each one with a simulated consumer
-                  panel. Keep running rounds until you find a concept that scores high enough
-                  to pursue.
+                  Three testing tools to compare concepts, find the right name,
+                  and optimize your price point.
                 </p>
                 <ul className="space-y-2 text-sm text-muted-foreground">
-                  <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0" />AI generates 8 product concepts per round</li>
-                  <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0" />Each concept tested with 30 consumers</li>
-                  <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0" />Iterative rounds evolve winning concepts</li>
-                  <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0" />One-click to run full research on winners</li>
+                  <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-teal shrink-0" />A/B concept testing</li>
+                  <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-teal shrink-0" />Name testing (rank 3-5 options)</li>
+                  <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-teal shrink-0" />Pricing optimizer with demand curve</li>
+                  <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-teal shrink-0" />30 research runs per month</li>
+                </ul>
+              </div>
+              <div className="bg-card rounded-2xl border border-teal/30 p-6">
+                <span className="text-xs font-bold text-primary uppercase tracking-wider">Pro</span>
+                <h3 className="text-base font-bold text-primary mt-2 mb-3">Strategic research</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+                  Product discovery, audience testing, and competitive analysis
+                  for teams building seriously.
+                </p>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />Product Discovery (AI concept generation)</li>
+                  <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />Audience finder across 5 segments</li>
+                  <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />Competitive teardown with radar chart</li>
+                  <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />100 research runs per month</li>
                 </ul>
               </div>
             </div>
@@ -387,46 +395,46 @@ export default function PricingPage() {
                 badgeColor="bg-emerald-100 text-emerald-800"
               />
               <ToolCard
-                title="Product Discovery"
-                description="Enter your brand and audience. AI generates product concepts and tests them with consumers. Keep iterating until you find a winner."
-                href="/discover/new"
-                badge="Starter+"
-                badgeColor="bg-teal/10 text-teal-dark"
-              />
-              <ToolCard
                 title="A/B Concept Testing"
                 description="Test two product concepts head-to-head against the same panel. Clear winner with side-by-side metrics."
                 href="/ab-test/new"
-                badge="Starter+"
+                badge="Starter"
                 badgeColor="bg-teal/10 text-teal-dark"
               />
               <ToolCard
                 title="Name Testing"
                 description="Test 3-5 product name options for the same concept. Ranked by consumer appeal with first impressions."
                 href="/name-test/new"
-                badge="Starter+"
+                badge="Starter"
                 badgeColor="bg-teal/10 text-teal-dark"
               />
               <ToolCard
                 title="Pricing Optimizer"
                 description="Test 5 price points and see the demand curve. Find the revenue-maximizing price with a visual chart."
                 href="/pricing-test/new"
-                badge="Starter+"
+                badge="Starter"
                 badgeColor="bg-teal/10 text-teal-dark"
+              />
+              <ToolCard
+                title="Product Discovery"
+                description="Enter your brand and audience. AI generates product concepts and tests them with consumers. Keep iterating until you find a winner."
+                href="/discover/new"
+                badge="Pro"
+                badgeColor="bg-primary/10 text-primary"
               />
               <ToolCard
                 title="Audience Finder"
                 description="Test your product across 5 audience segments. Find which demographic has the highest purchase intent."
                 href="/audience-test/new"
-                badge="Starter+"
-                badgeColor="bg-teal/10 text-teal-dark"
+                badge="Pro"
+                badgeColor="bg-primary/10 text-primary"
               />
               <ToolCard
                 title="Competitive Teardown"
                 description="Compare your product vs a competitor with a radar chart across 5 dimensions. See exactly where you win and lose."
                 href="/competitive/new"
-                badge="Starter+"
-                badgeColor="bg-teal/10 text-teal-dark"
+                badge="Pro"
+                badgeColor="bg-primary/10 text-primary"
               />
               <ToolCard
                 title="Segment Breakdown"

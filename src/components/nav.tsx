@@ -74,10 +74,6 @@ export function Nav() {
                   Consumer Research
                   <span className="text-[10px] bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 px-1.5 py-0.5 rounded-full font-medium">Free</span>
                 </Link>
-                <Link href="/discover/new" className="flex items-center justify-between px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">
-                  Product Discovery
-                  <span className="text-[10px] bg-teal/10 text-teal-dark dark:text-teal px-1.5 py-0.5 rounded-full font-medium">Starter</span>
-                </Link>
                 <Link href="/ab-test/new" className="flex items-center justify-between px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">
                   A/B Concept Testing
                   <span className="text-[10px] bg-teal/10 text-teal-dark dark:text-teal px-1.5 py-0.5 rounded-full font-medium">Starter</span>
@@ -90,13 +86,18 @@ export function Nav() {
                   Pricing Optimizer
                   <span className="text-[10px] bg-teal/10 text-teal-dark dark:text-teal px-1.5 py-0.5 rounded-full font-medium">Starter</span>
                 </Link>
+                <div className="h-px bg-border mx-3 my-1" />
+                <Link href="/discover/new" className="flex items-center justify-between px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">
+                  Product Discovery
+                  <span className="text-[10px] bg-primary/10 text-primary px-1.5 py-0.5 rounded-full font-medium">Pro</span>
+                </Link>
                 <Link href="/audience-test/new" className="flex items-center justify-between px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">
                   Audience Finder
-                  <span className="text-[10px] bg-teal/10 text-teal-dark dark:text-teal px-1.5 py-0.5 rounded-full font-medium">Starter</span>
+                  <span className="text-[10px] bg-primary/10 text-primary px-1.5 py-0.5 rounded-full font-medium">Pro</span>
                 </Link>
                 <Link href="/competitive/new" className="flex items-center justify-between px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">
                   Competitive Teardown
-                  <span className="text-[10px] bg-teal/10 text-teal-dark dark:text-teal px-1.5 py-0.5 rounded-full font-medium">Starter</span>
+                  <span className="text-[10px] bg-primary/10 text-primary px-1.5 py-0.5 rounded-full font-medium">Pro</span>
                 </Link>
               </div>
             </div>
