@@ -52,7 +52,7 @@ export function Nav() {
   return (
     <header className="border-b border-border/50 bg-card/80 backdrop-blur-sm sticky top-0 z-50">
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2">
+        <Link href={authChecked && authUser ? "/dashboard" : "/"} className="flex items-center gap-2">
           <svg
               className="w-8 h-8 text-foreground"
               viewBox="0 0 200 200"
@@ -76,6 +76,14 @@ export function Nav() {
           </span>
         </Link>
         <nav className="hidden md:flex items-center gap-8 text-sm text-muted-foreground">
+          {authChecked && authUser && (
+            <Link
+              href="/dashboard"
+              className="hover:text-foreground transition-colors font-medium"
+            >
+              Dashboard
+            </Link>
+          )}
           <Link
             href="/methodology"
             className="hover:text-foreground transition-colors"
@@ -228,7 +236,10 @@ export function Nav() {
             <Link href="/pricing" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 rounded-lg text-sm hover:bg-muted transition-colors text-muted-foreground">Pricing</Link>
             <Link href="/case-studies/rekt" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 rounded-lg text-sm hover:bg-muted transition-colors text-muted-foreground">Case Study</Link>
             {authChecked && authUser ? (
-              <Link href="/account" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 rounded-lg text-sm hover:bg-muted transition-colors text-foreground font-medium">Account</Link>
+              <>
+                <Link href="/dashboard" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 rounded-lg text-sm hover:bg-muted transition-colors text-foreground font-medium">Dashboard</Link>
+                <Link href="/account" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 rounded-lg text-sm hover:bg-muted transition-colors text-foreground font-medium">Account</Link>
+              </>
             ) : (
               <Link href="/login" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 rounded-lg text-sm hover:bg-muted transition-colors text-foreground font-medium">Log in</Link>
             )}
