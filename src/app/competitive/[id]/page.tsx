@@ -153,7 +153,7 @@ function CompetitiveResultContent({
       <main className="flex-1 py-8">
         <div className="max-w-5xl mx-auto px-6">
           {/* AI Disclaimer */}
-          <div className="bg-amber-50 border border-amber-200/60 rounded-lg px-4 py-2.5 mb-6 text-xs text-amber-800">
+          <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200/60 dark:border-amber-800/30 rounded-lg px-4 py-2.5 mb-6 text-xs text-amber-800 dark:text-amber-300">
             <strong>Important:</strong> These results are AI-simulated, not from real consumers. Best used for directional insights.{" "}
             <Link href="/methodology#limitations" className="text-amber-900 underline">Learn more</Link>
           </div>

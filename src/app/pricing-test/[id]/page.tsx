@@ -182,7 +182,7 @@ function PricingTestResultContent({
             </Button>
           </div>
 
-          <div className="bg-amber-50 border border-amber-200/60 rounded-lg px-4 py-2.5 mb-6 text-xs text-amber-800">
+          <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200/60 dark:border-amber-800/30 rounded-lg px-4 py-2.5 mb-6 text-xs text-amber-800 dark:text-amber-300">
             <strong>Important:</strong> These results are AI-simulated, not from real consumers.
             Best used for directional insights and hypothesis generation.{" "}
             <Link href="/methodology#limitations" className="text-amber-900 underline">Learn more</Link>

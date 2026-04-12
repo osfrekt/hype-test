@@ -397,7 +397,7 @@ function DiscoverResultContent({
             </Button>
           </div>
 
-          <div className="bg-amber-50 border border-amber-200/60 rounded-lg px-4 py-2.5 mb-6 text-xs text-amber-800">
+          <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200/60 dark:border-amber-800/30 rounded-lg px-4 py-2.5 mb-6 text-xs text-amber-800 dark:text-amber-300">
             <strong>Important:</strong> Product concepts and scores are AI-simulated, not from real consumers. Best used for directional insights.
             Not a substitute for professional market research.
           </div>
