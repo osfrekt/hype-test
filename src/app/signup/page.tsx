@@ -66,7 +66,7 @@ export default function SignupPage() {
       name: name || null,
       company: company || null,
       role: role || null,
-    }, { onConflict: "email" }).catch(() => {});
+    }, { onConflict: "email" });
 
     setEmailSent(true);
     setLoading(false);
