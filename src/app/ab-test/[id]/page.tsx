@@ -226,6 +226,7 @@ function AbTestResultContent({
                 metrics={[
                   { label: "Purchase Intent", valueA: result.conceptA.purchaseIntent.score, valueB: result.conceptB.purchaseIntent.score, unit: "%" },
                   { label: "Estimated WTP", valueA: result.conceptA.wtpRange.mid, valueB: result.conceptB.wtpRange.mid, unit: "$", prefix: "$" },
+                  { label: "NPS Score", valueA: Math.max(0, result.conceptA.npsScore ?? 0), valueB: Math.max(0, result.conceptB.npsScore ?? 0), unit: "" },
                 ]}
               />
             </CardContent>
@@ -311,6 +312,9 @@ function ConceptCard({ label, concept, isWinner }: { label: string; concept: AbT
   const featureImportance = concept.featureImportance || [];
   const topConcerns = concept.topConcerns || [];
   const topPositives = concept.topPositives || [];
+  const purchaseFrequency = concept.purchaseFrequency || [];
+  const verbatims = concept.verbatims || [];
+  const npsScore = concept.npsScore ?? 0;
 
   return (
     <Card className={isWinner ? "ring-2 ring-teal" : ""}>
@@ -322,37 +326,134 @@ function ConceptCard({ label, concept, isWinner }: { label: string; concept: AbT
           )}
         </div>
       </CardHeader>
-      <CardContent className="space-y-4">
-        {/* Purchase Intent */}
+      <CardContent className="space-y-5">
+        {/* Purchase Intent Score */}
         <div>
           <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-1">Purchase Intent</p>
           <p className="text-3xl font-bold text-primary">{concept.purchaseIntent.score}%</p>
         </div>
 
+        {/* Purchase Intent Distribution */}
+        <div>
+          <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-2">Intent Distribution</p>
+          <div className="space-y-1.5">
+            {concept.purchaseIntent.distribution.map((d) => {
+              const total = concept.purchaseIntent.distribution.reduce((s, x) => s + x.count, 0) || 1;
+              const pct = Math.round((d.count / total) * 100);
+              return (
+                <div key={d.label} className="flex items-center gap-2">
+                  <span className="text-[10px] text-muted-foreground w-20 shrink-0 truncate">{d.label}</span>
+                  <div className="flex-1 bg-muted rounded-full h-2">
+                    <div className={`h-2 rounded-full ${isWinner ? "bg-teal" : "bg-cyan-500"}`} style={{ width: `${pct}%` }} />
+                  </div>
+                  <span className="text-[10px] font-medium text-primary w-8 text-right">{pct}%</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
         {/* WTP */}
         <div>
-          <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-1">Estimated WTP</p>
+          <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-1">Willingness to Pay</p>
           <p className="text-xl font-bold text-primary">${concept.wtpRange.mid}</p>
-          <p className="text-xs text-muted-foreground">range: ${concept.wtpRange.low} - ${concept.wtpRange.high}</p>
+          <div className="mt-1 flex items-center gap-1">
+            <div className="flex-1 h-2 bg-muted rounded-full relative">
+              <div className="absolute h-2 bg-gradient-to-r from-cyan-500 to-teal rounded-full" style={{
+                left: `${((concept.wtpRange.low - concept.wtpRange.low) / Math.max(concept.wtpRange.high - concept.wtpRange.low, 1)) * 100}%`,
+                right: `${100 - ((concept.wtpRange.high - concept.wtpRange.low) / Math.max(concept.wtpRange.high - concept.wtpRange.low, 1)) * 100}%`,
+              }} />
+              <div className="absolute w-3 h-3 bg-primary rounded-full -top-0.5" style={{
+                left: `${((concept.wtpRange.mid - concept.wtpRange.low) / Math.max(concept.wtpRange.high - concept.wtpRange.low, 1)) * 100}%`,
+                transform: "translateX(-50%)",
+              }} />
+            </div>
+          </div>
+          <div className="flex justify-between text-[10px] text-muted-foreground mt-1">
+            <span>${concept.wtpRange.low}</span>
+            <span>${concept.wtpRange.high}</span>
+          </div>
         </div>
 
-        {/* Top Feature */}
+        {/* NPS */}
         <div>
-          <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-1">Top Feature</p>
-          <p className="text-sm font-medium text-primary">{featureImportance[0]?.feature || "N/A"}</p>
+          <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-1">NPS Score</p>
+          <p className={`text-xl font-bold ${npsScore >= 0 ? "text-emerald-600" : "text-red-500"}`}>
+            {npsScore > 0 ? "+" : ""}{npsScore}
+          </p>
         </div>
 
-        {/* Top Concern */}
+        {/* Feature Importance */}
         <div>
-          <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-1">Top Concern</p>
-          <p className="text-sm text-muted-foreground">{topConcerns[0] || "None"}</p>
+          <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-2">Feature Importance</p>
+          <div className="space-y-1.5">
+            {featureImportance.slice(0, 4).map((f) => (
+              <div key={f.feature} className="flex items-center gap-2">
+                <span className="text-[10px] text-muted-foreground flex-1 truncate">{f.feature}</span>
+                <div className="w-20 bg-muted rounded-full h-2">
+                  <div className={`h-2 rounded-full ${isWinner ? "bg-teal" : "bg-cyan-500"}`} style={{ width: `${f.score}%` }} />
+                </div>
+                <span className="text-[10px] font-medium text-primary w-8 text-right">{f.score}%</span>
+              </div>
+            ))}
+          </div>
         </div>
 
-        {/* Top Positive */}
+        {/* Top Concerns */}
         <div>
-          <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-1">Top Positive</p>
-          <p className="text-sm text-muted-foreground">{topPositives[0] || "None"}</p>
+          <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-1">Top Concerns</p>
+          <ul className="space-y-1">
+            {topConcerns.slice(0, 3).map((c, i) => (
+              <li key={i} className="text-xs text-muted-foreground flex gap-1.5">
+                <span className="text-red-400 shrink-0">-</span>
+                <span>{c}</span>
+              </li>
+            ))}
+            {topConcerns.length === 0 && <li className="text-xs text-muted-foreground">None reported</li>}
+          </ul>
         </div>
+
+        {/* Top Positives */}
+        <div>
+          <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-1">Top Positives</p>
+          <ul className="space-y-1">
+            {topPositives.slice(0, 3).map((p, i) => (
+              <li key={i} className="text-xs text-muted-foreground flex gap-1.5">
+                <span className="text-emerald-500 shrink-0">+</span>
+                <span>{p}</span>
+              </li>
+            ))}
+            {topPositives.length === 0 && <li className="text-xs text-muted-foreground">None reported</li>}
+          </ul>
+        </div>
+
+        {/* Purchase Frequency */}
+        {purchaseFrequency.length > 0 && (
+          <div>
+            <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-1">Purchase Frequency</p>
+            <div className="flex flex-wrap gap-1.5">
+              {purchaseFrequency.map((f) => (
+                <Badge key={f.label} variant="secondary" className="text-[10px]">
+                  {f.label}: {f.percent}%
+                </Badge>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Consumer Verbatims */}
+        {verbatims.length > 0 && (
+          <div>
+            <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-1">Consumer Verbatims</p>
+            <div className="space-y-2">
+              {verbatims.map((v, i) => (
+                <p key={i} className="text-xs text-muted-foreground italic border-l-2 border-border pl-2">
+                  &ldquo;{v}&rdquo;
+                </p>
+              ))}
+            </div>
+          </div>
+        )}
       </CardContent>
     </Card>
   );

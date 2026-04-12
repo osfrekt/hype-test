@@ -16,6 +16,9 @@ interface PanelResponse {
   featureRankings: { feature: string; importance: number }[];
   topConcern: string;
   topPositive: string;
+  nps: number; // 0-10
+  purchaseFrequency: string;
+  verbatim: string;
 }
 
 async function queryPersonaForConcept(
@@ -59,19 +62,30 @@ ${features.map((f, i) => `   ${String.fromCharCode(65 + i)}) ${f}`).join("\n")}
 
 5. TOP POSITIVE: What is the single most appealing thing about this product? (One sentence)
 
+6. NPS: On a scale of 0-10, how likely would you be to recommend this product to a friend?
+   0 = Not at all likely, 10 = Extremely likely
+
+7. PURCHASE FREQUENCY: If you bought this product, how often would you repurchase?
+   A) Weekly  B) Monthly  C) Quarterly  D) One-time purchase  E) Would not buy
+
+8. VERBATIM: In one sentence, describe your honest reaction to this product concept as a real consumer would.
+
 Respond in this exact JSON format:
 {
   "purchaseIntent": <number 1-5>,
   "priceChoice": "<A, B, C, or D>",
   "featureRanking": [<list of feature letters from most to least important>],
   "topConcern": "<one sentence>",
-  "topPositive": "<one sentence>"
+  "topPositive": "<one sentence>",
+  "nps": <number 0-10>,
+  "purchaseFrequency": "<A, B, C, D, or E>",
+  "verbatim": "<one sentence>"
 }`;
 
   try {
     const response = await anthropic.messages.create({
       model: "claude-haiku-4-5-20251001",
-      max_tokens: 300,
+      max_tokens: 500,
       temperature: 1.0,
       messages: [{ role: "user", content: prompt }],
     });
@@ -111,6 +125,9 @@ Respond in this exact JSON format:
       featureRankings,
       topConcern: parsed.topConcern || "No specific concern",
       topPositive: parsed.topPositive || "Interesting concept",
+      nps: Math.min(10, Math.max(0, Number(parsed.nps ?? 5))),
+      purchaseFrequency: parsed.purchaseFrequency || "D",
+      verbatim: parsed.verbatim || "Interesting product concept.",
     };
   } catch {
     return {
@@ -123,6 +140,9 @@ Respond in this exact JSON format:
       })),
       topConcern: "Need more information before deciding",
       topPositive: "The concept is interesting",
+      nps: 5,
+      purchaseFrequency: "D",
+      verbatim: "Would need to learn more before deciding.",
     };
   }
 }
@@ -183,6 +203,35 @@ function aggregateConceptResults(
   const concerns = deduplicateStrings(responses.map((r) => r.topConcern));
   const positives = deduplicateStrings(responses.map((r) => r.topPositive));
 
+  // NPS: promoters (9-10) minus detractors (0-6), as percentage
+  const promoters = responses.filter((r) => r.nps >= 9).length;
+  const detractors = responses.filter((r) => r.nps <= 6).length;
+  const npsScore = Math.round(((promoters - detractors) / n) * 100);
+
+  // Purchase frequency
+  const freqMap: Record<string, string> = {
+    A: "Weekly",
+    B: "Monthly",
+    C: "Quarterly",
+    D: "One-time",
+    E: "Would not buy",
+  };
+  const freqCounts: Record<string, number> = {};
+  responses.forEach((r) => {
+    const label = freqMap[r.purchaseFrequency] || "One-time";
+    freqCounts[label] = (freqCounts[label] || 0) + 1;
+  });
+  const purchaseFrequency = Object.entries(freqCounts)
+    .map(([label, count]) => ({ label, percent: Math.round((count / n) * 100) }))
+    .sort((a, b) => b.percent - a.percent);
+
+  // Verbatims - pick diverse, non-generic ones
+  const verbatims = deduplicateStrings(
+    responses
+      .filter((r) => r.verbatim && r.verbatim !== "Interesting product concept." && r.verbatim !== "Would need to learn more before deciding.")
+      .map((r) => r.verbatim)
+  ).slice(0, 3);
+
   return {
     input,
     purchaseIntent: {
@@ -200,6 +249,9 @@ function aggregateConceptResults(
     featureImportance,
     topConcerns: concerns,
     topPositives: positives,
+    npsScore,
+    purchaseFrequency,
+    verbatims,
   };
 }
 

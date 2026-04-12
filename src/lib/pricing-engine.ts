@@ -22,10 +22,15 @@ export async function runPricingTest(
   const unit = priceUnit || input.priceUnit || "";
 
   // For each price point, query the full panel
-  const priceResults: { price: number; intentScore: number }[] = [];
+  const priceResults: {
+    price: number;
+    intentScore: number;
+    valuePerception: number;
+    priceComparison: { tooCheap: number; aboutRight: number; tooExpensive: number };
+  }[] = [];
 
   for (const price of pricePoints) {
-    const intents: number[] = [];
+    const responses: PricingResponse[] = [];
 
     for (let i = 0; i < panel.length; i += BATCH_SIZE) {
       const batch = panel.slice(i, i + BATCH_SIZE);
@@ -34,16 +39,26 @@ export async function runPricingTest(
       );
       for (const result of batchResults) {
         if (result.status === "fulfilled") {
-          intents.push(result.value);
+          responses.push(result.value);
         }
       }
     }
 
-    const avgIntent = intents.length > 0
-      ? Math.round((intents.reduce((a, b) => a + b, 0) / intents.length / 5) * 100)
-      : 0;
+    const n = responses.length || 1;
+    const avgIntent = Math.round((responses.reduce((a, b) => a + b.intent, 0) / n / 5) * 100);
+    const valuePerception = Math.round(
+      (responses.filter((r) => r.valuePerception === "yes" || r.valuePerception === "maybe").length / n) * 100
+    );
+    const tooCheap = Math.round((responses.filter((r) => r.priceComparison === "too cheap").length / n) * 100);
+    const aboutRight = Math.round((responses.filter((r) => r.priceComparison === "about right").length / n) * 100);
+    const tooExpensive = Math.round((responses.filter((r) => r.priceComparison === "too expensive").length / n) * 100);
 
-    priceResults.push({ price, intentScore: avgIntent });
+    priceResults.push({
+      price,
+      intentScore: avgIntent,
+      valuePerception,
+      priceComparison: { tooCheap, aboutRight, tooExpensive },
+    });
   }
 
   // Compute revenue index: price * (intent / 100), normalized so max = 100
@@ -57,12 +72,25 @@ export async function runPricingTest(
     price: p.price,
     intentScore: p.intentScore,
     revenueIndex: Math.round((p.rawRevenue / maxRevenue) * 100),
+    valuePerception: p.valuePerception,
+    priceComparison: p.priceComparison,
   }));
 
   // Find optimal price
   const optimal = pricePointResults.reduce((best, cur) =>
     cur.revenueIndex > best.revenueIndex ? cur : best
   );
+
+  // Find sweet spot (where "about right" peaks)
+  const sweetSpot = pricePointResults.reduce((best, cur) =>
+    cur.priceComparison.aboutRight > best.priceComparison.aboutRight ? cur : best
+  );
+
+  // Generate key insight
+  const keyInsight = `$${optimal.price} maximizes revenue with ${optimal.intentScore}% purchase intent and ${optimal.valuePerception}% perceiving good value. ` +
+    (sweetSpot.price !== optimal.price
+      ? `The "about right" perception peaks at $${sweetSpot.price} (${sweetSpot.priceComparison.aboutRight}%).`
+      : `This price also has the highest "about right" perception at ${optimal.priceComparison.aboutRight}%.`);
 
   return {
     id: nanoid(12),
@@ -76,6 +104,7 @@ export async function runPricingTest(
     pricePoints: pricePointResults,
     optimalPrice: optimal.price,
     optimalIntent: optimal.intentScore,
+    keyInsight,
     panelSize: panel.length,
     methodology: {
       panelSize: panel.length,
@@ -90,12 +119,18 @@ export async function runPricingTest(
   };
 }
 
+interface PricingResponse {
+  intent: number;
+  valuePerception: "yes" | "no" | "maybe";
+  priceComparison: "too cheap" | "about right" | "too expensive";
+}
+
 async function queryPricingPersona(
   persona: ConsumerPersona,
   input: PricingTestInput,
   price: number,
   unit: string
-): Promise<number> {
+): Promise<PricingResponse> {
   const unitLabel = unit ? ` ${unit}` : "";
   const featuresText = input.keyFeatures?.length
     ? `\nKey features: ${input.keyFeatures.join(", ")}`
@@ -109,21 +144,23 @@ Product description: ${input.productDescription}${featuresText}
 
 The product is priced at $${price}${unitLabel}.
 
-On a scale of 1-5, how likely would you be to purchase this product at this price?
-1 = Definitely would not buy
-2 = Probably would not buy
-3 = Might or might not buy
-4 = Probably would buy
-5 = Definitely would buy
+Answer the following:
 
-Consider your income, lifestyle, and whether this price feels fair for what the product offers. Be realistic.
+1. PURCHASE INTENT: On a scale of 1-5, how likely would you be to purchase this product at this price?
+   1 = Definitely would not buy, 2 = Probably would not buy, 3 = Might or might not buy, 4 = Probably would buy, 5 = Definitely would buy
 
-Respond with ONLY a JSON object: {"intent": <number 1-5>}`;
+2. VALUE PERCEPTION: At this price, does this product feel like good value? (yes/no/maybe)
+
+3. PRICE COMPARISON: How does this price compare to similar products you've seen? (too cheap / about right / too expensive)
+
+Consider your income, lifestyle, and whether this price feels fair. Be realistic.
+
+Respond with ONLY a JSON object: {"intent": <1-5>, "value": "<yes/no/maybe>", "comparison": "<too cheap/about right/too expensive>"}`;
 
   try {
     const response = await anthropic.messages.create({
       model: "claude-haiku-4-5-20251001",
-      max_tokens: 50,
+      max_tokens: 100,
       temperature: 1.0,
       messages: [{ role: "user", content: prompt }],
     });
@@ -133,8 +170,14 @@ Respond with ONLY a JSON object: {"intent": <number 1-5>}`;
     if (!jsonMatch) throw new Error("No JSON in response");
 
     const parsed = JSON.parse(jsonMatch[0]);
-    return Math.min(5, Math.max(1, Number(parsed.intent)));
+    const valStr = String(parsed.value || "maybe").toLowerCase();
+    const compStr = String(parsed.comparison || "about right").toLowerCase();
+    return {
+      intent: Math.min(5, Math.max(1, Number(parsed.intent))),
+      valuePerception: (valStr === "yes" || valStr === "no" ? valStr : "maybe") as PricingResponse["valuePerception"],
+      priceComparison: (compStr.includes("cheap") ? "too cheap" : compStr.includes("expensive") ? "too expensive" : "about right") as PricingResponse["priceComparison"],
+    };
   } catch {
-    return 3; // neutral fallback
+    return { intent: 3, valuePerception: "maybe", priceComparison: "about right" };
   }
 }

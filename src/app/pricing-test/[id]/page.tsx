@@ -6,6 +6,7 @@ import { Nav } from "@/components/nav";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
 import { Link2 } from "lucide-react";
 import type { PricingTestResult } from "@/types/pricing-test";
 import { createClient } from "@/lib/supabase/client";
@@ -18,6 +19,11 @@ import {
   ReferenceDot,
   Area,
   AreaChart,
+  BarChart,
+  Bar,
+  Legend,
+  Line,
+  ComposedChart,
 } from "recharts";
 
 type FetchState =
@@ -82,6 +88,7 @@ function PricingTestResultContent({
               pricePoints: data.price_points,
               optimalPrice: data.optimal_price,
               optimalIntent: data.optimal_intent,
+              keyInsight: data.key_insight || "",
               panelSize: data.panel_size,
               methodology: data.methodology,
               status: data.status,
@@ -158,7 +165,16 @@ function PricingTestResultContent({
     priceNum: p.price,
     intent: p.intentScore,
     revenueIndex: p.revenueIndex,
+    valuePerception: p.valuePerception ?? 0,
+    tooCheap: p.priceComparison?.tooCheap ?? 0,
+    aboutRight: p.priceComparison?.aboutRight ?? 0,
+    tooExpensive: p.priceComparison?.tooExpensive ?? 0,
   }));
+
+  // Find the sweet spot (highest "about right")
+  const sweetSpot = result.pricePoints.reduce((best, cur) =>
+    (cur.priceComparison?.aboutRight ?? 0) > (best.priceComparison?.aboutRight ?? 0) ? cur : best
+  , result.pricePoints[0]);
 
   return (
     <>
@@ -268,6 +284,104 @@ function PricingTestResultContent({
             </CardContent>
           </Card>
 
+          {/* Key Insight */}
+          {result.keyInsight && (
+            <Card className="mb-8 border-cyan-500/20 bg-cyan-500/5">
+              <CardContent className="py-5">
+                <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-2">Key Insight</p>
+                <p className="text-sm text-primary leading-relaxed">{result.keyInsight}</p>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Value Perception & Demand Overlay */}
+          {chartData[0]?.valuePerception > 0 && (
+            <Card className="mb-8">
+              <CardHeader>
+                <CardTitle className="text-base">Demand vs Value Perception</CardTitle>
+              </CardHeader>
+              <CardContent>
+                {mounted && (
+                  <ResponsiveContainer width="100%" height={320}>
+                    <ComposedChart data={chartData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="oklch(0.91 0.005 260)" />
+                      <XAxis dataKey="price" tick={{ fontSize: 12 }} />
+                      <YAxis tick={{ fontSize: 12 }} domain={[0, 100]} tickFormatter={(v) => `${v}%`} />
+                      <Tooltip
+                        formatter={(value: unknown, name: unknown) => [
+                          `${value}%`,
+                          String(name ?? ""),
+                        ]}
+                        contentStyle={{
+                          background: "#fff",
+                          border: "1px solid oklch(0.91 0.005 260)",
+                          borderRadius: "8px",
+                          fontSize: "13px",
+                        }}
+                      />
+                      <Legend />
+                      <Area
+                        type="monotone"
+                        dataKey="intent"
+                        stroke="#0891b2"
+                        strokeWidth={2}
+                        fill="url(#intentGradient)"
+                        name="Purchase Intent"
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="valuePerception"
+                        stroke="#10b981"
+                        strokeWidth={2}
+                        strokeDasharray="5 5"
+                        dot={{ r: 4, fill: "#10b981" }}
+                        name="Good Value %"
+                      />
+                    </ComposedChart>
+                  </ResponsiveContainer>
+                )}
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Price Comparison Breakdown */}
+          {chartData[0]?.aboutRight > 0 && (
+            <Card className="mb-8">
+              <CardHeader>
+                <CardTitle className="text-base">Price Perception Breakdown</CardTitle>
+                {sweetSpot && (
+                  <p className="text-xs text-muted-foreground mt-1">
+                    &ldquo;About right&rdquo; peaks at ${sweetSpot.price} ({sweetSpot.priceComparison?.aboutRight ?? 0}%)
+                  </p>
+                )}
+              </CardHeader>
+              <CardContent>
+                {mounted && (
+                  <ResponsiveContainer width="100%" height={300}>
+                    <BarChart data={chartData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="oklch(0.91 0.005 260)" />
+                      <XAxis dataKey="price" tick={{ fontSize: 12 }} />
+                      <YAxis tick={{ fontSize: 12 }} domain={[0, 100]} tickFormatter={(v) => `${v}%`} />
+                      <Tooltip
+                        formatter={(value: unknown, name: unknown) => [`${value}%`, String(name ?? "")]}
+                        contentStyle={{
+                          background: "#fff",
+                          border: "1px solid oklch(0.91 0.005 260)",
+                          borderRadius: "8px",
+                          fontSize: "13px",
+                        }}
+                      />
+                      <Legend />
+                      <Bar dataKey="tooCheap" stackId="comp" fill="#f59e0b" name="Too Cheap" />
+                      <Bar dataKey="aboutRight" stackId="comp" fill="#10b981" name="About Right" />
+                      <Bar dataKey="tooExpensive" stackId="comp" fill="#ef4444" name="Too Expensive" />
+                    </BarChart>
+                  </ResponsiveContainer>
+                )}
+              </CardContent>
+            </Card>
+          )}
+
           {/* Price Point Table */}
           <Card className="mb-8">
             <CardHeader>
@@ -278,10 +392,12 @@ function PricingTestResultContent({
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-border/50">
-                      <th className="text-left py-3 px-4 font-medium text-muted-foreground">Price</th>
-                      <th className="text-center py-3 px-4 font-medium text-muted-foreground">Purchase Intent</th>
-                      <th className="text-center py-3 px-4 font-medium text-muted-foreground">Revenue Index</th>
-                      <th className="text-center py-3 px-4 font-medium text-muted-foreground">Optimal</th>
+                      <th className="text-left py-3 px-3 font-medium text-muted-foreground text-xs">Price</th>
+                      <th className="text-center py-3 px-3 font-medium text-muted-foreground text-xs">Intent</th>
+                      <th className="text-center py-3 px-3 font-medium text-muted-foreground text-xs">Value</th>
+                      <th className="text-center py-3 px-3 font-medium text-muted-foreground text-xs">Revenue</th>
+                      <th className="text-center py-3 px-3 font-medium text-muted-foreground text-xs">Perception</th>
+                      <th className="text-center py-3 px-3 font-medium text-muted-foreground text-xs"></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -290,13 +406,14 @@ function PricingTestResultContent({
                         key={pp.price}
                         className={`border-b border-border/30 ${pp.price === result.optimalPrice ? "bg-teal/5" : ""}`}
                       >
-                        <td className="py-3 px-4 font-medium">
+                        <td className="py-3 px-3 font-medium text-sm">
                           ${pp.price}{unit}
                         </td>
-                        <td className="py-3 px-4 text-center">{pp.intentScore}%</td>
-                        <td className="py-3 px-4 text-center">
+                        <td className="py-3 px-3 text-center text-sm">{pp.intentScore}%</td>
+                        <td className="py-3 px-3 text-center text-sm">{pp.valuePerception !== undefined ? `${pp.valuePerception}%` : "-"}</td>
+                        <td className="py-3 px-3 text-center">
                           <div className="flex items-center justify-center gap-2">
-                            <div className="w-20 bg-muted rounded-full h-1.5">
+                            <div className="w-16 bg-muted rounded-full h-1.5">
                               <div
                                 className="bg-teal h-1.5 rounded-full"
                                 style={{ width: `${pp.revenueIndex}%` }}
@@ -305,7 +422,18 @@ function PricingTestResultContent({
                             <span className="text-xs">{pp.revenueIndex}</span>
                           </div>
                         </td>
-                        <td className="py-3 px-4 text-center">
+                        <td className="py-3 px-3 text-center">
+                          {pp.priceComparison ? (
+                            <div className="flex items-center justify-center gap-1 text-[10px]">
+                              <span className="text-amber-500">{pp.priceComparison.tooCheap}%</span>
+                              <span className="text-muted-foreground">/</span>
+                              <span className="text-emerald-600">{pp.priceComparison.aboutRight}%</span>
+                              <span className="text-muted-foreground">/</span>
+                              <span className="text-red-500">{pp.priceComparison.tooExpensive}%</span>
+                            </div>
+                          ) : "-"}
+                        </td>
+                        <td className="py-3 px-3 text-center">
                           {pp.price === result.optimalPrice && (
                             <Badge className="bg-teal/10 text-teal border-teal/20 text-xs">
                               Best

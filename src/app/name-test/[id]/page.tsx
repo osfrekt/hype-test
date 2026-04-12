@@ -199,10 +199,10 @@ function NameTestResultContent({
               <CardTitle className="text-lg font-semibold">Name Rankings</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
+              <div className="space-y-6">
                 {result.names.map((n) => (
-                  <div key={n.name} className="flex flex-col md:flex-row md:items-center gap-3 p-4 rounded-lg bg-muted/50 border border-border/50">
-                    <div className="flex items-center gap-3 md:w-64 shrink-0">
+                  <div key={n.name} className="p-4 rounded-lg bg-muted/50 border border-border/50">
+                    <div className="flex items-center gap-3 mb-3">
                       <span className={`text-lg font-bold w-8 text-center ${n.rank === 1 ? "text-teal" : "text-muted-foreground"}`}>
                         #{n.rank}
                       </span>
@@ -213,32 +213,92 @@ function NameTestResultContent({
                         )}
                       </div>
                     </div>
-                    <div className="flex-1 space-y-2">
-                      {/* Appeal bar */}
-                      <div className="flex items-center gap-3">
-                        <div className="flex-1 bg-muted rounded-full h-3">
-                          <div
-                            className={`h-3 rounded-full transition-all ${n.rank === 1 ? "bg-teal" : "bg-cyan-500"}`}
-                            style={{ width: `${n.appealScore}%` }}
-                          />
+
+                    {/* Metric bars */}
+                    <div className="space-y-2 mb-3">
+                      <MetricBar label="Appeal" value={n.appealScore} color={n.rank === 1 ? "bg-teal" : "bg-cyan-500"} />
+                      {n.memorability !== undefined && (
+                        <MetricBar label="Memorability" value={n.memorability} color={n.rank === 1 ? "bg-teal" : "bg-cyan-500"} />
+                      )}
+                      {n.categoryFit !== undefined && (
+                        <MetricBar label="Category Fit" value={n.categoryFit} color={n.rank === 1 ? "bg-teal" : "bg-cyan-500"} />
+                      )}
+                    </div>
+
+                    {/* Emotions */}
+                    {n.emotions && n.emotions.length > 0 && (
+                      <div className="mb-3">
+                        <p className="text-xs text-muted-foreground font-medium mb-1">Emotional Associations</p>
+                        <div className="flex flex-wrap gap-1.5">
+                          {n.emotions.slice(0, 3).map((e) => (
+                            <Badge key={e.word} variant="outline" className="text-[10px]">
+                              {e.word} ({e.count})
+                            </Badge>
+                          ))}
                         </div>
-                        <span className="text-sm font-medium text-primary w-12 text-right">
-                          {n.appealScore}%
-                        </span>
                       </div>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
-                        <div>
-                          <span className="text-emerald-600 font-medium">Positive: </span>
-                          <span className="text-muted-foreground">{n.topPositive}</span>
+                    )}
+
+                    {/* Impressions */}
+                    {n.impressions && n.impressions.length > 0 && (
+                      <div className="mb-3">
+                        <p className="text-xs text-muted-foreground font-medium mb-1">First Impressions</p>
+                        <div className="space-y-1">
+                          {n.impressions.map((imp, i) => (
+                            <p key={i} className="text-xs text-muted-foreground italic border-l-2 border-border pl-2">
+                              &ldquo;{imp}&rdquo;
+                            </p>
+                          ))}
                         </div>
-                        <div>
-                          <span className="text-red-500 font-medium">Concern: </span>
-                          <span className="text-muted-foreground">{n.topNegative}</span>
-                        </div>
+                      </div>
+                    )}
+
+                    {/* Positive / Concern */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
+                      <div>
+                        <span className="text-emerald-600 font-medium">Positive: </span>
+                        <span className="text-muted-foreground">{n.topPositive}</span>
+                      </div>
+                      <div>
+                        <span className="text-red-500 font-medium">Concern: </span>
+                        <span className="text-muted-foreground">{n.topNegative}</span>
                       </div>
                     </div>
                   </div>
                 ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Comparison Chart */}
+          <Card className="mb-8">
+            <CardHeader>
+              <CardTitle className="text-lg font-semibold">Side-by-Side Comparison</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-border/50">
+                      <th className="text-left py-3 px-3 font-medium text-muted-foreground">Name</th>
+                      <th className="text-center py-3 px-3 font-medium text-muted-foreground">Appeal</th>
+                      <th className="text-center py-3 px-3 font-medium text-muted-foreground">Memorability</th>
+                      <th className="text-center py-3 px-3 font-medium text-muted-foreground">Category Fit</th>
+                      <th className="text-center py-3 px-3 font-medium text-muted-foreground">Top Emotion</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {result.names.map((n) => (
+                      <tr key={n.name} className={`border-b border-border/30 ${n.rank === 1 ? "bg-teal/5" : ""}`}>
+                        <td className="py-3 px-3 font-medium">{n.name}</td>
+                        <td className="py-3 px-3 text-center">{n.appealScore}%</td>
+                        <td className="py-3 px-3 text-center">{n.memorability !== undefined ? `${n.memorability}%` : "-"}</td>
+                        <td className="py-3 px-3 text-center">{n.categoryFit !== undefined ? `${n.categoryFit}%` : "-"}</td>
+                        <td className="py-3 px-3 text-center">{n.emotions && n.emotions[0] ? n.emotions[0].word : "-"}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </CardContent>
           </Card>
@@ -315,5 +375,17 @@ function NameTestResultContent({
         </div>
       </main>
     </>
+  );
+}
+
+function MetricBar({ label, value, color }: { label: string; value: number; color: string }) {
+  return (
+    <div className="flex items-center gap-3">
+      <span className="text-[10px] text-muted-foreground w-20 shrink-0">{label}</span>
+      <div className="flex-1 bg-muted rounded-full h-2.5">
+        <div className={`h-2.5 rounded-full transition-all ${color}`} style={{ width: `${value}%` }} />
+      </div>
+      <span className="text-xs font-medium text-primary w-10 text-right">{value}%</span>
+    </div>
   );
 }

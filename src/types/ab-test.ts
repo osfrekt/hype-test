@@ -14,6 +14,9 @@ export interface AbTestConceptResult {
   featureImportance: { feature: string; score: number }[];
   topConcerns: string[];
   topPositives: string[];
+  npsScore: number;
+  purchaseFrequency: { label: string; percent: number }[];
+  verbatims: string[];
 }
 
 export interface AbTestResult {

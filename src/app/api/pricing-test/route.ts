@@ -156,6 +156,7 @@ async function persistResult(result: import("@/types/pricing-test").PricingTestR
     price_points: result.pricePoints,
     optimal_price: result.optimalPrice,
     optimal_intent: result.optimalIntent,
+    key_insight: result.keyInsight,
     panel_size: result.panelSize,
     methodology: result.methodology,
     email: user.email,

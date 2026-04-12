@@ -20,7 +20,10 @@ export interface PricingTestResult {
     price: number;
     intentScore: number;
     revenueIndex: number;
+    valuePerception: number; // % who said yes/maybe for good value
+    priceComparison: { tooCheap: number; aboutRight: number; tooExpensive: number };
   }[];
+  keyInsight: string;
   optimalPrice: number;
   optimalIntent: number;
   panelSize: number;
