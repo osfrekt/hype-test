@@ -182,12 +182,20 @@ export function Nav() {
               </div>
             </div>
           ) : (
-            <Link
-              href="/login"
-              className="hover:text-foreground transition-colors"
-            >
-              Log in
-            </Link>
+            <>
+              <Link
+                href="/login"
+                className="hover:text-foreground transition-colors"
+              >
+                Log In
+              </Link>
+              <Link
+                href="/signup"
+                className="hover:text-foreground transition-colors"
+              >
+                Sign Up
+              </Link>
+            </>
           )}
         </nav>
         <div className="flex items-center gap-3">
@@ -267,7 +275,8 @@ export function Nav() {
                 </button>
               </>
             ) : (
-              <Link href="/login" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 rounded-lg text-sm hover:bg-muted transition-colors text-foreground font-medium">Log in</Link>
+              <Link href="/login" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 rounded-lg text-sm hover:bg-muted transition-colors text-foreground font-medium">Log In</Link>
+              <Link href="/signup" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 rounded-lg text-sm hover:bg-muted transition-colors text-foreground font-medium">Sign Up</Link>
             )}
           </div>
         </div>
