@@ -124,6 +124,32 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Used by */}
+        <section className="py-6 border-b border-border/50">
+          <div className="max-w-4xl mx-auto px-6">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8">
+              <p className="text-xs text-muted-foreground/60 uppercase tracking-wider shrink-0">
+                Used by founders of
+              </p>
+              <div className="flex items-center gap-8">
+                <a href="https://rfrekt.com" target="_blank" rel="noopener noreferrer" className="opacity-40 hover:opacity-70 transition-opacity">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/brands/rekt-black.svg" alt="REKT" className="h-5 dark:hidden" />
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/brands/rekt-yellow.svg" alt="REKT" className="h-5 hidden dark:block" />
+                </a>
+                <a href="https://yeet.com" target="_blank" rel="noopener noreferrer" className="opacity-40 hover:opacity-70 transition-opacity">
+                  <span className="text-lg font-extrabold tracking-tight text-foreground">YEET</span>
+                </a>
+                <a href="https://snoozlife.co.uk" target="_blank" rel="noopener noreferrer" className="opacity-40 hover:opacity-70 transition-opacity flex items-center gap-1.5">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="https://snoozlife.co.uk/wp-content/uploads/2024/07/Snooz_Logo_grad_01-13.svg" alt="Snooz" className="h-5" />
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* How it works */}
         <section className="py-14 bg-card">
           <div className="max-w-5xl mx-auto px-6">
