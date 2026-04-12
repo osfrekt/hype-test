@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Nav } from "@/components/nav";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import type { AdTestResult, AdCreativeResult } from "@/types/ad-test";
 
 const SAMPLE_RESULT: AdTestResult = {
@@ -82,21 +83,25 @@ const SAMPLE_RESULT: AdTestResult = {
         { word: "skeptical", count: 5 },
       ],
       topStrengths: [
-        "Clear, specific claims about caffeine and L-Theanine build credibility",
-        "Zero sugar/zero crash message appeals to health-conscious consumers",
-        "Multiple use cases (gaming, work, training) broadens audience",
-        "Straightforward and easy to understand at a glance",
-        "Natural caffeine positioning differentiates from competitors",
+        "Clear, specific claims about caffeine dosage and L-Theanine build immediate credibility with health-literate consumers",
+        "Zero sugar / zero crash message directly addresses the #1 pain point of energy drink users",
+        "Multiple use cases (gaming, work, training) broadens appeal across the full 18-38 target demographic",
+        "Straightforward copy is scannable in under 3 seconds -- critical for paid social placements",
+        "Natural caffeine positioning creates clear differentiation from synthetic-heavy competitors like G Fuel and Celsius",
       ],
       topWeaknesses: [
-        "Functional messaging may feel clinical rather than exciting",
-        "No emotional hook to build brand connection",
-        "Could be any supplement brand without stronger identity",
+        "Functional, ingredient-led messaging may feel clinical rather than exciting to younger gamers",
+        "No emotional hook or storytelling element to build deeper brand connection beyond product specs",
+        "Could be any supplement brand -- copy lacks Rekt Energy's distinctive personality and edge",
+        "Benefit stacking ('game harder, work sharper, train longer') dilutes focus; one clear CTA would convert better",
+        "Missing social proof or community signal that would increase trust for a newer DTC brand",
       ],
       keyTakeaways: [
-        "This is a clean energy product that promises focus without the crash",
-        "A caffeine supplement with nootropics for productivity",
-        "An alternative to sugary energy drinks for active people",
+        "This is a clean energy product that promises focus without the crash -- it leads with science, not hype",
+        "A caffeine supplement with nootropics for productivity-obsessed professionals who read labels",
+        "An alternative to sugary energy drinks for active people who want to feel responsible about their intake",
+        "The messaging is trustworthy but forgettable -- it explains what the product is, not why it matters",
+        "Best suited for bottom-of-funnel retargeting where the audience already knows the brand",
       ],
     },
     {
@@ -154,26 +159,30 @@ const SAMPLE_RESULT: AdTestResult = {
         { word: "defensive", count: 4 },
       ],
       topStrengths: [
-        "Strong emotional hook grabs attention immediately",
-        "Provocative tone creates memorable brand voice",
-        "Clearly positions against sugar-loaded competitors",
-        "Appeals to intelligence and self-improvement",
+        "Strong emotional hook ('Stop poisoning your focus') grabs attention and creates urgency in the first 2 words",
+        "Provocative, confrontational tone creates a memorable brand voice that stands out in crowded feeds",
+        "Clearly positions Rekt Energy against sugar-loaded competitors, giving the audience a villain to reject",
+        "Appeals to intelligence and self-improvement -- 'your brain deserves better' flatters the reader",
+        "Conversational headline ('Your Brain Called') uses humour to lower defences before the hard sell",
       ],
       topWeaknesses: [
-        "Confrontational tone may alienate some consumers",
-        "Shaming language could feel preachy or judgemental",
-        "Less specific about what the product actually contains",
-        "May not work well for consumers who already drink energy drinks",
+        "Confrontational tone risks alienating 30-40% of consumers who feel personally attacked for their current habits",
+        "Shaming language ('stop poisoning') could feel preachy or judgemental, especially among older professionals",
+        "Less specific about product contents -- no dosage, no ingredient callouts beyond 'nootropics'",
+        "May backfire with loyal energy drink consumers who feel defensive rather than curious",
+        "Humour in the headline sets a playful expectation that clashes with the aggressive body copy tone",
       ],
       keyTakeaways: [
-        "This brand is telling me my current energy drink is bad for me",
-        "A healthier energy option that is trying to shame competitors",
-        "A bold brand that thinks it is smarter than the alternatives",
+        "This brand is telling me my current energy drink is poisoning me -- a bold, polarising claim",
+        "A healthier energy option positioning itself as the 'smart choice' by shaming mainstream alternatives",
+        "The copy has strong personality but trades credibility for attitude -- it tells me to switch without proving why",
+        "Would likely perform better as a top-of-funnel awareness play where memorability matters more than conversion",
+        "The provocative angle could drive high engagement (comments, shares) but may underperform on direct click-through",
       ],
     },
   ],
   winner: "A",
-  winMargin: 4,
+  winMargin: 5,
   panelSize: 50,
   methodology: {
     panelSize: 50,
@@ -186,6 +195,24 @@ const SAMPLE_RESULT: AdTestResult = {
   createdAt: "2026-04-10T14:30:00Z",
   status: "complete",
 };
+
+function DistributionBar({ distribution }: { distribution: { label: string; count: number }[] }) {
+  const max = Math.max(...distribution.map((d) => d.count), 1);
+  return (
+    <div className="flex items-end gap-0.5 h-8 mt-1.5">
+      {distribution.map((d) => (
+        <div key={d.label} className="flex-1 flex flex-col items-center gap-0.5">
+          <span className="text-[9px] text-muted-foreground leading-none">{d.count}</span>
+          <div
+            className="w-full bg-teal/60 rounded-sm min-h-[2px]"
+            style={{ height: `${(d.count / max) * 100}%` }}
+          />
+          <span className="text-[8px] text-muted-foreground leading-none">{d.label.charAt(0)}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 function CreativeCard({
   label,
@@ -215,8 +242,8 @@ function CreativeCard({
         <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{creative.creative.adCopy}</p>
       </CardHeader>
       <CardContent className="space-y-5">
-        {/* Score metrics */}
-        <div className="grid grid-cols-2 gap-3">
+        {/* Score metrics with distributions */}
+        <div className="grid grid-cols-2 gap-4">
           {metrics.map((m) => (
             <div key={m.label}>
               <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-1">{m.label}</p>
@@ -224,6 +251,7 @@ function CreativeCard({
               <div className="w-full bg-muted rounded-full h-1.5 mt-1">
                 <div className="bg-teal h-1.5 rounded-full" style={{ width: `${m.data.score}%` }} />
               </div>
+              <DistributionBar distribution={m.data.distribution} />
             </div>
           ))}
         </div>
@@ -231,7 +259,7 @@ function CreativeCard({
         {/* Click likelihood */}
         <div>
           <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-2">Click Likelihood</p>
-          <div className="flex rounded-full overflow-hidden h-5 text-[10px] font-medium">
+          <div className="flex rounded-full overflow-hidden h-6 text-[10px] font-medium">
             {creative.clickLikelihood.yes > 0 && (
               <div
                 className="bg-emerald-500 text-white flex items-center justify-center"
@@ -261,7 +289,7 @@ function CreativeCard({
 
         {/* Emotional responses */}
         <div>
-          <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-2">Emotional Responses</p>
+          <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-2">Top Emotional Responses</p>
           <div className="flex flex-wrap gap-1.5">
             {creative.emotionalResponses.map((e) => (
               <span
@@ -279,11 +307,11 @@ function CreativeCard({
         {/* Strengths */}
         {creative.topStrengths.length > 0 && (
           <div>
-            <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-2">Strengths</p>
-            <ul className="space-y-1">
+            <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-2">Top 5 Strengths</p>
+            <ul className="space-y-1.5">
               {creative.topStrengths.map((s, i) => (
                 <li key={i} className="text-xs text-foreground flex items-start gap-1.5">
-                  <span className="text-emerald-500 mt-0.5 shrink-0">+</span>
+                  <span className="text-emerald-500 mt-0.5 shrink-0 font-bold">+</span>
                   {s}
                 </li>
               ))}
@@ -294,11 +322,11 @@ function CreativeCard({
         {/* Weaknesses */}
         {creative.topWeaknesses.length > 0 && (
           <div>
-            <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-2">Weaknesses</p>
-            <ul className="space-y-1">
+            <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-2">Top 5 Weaknesses</p>
+            <ul className="space-y-1.5">
               {creative.topWeaknesses.map((w, i) => (
                 <li key={i} className="text-xs text-foreground flex items-start gap-1.5">
-                  <span className="text-red-500 mt-0.5 shrink-0">-</span>
+                  <span className="text-red-500 mt-0.5 shrink-0 font-bold">-</span>
                   {w}
                 </li>
               ))}
@@ -310,7 +338,7 @@ function CreativeCard({
         {creative.keyTakeaways.length > 0 && (
           <div>
             <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-2">Key Takeaways</p>
-            <ul className="space-y-1">
+            <ul className="space-y-1.5">
               {creative.keyTakeaways.map((t, i) => (
                 <li key={i} className="text-xs text-muted-foreground">&ldquo;{t}&rdquo;</li>
               ))}
@@ -355,11 +383,12 @@ export default function SampleRektAdTest() {
           {/* Winner Banner */}
           <Card className="mb-8 bg-primary text-primary-foreground border-primary">
             <CardContent className="pt-6 pb-6 text-center">
-              <p className="text-lg font-bold mb-1">
-                {result.results[0].creative.name} wins
+              <p className="text-xs font-medium uppercase tracking-wider text-primary-foreground/50 mb-2">Panel Verdict</p>
+              <p className="text-xl font-bold mb-2">
+                &ldquo;{result.results[0].creative.name}&rdquo; wins by {result.winMargin} points
               </p>
-              <p className="text-sm text-primary-foreground/70">
-                {result.winMargin}pt margin on overall score (attention + clarity + persuasion + brand fit)
+              <p className="text-sm text-primary-foreground/70 max-w-xl mx-auto">
+                Creative A scored higher on clarity (+16), attention (+4), and brand fit (+6), outweighing Creative B&apos;s edge in persuasion (+5). The functional, ingredient-led approach built more trust with the health-conscious panel, while the provocative tone of Creative B polarised respondents -- driving higher emotional engagement but also higher rejection rates.
               </p>
             </CardContent>
           </Card>
@@ -418,6 +447,28 @@ export default function SampleRektAdTest() {
             </CardContent>
           </Card>
 
+          {/* Methodology */}
+          <Card className="border-teal/20 bg-teal/5 mb-8">
+            <CardHeader>
+              <CardTitle className="text-lg font-semibold text-primary">Methodology &amp; Limitations</CardTitle>
+            </CardHeader>
+            <CardContent className="text-sm text-muted-foreground space-y-2">
+              <p><strong>Panel size:</strong> {result.methodology.panelSize} simulated consumers</p>
+              <p><strong>Demographic mix:</strong> {result.methodology.demographicMix}</p>
+              <p><strong>Total survey questions:</strong> {result.methodology.questionsAsked}</p>
+              <Separator className="my-3" />
+              <p className="text-xs leading-relaxed">{result.methodology.confidenceNote}</p>
+              <p className="text-xs leading-relaxed">
+                This research uses methodology informed by Brand, Israeli &amp; Ngwe (2025),
+                &ldquo;Using LLMs for Market Research,&rdquo; Harvard Business School Working Paper 23-062.
+              </p>
+              <p className="text-xs leading-relaxed font-medium">
+                Important: These results are best used for directional insights and hypothesis generation.
+                They should not replace high-stakes primary consumer research for major business decisions.
+              </p>
+            </CardContent>
+          </Card>
+
           {/* CTA */}
           <div className="mt-8 text-center" data-print-hide>
             <Link
@@ -427,6 +478,10 @@ export default function SampleRektAdTest() {
               Run your own ad test
             </Link>
           </div>
+
+          <p className="text-[11px] text-muted-foreground leading-relaxed mt-6 text-center">
+            AI-simulated research using peer-reviewed methodology. Results are directional and best used for hypothesis validation, not high-stakes business decisions.
+          </p>
         </div>
       </main>
     </>
