@@ -106,8 +106,8 @@ export default function Home() {
                     <circle key={`o${i}`} cx={cx} cy={cy} r="5" className="fill-teal" opacity="0.35" />
                   ))}
                   {/* R-squared annotation */}
-                  <rect x="260" y="170" width="110" height="32" rx="6" className="fill-navy" />
-                  <text x="315" y="191" textAnchor="middle" className="fill-primary-foreground" fontSize="13" fontWeight="600">R&sup2; = 0.89</text>
+                  <rect x="260" y="170" width="110" height="32" rx="6" fill="#0e7490" />
+                  <text x="315" y="191" textAnchor="middle" fill="white" fontSize="13" fontWeight="600">R&sup2; = 0.89</text>
                 </svg>
                 <p className="text-xs text-muted-foreground mt-2 text-center">
                   Illustrative chart inspired by findings in Brand, Israeli &amp; Ngwe (2025), HBS Working Paper 23-062. Not a representation of HypeTest validation data.
