@@ -125,7 +125,16 @@ export async function POST(request: Request) {
       }),
     };
 
-    const result = await runResearch(sanitizedInput);
+    // Pro and Team plans get 100 respondents, others get 50
+    let panelSize = 50;
+    if (email) {
+      const user = await getOrCreateUser(email);
+      if (user.plan === "pro" || user.plan === "team") {
+        panelSize = 100;
+      }
+    }
+
+    const result = await runResearch(sanitizedInput, undefined, panelSize);
 
     const userName = typeof body.userName === "string" ? body.userName.trim().slice(0, 200) : null;
     const userCompany = typeof body.userCompany === "string" ? body.userCompany.trim().slice(0, 200) : null;

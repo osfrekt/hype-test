@@ -9,17 +9,18 @@ import { generatePanel, generateTargetedPanel } from "./personas";
 
 const anthropic = new Anthropic();
 
-const PANEL_SIZE = 50;
+const DEFAULT_PANEL_SIZE = 50;
 const BATCH_SIZE = 10;
 
 export async function runResearch(
   input: ResearchInput,
-  onProgress?: (stage: string, progress: number) => void
+  onProgress?: (stage: string, progress: number) => void,
+  panelSize: number = DEFAULT_PANEL_SIZE
 ): Promise<ResearchResult> {
   const category = input.category || inferCategory(input.productDescription);
   const panel = input.targetMarket
-    ? await generateTargetedPanel(PANEL_SIZE, category, input.targetMarket)
-    : generatePanel(PANEL_SIZE, category);
+    ? await generateTargetedPanel(panelSize, category, input.targetMarket)
+    : generatePanel(panelSize, category);
   const features = input.keyFeatures?.length
     ? input.keyFeatures
     : await extractFeatures(input);
@@ -52,7 +53,7 @@ export async function runResearch(
 
   if (allResponses.length < 5) {
     throw new Error(
-      `Too few persona responses (${allResponses.length}/${PANEL_SIZE}). The research panel could not be completed.`
+      `Too few persona responses (${allResponses.length}/${panelSize}). The research panel could not be completed.`
     );
   }
 

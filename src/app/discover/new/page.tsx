@@ -698,101 +698,50 @@ function DiscoverNewForm() {
                   )}
                 </div>
 
-                {/* About you */}
-                <div className="bg-teal/5 rounded-xl p-4 border border-teal/20 space-y-4">
-                  <div>
-                    <p className="text-sm font-semibold text-primary mb-1">About you</p>
-                    <p className="text-xs text-muted-foreground">
-                      {isAuthUser
-                        ? "Signed in. Your report will be saved to your account."
-                        : "We'll send your report link to your email. No account needed."}
-                    </p>
-                  </div>
-                  {isAuthUser ? (
-                    <div className="flex items-center gap-3 text-sm">
-                      <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold text-xs">
-                        {(userName || email || "?").charAt(0).toUpperCase()}
-                      </div>
-                      <div>
-                        <p className="font-medium text-foreground">{userName || "User"}</p>
-                        <p className="text-xs text-muted-foreground">{email}</p>
-                      </div>
+                {/* About you - only for non-authenticated users */}
+                {!isAuthUser && (
+                  <div className="bg-teal/5 rounded-xl p-4 border border-teal/20 space-y-4">
+                    <div>
+                      <p className="text-sm font-semibold text-primary mb-1">About you</p>
+                      <p className="text-xs text-muted-foreground">
+                        We&apos;ll send your report link to your email. No account needed.
+                      </p>
                     </div>
-                  ) : (
-                    <>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <div className="space-y-1.5">
-                          <Label htmlFor="d-userName">Name</Label>
-                          <Input
-                            id="d-userName"
-                            placeholder="Jane Smith"
-                            value={userName}
-                            onChange={(e) => setUserName(e.target.value)}
-                            required
-                          />
-                        </div>
-                        <div className="space-y-1.5">
-                          <Label htmlFor="d-email">Work email</Label>
-                          <Input
-                            id="d-email"
-                            type="email"
-                            placeholder="jane@company.com"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                          />
-                        </div>
-                        <div className="space-y-1.5">
-                          <Label htmlFor="d-userCompany">Company</Label>
-                          <Input
-                            id="d-userCompany"
-                            placeholder="Acme Corp"
-                            value={userCompany}
-                            onChange={(e) => setUserCompany(e.target.value)}
-                            required
-                          />
-                        </div>
-                        <div className="space-y-1.5">
-                          <Label>Role</Label>
-                          <Select value={userRole} onValueChange={(v) => setUserRole(v ?? "")}>
-                            <SelectTrigger className="w-full">
-                              <SelectValue placeholder="Select your role" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="founder">Founder / CEO</SelectItem>
-                              <SelectItem value="product">Product / CPO</SelectItem>
-                              <SelectItem value="marketing">Marketing / CMO</SelectItem>
-                              <SelectItem value="brand">Brand Manager</SelectItem>
-                              <SelectItem value="innovation">Innovation / R&amp;D</SelectItem>
-                              <SelectItem value="insights">Consumer Insights / Research</SelectItem>
-                              <SelectItem value="growth">Growth / Strategy</SelectItem>
-                              <SelectItem value="consultant">Consultant / Agency</SelectItem>
-                              <SelectItem value="investor">Investor / VC</SelectItem>
-                              <SelectItem value="student">Student / Academic</SelectItem>
-                              <SelectItem value="other">Other</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div className="space-y-1.5">
+                        <Label htmlFor="d-userName">Name <span className="text-red-500">*</span></Label>
+                        <Input id="d-userName" placeholder="Jane Smith" value={userName} onChange={(e) => setUserName(e.target.value)} required />
                       </div>
                       <div className="space-y-1.5">
-                        <Label>Company size</Label>
-                        <Select value={userCompanySize} onValueChange={(v) => setUserCompanySize(v ?? "")}>
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Select company size (optional)" />
-                          </SelectTrigger>
+                        <Label htmlFor="d-email">Work email <span className="text-red-500">*</span></Label>
+                        <Input id="d-email" type="email" placeholder="jane@company.com" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                      </div>
+                      <div className="space-y-1.5">
+                        <Label htmlFor="d-userCompany">Company <span className="text-red-500">*</span></Label>
+                        <Input id="d-userCompany" placeholder="Acme Corp" value={userCompany} onChange={(e) => setUserCompany(e.target.value)} required />
+                      </div>
+                      <div className="space-y-1.5">
+                        <Label>Role <span className="text-red-500">*</span></Label>
+                        <Select value={userRole} onValueChange={(v) => setUserRole(v ?? "")}>
+                          <SelectTrigger className="w-full"><SelectValue placeholder="Select your role" /></SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="1">Just me</SelectItem>
-                            <SelectItem value="2-10">2-10</SelectItem>
-                            <SelectItem value="11-50">11-50</SelectItem>
-                            <SelectItem value="51-200">51-200</SelectItem>
-                            <SelectItem value="201-1000">201-1,000</SelectItem>
-                            <SelectItem value="1000+">1,000+</SelectItem>
+                            <SelectItem value="founder">Founder / CEO</SelectItem>
+                            <SelectItem value="product">Product / CPO</SelectItem>
+                            <SelectItem value="marketing">Marketing / CMO</SelectItem>
+                            <SelectItem value="brand">Brand Manager</SelectItem>
+                            <SelectItem value="innovation">Innovation / R&amp;D</SelectItem>
+                            <SelectItem value="insights">Consumer Insights / Research</SelectItem>
+                            <SelectItem value="growth">Growth / Strategy</SelectItem>
+                            <SelectItem value="consultant">Consultant / Agency</SelectItem>
+                            <SelectItem value="investor">Investor / VC</SelectItem>
+                            <SelectItem value="student">Student / Academic</SelectItem>
+                            <SelectItem value="other">Other</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
-                    </>
-                  )}
-                </div>
+                    </div>
+                  </div>
+                )}
 
                 {error && (
                   <div className="bg-destructive/10 text-destructive text-sm rounded-lg p-3">

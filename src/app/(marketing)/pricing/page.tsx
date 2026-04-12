@@ -65,7 +65,7 @@ const featureCategories: { category: string; features: FeatureRow[] }[] = [
     category: "Consumer Research",
     features: [
       { name: "Research runs per month", free: "3", starter: "30", pro: "100", team: "500" },
-      { name: "Simulated panellists per run", free: "50", starter: "50", pro: "50", team: "50" },
+      { name: "Simulated panellists per run", free: "50", starter: "50", pro: "100", team: "100" },
       { name: "Purchase intent scoring", free: true, starter: true, pro: true, team: true },
       { name: "WTP range estimation", free: true, starter: true, pro: true, team: true },
       { name: "Feature importance ranking", free: true, starter: true, pro: true, team: true },
