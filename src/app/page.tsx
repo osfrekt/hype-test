@@ -409,7 +409,7 @@ export default function Home() {
                   </p>
                 </div>
 
-                <div className="flex items-center justify-center gap-6">
+                <div className="flex items-center justify-center gap-6 flex-wrap">
                   <Link
                     href="/research/new"
                     className="inline-flex items-center gap-2 text-sm font-semibold text-teal hover:underline"
@@ -422,6 +422,14 @@ export default function Home() {
                   >
                     View full sample report
                   </a>
+                </div>
+                <div className="text-center mt-4">
+                  <Link
+                    href="/case-studies/rekt"
+                    className="text-sm font-medium text-teal hover:underline"
+                  >
+                    Read the full case study: 1 million cans in Year 1 &rarr;
+                  </Link>
                 </div>
               </div>
             </div>

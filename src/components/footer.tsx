@@ -38,6 +38,9 @@ export function Footer() {
               <Link href="/pricing" className="hover:text-foreground transition-colors">
                 Pricing
               </Link>
+              <Link href="/case-studies/rekt" className="hover:text-foreground transition-colors">
+                Case Studies
+              </Link>
             </div>
           </div>
           <div>
