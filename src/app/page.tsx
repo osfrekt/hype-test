@@ -494,17 +494,17 @@ export default function Home() {
                 </div>
                 <div className="w-12 h-px bg-primary-foreground/10" />
                 {/* Change 5: Validation CTA */}
-                <div className="bg-amber-100 dark:bg-amber-500/10 border border-amber-300 dark:border-amber-400/20 rounded-xl p-4">
-                  <p className="text-sm font-semibold text-amber-800 dark:text-amber-300 mb-1">
+                <div className="bg-primary-foreground/10 border border-primary-foreground/20 rounded-xl p-4">
+                  <p className="text-sm font-semibold text-primary-foreground mb-1">
                     Already have research data?
                   </p>
-                  <p className="text-sm text-amber-700 dark:text-primary-foreground/70 mb-3">
+                  <p className="text-sm text-primary-foreground/70 mb-3">
                     Run HypeTest on the same product and compare results. It&apos;s
                     the fastest way to build confidence in the methodology.
                   </p>
                   <Link
                     href="/research/new"
-                    className="inline-flex items-center gap-2 text-sm font-semibold text-amber-800 dark:text-amber-300 hover:underline"
+                    className="inline-flex items-center gap-2 text-sm font-semibold text-teal hover:underline"
                   >
                     Run a validation test
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
