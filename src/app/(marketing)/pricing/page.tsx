@@ -199,12 +199,12 @@ export default function PricingPage() {
               <Card
                 key={plan.id}
                 className={`relative flex flex-col ${
-                  plan.highlight ? "border-teal shadow-lg shadow-teal/10" : ""
+                  plan.highlight ? "border-teal shadow-lg shadow-teal/10 overflow-visible" : ""
                 }`}
               >
                 {plan.highlight && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <span className="bg-teal text-white text-xs font-semibold px-3 py-1 rounded-full">
+                    <span className="bg-teal text-white text-xs font-semibold px-3 py-1 rounded-full whitespace-nowrap">
                       Most popular
                     </span>
                   </div>
