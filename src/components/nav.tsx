@@ -156,15 +156,31 @@ export function Nav() {
             </Link>
           )}
           {authChecked && authUser ? (
-            <Link
-              href="/account"
-              className="hover:text-foreground transition-colors flex items-center gap-1.5"
-            >
-              <span className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center text-[10px] font-semibold text-primary">
-                {initial}
-              </span>
-              Account
-            </Link>
+            <div className="relative group/account">
+              <button className="hover:text-foreground transition-colors flex items-center gap-1.5">
+                <span className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center text-[10px] font-semibold text-primary">
+                  {initial}
+                </span>
+                Account
+              </button>
+              <div className="absolute top-full right-0 pt-2 opacity-0 invisible group-hover/account:opacity-100 group-hover/account:visible transition-all duration-150 z-50">
+                <div className="bg-card border border-border rounded-xl shadow-lg p-1.5 w-40">
+                  <Link href="/dashboard" className="block px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">Dashboard</Link>
+                  <Link href="/account" className="block px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">Account</Link>
+                  <div className="h-px bg-border mx-3 my-1" />
+                  <button
+                    onClick={async () => {
+                      const supabase = createClient();
+                      await supabase.auth.signOut();
+                      window.location.href = "/";
+                    }}
+                    className="block w-full text-left px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors text-red-600 dark:text-red-400"
+                  >
+                    Log out
+                  </button>
+                </div>
+              </div>
+            </div>
           ) : (
             <Link
               href="/login"
@@ -239,6 +255,16 @@ export function Nav() {
               <>
                 <Link href="/dashboard" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 rounded-lg text-sm hover:bg-muted transition-colors text-foreground font-medium">Dashboard</Link>
                 <Link href="/account" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 rounded-lg text-sm hover:bg-muted transition-colors text-foreground font-medium">Account</Link>
+                <button
+                  onClick={async () => {
+                    const supabase = createClient();
+                    await supabase.auth.signOut();
+                    window.location.href = "/";
+                  }}
+                  className="block w-full text-left px-3 py-2.5 rounded-lg text-sm hover:bg-muted transition-colors text-red-600 dark:text-red-400"
+                >
+                  Log out
+                </button>
               </>
             ) : (
               <Link href="/login" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 rounded-lg text-sm hover:bg-muted transition-colors text-foreground font-medium">Log in</Link>

@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Nav } from "@/components/nav";
 import { Footer } from "@/components/footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { createClient } from "@/lib/supabase/client";
 
 const plans = [
   {
@@ -124,11 +125,19 @@ function DashIcon() {
 }
 
 export default function PricingPage() {
+  const [authEmail, setAuthEmail] = useState<string | null>(null);
   const [checkoutEmail, setCheckoutEmail] = useState("");
   const [checkoutPlan, setCheckoutPlan] = useState<string | null>(null);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [checkoutError, setCheckoutError] = useState("");
   const [waitlistEmail, setWaitlistEmail] = useState("");
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (user?.email) setAuthEmail(user.email);
+    });
+  }, []);
   const [waitlistStatus, setWaitlistStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [waitlistMessage, setWaitlistMessage] = useState("");
 
@@ -248,13 +257,33 @@ export default function PricingPage() {
                   ) : (
                     <Button
                       className={`w-full ${plan.highlight ? "" : "bg-muted text-foreground hover:bg-muted/80"}`}
-                      onClick={() => {
-                        setCheckoutPlan(plan.id);
-                        setCheckoutError("");
-                        try {
-                          const stored = sessionStorage.getItem("ht-email");
-                          if (stored) setCheckoutEmail(stored);
-                        } catch { /* ignore */ }
+                      onClick={async () => {
+                        if (authEmail) {
+                          // Logged in: skip email modal, go straight to checkout
+                          setCheckoutLoading(true);
+                          setCheckoutError("");
+                          try {
+                            const res = await fetch("/api/billing/checkout", {
+                              method: "POST",
+                              headers: { "Content-Type": "application/json" },
+                              body: JSON.stringify({ email: authEmail, plan: plan.id }),
+                            });
+                            const data = await res.json();
+                            if (data.url) {
+                              window.location.href = data.url;
+                            } else {
+                              setCheckoutError(data.error || "Something went wrong.");
+                              setCheckoutLoading(false);
+                            }
+                          } catch {
+                            setCheckoutError("Something went wrong.");
+                            setCheckoutLoading(false);
+                          }
+                        } else {
+                          // Not logged in: show email modal
+                          setCheckoutPlan(plan.id);
+                          setCheckoutError("");
+                        }
                       }}
                     >
                       {plan.cta}

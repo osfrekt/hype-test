@@ -294,7 +294,12 @@ export default function DashboardPage() {
                 used this month
               </p>
             </div>
-            <Badge variant="outline" className="text-sm px-3 py-1 w-fit">
+            <Badge className={`text-sm px-3 py-1 w-fit border-0 ${
+              plan === "free" ? "bg-emerald-100 dark:bg-emerald-950/50 text-emerald-800 dark:text-emerald-400" :
+              plan === "starter" ? "bg-teal/10 text-teal-dark dark:text-teal" :
+              plan === "pro" ? "bg-primary text-primary-foreground" :
+              "bg-primary text-primary-foreground"
+            }`}>
               {planName} plan
             </Badge>
           </div>
