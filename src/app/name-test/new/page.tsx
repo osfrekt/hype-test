@@ -208,6 +208,11 @@ function NewNameTestForm() {
             <p className="text-muted-foreground">
               Test 2-5 name options for the same product concept. A panel of 30 consumers ranks each name by appeal.
             </p>
+            <p className="text-sm text-muted-foreground mt-2">
+              <Link href="/name-test/sample-rekt" className="text-teal hover:underline">
+                View a sample report &rarr;
+              </Link>
+            </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">

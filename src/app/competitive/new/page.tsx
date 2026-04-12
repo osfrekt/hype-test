@@ -302,6 +302,11 @@ function CompetitiveForm() {
             <p className="text-muted-foreground">
               Compare your product against a competitor. Same panel, same questions, side-by-side results.
             </p>
+            <p className="text-sm text-muted-foreground mt-2">
+              <Link href="/competitive/sample-rekt" className="text-teal hover:underline">
+                View a sample report &rarr;
+              </Link>
+            </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">

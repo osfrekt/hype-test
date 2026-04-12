@@ -238,6 +238,11 @@ function AudienceTestForm() {
             <p className="text-muted-foreground">
               Test your product across different audience segments. Find out which group has the highest purchase intent.
             </p>
+            <p className="text-sm text-muted-foreground mt-2">
+              <Link href="/audience-test/sample-rekt" className="text-teal hover:underline">
+                View a sample report &rarr;
+              </Link>
+            </p>
           </div>
 
           <Card>

@@ -483,6 +483,11 @@ function NewResearchForm() {
               Tell us about your product. The more detail you give, the better
               your research panel performs.
             </p>
+            <p className="text-sm text-muted-foreground mt-2">
+              <Link href="/research/sample-rekt" className="text-teal hover:underline">
+                View a sample report &rarr;
+              </Link>
+            </p>
           </div>
 
           <Card>

@@ -227,6 +227,11 @@ function NewAbTestForm() {
             <p className="text-muted-foreground">
               Test two product concepts against the same panel of 50 consumers. See which one wins.
             </p>
+            <p className="text-sm text-muted-foreground mt-2">
+              <Link href="/ab-test/sample-rekt" className="text-teal hover:underline">
+                View a sample report &rarr;
+              </Link>
+            </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">

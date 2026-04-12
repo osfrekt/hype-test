@@ -424,6 +424,11 @@ function DiscoverNewForm() {
               test them with a simulated consumer panel to find the best
               opportunities.
             </p>
+            <p className="text-sm text-muted-foreground mt-2">
+              <Link href="/discover/sample-rekt" className="text-teal hover:underline">
+                View a sample report &rarr;
+              </Link>
+            </p>
           </div>
 
           <Card>

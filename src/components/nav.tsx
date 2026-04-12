@@ -69,17 +69,35 @@ export function Nav() {
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6" /></svg>
             </button>
             <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 hidden group-hover:block z-50">
-              <div className="bg-card border border-border rounded-xl shadow-lg p-2 w-56">
-                <Link href="/research/new" className="block px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">Consumer Research</Link>
-                <Link href="/discover/new" className="block px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">
-                  Product Discovery
-                  <span className="text-[10px] bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400 px-1.5 py-0.5 rounded-full font-medium ml-1.5">Pro</span>
+              <div className="bg-card border border-border rounded-xl shadow-lg p-1.5 w-64">
+                <Link href="/research/new" className="flex items-center justify-between px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">
+                  Consumer Research
+                  <span className="text-[10px] bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 px-1.5 py-0.5 rounded-full font-medium">Free</span>
                 </Link>
-                <Link href="/ab-test/new" className="block px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">A/B Concept Testing</Link>
-                <Link href="/name-test/new" className="block px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">Name Testing</Link>
-                <Link href="/pricing-test/new" className="block px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">Pricing Optimizer</Link>
-                <Link href="/audience-test/new" className="block px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">Audience Finder</Link>
-                <Link href="/competitive/new" className="block px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">Competitive Teardown</Link>
+                <Link href="/discover/new" className="flex items-center justify-between px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">
+                  Product Discovery
+                  <span className="text-[10px] bg-teal/10 text-teal-dark dark:text-teal px-1.5 py-0.5 rounded-full font-medium">Starter</span>
+                </Link>
+                <Link href="/ab-test/new" className="flex items-center justify-between px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">
+                  A/B Concept Testing
+                  <span className="text-[10px] bg-teal/10 text-teal-dark dark:text-teal px-1.5 py-0.5 rounded-full font-medium">Starter</span>
+                </Link>
+                <Link href="/name-test/new" className="flex items-center justify-between px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">
+                  Name Testing
+                  <span className="text-[10px] bg-teal/10 text-teal-dark dark:text-teal px-1.5 py-0.5 rounded-full font-medium">Starter</span>
+                </Link>
+                <Link href="/pricing-test/new" className="flex items-center justify-between px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">
+                  Pricing Optimizer
+                  <span className="text-[10px] bg-teal/10 text-teal-dark dark:text-teal px-1.5 py-0.5 rounded-full font-medium">Starter</span>
+                </Link>
+                <Link href="/audience-test/new" className="flex items-center justify-between px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">
+                  Audience Finder
+                  <span className="text-[10px] bg-teal/10 text-teal-dark dark:text-teal px-1.5 py-0.5 rounded-full font-medium">Starter</span>
+                </Link>
+                <Link href="/competitive/new" className="flex items-center justify-between px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">
+                  Competitive Teardown
+                  <span className="text-[10px] bg-teal/10 text-teal-dark dark:text-teal px-1.5 py-0.5 rounded-full font-medium">Starter</span>
+                </Link>
               </div>
             </div>
           </div>

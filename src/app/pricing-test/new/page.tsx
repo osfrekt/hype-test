@@ -216,6 +216,11 @@ function PricingTestForm() {
             <p className="text-muted-foreground">
               Test up to 5 price points with a simulated consumer panel. Find the price that maximizes revenue.
             </p>
+            <p className="text-sm text-muted-foreground mt-2">
+              <Link href="/pricing-test/sample-rekt" className="text-teal hover:underline">
+                View a sample report &rarr;
+              </Link>
+            </p>
           </div>
 
           <Card>
