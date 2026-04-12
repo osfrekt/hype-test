@@ -411,15 +411,15 @@ function GoNoGoScorecard({ result }: { result: ResearchResult }) {
   let bgColor: string;
   let borderColor: string;
 
-  const wtpAbovePrice = userPriceMid !== null ? wtpMid >= userPriceMid : true;
-  const wtpSignificantlyBelow = userPriceMid !== null ? wtpMid < userPriceMid * 0.75 : false;
+  const wtpCloseToPrice = userPriceMid !== null ? wtpMid >= userPriceMid * 0.85 : true;
+  const wtpSignificantlyBelow = userPriceMid !== null ? wtpMid < userPriceMid * 0.65 : false;
 
-  if (score >= 60 && wtpAbovePrice) {
+  if (score >= 55 && wtpCloseToPrice) {
     verdict = "GO";
     verdictColor = "text-emerald-700 dark:text-emerald-400";
     bgColor = "bg-emerald-50 dark:bg-emerald-950/30";
     borderColor = "border-emerald-200 dark:border-emerald-800/40";
-    reasoning = `Strong purchase intent (${score}%) with willingness to pay at or above your target price. Consumer sentiment is positive, with "${topPositive}" cited most frequently.`;
+    reasoning = `Strong purchase intent (${score}%) with willingness to pay in range of your target price. Consumer sentiment is positive, with "${topPositive}" cited most frequently.`;
   } else if (score < 40 || wtpSignificantlyBelow) {
     verdict = "RECONSIDER";
     verdictColor = "text-red-700 dark:text-red-400";
