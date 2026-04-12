@@ -14,7 +14,7 @@ export default function Home() {
           <div className="max-w-5xl mx-auto px-6 pt-16 pb-14 text-center relative">
             <div data-animate="1" className="inline-flex items-center gap-2 bg-teal/10 text-teal-dark text-xs font-medium px-3 py-1.5 rounded-full mb-5">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" /></svg>
-              Grounded in peer-reviewed research
+              Grounded in academic research
             </div>
             <h1 data-animate="2" className="font-extrabold text-primary tracking-tight leading-[1.08] mb-5" style={{ fontSize: 'clamp(2.25rem, 1.5rem + 3vw, 3.75rem)' }}>
               Consumer research in
@@ -129,7 +129,7 @@ export default function Home() {
           <div className="max-w-4xl mx-auto px-6">
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8">
               <p className="text-xs text-muted-foreground/60 uppercase tracking-wider shrink-0">
-                Used by founders of
+                Built by the team behind
               </p>
               <div className="flex items-center gap-8">
                 <a href="https://rekt.com" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition-opacity">
@@ -222,7 +222,7 @@ export default function Home() {
               <div className="bg-card rounded-2xl border border-border/50 p-6">
                 <h3 className="text-base font-bold text-primary mb-2">Real accuracy, not AI guesswork</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">
-                  Built on peer-reviewed methodology that achieved R&sup2; = 0.89
+                  Built on academic methodology that achieved R&sup2; = 0.89
                   correlation with real consumer panels. This isn&apos;t a chatbot
                   opinion. It&apos;s structured research.
                 </p>
@@ -445,7 +445,7 @@ export default function Home() {
                   Why this works
                 </h2>
                 <p className="text-white/70 leading-relaxed mb-6">
-                  HypeTest is built on peer-reviewed research showing that LLM-simulated
+                  HypeTest is built on academic research showing that LLM-simulated
                   consumer panels produce willingness-to-pay estimates comparable to
                   real human panels.
                 </p>
