@@ -422,13 +422,22 @@ export default function PricingPage() {
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {/* Free */}
               <ToolCard
                 title="Consumer Research"
                 description="Test any product concept with a 50-person AI panel. Get purchase intent, WTP, feature importance, concerns, and a Go/No-Go verdict."
                 href="/research/new"
                 badge="Free"
-                badgeColor="bg-emerald-100 text-emerald-800"
+                badgeColor="bg-emerald-100 dark:bg-emerald-950/50 text-emerald-800 dark:text-emerald-400"
               />
+              <ToolCard
+                title="Segment Breakdown"
+                description="See research results broken down by age, gender, and income. Automatically included in every research run."
+                href="/research/new"
+                badge="Free"
+                badgeColor="bg-emerald-100 dark:bg-emerald-950/50 text-emerald-800 dark:text-emerald-400"
+              />
+              {/* Starter */}
               <ToolCard
                 title="A/B Concept Testing"
                 description="Test two product concepts head-to-head against the same panel. Clear winner with side-by-side metrics."
@@ -451,6 +460,21 @@ export default function PricingPage() {
                 badgeColor="bg-teal/10 text-teal-dark"
               />
               <ToolCard
+                title="Slack Integration"
+                description="Connect a Slack webhook and get research summaries posted to your channel automatically."
+                href="/account"
+                badge="Starter"
+                badgeColor="bg-teal/10 text-teal-dark"
+              />
+              {/* Pro */}
+              <ToolCard
+                title="Product Discovery"
+                description="Enter your brand and audience. AI generates product concepts and tests them with consumers. Keep iterating until you find a winner."
+                href="/discover/new"
+                badge="Pro"
+                badgeColor="bg-primary text-primary-foreground"
+              />
+              <ToolCard
                 title="Ad / Creative Testing"
                 description="Test ad creatives with a 50-person panel. Get attention, clarity, persuasion, brand fit, and click likelihood scores."
                 href="/ad-test/new"
@@ -461,13 +485,6 @@ export default function PricingPage() {
                 title="Logo Testing"
                 description="Test 1-5 logo designs with a 30-person panel. Get first impression, memorability, brand fit, distinctiveness, and trust scores."
                 href="/logo-test/new"
-                badge="Pro"
-                badgeColor="bg-primary text-primary-foreground"
-              />
-              <ToolCard
-                title="Product Discovery"
-                description="Enter your brand and audience. AI generates product concepts and tests them with consumers. Keep iterating until you find a winner."
-                href="/discover/new"
                 badge="Pro"
                 badgeColor="bg-primary text-primary-foreground"
               />
@@ -484,20 +501,6 @@ export default function PricingPage() {
                 href="/competitive/new"
                 badge="Pro"
                 badgeColor="bg-primary text-primary-foreground"
-              />
-              <ToolCard
-                title="Segment Breakdown"
-                description="See research results broken down by age, gender, and income. Automatically included in every research run."
-                href="/research/new"
-                badge="Free"
-                badgeColor="bg-emerald-100 text-emerald-800"
-              />
-              <ToolCard
-                title="Slack Integration"
-                description="Connect a Slack webhook and get research summaries posted to your channel automatically."
-                href="/account"
-                badge="Starter+"
-                badgeColor="bg-teal/10 text-teal-dark"
               />
             </div>
           </div>
