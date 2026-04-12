@@ -33,7 +33,7 @@ async function queryPersonaForLogo(
   category: string,
   brandDescription?: string
 ): Promise<LogoPanelResponse> {
-  const prompt = `You are a ${persona.age}-year-old ${persona.gender} living in ${persona.location} with an annual household income of approximately $${persona.income.toLocaleString()}. ${persona.lifestyle} ${persona.categoryContext}
+  const textPrompt = `You are a ${persona.age}-year-old ${persona.gender} living in ${persona.location} with an annual household income of approximately $${persona.income.toLocaleString()}. ${persona.lifestyle} ${persona.categoryContext}
 
 You are shown a logo for the brand "${brandName}" (${category}).
 ${brandDescription ? `Brand description: ${brandDescription}` : ""}
@@ -42,6 +42,7 @@ Logo: "${logo.name}"
 Description: ${logo.description}
 ${logo.colorPalette ? `Colors: ${logo.colorPalette}` : ""}
 ${logo.styleTags ? `Style: ${logo.styleTags}` : ""}
+${logo.imageBase64 ? "The logo image is shown above." : ""}
 
 Evaluate this logo honestly. Not everyone likes every design.
 
@@ -57,12 +58,31 @@ Evaluate this logo honestly. Not everyone likes every design.
 Respond in JSON:
 {"firstImpression":1-5,"memorability":1-5,"brandFit":1-5,"distinctiveness":1-5,"trust":1-5,"reaction":"word","industry":"2-3 words","engage":"Yes/No/Maybe"}`;
 
+  // Build multimodal content array
+  const content: Anthropic.MessageCreateParams["messages"][0]["content"] = [];
+
+  if (logo.imageBase64) {
+    const match = logo.imageBase64.match(/^data:(image\/\w+);base64,(.+)$/);
+    if (match) {
+      content.push({
+        type: "image",
+        source: {
+          type: "base64",
+          media_type: match[1] as "image/jpeg" | "image/png" | "image/webp" | "image/gif",
+          data: match[2],
+        },
+      });
+    }
+  }
+
+  content.push({ type: "text", text: textPrompt });
+
   try {
     const response = await anthropic.messages.create({
       model: "claude-haiku-4-5-20251001",
       max_tokens: 200,
       temperature: 1.0,
-      messages: [{ role: "user", content: prompt }],
+      messages: [{ role: "user", content }],
     });
 
     const text =

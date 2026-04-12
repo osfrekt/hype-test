@@ -27,7 +27,7 @@ export async function POST(request: Request) {
     }
 
     const contentLength = Number(request.headers.get("content-length") ?? 0);
-    if (contentLength > 20_000) {
+    if (contentLength > 10_000_000) { // 10MB limit for image uploads
       return Response.json(
         { error: "Request body too large" },
         { status: 413 }
@@ -66,6 +66,9 @@ export async function POST(request: Request) {
       }),
       ...(typeof l.styleTags === "string" && l.styleTags.trim() && {
         styleTags: l.styleTags.trim().slice(0, 500),
+      }),
+      ...(typeof l.imageBase64 === "string" && l.imageBase64.startsWith("data:image/") && {
+        imageBase64: l.imageBase64,
       }),
     }));
 
@@ -157,10 +160,26 @@ interface UserInfo {
 
 async function persistLogoTestResult(result: LogoTestResult, user: UserInfo) {
   const supabase = await createClient();
+  // Strip imageBase64 from input before storing (too large for JSONB)
+  const inputForStorage = {
+    ...result.input,
+    logos: result.input.logos.map((l) => {
+      const { imageBase64: _img, ...rest } = l;
+      return rest;
+    }),
+  };
+  // Also strip imageBase64 from results[].logo
+  const resultsForStorage = result.results.map((r) => ({
+    ...r,
+    logo: (() => {
+      const { imageBase64: _img, ...rest } = r.logo;
+      return rest;
+    })(),
+  }));
   const { error } = await supabase.from("logo_test_results").insert({
     id: result.id,
-    input: result.input,
-    results: result.results,
+    input: inputForStorage,
+    results: resultsForStorage,
     winner: result.winner || null,
     panel_size: result.panelSize,
     methodology: result.methodology,

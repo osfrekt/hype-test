@@ -3,6 +3,7 @@ export interface LogoOption {
   description: string;
   colorPalette?: string;
   styleTags?: string;
+  imageBase64?: string; // base64 data URL of uploaded image
 }
 
 export interface LogoTestInput {

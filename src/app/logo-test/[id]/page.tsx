@@ -298,6 +298,10 @@ function LogoTestResultContent({
                 This research uses methodology informed by Brand, Israeli &amp; Ngwe (2025),
                 &ldquo;Using LLMs for Market Research,&rdquo; Harvard Business School Working Paper 23-062.
               </p>
+              <p className="text-xs leading-relaxed">
+                Logo images were evaluated using Claude&apos;s multimodal vision capabilities.
+                Each panellist received both the image and text description for context-rich evaluation.
+              </p>
               <p className="text-xs leading-relaxed font-medium">
                 Important: These results are best used for directional insights and hypothesis generation.
                 They should not replace high-stakes primary consumer research for major business decisions.

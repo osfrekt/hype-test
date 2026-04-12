@@ -35,10 +35,11 @@ interface LogoInput {
   description: string;
   colorPalette: string;
   styleTags: string;
+  imageBase64: string;
 }
 
 function emptyLogo(): LogoInput {
-  return { name: "", description: "", colorPalette: "", styleTags: "" };
+  return { name: "", description: "", colorPalette: "", styleTags: "", imageBase64: "" };
 }
 
 export default function NewLogoTestPage() {
@@ -80,12 +81,27 @@ function NewLogoTestForm() {
   const [stage, setStage] = useState("");
   const [error, setError] = useState("");
 
-  function updateLogo(index: number, field: keyof LogoInput, value: string) {
+  function updateLogo(index: number, updates: Partial<LogoInput>) {
     setLogos((prev) => {
       const next = [...prev];
-      next[index] = { ...next[index], [field]: value };
+      next[index] = { ...next[index], ...updates };
       return next;
     });
+  }
+
+  function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>, index: number) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      alert("Image must be under 5MB");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64 = reader.result as string;
+      updateLogo(index, { imageBase64: base64 });
+    };
+    reader.readAsDataURL(file);
   }
 
   function addLogo() {
@@ -147,6 +163,7 @@ function NewLogoTestForm() {
           description: l.description.trim(),
           ...(l.colorPalette.trim() && { colorPalette: l.colorPalette.trim() }),
           ...(l.styleTags.trim() && { styleTags: l.styleTags.trim() }),
+          ...(l.imageBase64 && { imageBase64: l.imageBase64 }),
         })),
         email: email.trim(),
         userName: userName.trim(),
@@ -243,6 +260,13 @@ function NewLogoTestForm() {
             <p className="text-muted-foreground">
               Test 1-5 logo designs with a panel of 30 simulated consumers. Get first impression, memorability, brand fit, distinctiveness, and trust scores.
             </p>
+            <p className="text-xs text-muted-foreground mt-2">
+              Upload your logo images for visual evaluation by our AI panel.
+              Each panellist evaluates the design, memorability, and brand fit.{" "}
+              <Link href="/methodology" className="text-teal hover:underline">
+                Learn about our methodology
+              </Link>
+            </p>
             <p className="text-sm text-muted-foreground mt-2">
               <Link href="/logo-test/sample-rekt" className="text-teal hover:underline">
                 View a sample report &rarr;
@@ -328,16 +352,28 @@ function NewLogoTestForm() {
                     <Input
                       placeholder='e.g., "Option A - Minimalist"'
                       value={logo.name}
-                      onChange={(e) => updateLogo(idx, "name", e.target.value)}
+                      onChange={(e) => updateLogo(idx, { name: e.target.value })}
                       required
                     />
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label>Upload logo image</Label>
+                    <input
+                      type="file"
+                      accept="image/png,image/jpeg,image/webp,image/svg+xml"
+                      onChange={(e) => handleFileUpload(e, idx)}
+                      className="text-sm file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-muted file:text-foreground hover:file:bg-muted/80"
+                    />
+                    {logo.imageBase64 && (
+                      <img src={logo.imageBase64} alt={logo.name} className="w-20 h-20 object-contain rounded-lg border border-border mt-2" />
+                    )}
                   </div>
                   <div className="space-y-1.5">
                     <Label>Logo Description</Label>
                     <Textarea
                       placeholder="Describe the logo in detail: typeface, imagery, layout, colours..."
                       value={logo.description}
-                      onChange={(e) => updateLogo(idx, "description", e.target.value)}
+                      onChange={(e) => updateLogo(idx, { description: e.target.value })}
                       rows={3}
                       className="resize-none"
                       required
@@ -352,7 +388,7 @@ function NewLogoTestForm() {
                       <Input
                         placeholder="e.g., Black, white, electric yellow"
                         value={logo.colorPalette}
-                        onChange={(e) => updateLogo(idx, "colorPalette", e.target.value)}
+                        onChange={(e) => updateLogo(idx, { colorPalette: e.target.value })}
                       />
                     </div>
                     <div className="space-y-1.5">
@@ -360,7 +396,7 @@ function NewLogoTestForm() {
                       <Input
                         placeholder="e.g., minimalist, bold, tech"
                         value={logo.styleTags}
-                        onChange={(e) => updateLogo(idx, "styleTags", e.target.value)}
+                        onChange={(e) => updateLogo(idx, { styleTags: e.target.value })}
                       />
                     </div>
                   </div>
