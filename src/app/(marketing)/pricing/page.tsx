@@ -64,7 +64,7 @@ const featureCategories: { category: string; features: FeatureRow[] }[] = [
   {
     category: "Consumer Research",
     features: [
-      { name: "Research runs per month", free: "3", starter: "15", pro: "Unlimited", team: "Unlimited" },
+      { name: "Research runs per month", free: "3", starter: "30", pro: "100", team: "500" },
       { name: "Simulated panellists per run", free: "50", starter: "50", pro: "50", team: "50" },
       { name: "Purchase intent scoring", free: true, starter: true, pro: true, team: true },
       { name: "WTP range estimation", free: true, starter: true, pro: true, team: true },
@@ -76,10 +76,10 @@ const featureCategories: { category: string; features: FeatureRow[] }[] = [
     ],
   },
   {
-    category: "Testing Tools",
+    category: "Pro Testing Tools",
     features: [
       { name: "A/B concept testing", free: false, starter: true, pro: true, team: true },
-      { name: "Name testing (3-5 options)", free: false, starter: true, pro: true, team: true },
+      { name: "Name testing (rank 3-5 options)", free: false, starter: true, pro: true, team: true },
       { name: "Pricing optimizer (demand curve)", free: false, starter: true, pro: true, team: true },
       { name: "Audience finder (5 segments)", free: false, starter: true, pro: true, team: true },
       { name: "Competitive teardown (radar chart)", free: false, starter: true, pro: true, team: true },
@@ -88,7 +88,7 @@ const featureCategories: { category: string; features: FeatureRow[] }[] = [
   {
     category: "Product Discovery",
     features: [
-      { name: "Discovery rounds per month", free: false, starter: "3", pro: "Unlimited", team: "Unlimited" },
+      { name: "Discovery rounds per month", free: false, starter: "10", pro: "50", team: "200" },
       { name: "AI concept generation", free: false, starter: true, pro: true, team: true },
       { name: "Iterative refinement rounds", free: false, starter: true, pro: true, team: true },
       { name: "Brand auto-fill (URL + search)", free: false, starter: true, pro: true, team: true },
@@ -102,15 +102,6 @@ const featureCategories: { category: string; features: FeatureRow[] }[] = [
       { name: "Email report delivery", free: true, starter: true, pro: true, team: true },
       { name: "Performance tracking over time", free: false, starter: true, pro: true, team: true },
       { name: "Slack notifications", free: false, starter: true, pro: true, team: true },
-    ],
-  },
-  {
-    category: "Support",
-    features: [
-      { name: "Community support", free: true, starter: true, pro: true, team: true },
-      { name: "Email support", free: false, starter: true, pro: true, team: true },
-      { name: "Priority support", free: false, starter: false, pro: true, team: true },
-      { name: "Dedicated support", free: false, starter: false, pro: false, team: true },
       { name: "Team seats", free: "1", starter: "1", pro: "1", team: "5" },
       { name: "Shared research library", free: false, starter: false, pro: false, team: true },
     ],
@@ -269,6 +260,52 @@ export default function PricingPage() {
                 </CardContent>
               </Card>
             ))}
+          </div>
+
+          {/* Pro features explainer */}
+          <div className="mb-16">
+            <h2 className="text-2xl font-bold text-primary text-center mb-2">
+              What you unlock with a paid plan
+            </h2>
+            <p className="text-muted-foreground text-center max-w-2xl mx-auto mb-8">
+              Free gets you core consumer research. Paid plans add specialized testing tools
+              and AI-powered product discovery.
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="bg-card rounded-2xl border border-border p-6">
+                <span className="text-xs font-bold text-teal uppercase tracking-wider">Pro Testing Tools</span>
+                <h3 className="text-lg font-bold text-primary mt-2 mb-3">Test every angle of your product</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+                  Five specialized tools that go beyond basic consumer research. Test
+                  two concepts head-to-head, find the perfect name, optimize your
+                  price point, discover your best audience, and see how you stack up
+                  against competitors.
+                </p>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-teal shrink-0" />A/B concept testing with same panel</li>
+                  <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-teal shrink-0" />Name testing ranked by appeal</li>
+                  <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-teal shrink-0" />Pricing optimizer with demand curve</li>
+                  <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-teal shrink-0" />Audience finder across 5 segments</li>
+                  <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-teal shrink-0" />Competitive teardown with radar chart</li>
+                </ul>
+              </div>
+              <div className="bg-card rounded-2xl border border-border p-6">
+                <span className="text-xs font-bold text-amber-600 uppercase tracking-wider">Product Discovery</span>
+                <h3 className="text-lg font-bold text-primary mt-2 mb-3">Find what to build next</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+                  Don&apos;t have a product yet? Enter your brand and audience, and our AI
+                  generates product concepts then tests each one with a simulated consumer
+                  panel. Keep running rounds until you find a concept that scores high enough
+                  to pursue.
+                </p>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0" />AI generates 8 product concepts per round</li>
+                  <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0" />Each concept tested with 30 consumers</li>
+                  <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0" />Iterative rounds evolve winning concepts</li>
+                  <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0" />One-click to run full research on winners</li>
+                </ul>
+              </div>
+            </div>
           </div>
 
           {/* Feature comparison table */}

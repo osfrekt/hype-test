@@ -14,20 +14,14 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
             <div className="flex items-center gap-2 mb-3">
-              <div className="w-6 h-6 rounded bg-navy flex items-center justify-center">
-                <svg
-                  width="12"
-                  height="12"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="white"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2" />
-                </svg>
-              </div>
+              <svg className="w-6 h-6 text-foreground" viewBox="0 0 200 200" fill="none">
+                <circle cx="88" cy="88" r="48" stroke="currentColor" strokeWidth="10" />
+                <line x1="122" y1="122" x2="160" y2="160" stroke="currentColor" strokeWidth="12" strokeLinecap="round" />
+                <rect x="64" y="98" width="10" height="22" rx="2" fill="#0e7490" opacity="0.7" />
+                <rect x="78" y="82" width="10" height="38" rx="2" fill="#0891b2" />
+                <rect x="92" y="90" width="10" height="30" rx="2" fill="#0e7490" opacity="0.7" />
+                <rect x="106" y="72" width="10" height="48" rx="2" fill="#0891b2" opacity="0.85" />
+              </svg>
               <span className="font-semibold text-primary text-sm">HypeTest</span>
             </div>
             <p className="text-sm text-muted-foreground max-w-xs">
