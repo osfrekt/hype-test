@@ -366,6 +366,139 @@ export default function MethodologyPage() {
               </div>
             </div>
 
+            {/* Ad and creative testing research */}
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mt-6">
+              Ad and creative testing research
+            </p>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              These studies validate using LLMs for advertising evaluation,
+              creative generation, and campaign testing.
+            </p>
+
+            <p className="text-xs font-semibold text-teal uppercase tracking-wider">
+              Primary validation
+            </p>
+            <div className="grid grid-cols-1 gap-3">
+              <div className="bg-muted/50 rounded-xl p-4 border border-border/50">
+                <p className="font-medium text-primary text-sm mb-1">
+                  <a
+                    href="https://arxiv.org/html/2512.03373"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline decoration-muted-foreground/40 underline-offset-2 hover:decoration-primary transition-colors"
+                  >
+                    &ldquo;LLM-Generated Ads: From Personalization Parity to
+                    Persuasion Superiority&rdquo; (2025).
+                  </a>
+                </p>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  First systematic comparison of LLM-generated vs human-created
+                  advertising. LLM ads match humans on personalisation and
+                  outperform on persuasion under certain conditions.
+                </p>
+              </div>
+
+              <div className="bg-muted/50 rounded-xl p-4 border border-border/50">
+                <p className="font-medium text-primary text-sm mb-1">
+                  <a
+                    href="https://pubsonline.informs.org/doi/10.1287/mnsc.2023.03014"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline decoration-muted-foreground/40 underline-offset-2 hover:decoration-primary transition-colors"
+                  >
+                    &ldquo;Large Language Model in Creative Work&rdquo; (2024).
+                  </a>{" "}
+                  Management Science.
+                </p>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  Controlled experiment measuring real ad quality using social
+                  media click metrics. LLM feedback on human-written creative
+                  improved measurable performance.
+                </p>
+              </div>
+
+              <div className="bg-muted/50 rounded-xl p-4 border border-border/50">
+                <p className="font-medium text-primary text-sm mb-1">
+                  <a
+                    href="https://pubsonline.informs.org/doi/10.1287/mksc.2023.0611"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline decoration-muted-foreground/40 underline-offset-2 hover:decoration-primary transition-colors"
+                  >
+                    &ldquo;Applying Large Language Models to Sponsored Search
+                    Advertising&rdquo; (2024).
+                  </a>{" "}
+                  Marketing Science.
+                </p>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  Field experiments (30,799+ impressions). Persona conditioning
+                  significantly improves ad quality. Bigger models alone
+                  don&apos;t help; audience context does.
+                </p>
+              </div>
+            </div>
+
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mt-4">
+              Supporting
+            </p>
+            <div className="grid grid-cols-1 gap-3">
+              <div className="bg-muted/50 rounded-xl p-4 border border-border/50">
+                <p className="font-medium text-primary text-sm mb-1">
+                  <a
+                    href="https://www.arxiv.org/pdf/2512.01431"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline decoration-muted-foreground/40 underline-offset-2 hover:decoration-primary transition-colors"
+                  >
+                    &ldquo;A Meta-Analysis of the Persuasive Power of Large
+                    Language Models&rdquo; (2025).
+                  </a>
+                </p>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  First meta-analysis synthesising all existing research on LLM
+                  persuasiveness vs humans.
+                </p>
+              </div>
+
+              <div className="bg-muted/50 rounded-xl p-4 border border-border/50">
+                <p className="font-medium text-primary text-sm mb-1">
+                  <a
+                    href="https://arxiv.org/html/2407.21553v1"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline decoration-muted-foreground/40 underline-offset-2 hover:decoration-primary transition-colors"
+                  >
+                    &ldquo;CXSimulator: User Behavior Simulation for
+                    Web-Marketing Campaign Assessment&rdquo; (2024).
+                  </a>
+                </p>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  Framework for assessing marketing campaign effects through
+                  simulated user behaviour without costly A/B tests.
+                </p>
+              </div>
+
+              <div className="bg-muted/50 rounded-xl p-4 border border-border/50">
+                <p className="font-medium text-primary text-sm mb-1">
+                  <a
+                    href="https://dl.acm.org/doi/abs/10.1145/3589335.3651520"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline decoration-muted-foreground/40 underline-offset-2 hover:decoration-primary transition-colors"
+                  >
+                    &ldquo;How Good are LLMs in Generating Personalized
+                    Advertisements?&rdquo; (2024).
+                  </a>{" "}
+                  ACM Web Conference.
+                </p>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  User study comparing LLM-generated ads tailored to personality
+                  traits against human-written ads across different online
+                  environments.
+                </p>
+              </div>
+            </div>
+
             <p className="text-xs text-muted-foreground italic mt-2">
               We track new research in this space actively. As more validation
               studies are published, we&apos;ll update this page and our confidence
@@ -605,6 +738,44 @@ export default function MethodologyPage() {
             </p>
           </section>
 
+          {/* How ad and creative testing works */}
+          <section className="space-y-5 mb-10">
+            <div className="flex items-start gap-3">
+              <div className="w-9 h-9 rounded-lg bg-teal/10 flex items-center justify-center shrink-0 mt-0.5">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M3 9h18" /><path d="M9 21V9" /></svg>
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-primary">
+                  How ad and creative testing works
+                </h2>
+              </div>
+            </div>
+
+            <p className="text-muted-foreground leading-relaxed">
+              LLMs have been trained on enormous volumes of ad copy, marketing
+              campaigns, consumer reactions to advertising, click-through data
+              discussions, and A/B test case studies. They have internalised what
+              makes ads effective across different demographics and channels.
+            </p>
+
+            <p className="text-muted-foreground leading-relaxed">
+              Research from Marketing Science (Xu et al., 2024) showed that
+              giving the LLM context about the audience significantly improves
+              ad evaluation quality. This is exactly what HypeTest does: each
+              simulated panellist has a unique demographic profile that shapes
+              how they respond to creative. A 22-year-old gamer evaluates an
+              energy drink ad very differently than a 45-year-old executive.
+            </p>
+
+            <p className="text-muted-foreground leading-relaxed">
+              A controlled experiment published in Management Science (Zhu et
+              al., 2024) demonstrated that LLM feedback on ad creative
+              correlates with real social media engagement metrics such as
+              click-through rates. This means LLM ad evaluation is not just
+              subjective assessment; it tracks measurable real-world performance.
+            </p>
+          </section>
+
           {/* Change 4: Expanded limitations */}
           <section id="limitations" className="space-y-5 mb-10">
             <div className="flex items-start gap-3">
@@ -682,6 +853,19 @@ export default function MethodologyPage() {
                   trends, viral moments, or category disruptions that happened in
                   the last few months, those won&apos;t be reflected in the
                   simulation.
+                </span>
+              </li>
+              <li className="text-sm text-muted-foreground leading-relaxed flex items-start gap-2">
+                <span className="text-red-400 mt-0.5 shrink-0 font-bold">&times;</span>
+                <span>
+                  <strong>Ad creative testing has its own limits.</strong> Ad
+                  creative testing works best for text-based messaging and
+                  taglines. Visual evaluation is more limited since the model
+                  evaluates described visuals rather than perceiving images the
+                  way consumers do. Results are directional signals for creative
+                  optimisation, not replacements for real campaign analytics.
+                  Performance predictions may vary for highly visual, culturally
+                  specific, or platform-native creative formats.
                 </span>
               </li>
             </ul>
