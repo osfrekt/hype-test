@@ -43,14 +43,21 @@ export function Footer() {
           <div>
             <h4 className="text-sm font-medium mb-3">Research</h4>
             <div className="flex flex-col gap-2 text-sm text-muted-foreground">
-              <a
-                href="https://www.hbs.edu/ris/Publication%20Files/23-062_b8e4c6b3-27b2-4131-929a-85636faf8024.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-foreground transition-colors"
-              >
+              <a href="https://www.hbs.edu/ris/Publication%20Files/23-062_b8e4c6b3-27b2-4131-929a-85636faf8024.pdf" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
                 Brand, Israeli & Ngwe (2025)
               </a>
+              <a href="https://onlinelibrary.wiley.com/doi/10.1002/mar.21982" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
+                Sarstedt et al. (2024)
+              </a>
+              <a href="https://www.bain.com/insights/how-synthetic-customers-bring-companies-closer-to-the-real-ones/" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
+                Bain & Company (2025)
+              </a>
+              <a href="https://nielseniq.com/global/en/insights/education/2024/the-rise-of-synthetic-respondents/" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
+                NielsenIQ (2024)
+              </a>
+              <Link href="/methodology" className="hover:text-foreground transition-colors">
+                View all research
+              </Link>
             </div>
           </div>
           <div>
