@@ -1,6 +1,7 @@
 import { runDiscovery } from "@/lib/discovery-engine";
 import { createClient } from "@/lib/supabase/server";
 import { sendDiscoveryReport } from "@/lib/email";
+import { sendDiscoverySlackNotification } from "@/lib/slack";
 import { createRateLimiter } from "@/lib/rate-limit";
 import { checkQuota, incrementUsage, getOrCreateUser } from "@/lib/users";
 import type { DiscoveryInput, DiscoveryResult } from "@/types/discovery";
@@ -121,6 +122,11 @@ export async function POST(request: Request) {
       sendDiscoveryReport(email, sanitizedInput.brandName, result.id).catch(
         (err) => console.error("Failed to send discovery email:", err)
       );
+
+      // Slack notification (non-blocking)
+      notifySlack(email, sanitizedInput.brandName, result).catch(
+        (err) => console.error("Failed to send Slack notification:", err)
+      );
     }
 
     return Response.json(result);
@@ -144,6 +150,27 @@ interface UserInfo {
   utmMedium: string | null;
   utmCampaign: string | null;
   referrer: string | null;
+}
+
+async function notifySlack(email: string, brandName: string, result: DiscoveryResult) {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("users")
+    .select("slack_webhook_url")
+    .eq("email", email)
+    .single();
+
+  if (data?.slack_webhook_url) {
+    const resultUrl = `https://hypetest.ai/discover/${result.id}`;
+    const topConcept = result.concepts[0];
+    await sendDiscoverySlackNotification(
+      data.slack_webhook_url,
+      brandName,
+      topConcept?.concept.name ?? "N/A",
+      topConcept?.purchaseIntent.score ?? 0,
+      resultUrl
+    );
+  }
 }
 
 async function persistResult(result: DiscoveryResult, user: UserInfo) {

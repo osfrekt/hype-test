@@ -1,6 +1,7 @@
 import { runResearch } from "@/lib/research-engine";
 import { createClient } from "@/lib/supabase/server";
 import { sendResearchReport } from "@/lib/email";
+import { sendSlackNotification } from "@/lib/slack";
 import { createRateLimiter } from "@/lib/rate-limit";
 import { checkQuota, incrementUsage, getOrCreateUser } from "@/lib/users";
 import type { ResearchInput, ResearchResult } from "@/types/research";
@@ -115,6 +116,11 @@ export async function POST(request: Request) {
       sendResearchReport(email, sanitizedInput.productName, result.id).catch(
         (err) => console.error("Failed to send research email:", err)
       );
+
+      // Slack notification (non-blocking)
+      notifySlack(email, sanitizedInput.productName, result).catch(
+        (err) => console.error("Failed to send Slack notification:", err)
+      );
     }
 
     return Response.json(result);
@@ -140,6 +146,26 @@ interface UserInfo {
   referrer: string | null;
 }
 
+async function notifySlack(email: string, productName: string, result: ResearchResult) {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("users")
+    .select("slack_webhook_url")
+    .eq("email", email)
+    .single();
+
+  if (data?.slack_webhook_url) {
+    const resultUrl = `https://hypetest.ai/research/${result.id}`;
+    await sendSlackNotification(
+      data.slack_webhook_url,
+      productName,
+      result.purchaseIntent.score,
+      result.wtpRange.mid,
+      resultUrl
+    );
+  }
+}
+
 async function persistResult(result: ResearchResult, user: UserInfo) {
   const supabase = await createClient();
   const { error } = await supabase.from("research_results").insert({
@@ -154,6 +180,7 @@ async function persistResult(result: ResearchResult, user: UserInfo) {
     verbatims: result.verbatims,
     methodology: result.methodology,
     competitive_position: result.competitivePosition ?? null,
+    segment_breakdown: result.segmentBreakdown ?? null,
     email: user.email,
     user_name: user.userName,
     user_company: user.userCompany,

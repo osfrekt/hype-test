@@ -67,6 +67,8 @@ function AccountContent() {
   const [magicLinkStatus, setMagicLinkStatus] = useState<"idle" | "loading" | "sent" | "error">("idle");
   const [researchResults, setResearchResults] = useState<ResearchResult[]>([]);
   const [discoveryResults, setDiscoveryResults] = useState<DiscoveryResult[]>([]);
+  const [slackWebhookUrl, setSlackWebhookUrl] = useState("");
+  const [slackStatus, setSlackStatus] = useState<"idle" | "saving" | "saved" | "error" | "testing" | "tested" | "test-error">("idle");
 
   const verifyToken = useCallback(async (token: string) => {
     try {
@@ -116,11 +118,21 @@ function AccountContent() {
     }
   }, [searchParams, verifyToken, loadUserByEmail]);
 
-  // Fetch research/discovery results when user is loaded
+  // Fetch integrations when user is loaded
   useEffect(() => {
     if (!user) return;
-    // These would need a server endpoint, but for now we note the email
-    // The account page shows usage stats from the user object
+
+    // Fetch Slack webhook URL
+    fetch(`/api/integrations/slack?email=${encodeURIComponent(user.email)}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.slackWebhookUrl) {
+          setSlackWebhookUrl(data.slackWebhookUrl);
+        }
+      })
+      .catch(() => {
+        // Non-critical
+      });
   }, [user]);
 
   async function handleSendMagicLink(e: React.FormEvent) {
@@ -390,6 +402,99 @@ function AccountContent() {
               </CardContent>
             </Card>
           )}
+
+          {/* Slack Integration */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-sm font-medium">Slack Integration</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground mb-4">
+                Add a Slack webhook URL to receive research and discovery summaries in your Slack channel when they complete.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <Input
+                  type="url"
+                  placeholder="https://hooks.slack.com/services/..."
+                  value={slackWebhookUrl}
+                  onChange={(e) => {
+                    setSlackWebhookUrl(e.target.value);
+                    setSlackStatus("idle");
+                  }}
+                  className="flex-1"
+                />
+                <div className="flex gap-2">
+                  <Button
+                    variant="default"
+                    size="sm"
+                    disabled={slackStatus === "saving"}
+                    onClick={async () => {
+                      setSlackStatus("saving");
+                      try {
+                        const res = await fetch("/api/integrations/slack", {
+                          method: "POST",
+                          headers: { "Content-Type": "application/json" },
+                          body: JSON.stringify({
+                            email: user.email,
+                            webhookUrl: slackWebhookUrl.trim(),
+                          }),
+                        });
+                        if (res.ok) {
+                          setSlackStatus("saved");
+                        } else {
+                          const data = await res.json();
+                          alert(data.error || "Failed to save.");
+                          setSlackStatus("error");
+                        }
+                      } catch {
+                        setSlackStatus("error");
+                      }
+                    }}
+                  >
+                    {slackStatus === "saving" ? "Saving..." : slackStatus === "saved" ? "Saved" : "Save"}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    disabled={!slackWebhookUrl.trim() || slackStatus === "testing"}
+                    onClick={async () => {
+                      setSlackStatus("testing");
+                      try {
+                        const res = await fetch(slackWebhookUrl.trim(), {
+                          method: "POST",
+                          headers: { "Content-Type": "application/json" },
+                          body: JSON.stringify({
+                            text: "HypeTest connection test successful! You will receive research summaries here.",
+                          }),
+                        });
+                        if (res.ok) {
+                          setSlackStatus("tested");
+                        } else {
+                          setSlackStatus("test-error");
+                        }
+                      } catch {
+                        setSlackStatus("test-error");
+                      }
+                    }}
+                  >
+                    {slackStatus === "testing" ? "Testing..." : slackStatus === "tested" ? "Sent!" : "Test"}
+                  </Button>
+                </div>
+              </div>
+              {slackStatus === "saved" && (
+                <p className="text-xs text-emerald-600 mt-2">Webhook URL saved successfully.</p>
+              )}
+              {slackStatus === "error" && (
+                <p className="text-xs text-destructive mt-2">Failed to save. Please try again.</p>
+              )}
+              {slackStatus === "tested" && (
+                <p className="text-xs text-emerald-600 mt-2">Test message sent. Check your Slack channel.</p>
+              )}
+              {slackStatus === "test-error" && (
+                <p className="text-xs text-destructive mt-2">Test failed. Please check the webhook URL.</p>
+              )}
+            </CardContent>
+          </Card>
         </div>
       </main>
       <Footer />

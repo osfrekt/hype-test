@@ -8,12 +8,21 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Download, Link2, RotateCcw, Trash2 } from "lucide-react";
 import type { ResearchResult } from "@/types/research";
 import { ReportView } from "@/components/report-view";
+import { PerformanceOverTime } from "@/components/performance-over-time";
 import { createClient } from "@/lib/supabase/client";
 
 type FetchState =
   | { status: "loading" }
   | { status: "error"; message: string }
   | { status: "ok"; result: ResearchResult };
+
+interface HistoryEntry {
+  id: string;
+  productName: string;
+  intentScore: number;
+  wtpMid: number;
+  createdAt: string;
+}
 
 export default function ResearchResultPage({
   params,
@@ -46,6 +55,7 @@ function ResearchResultContent({
   const [state, setState] = useState<FetchState>({ status: "loading" });
   const [copied, setCopied] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [history, setHistory] = useState<HistoryEntry[]>([]);
 
   useEffect(() => {
     let cancelled = false;
@@ -77,10 +87,18 @@ function ResearchResultContent({
               ...(data.competitive_position && {
                 competitivePosition: data.competitive_position,
               }),
+              ...(data.segment_breakdown && {
+                segmentBreakdown: data.segment_breakdown,
+              }),
               status: data.status,
               createdAt: data.created_at,
             },
           });
+
+          // Fetch history for Track Over Time
+          if (data.email && data.input?.productName) {
+            fetchHistory(data.email, data.input.productName);
+          }
           return;
         }
       } catch {
@@ -112,6 +130,21 @@ function ResearchResultContent({
       cancelled = true;
     };
   }, [id]);
+
+  async function fetchHistory(email: string, productName: string) {
+    try {
+      const params = new URLSearchParams({ email, product: productName });
+      const res = await fetch(`/api/research/history?${params.toString()}`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data.results && data.results.length >= 2) {
+          setHistory(data.results);
+        }
+      }
+    } catch {
+      // History fetch is non-critical
+    }
+  }
 
   if (state.status === "loading") {
     return (
@@ -205,6 +238,10 @@ function ResearchResultContent({
             </Link>
           </div>
           <ReportView result={result} />
+
+          {history.length >= 2 && (
+            <PerformanceOverTime history={history} currentId={id} />
+          )}
 
           {/* Delete button */}
           <div className="mt-12 mb-8 text-center" data-print-hide>
