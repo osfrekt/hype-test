@@ -132,7 +132,7 @@ export default function Home() {
                 Used by founders of
               </p>
               <div className="flex items-center gap-8">
-                <a href="https://rfrekt.com" target="_blank" rel="noopener noreferrer" className="opacity-40 hover:opacity-70 transition-opacity">
+                <a href="https://rekt.com" target="_blank" rel="noopener noreferrer" className="opacity-40 hover:opacity-70 transition-opacity">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src="/brands/rekt-black.svg" alt="REKT" className="h-5 dark:hidden" />
                   {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -140,7 +140,9 @@ export default function Home() {
                 </a>
                 <a href="https://yeet.com" target="_blank" rel="noopener noreferrer" className="opacity-40 hover:opacity-70 transition-opacity">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/brands/yeet.svg" alt="YEET" className="h-5" />
+                  <img src="/brands/yeet-black.svg" alt="YEET" className="h-5 dark:hidden" />
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/brands/yeet-white.svg" alt="YEET" className="h-5 hidden dark:block" />
                 </a>
                 <a href="https://snoozlife.co.uk" target="_blank" rel="noopener noreferrer" className="opacity-40 hover:opacity-70 transition-opacity">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
