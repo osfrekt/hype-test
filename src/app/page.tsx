@@ -345,10 +345,10 @@ export default function Home() {
                   Full sample report
                 </span>
                 <h3 className="text-xl font-bold text-primary">
-                  Rekt Focus Energy Powder
+                  Rekt Energy + Focus Powder
                 </h3>
                 <p className="text-sm text-muted-foreground mt-1.5">
-                  <a href="https://www.amazon.com/dp/B0DFY2PY3G" target="_blank" rel="noopener noreferrer" className="text-teal hover:underline">View product on Amazon &rarr;</a>
+                  <a href="https://www.amazon.com/Rekt-Energy-Focus-Powder-Cherry/dp/B0GSGB13LJ" target="_blank" rel="noopener noreferrer" className="text-teal hover:underline">View product on Amazon &rarr;</a>
                 </p>
               </div>
 
@@ -359,7 +359,7 @@ export default function Home() {
                     <p className="text-xs text-muted-foreground">Purchase Intent</p>
                   </div>
                   <div className="text-center">
-                    <p className="text-2xl font-bold text-primary">$2.50</p>
+                    <p className="text-2xl font-bold text-primary">$30</p>
                     <p className="text-xs text-muted-foreground">Estimated WTP</p>
                   </div>
                   <div className="text-center">
@@ -371,7 +371,7 @@ export default function Home() {
                 <div className="space-y-3 mb-6">
                   <div>
                     <div className="flex justify-between text-xs mb-1">
-                      <span className="text-muted-foreground">Natural caffeine from green coffee bean</span>
+                      <span className="text-muted-foreground">200mg natural caffeine + L-Theanine</span>
                       <span className="font-bold text-primary">92%</span>
                     </div>
                     <div className="w-full bg-muted rounded-full h-1.5">
@@ -380,7 +380,7 @@ export default function Home() {
                   </div>
                   <div>
                     <div className="flex justify-between text-xs mb-1">
-                      <span className="text-muted-foreground">Cognizin citicoline for focus</span>
+                      <span className="text-muted-foreground">Nootropic blend for focus</span>
                       <span className="font-bold text-primary">78%</span>
                     </div>
                     <div className="w-full bg-muted rounded-full h-1.5">
@@ -389,20 +389,20 @@ export default function Home() {
                   </div>
                   <div>
                     <div className="flex justify-between text-xs mb-1">
-                      <span className="text-muted-foreground">Zero sugar, mixes instantly</span>
-                      <span className="font-bold text-primary">65%</span>
+                      <span className="text-muted-foreground">Zero sugar, zero calories</span>
+                      <span className="font-bold text-primary">71%</span>
                     </div>
                     <div className="w-full bg-muted rounded-full h-1.5">
-                      <div className="bg-teal h-1.5 rounded-full" style={{ width: "65%" }} />
+                      <div className="bg-teal h-1.5 rounded-full" style={{ width: "71%" }} />
                     </div>
                   </div>
                 </div>
 
                 <div className="bg-muted/50 rounded-lg p-3 mb-6">
                   <p className="text-sm text-foreground italic">
-                    &ldquo;The clean caffeine angle is appealing, and the focus component
-                    sets it apart from standard energy drinks. I&apos;d try it if the
-                    price is right.&rdquo;
+                    &ldquo;Zero sugar and zero calories with actual nootropics is exactly what
+                    I want for work focus. The 30-serving tub makes it cheaper per serving
+                    than buying Celsius cans every day.&rdquo;
                   </p>
                   <p className="text-xs text-muted-foreground mt-1">
                     28yo female, $65k income

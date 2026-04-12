@@ -8,20 +8,20 @@ import type { ResearchResult } from "@/types/research";
 const SAMPLE_RESULT: ResearchResult = {
   id: "sample-rekt",
   input: {
-    productName: "Rekt Focus Energy Powder",
+    productName: "Rekt Energy + Focus Powder",
     productDescription:
-      "A clean energy powder with 200mg natural caffeine from green coffee bean, Cognizin citicoline for sustained mental focus, zero sugar, 5 calories per serving. Mixes instantly in water. Positioned between energy drinks (unhealthy) and pre-workout (too intense) for health-conscious professionals and gym-goers who want clean energy without the crash.",
+      "Clean energy drink mix with 200mg natural caffeine, nootropics including L-Theanine for focused energy without jitters or crash. Zero sugar, zero calories, 30 servings per tub. Available in Blue Raspberry and Cherry flavors. Positioned as a clean alternative to traditional energy drinks for gamers, athletes, and professionals who need sustained focus.",
     category: "health & wellness",
     keyFeatures: [
-      "200mg natural caffeine from green coffee bean",
-      "Cognizin citicoline for sustained mental focus",
-      "Zero sugar, 5 calories, mixes in water in seconds",
+      "200mg natural caffeine with L-Theanine for smooth energy",
+      "Nootropic blend for focus and mental clarity",
+      "Zero sugar, zero calories, 30 servings per tub",
     ],
-    priceRange: { min: 2, max: 3 },
-    priceUnit: "$2-3 per stick pack",
+    priceRange: { min: 25, max: 35 },
+    priceUnit: "$25-35 per tub (30 servings)",
     targetMarket:
-      "Health-conscious professionals and gym-goers 22-38, $60k+ income, who currently drink energy drinks but want something cleaner",
-    competitors: "Celsius, Ghost Energy, LMNT, Liquid IV Energy",
+      "Gamers, athletes, and professionals 18-38 who want clean energy without sugar crashes or jitters",
+    competitors: "Celsius, Ghost Energy, G Fuel, LMNT",
   },
   panelSize: 50,
   purchaseIntent: {
@@ -34,52 +34,53 @@ const SAMPLE_RESULT: ResearchResult = {
       { label: "Definitely yes", count: 12 },
     ],
   },
-  wtpRange: { low: 2, mid: 2.5, high: 3 },
+  wtpRange: { low: 25, mid: 30, high: 35 },
   featureImportance: [
-    { feature: "Natural caffeine from green coffee bean", score: 92 },
-    { feature: "Cognizin citicoline for focus", score: 78 },
-    { feature: "Zero sugar, mixes instantly", score: 65 },
-    { feature: "Clean label positioning", score: 58 },
+    { feature: "200mg natural caffeine with L-Theanine", score: 92 },
+    { feature: "Nootropic blend for focus", score: 78 },
+    { feature: "Zero sugar, zero calories", score: 71 },
+    { feature: "30 servings per tub value", score: 65 },
+    { feature: "Clean label, no artificial ingredients", score: 58 },
   ],
   topConcerns: [
-    "Taste quality compared to flavored energy drinks",
-    "Whether nootropic ingredients deliver noticeable results",
-    "Price per serving vs. canned energy drinks",
-    "Convenience of mixing powder vs. grabbing a can",
-    "Long-term safety of daily citicoline supplementation",
+    "Taste quality of powder vs. ready-to-drink energy drinks",
+    "Whether nootropic ingredients deliver noticeable cognitive benefits",
+    "Price per serving compared to canned alternatives like Celsius or G Fuel",
+    "Convenience of mixing powder vs. grabbing a can on the go",
+    "Limited flavor options compared to established competitors",
   ],
   topPositives: [
-    "Clean caffeine without artificial ingredients is appealing",
-    "The focus angle differentiates from standard energy products",
-    "Low calorie count fits health-conscious lifestyles",
-    "Portable stick pack format is practical for commuting",
-    "Transparent ingredient list builds trust",
+    "Clean caffeine with L-Theanine avoids jitters and crash",
+    "The nootropic focus angle differentiates from generic energy drinks",
+    "Zero sugar and zero calories fits health-conscious lifestyles",
+    "30 servings per tub makes the per-serving cost competitive",
+    "Transparent ingredient list and clean label builds trust",
   ],
   verbatims: [
     {
-      persona: "28yo female, $65k income",
+      persona: "24yo male, $45k income",
       quote:
-        "The clean caffeine angle is appealing, and the focus component sets it apart from standard energy drinks. I'd try it if the price per serving is competitive with what I currently spend on Celsius.",
+        "I currently use G Fuel for gaming sessions, but the L-Theanine in this is a real upgrade. Smooth energy without the jitters would be a game-changer for long ranked sessions.",
     },
     {
-      persona: "34yo male, $95k income",
+      persona: "32yo female, $85k income",
       quote:
-        "I like the idea of a powder I can throw in my gym bag instead of carrying cans. My main question is whether the citicoline actually does anything noticeable or if it's just marketing.",
+        "Zero sugar and zero calories with actual nootropics is exactly what I want for work focus. The 30-serving tub makes it cheaper per serving than buying Celsius cans every day.",
     },
     {
-      persona: "26yo female, $55k income",
+      persona: "27yo male, $60k income",
       quote:
-        "Zero sugar and only 5 calories is exactly what I look for. But I've tried powders before and they never taste as good as canned drinks. Taste would make or break this for me.",
+        "I like the concept but I'm skeptical about powder taste. Every energy powder I've tried tastes artificial. If the Blue Raspberry is actually good, I'm in.",
     },
     {
-      persona: "41yo male, $120k income",
+      persona: "35yo male, $110k income",
       quote:
-        "At $2-3 per serving this is roughly what I pay for energy drinks anyway, so the price works. The focus ingredient is what interests me most. I'd want to see clinical backing for the citicoline dosage.",
+        "The nootropic angle is what sells it for me. I'd want to see the actual dosages of L-Theanine and know whether it's clinically effective, not just a label claim.",
     },
     {
-      persona: "31yo non-binary, $80k income",
+      persona: "22yo female, $35k income",
       quote:
-        "I appreciate the positioning between energy drinks and pre-workout. That's a gap in the market I've felt personally. Would need to see it in stores or have easy online ordering to actually buy it.",
+        "Price per serving works out to under a dollar which is way cheaper than my daily Monster. If it actually helps me focus during study sessions, it's worth trying.",
     },
   ],
   competitivePosition: {
@@ -91,7 +92,7 @@ const SAMPLE_RESULT: ResearchResult = {
       { label: "Much worse", count: 3 },
       { label: "Not familiar", count: 3 },
     ],
-    competitors: "Celsius, Ghost Energy, LMNT, Liquid IV Energy",
+    competitors: "Celsius, Ghost Energy, G Fuel, LMNT",
   },
   methodology: {
     panelSize: 50,
@@ -126,12 +127,12 @@ export default function SampleRektReport() {
           />
           <div className="mt-8 text-center" data-print-hide>
             <a
-              href="https://www.amazon.com/dp/B0DFY2PY3G"
+              href="https://www.amazon.com/Rekt-Energy-Focus-Powder-Cherry/dp/B0GSGB13LJ"
               target="_blank"
               rel="noopener noreferrer"
               className="text-sm text-teal hover:underline"
             >
-              View Rekt Focus Energy Powder on Amazon &rarr;
+              View Rekt Energy + Focus Powder on Amazon &rarr;
             </a>
           </div>
         </div>
