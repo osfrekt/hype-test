@@ -80,6 +80,9 @@ export async function runResearch(
 interface PanelResponse {
   personaId: number;
   personaLabel: string;
+  personaAge: number;
+  personaGender: string;
+  personaIncome: number;
   purchaseIntent: number; // 1-5
   wtpChoice: "low" | "mid" | "high" | "none";
   featureRankings: { feature: string; importance: number }[];
@@ -199,6 +202,9 @@ Respond in this exact JSON format:
     return {
       personaId: persona.id,
       personaLabel,
+      personaAge: persona.age,
+      personaGender: persona.gender,
+      personaIncome: persona.income,
       purchaseIntent: Math.min(5, Math.max(1, Number(parsed.purchaseIntent))),
       wtpChoice: priceMap[parsed.priceChoice] || "none",
       featureRankings,
@@ -213,6 +219,9 @@ Respond in this exact JSON format:
     return {
       personaId: persona.id,
       personaLabel: `${persona.age}yo ${persona.gender}`,
+      personaAge: persona.age,
+      personaGender: persona.gender,
+      personaIncome: persona.income,
       purchaseIntent: 3,
       wtpChoice: "mid",
       featureRankings: features.map((f, i) => ({
@@ -335,9 +344,49 @@ function aggregateResults(
     incomeRange: { min: incomes[0], max: incomes[incomes.length - 1], median: median(incomes) },
   };
 
+  // Segment breakdowns
+  function computeSegmentIntent(subset: PanelResponse[]): number {
+    if (subset.length === 0) return 0;
+    return Math.round(
+      (subset.reduce((sum, r) => sum + r.purchaseIntent, 0) / subset.length / 5) * 100
+    );
+  }
+
+  const ageGroups = [
+    { segment: "18-30", filter: (r: PanelResponse) => r.personaAge >= 18 && r.personaAge <= 30 },
+    { segment: "31-45", filter: (r: PanelResponse) => r.personaAge >= 31 && r.personaAge <= 45 },
+    { segment: "46+", filter: (r: PanelResponse) => r.personaAge >= 46 },
+  ];
+  const genderGroups = [
+    { segment: "Male", filter: (r: PanelResponse) => r.personaGender === "male" },
+    { segment: "Female", filter: (r: PanelResponse) => r.personaGender === "female" },
+    { segment: "Non-binary", filter: (r: PanelResponse) => r.personaGender === "non-binary" },
+  ];
+  const incomeGroups = [
+    { segment: "Under $50k", filter: (r: PanelResponse) => r.personaIncome < 50000 },
+    { segment: "$50-100k", filter: (r: PanelResponse) => r.personaIncome >= 50000 && r.personaIncome <= 100000 },
+    { segment: "Over $100k", filter: (r: PanelResponse) => r.personaIncome > 100000 },
+  ];
+
+  const segmentBreakdown = {
+    byAge: ageGroups.map((g) => {
+      const subset = responses.filter(g.filter);
+      return { segment: g.segment, intentScore: computeSegmentIntent(subset), count: subset.length };
+    }).filter((s) => s.count > 0),
+    byGender: genderGroups.map((g) => {
+      const subset = responses.filter(g.filter);
+      return { segment: g.segment, intentScore: computeSegmentIntent(subset), count: subset.length };
+    }).filter((s) => s.count > 0),
+    byIncome: incomeGroups.map((g) => {
+      const subset = responses.filter(g.filter);
+      return { segment: g.segment, intentScore: computeSegmentIntent(subset), count: subset.length };
+    }).filter((s) => s.count > 0),
+  };
+
   return {
     input,
     panelSize: n,
+    segmentBreakdown,
     purchaseIntent: {
       score: purchaseIntentScore,
       distribution: intentLabels.map((label, i) => ({

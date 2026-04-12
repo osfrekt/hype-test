@@ -52,6 +52,67 @@ export async function sendResearchReport(email: string, productName: string, res
   });
 }
 
+export async function sendAbTestReport(email: string, nameA: string, nameB: string, resultId: string) {
+  const reportUrl = `https://hypetest.ai/ab-test/${resultId}`;
+
+  await getResend().emails.send({
+    from: FROM_EMAIL,
+    to: email,
+    subject: `Your A/B Test: ${nameA} vs ${nameB}`,
+    html: `
+      <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 560px; margin: 0 auto; padding: 40px 20px;">
+        <div style="margin-bottom: 32px;">
+          <strong style="font-size: 18px; color: #1a1f36;">HypeTest</strong>
+        </div>
+        <h1 style="font-size: 22px; color: #1a1f36; margin-bottom: 8px;">Your A/B test results are ready</h1>
+        <p style="color: #64748b; font-size: 14px; line-height: 1.6; margin-bottom: 24px;">
+          AI-simulated A/B concept test for <strong>${nameA}</strong> vs <strong>${nameB}</strong> is complete.
+          See which concept won with the same consumer panel.
+        </p>
+        <a href="${reportUrl}" style="display: inline-block; background: #1a1f36; color: white; text-decoration: none; padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 600;">
+          View your results
+        </a>
+        <p style="color: #94a3b8; font-size: 12px; margin-top: 32px; line-height: 1.5;">
+          This link is permanent and accessible to anyone who has it.
+          <br/>Results are AI-simulated and should be used for directional insights only, not high-stakes decisions.
+        </p>
+        ${FOOTER}
+      </div>
+    `,
+  });
+}
+
+export async function sendNameTestReport(email: string, names: string[], resultId: string) {
+  const reportUrl = `https://hypetest.ai/name-test/${resultId}`;
+  const nameList = names.join(", ");
+
+  await getResend().emails.send({
+    from: FROM_EMAIL,
+    to: email,
+    subject: `Name Test results: ${nameList}`,
+    html: `
+      <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 560px; margin: 0 auto; padding: 40px 20px;">
+        <div style="margin-bottom: 32px;">
+          <strong style="font-size: 18px; color: #1a1f36;">HypeTest</strong>
+        </div>
+        <h1 style="font-size: 22px; color: #1a1f36; margin-bottom: 8px;">Your name test results are ready</h1>
+        <p style="color: #64748b; font-size: 14px; line-height: 1.6; margin-bottom: 24px;">
+          AI-simulated name testing for <strong>${nameList}</strong> is complete.
+          See which names ranked highest with the consumer panel.
+        </p>
+        <a href="${reportUrl}" style="display: inline-block; background: #1a1f36; color: white; text-decoration: none; padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 600;">
+          View your results
+        </a>
+        <p style="color: #94a3b8; font-size: 12px; margin-top: 32px; line-height: 1.5;">
+          This link is permanent and accessible to anyone who has it.
+          <br/>Results are AI-simulated and should be used for directional insights only, not high-stakes decisions.
+        </p>
+        ${FOOTER}
+      </div>
+    `,
+  });
+}
+
 export async function sendDiscoveryReport(email: string, brandName: string, resultId: string) {
   const reportUrl = `https://hypetest.ai/discover/${resultId}`;
 

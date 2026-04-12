@@ -88,6 +88,11 @@ export interface ResearchResult {
       incomeRange: { min: number; max: number; median: number };
     };
   };
+  segmentBreakdown?: {
+    byAge: { segment: string; intentScore: number; count: number }[];
+    byGender: { segment: string; intentScore: number; count: number }[];
+    byIncome: { segment: string; intentScore: number; count: number }[];
+  };
   createdAt: string;
   status: "running" | "complete" | "error";
 }

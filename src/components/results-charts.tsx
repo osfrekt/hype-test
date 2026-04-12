@@ -11,6 +11,7 @@ import {
   ResponsiveContainer,
   Cell,
   LabelList,
+  Legend,
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { ResearchResult } from "@/types/research";
@@ -228,6 +229,94 @@ export function ResultsCharts({ result }: { result: ResearchResult }) {
             </div>
           </CardContent>
         </Card>
+      </div>
+    </div>
+  );
+}
+
+// Segment breakdown bar charts
+const SEGMENT_COLOR = "#1a6b5a";
+
+interface SegmentData {
+  segment: string;
+  intentScore: number;
+  count: number;
+}
+
+function SegmentBarChart({
+  data,
+  title,
+  chart,
+}: {
+  data: SegmentData[];
+  title: string;
+  chart: ReturnType<typeof useChartTheme>;
+}) {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="text-sm font-semibold">{title}</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="h-48">
+          {mounted && (
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={data} margin={{ top: 15, right: 5, left: -20, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke={chart.gridColor} />
+                <XAxis dataKey="segment" tick={{ fontSize: 10 }} />
+                <YAxis tick={{ fontSize: 10 }} domain={[0, 100]} />
+                <Tooltip
+                  contentStyle={{
+                    fontSize: 12,
+                    borderRadius: 8,
+                    border: `1px solid ${chart.tooltipBorder}`,
+                    backgroundColor: chart.tooltipBg,
+                    color: chart.tooltipColor,
+                  }}
+                  formatter={(value: unknown) => [`${value}%`, "Intent"]}
+                />
+                <Bar dataKey="intentScore" fill={SEGMENT_COLOR} radius={[4, 4, 0, 0]}>
+                  <LabelList
+                    dataKey="intentScore"
+                    position="top"
+                    fontSize={10}
+                    fill={chart.labelColor}
+                    formatter={(v: unknown) => (Number(v) > 0 ? `${v}%` : "")}
+                  />
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          )}
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+export function SegmentCharts({
+  breakdown,
+}: {
+  breakdown: {
+    byAge: SegmentData[];
+    byGender: SegmentData[];
+    byIncome: SegmentData[];
+  };
+}) {
+  const chart = useChartTheme();
+
+  return (
+    <div className="mt-12 mb-8">
+      <h3 className="text-xl font-bold text-primary mb-4">Segment Breakdown</h3>
+      <p className="text-sm text-muted-foreground mb-6">
+        Purchase intent broken down by demographic segments of the simulated panel.
+      </p>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <SegmentBarChart data={breakdown.byAge} title="By Age Group" chart={chart} />
+        <SegmentBarChart data={breakdown.byGender} title="By Gender" chart={chart} />
+        <SegmentBarChart data={breakdown.byIncome} title="By Income" chart={chart} />
       </div>
     </div>
   );

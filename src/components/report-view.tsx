@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import type { ResearchResult } from "@/types/research";
-import { ResultsCharts } from "@/components/results-charts";
+import { ResultsCharts, SegmentCharts } from "@/components/results-charts";
 import Link from "next/link";
 
 export function ReportView({
@@ -35,6 +35,9 @@ export function ReportView({
         Not a substitute for professional market research.{" "}
         <Link href="/methodology#limitations" className="text-amber-900 underline">Learn more</Link>
       </div>
+      {/* Go/No-Go Scorecard */}
+      <GoNoGoScorecard result={result} />
+
       {/* Header */}
       <div className="mb-10">
         <div className="flex items-center gap-3 mb-2">
@@ -116,6 +119,11 @@ export function ReportView({
           </div>
         </CardContent>
       </Card>
+
+      {/* Segment Breakdown */}
+      {result.segmentBreakdown && (
+        <SegmentCharts breakdown={result.segmentBreakdown} />
+      )}
 
       {/* Concerns & Positives */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
@@ -305,5 +313,58 @@ function WtpCard({ result }: { result: ResearchResult }) {
         )}
       </CardContent>
     </Card>
+  );
+}
+
+function GoNoGoScorecard({ result }: { result: ResearchResult }) {
+  const score = result.purchaseIntent?.score ?? 0;
+  const wtpMid = result.wtpRange?.mid ?? 0;
+  const topConcern = (result.topConcerns || [])[0] || "consumer hesitations";
+  const topPositive = (result.topPositives || [])[0] || "the product concept";
+
+  // Determine user price midpoint
+  const userPriceMid = result.input.priceRange
+    ? Math.round((result.input.priceRange.min + result.input.priceRange.max) / 2)
+    : null;
+
+  // Determine verdict
+  let verdict: "GO" | "PROCEED WITH CAUTION" | "RECONSIDER";
+  let reasoning: string;
+  let borderColor: string;
+  let verdictColor: string;
+  let bgColor: string;
+
+  const wtpCloseToPrice = userPriceMid !== null ? wtpMid >= userPriceMid * 0.85 : true;
+  const wtpAbovePrice = userPriceMid !== null ? wtpMid >= userPriceMid : true;
+  const wtpSignificantlyBelow = userPriceMid !== null ? wtpMid < userPriceMid * 0.75 : false;
+
+  if (score >= 60 && wtpAbovePrice) {
+    verdict = "GO";
+    borderColor = "border-l-emerald-500";
+    verdictColor = "text-emerald-700";
+    bgColor = "bg-emerald-50";
+    reasoning = `Strong purchase intent (${score}%) with willingness to pay at or above your target price. Consumer sentiment is positive, with "${topPositive}" cited most frequently.`;
+  } else if (score < 40 || wtpSignificantlyBelow) {
+    verdict = "RECONSIDER";
+    borderColor = "border-l-red-500";
+    verdictColor = "text-red-700";
+    bgColor = "bg-red-50";
+    reasoning = `Low purchase intent (${score}%) indicates the current positioning may not resonate. The primary concern is "${topConcern}". Consider repositioning or testing alternative concepts.`;
+  } else {
+    verdict = "PROCEED WITH CAUTION";
+    borderColor = "border-l-amber-500";
+    verdictColor = "text-amber-700";
+    bgColor = "bg-amber-50";
+    reasoning = `Moderate purchase intent (${score}%) suggests interest but not conviction. Consider addressing consumer concerns around "${topConcern}" before committing.`;
+  }
+
+  return (
+    <div className={`rounded-lg border border-l-4 ${borderColor} ${bgColor} p-5 mb-6`}>
+      <p className={`text-2xl font-extrabold ${verdictColor} mb-2`}>{verdict}</p>
+      <p className="text-sm text-foreground/80 leading-relaxed mb-3">{reasoning}</p>
+      <p className="text-xs text-muted-foreground">
+        This is a directional recommendation based on AI-simulated data. Always validate with real consumers before major decisions.
+      </p>
+    </div>
   );
 }

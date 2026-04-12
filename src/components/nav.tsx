@@ -73,6 +73,18 @@ export function Nav() {
             </span>
           </Link>
           <Link
+            href="/ab-test/new"
+            className="hover:text-foreground transition-colors"
+          >
+            A/B Test
+          </Link>
+          <Link
+            href="/name-test/new"
+            className="hover:text-foreground transition-colors"
+          >
+            Name Test
+          </Link>
+          <Link
             href="/pricing"
             className="hover:text-foreground transition-colors"
           >
