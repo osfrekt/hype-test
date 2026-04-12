@@ -270,7 +270,7 @@ function NewNameTestForm() {
               <CardContent className="space-y-3">
                 <div className="space-y-1.5">
                   <Label>Name 1 *</Label>
-                  <Input placeholder="e.g., REKT Focus" value={name1} onChange={(e) => setName1(e.target.value)} required />
+                  <Input placeholder="e.g., Rekt Focus" value={name1} onChange={(e) => setName1(e.target.value)} required />
                 </div>
                 <div className="space-y-1.5">
                   <Label>Name 2 *</Label>

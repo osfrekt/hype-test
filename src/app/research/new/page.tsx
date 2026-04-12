@@ -69,7 +69,7 @@ const CATEGORY_DEFAULTS: Record<
 };
 
 const EXAMPLES: Record<string, string> = {
-  productName: "REKT Focus Energy Powder",
+  productName: "Rekt Focus Energy Powder",
   problem:
     "People want clean energy for work and training without sugar crashes, jitters, or having to drink another can of something",
   feature1: "200mg natural caffeine from green coffee bean",
@@ -103,8 +103,6 @@ function NewResearchForm() {
   const [feature3, setFeature3] = useState("");
   const [differentiator, setDifferentiator] = useState("");
   const [category, setCategory] = useState("");
-  const [priceMin, setPriceMin] = useState("");
-  const [priceMax, setPriceMax] = useState("");
   const [priceUnit, setPriceUnit] = useState("per unit");
   const [targetMarket, setTargetMarket] = useState("");
   const [competitors, setCompetitors] = useState("");
@@ -174,7 +172,7 @@ function NewResearchForm() {
       score++;
     if (differentiator.trim().length > 10) score++;
     if (category) score++;
-    if (priceMin && priceMax) score++;
+    if (priceUnit.trim()) score++;
     if (targetMarket.trim()) score++;
     if (competitors.trim()) score++;
 
@@ -183,7 +181,7 @@ function NewResearchForm() {
     return { level: "Excellent", color: "text-emerald-600", bg: "bg-emerald-500" };
   }, [
     productName, problem, feature1, feature2, feature3,
-    differentiator, category, priceMin, priceMax, targetMarket, competitors,
+    differentiator, category, priceUnit, targetMarket, competitors,
   ]);
 
   const qualityNudge = useMemo(() => {
@@ -191,12 +189,12 @@ function NewResearchForm() {
       return "Adding competitors enables head-to-head analysis";
     if (!targetMarket.trim())
       return "Specifying a target consumer skews the panel for more relevant results";
-    if (!priceMin || !priceMax)
-      return "Adding a price range improves willingness-to-pay accuracy";
+    if (!priceUnit.trim())
+      return "Adding pricing improves willingness-to-pay accuracy";
     if ([feature1, feature2, feature3].filter((f) => f.trim()).length < 2)
       return "Adding more features gives consumers more to evaluate";
     return null;
-  }, [competitors, targetMarket, priceMin, priceMax, feature1, feature2, feature3]);
+  }, [competitors, targetMarket, priceUnit, feature1, feature2, feature3]);
 
   function toggleExample(field: string) {
     setShowExamples((prev) => {
@@ -229,8 +227,9 @@ function NewResearchForm() {
       if (data.feature3) setFeature3(data.feature3);
       if (data.differentiator) setDifferentiator(data.differentiator);
       if (data.category) setCategory(data.category);
-      if (data.priceMin != null) setPriceMin(String(data.priceMin));
-      if (data.priceMax != null) setPriceMax(String(data.priceMax));
+      if (data.priceMin != null && data.priceMax != null) {
+        setPriceUnit(`$${data.priceMin}-${data.priceMax}${data.priceUnit ? ` ${data.priceUnit}` : " per unit"}`);
+      }
       if (data.priceUnit) {
         const unitOptions = ["per unit", "per pack", "per serving", "per month", "per subscription"];
         const match = unitOptions.find((o) =>
@@ -288,10 +287,7 @@ function NewResearchForm() {
         productDescription: assembledDescription,
       };
       if (category && category !== "other") payload.category = category;
-      if (priceMin && priceMax) {
-        payload.priceRange = { min: Number(priceMin), max: Number(priceMax) };
-      }
-      if (priceUnit) payload.priceUnit = priceUnit;
+      if (priceUnit.trim()) payload.priceUnit = priceUnit.trim();
       if (targetMarket.trim()) payload.targetMarket = targetMarket.trim();
       if (competitors.trim()) payload.competitors = competitors.trim();
 
@@ -446,7 +442,7 @@ function NewResearchForm() {
                   onToggleExample={() => toggleExample("name")}
                 >
                   <Input
-                    placeholder="e.g., REKT Focus Energy Powder"
+                    placeholder="e.g., Rekt Focus Energy Powder"
                     value={productName}
                     onChange={(e) => setProductName(e.target.value)}
                     required
@@ -588,69 +584,21 @@ function NewResearchForm() {
                   </p>
                 </FieldGroup>
 
-                {/* Price Range */}
-                <div className="space-y-1.5">
-                  <div className="flex items-center justify-between">
-                    <Label>Price Range</Label>
-                    <button
-                      type="button"
-                      onClick={() => toggleExample("price")}
-                      className="text-xs text-teal hover:underline"
-                    >
-                      {showExamples.has("price") ? "Hide example" : "See example"}
-                    </button>
-                  </div>
-                  {showExamples.has("price") && (
-                    <p className="text-xs text-teal bg-teal/5 rounded px-2 py-1">
-                      ${EXAMPLES.priceMin}-${EXAMPLES.priceMax}{" "}
-                      {EXAMPLES.priceUnit}
-                    </p>
-                  )}
-                  <div className="flex items-center gap-3">
-                    <div className="relative flex-1">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
-                        $
-                      </span>
-                      <Input
-                        type="number"
-                        placeholder="Min"
-                        value={priceMin}
-                        onChange={(e) => setPriceMin(e.target.value)}
-                        className="pl-7"
-                        min="0"
-                      />
-                    </div>
-                    <span className="text-muted-foreground">—</span>
-                    <div className="relative flex-1">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
-                        $
-                      </span>
-                      <Input
-                        type="number"
-                        placeholder="Max"
-                        value={priceMax}
-                        onChange={(e) => setPriceMax(e.target.value)}
-                        className="pl-7"
-                        min="0"
-                      />
-                    </div>
-                  </div>
-                  <Select
+                {/* Pricing */}
+                <FieldGroup
+                  label="Pricing"
+                  example={showExamples.has("price") ? "$2-3 per stick pack" : null}
+                  onToggleExample={() => toggleExample("price")}
+                >
+                  <Input
+                    placeholder="e.g. $2-3 per stick pack, $45-65 per unit, $29/month"
                     value={priceUnit}
-                    onValueChange={(v) => setPriceUnit(v ?? "per unit")}
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="per unit">per unit</SelectItem>
-                      <SelectItem value="per pack">per pack</SelectItem>
-                      <SelectItem value="per serving">per serving</SelectItem>
-                      <SelectItem value="per month">per month</SelectItem>
-                      <SelectItem value="per subscription">per subscription</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+                    onChange={(e) => setPriceUnit(e.target.value)}
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    Include the price range and what unit it applies to.
+                  </p>
+                </FieldGroup>
 
                 {/* About you */}
                 <div className="bg-teal/5 rounded-xl p-4 border border-teal/20 space-y-4">

@@ -239,7 +239,7 @@ function NewAbTestForm() {
                 <div className="space-y-1.5">
                   <Label>Product Name</Label>
                   <Input
-                    placeholder="e.g., REKT Focus Powder"
+                    placeholder="e.g., Rekt Focus Powder"
                     value={nameA}
                     onChange={(e) => setNameA(e.target.value)}
                     required
@@ -290,7 +290,7 @@ function NewAbTestForm() {
                 <div className="space-y-1.5">
                   <Label>Product Name</Label>
                   <Input
-                    placeholder="e.g., REKT Energy Gummies"
+                    placeholder="e.g., Rekt Energy Gummies"
                     value={nameB}
                     onChange={(e) => setNameB(e.target.value)}
                     required

@@ -113,6 +113,12 @@ export function Nav() {
             {themeIcon}
           </button>
           <Link
+            href="/pricing"
+            className="hidden sm:inline-flex items-center justify-center text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            Pricing
+          </Link>
+          <Link
             href="/research/new"
             className="inline-flex items-center justify-center rounded-lg bg-primary text-primary-foreground text-sm font-medium px-4 h-9 hover:bg-primary/90 transition-colors"
           >

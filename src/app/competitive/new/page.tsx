@@ -338,7 +338,7 @@ function CompetitiveForm() {
                 <div className="space-y-1.5">
                   <Label>Product Name</Label>
                   <Input
-                    placeholder="e.g., REKT Focus Energy Powder"
+                    placeholder="e.g., Rekt Focus Energy Powder"
                     value={yourName}
                     onChange={(e) => setYourName(e.target.value)}
                     required

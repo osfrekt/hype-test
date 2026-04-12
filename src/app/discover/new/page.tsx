@@ -428,7 +428,7 @@ function DiscoverNewForm() {
                 <div className="space-y-1.5">
                   <Label>Brand Name</Label>
                   <Input
-                    placeholder="e.g., REKT"
+                    placeholder="e.g., Rekt"
                     value={brandName}
                     onChange={(e) => setBrandName(e.target.value)}
                     required
