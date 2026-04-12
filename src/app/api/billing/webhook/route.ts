@@ -1,5 +1,5 @@
 import crypto from "crypto";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 export async function POST(request: Request) {
   try {
@@ -24,7 +24,7 @@ export async function POST(request: Request) {
     const subscriptionId = String(event.data?.id);
     const customerId = String(event.data?.attributes?.customer_id);
 
-    const supabase = await createClient();
+    const supabase = createAdminClient();
 
     switch (eventName) {
       case "subscription_created": {
