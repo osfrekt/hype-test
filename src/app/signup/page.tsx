@@ -8,11 +8,20 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { createClient } from "@/lib/supabase/client";
 
 export default function SignupPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [company, setCompany] = useState("");
+  const [role, setRole] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
@@ -40,7 +49,7 @@ export default function SignupPage() {
       email,
       password,
       options: {
-        data: { name },
+        data: { name, company, role },
         emailRedirectTo: `${window.location.origin}/auth/callback`,
       },
     });
@@ -50,6 +59,14 @@ export default function SignupPage() {
       setLoading(false);
       return;
     }
+
+    // Store profile in users table
+    await supabase.from("users").upsert({
+      email,
+      name: name || null,
+      company: company || null,
+      role: role || null,
+    }, { onConflict: "email" }).catch(() => {});
 
     setEmailSent(true);
     setLoading(false);
@@ -185,6 +202,37 @@ export default function SignupPage() {
                     onChange={(e) => setEmail(e.target.value)}
                     required
                   />
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="company">Company</Label>
+                  <Input
+                    id="company"
+                    placeholder="Acme Corp"
+                    value={company}
+                    onChange={(e) => setCompany(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label>Role</Label>
+                  <Select value={role} onValueChange={(v) => setRole(v ?? "")}>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select your role" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="founder">Founder / CEO</SelectItem>
+                      <SelectItem value="product">Product / CPO</SelectItem>
+                      <SelectItem value="marketing">Marketing / CMO</SelectItem>
+                      <SelectItem value="brand">Brand Manager</SelectItem>
+                      <SelectItem value="innovation">Innovation / R&amp;D</SelectItem>
+                      <SelectItem value="insights">Consumer Insights / Research</SelectItem>
+                      <SelectItem value="growth">Growth / Strategy</SelectItem>
+                      <SelectItem value="consultant">Consultant / Agency</SelectItem>
+                      <SelectItem value="investor">Investor / VC</SelectItem>
+                      <SelectItem value="student">Student / Academic</SelectItem>
+                      <SelectItem value="other">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
                 <div className="space-y-1.5">
                   <Label htmlFor="password">Password</Label>
