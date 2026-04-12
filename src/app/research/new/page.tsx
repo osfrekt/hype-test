@@ -682,11 +682,11 @@ function NewResearchForm() {
                 {/* Pricing */}
                 <FieldGroup
                   label="Pricing"
-                  example={showExamples.has("price") ? "$2-3 per stick pack" : null}
+                  example={showExamples.has("price") ? "$39.99 per tub (30 servings)" : null}
                   onToggleExample={() => toggleExample("price")}
                 >
                   <Input
-                    placeholder="e.g. $2-3 per stick pack, $45-65 per unit, $29/month"
+                    placeholder="e.g. $39.99 per tub, $2.50 per can, $29.99/month"
                     value={priceUnit}
                     onChange={(e) => setPriceUnit(e.target.value)}
                   />

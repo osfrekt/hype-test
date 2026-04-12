@@ -359,7 +359,7 @@ export default function Home() {
                     <p className="text-xs text-muted-foreground">Purchase Intent</p>
                   </div>
                   <div className="text-center">
-                    <p className="text-2xl font-bold text-primary">$30</p>
+                    <p className="text-2xl font-bold text-primary">$36</p>
                     <p className="text-xs text-muted-foreground">Estimated WTP</p>
                   </div>
                   <div className="text-center">
@@ -558,21 +558,21 @@ export default function Home() {
               <Link href="/discover/new" className="block bg-background rounded-2xl border border-border/50 p-5 hover:border-teal/30 hover:shadow-sm transition-all group">
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="text-sm font-bold text-primary group-hover:text-teal transition-colors">Product Discovery</h3>
-                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-primary/10 text-primary">Pro</span>
+                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-primary text-primary-foreground">Pro</span>
                 </div>
                 <p className="text-xs text-muted-foreground leading-relaxed">AI generates product concepts for your brand and tests them. Keep iterating until you find a winner.</p>
               </Link>
               <Link href="/audience-test/new" className="block bg-background rounded-2xl border border-border/50 p-5 hover:border-teal/30 hover:shadow-sm transition-all group">
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="text-sm font-bold text-primary group-hover:text-teal transition-colors">Audience Finder</h3>
-                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-primary/10 text-primary">Pro</span>
+                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-primary text-primary-foreground">Pro</span>
                 </div>
                 <p className="text-xs text-muted-foreground leading-relaxed">Test your product across 5 audience segments. Find which demographic has the highest intent.</p>
               </Link>
               <Link href="/competitive/new" className="block bg-background rounded-2xl border border-border/50 p-5 hover:border-teal/30 hover:shadow-sm transition-all group sm:col-span-2 lg:col-span-1">
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="text-sm font-bold text-primary group-hover:text-teal transition-colors">Competitive Teardown</h3>
-                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-primary/10 text-primary">Pro</span>
+                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-primary text-primary-foreground">Pro</span>
                 </div>
                 <p className="text-xs text-muted-foreground leading-relaxed">Compare your product vs a competitor with a radar chart across 5 dimensions.</p>
               </Link>

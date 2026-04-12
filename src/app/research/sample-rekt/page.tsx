@@ -17,8 +17,8 @@ const SAMPLE_RESULT: ResearchResult = {
       "Nootropic blend for focus and mental clarity",
       "Zero sugar, zero calories, 30 servings per tub",
     ],
-    priceRange: { min: 25, max: 35 },
-    priceUnit: "$25-35 per tub (30 servings)",
+    priceRange: { min: 34.99, max: 44.99 },
+    priceUnit: "$34.99-$44.99 per tub (30 servings)",
     targetMarket:
       "Gamers, athletes, and professionals 18-38 who want clean energy without sugar crashes or jitters",
     competitors: "Celsius, Ghost Energy, G Fuel, LMNT",
@@ -34,7 +34,7 @@ const SAMPLE_RESULT: ResearchResult = {
       { label: "Definitely yes", count: 12 },
     ],
   },
-  wtpRange: { low: 25, mid: 30, high: 35 },
+  wtpRange: { low: 30, mid: 36, high: 42 },
   featureImportance: [
     { feature: "200mg natural caffeine with L-Theanine", score: 92 },
     { feature: "Nootropic blend for focus", score: 78 },

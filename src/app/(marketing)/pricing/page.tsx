@@ -420,21 +420,21 @@ export default function PricingPage() {
                 description="Enter your brand and audience. AI generates product concepts and tests them with consumers. Keep iterating until you find a winner."
                 href="/discover/new"
                 badge="Pro"
-                badgeColor="bg-primary/10 text-primary"
+                badgeColor="bg-primary text-primary-foreground"
               />
               <ToolCard
                 title="Audience Finder"
                 description="Test your product across 5 audience segments. Find which demographic has the highest purchase intent."
                 href="/audience-test/new"
                 badge="Pro"
-                badgeColor="bg-primary/10 text-primary"
+                badgeColor="bg-primary text-primary-foreground"
               />
               <ToolCard
                 title="Competitive Teardown"
                 description="Compare your product vs a competitor with a radar chart across 5 dimensions. See exactly where you win and lose."
                 href="/competitive/new"
                 badge="Pro"
-                badgeColor="bg-primary/10 text-primary"
+                badgeColor="bg-primary text-primary-foreground"
               />
               <ToolCard
                 title="Segment Breakdown"
