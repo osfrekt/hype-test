@@ -34,7 +34,7 @@ export async function POST(request: Request) {
     const code = String(Math.floor(100000 + Math.random() * 900000));
 
     // Store code with 10min TTL
-    storeCode(email, code);
+    await storeCode(email, code);
 
     // Send code via Resend
     const resend = new Resend(process.env.RESEND_API_KEY);

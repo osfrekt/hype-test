@@ -11,7 +11,7 @@ export async function POST(request: Request) {
       return Response.json({ error: "Email and code are required" }, { status: 400 });
     }
 
-    if (!checkCode(email, code)) {
+    if (!(await checkCode(email, code))) {
       return Response.json(
         { error: "Invalid or expired code. Please request a new one." },
         { status: 400 }
@@ -19,7 +19,7 @@ export async function POST(request: Request) {
     }
 
     // Consume the code so it can't be reused
-    consumeCode(email);
+    await consumeCode(email);
 
     // Generate a verification token (30min JWT)
     const verificationToken = generateVerificationToken(email);

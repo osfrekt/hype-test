@@ -809,13 +809,15 @@ function DiscoverNewForm() {
                   </div>
                 )}
 
-                <Button
-                  type="submit"
-                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground h-11"
-                  disabled={!isFormValid || verificationStep === "verifying" || verificationStep === "entering-code"}
-                >
-                  {verificationStep === "verified" ? "Discover Products (Pro)" : "Verify Email & Discover Products"}
-                </Button>
+                {verificationStep !== "entering-code" && (
+                  <Button
+                    type="submit"
+                    className="w-full bg-primary hover:bg-primary/90 text-primary-foreground h-11"
+                    disabled={!isFormValid || verificationStep === "verifying"}
+                  >
+                    {verificationStep === "verified" ? "Discover Products (Pro)" : "Verify Email & Discover Products"}
+                  </Button>
+                )}
 
                 <p className="text-xs text-muted-foreground text-center">
                   Generates 8 product concepts and tests each with 30 simulated

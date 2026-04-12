@@ -866,13 +866,15 @@ function NewResearchForm() {
                   </div>
                 )}
 
-                <Button
-                  type="submit"
-                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground h-11"
-                  disabled={!isFormValid || verificationStep === "verifying" || verificationStep === "entering-code"}
-                >
-                  {verificationStep === "verified" ? "Run Research (Free)" : "Verify Email & Run Research"}
-                </Button>
+                {verificationStep !== "entering-code" && (
+                  <Button
+                    type="submit"
+                    className="w-full bg-primary hover:bg-primary/90 text-primary-foreground h-11"
+                    disabled={!isFormValid || verificationStep === "verifying"}
+                  >
+                    {verificationStep === "verified" ? "Run Research (Free)" : "Verify Email & Run Research"}
+                  </Button>
+                )}
 
                 <p className="text-xs text-muted-foreground text-center">
                   Free - no credit card required. Results in 1-2 minutes.

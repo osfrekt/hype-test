@@ -1,31 +1,38 @@
-// In-memory store for email verification codes
-// Shared across API routes within the same server process
+// Store verification codes in Supabase for persistence across serverless instances
 
-const verificationCodes = new Map<string, { code: string; expiresAt: number }>();
+import { createClient } from "@/lib/supabase/server";
 
-export function storeCode(email: string, code: string): void {
-  const expiresAt = Date.now() + 10 * 60 * 1000; // 10 minutes
-  verificationCodes.set(email.toLowerCase(), { code, expiresAt });
-  cleanExpired();
+export async function storeCode(email: string, code: string): Promise<void> {
+  const supabase = await createClient();
+  const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString();
+
+  // Upsert: replace any existing code for this email
+  await supabase
+    .from("verification_codes")
+    .upsert(
+      { email: email.toLowerCase(), code, expires_at: expiresAt },
+      { onConflict: "email" }
+    );
 }
 
-export function checkCode(email: string, code: string): boolean {
-  const entry = verificationCodes.get(email.toLowerCase());
-  if (!entry) return false;
-  if (Date.now() > entry.expiresAt) {
-    verificationCodes.delete(email.toLowerCase());
+export async function checkCode(email: string, code: string): Promise<boolean> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("verification_codes")
+    .select("code, expires_at")
+    .eq("email", email.toLowerCase())
+    .single();
+
+  if (!data) return false;
+  if (new Date(data.expires_at) < new Date()) {
+    // Expired - clean up
+    await supabase.from("verification_codes").delete().eq("email", email.toLowerCase());
     return false;
   }
-  return entry.code === code;
+  return data.code === code;
 }
 
-export function consumeCode(email: string): void {
-  verificationCodes.delete(email.toLowerCase());
-}
-
-function cleanExpired() {
-  const now = Date.now();
-  for (const [key, val] of verificationCodes) {
-    if (val.expiresAt <= now) verificationCodes.delete(key);
-  }
+export async function consumeCode(email: string): Promise<void> {
+  const supabase = await createClient();
+  await supabase.from("verification_codes").delete().eq("email", email.toLowerCase());
 }

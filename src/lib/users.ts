@@ -87,8 +87,6 @@ export async function checkQuota(email: string, type: "research" | "discovery"):
   const plan = PLANS[user.plan] || PLANS.free;
   const limit = type === "research" ? plan.researchLimit : plan.discoveryLimit;
 
-  if (limit === -1) return { allowed: true, remaining: -1, limit: -1, plan: user.plan };
-
   const used = type === "research" ? user.research_count_this_month : user.discovery_count_this_month;
   const remaining = Math.max(0, limit - used);
 

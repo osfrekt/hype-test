@@ -549,11 +549,8 @@ export default function PricingPage() {
           </div>
 
           <div className="mt-10 text-center">
-            <p className="text-sm text-muted-foreground mb-1">
-              Need enterprise features? Custom model fine-tuning? SSO?
-            </p>
-            <p className="text-sm font-medium text-primary">
-              Contact us at <a href="mailto:support@hypetest.ai" className="underline">support@hypetest.ai</a>
+            <p className="text-sm text-muted-foreground">
+              Questions? <a href="mailto:support@hypetest.ai" className="text-primary underline">support@hypetest.ai</a>
             </p>
           </div>
         </div>
