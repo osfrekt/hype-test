@@ -73,6 +73,10 @@ export interface ResearchResult {
   topConcerns: string[];
   topPositives: string[];
   verbatims: { persona: string; quote: string }[];
+  purchaseFrequency?: { label: string; count: number }[];
+  channelPreference?: { label: string; count: number }[];
+  npsScore?: number; // -100 to 100
+  topWords?: { word: string; count: number }[];
   competitivePosition?: {
     distribution: { label: string; count: number }[];
     competitors: string;

@@ -83,6 +83,31 @@ const SAMPLE_RESULT: ResearchResult = {
         "Price per serving works out to under a dollar which is way cheaper than my daily Monster. If it actually helps me focus during study sessions, it's worth trying.",
     },
   ],
+  purchaseFrequency: [
+    { label: "Weekly", count: 8 },
+    { label: "Monthly", count: 18 },
+    { label: "Every few months", count: 12 },
+    { label: "One-time only", count: 7 },
+    { label: "Would not purchase", count: 5 },
+  ],
+  channelPreference: [
+    { label: "Amazon", count: 22 },
+    { label: "Brand website", count: 10 },
+    { label: "Grocery/retail", count: 8 },
+    { label: "Convenience store", count: 3 },
+    { label: "Subscription", count: 7 },
+  ],
+  npsScore: 34,
+  topWords: [
+    { word: "innovative", count: 8 },
+    { word: "clean", count: 7 },
+    { word: "focused", count: 6 },
+    { word: "convenient", count: 5 },
+    { word: "healthy", count: 4 },
+    { word: "expensive", count: 3 },
+    { word: "promising", count: 3 },
+    { word: "natural", count: 2 },
+  ],
   competitivePosition: {
     distribution: [
       { label: "Much better", count: 8 },

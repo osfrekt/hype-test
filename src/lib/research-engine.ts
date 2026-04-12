@@ -89,6 +89,10 @@ interface PanelResponse {
   topConcern: string;
   topPositive: string;
   competitivePreference?: "much_better" | "better" | "same" | "worse" | "much_worse" | "unfamiliar";
+  purchaseFrequency: string; // A-E
+  purchaseChannel: string; // A-E
+  npsScore: number; // 0-10
+  oneWord: string;
 }
 
 async function queryPersona(
@@ -134,8 +138,26 @@ ${features.map((f, i) => `   ${String.fromCharCode(65 + i)}) ${f}`).join("\n")}
 4. TOP CONCERN: What is your single biggest concern or hesitation about this product? (One sentence)
 
 5. TOP POSITIVE: What is the single most appealing thing about this product? (One sentence)
+
+6. PURCHASE FREQUENCY: If you bought this, how often would you repurchase?
+   A) Weekly
+   B) Monthly
+   C) Every few months
+   D) One-time purchase only
+   E) Would not purchase
+
+7. PURCHASE CHANNEL: Where would you most likely buy this product?
+   A) Amazon
+   B) Brand's website
+   C) Grocery/retail store
+   D) Convenience store
+   E) Subscription service
+
+8. RECOMMENDATION: On a scale of 0-10, how likely are you to recommend this product to a friend or colleague?
+
+9. ONE WORD: Describe this product in exactly one word.
 ${input.competitors ? `
-6. COMPETITIVE PREFERENCE: Compared to ${input.competitors}, how does ${input.productName} compare?
+10. COMPETITIVE PREFERENCE: Compared to ${input.competitors}, how does ${input.productName} compare?
    A) Much better than alternatives
    B) Somewhat better
    C) About the same
@@ -149,14 +171,18 @@ Respond in this exact JSON format:
   "priceChoice": "<A, B, C, or D>",
   "featureRanking": [<list of feature letters from most to least important>],
   "topConcern": "<one sentence>",
-  "topPositive": "<one sentence>"${input.competitors ? `,
+  "topPositive": "<one sentence>",
+  "purchaseFrequency": "<A, B, C, D, or E>",
+  "purchaseChannel": "<A, B, C, D, or E>",
+  "npsScore": <number 0-10>,
+  "oneWord": "<single word>"${input.competitors ? `,
   "competitiveChoice": "<A, B, C, D, E, or F>"` : ""}
 }`;
 
   try {
     const response = await anthropic.messages.create({
       model: "claude-haiku-4-5-20251001",
-      max_tokens: 300,
+      max_tokens: 400,
       temperature: 1.0,
       messages: [{ role: "user", content: prompt }],
     });
@@ -210,6 +236,10 @@ Respond in this exact JSON format:
       featureRankings,
       topConcern: parsed.topConcern || "No specific concern",
       topPositive: parsed.topPositive || "Interesting concept",
+      purchaseFrequency: parsed.purchaseFrequency || "C",
+      purchaseChannel: parsed.purchaseChannel || "A",
+      npsScore: Math.min(10, Math.max(0, Number(parsed.npsScore) || 5)),
+      oneWord: (parsed.oneWord || "interesting").split(/\s+/)[0],
       ...(parsed.competitiveChoice && {
         competitivePreference: compMap[parsed.competitiveChoice] || "unfamiliar",
       }),
@@ -230,6 +260,10 @@ Respond in this exact JSON format:
       })),
       topConcern: "Need more information before deciding",
       topPositive: "The concept is interesting",
+      purchaseFrequency: "C",
+      purchaseChannel: "A",
+      npsScore: 5,
+      oneWord: "interesting",
     };
   }
 }
@@ -318,7 +352,43 @@ function aggregateResults(
     };
   }
 
-  const questionsPerPersona = input.competitors ? 6 : 5;
+  // Purchase frequency distribution
+  const frequencyLabels = ["Weekly", "Monthly", "Every few months", "One-time only", "Would not purchase"];
+  const frequencyCounts = [0, 0, 0, 0, 0];
+  const freqMap: Record<string, number> = { A: 0, B: 1, C: 2, D: 3, E: 4 };
+  responses.forEach((r) => {
+    const idx = freqMap[r.purchaseFrequency];
+    if (idx !== undefined) frequencyCounts[idx]++;
+  });
+  const purchaseFrequency = frequencyLabels.map((label, i) => ({ label, count: frequencyCounts[i] }));
+
+  // Channel preference distribution
+  const channelLabels = ["Amazon", "Brand website", "Grocery/retail", "Convenience store", "Subscription"];
+  const channelCounts = [0, 0, 0, 0, 0];
+  const chanMap: Record<string, number> = { A: 0, B: 1, C: 2, D: 3, E: 4 };
+  responses.forEach((r) => {
+    const idx = chanMap[r.purchaseChannel];
+    if (idx !== undefined) channelCounts[idx]++;
+  });
+  const channelPreference = channelLabels.map((label, i) => ({ label, count: channelCounts[i] }));
+
+  // NPS Score: % Promoters (9-10) - % Detractors (0-6)
+  const promoters = responses.filter((r) => r.npsScore >= 9).length;
+  const detractors = responses.filter((r) => r.npsScore <= 6).length;
+  const npsScore = Math.round(((promoters - detractors) / n) * 100);
+
+  // Top words from one-word descriptions
+  const wordCounts: Record<string, number> = {};
+  responses.forEach((r) => {
+    const word = r.oneWord.toLowerCase().trim();
+    if (word) wordCounts[word] = (wordCounts[word] || 0) + 1;
+  });
+  const topWords = Object.entries(wordCounts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 8)
+    .map(([word, count]) => ({ word, count }));
+
+  const questionsPerPersona = input.competitors ? 10 : 9;
 
   // Panel demographic breakdown
   const ages = panel.map((p) => p.age).sort((a, b) => a - b);
@@ -402,6 +472,10 @@ function aggregateResults(
     featureImportance,
     topConcerns: concerns,
     topPositives: positives,
+    purchaseFrequency,
+    channelPreference,
+    npsScore,
+    topWords,
     ...(competitivePosition && { competitivePosition }),
     methodology: {
       panelSize: n,

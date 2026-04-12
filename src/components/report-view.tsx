@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import type { ResearchResult } from "@/types/research";
-import { ResultsCharts, SegmentCharts } from "@/components/results-charts";
+import { ResultsCharts, SegmentCharts, HorizontalBarChart } from "@/components/results-charts";
 import Link from "next/link";
 
 export function ReportView({
@@ -123,6 +123,81 @@ export function ReportView({
       {/* Segment Breakdown */}
       {result.segmentBreakdown && (
         <SegmentCharts breakdown={result.segmentBreakdown} />
+      )}
+
+      {/* NPS Score */}
+      {result.npsScore !== undefined && (
+        <Card className="mt-12 mb-8">
+          <CardContent className="pt-6 text-center">
+            <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-2">
+              Net Promoter Score
+            </p>
+            <p
+              className={`text-5xl font-bold tracking-tight ${
+                result.npsScore > 30
+                  ? "text-emerald-600 dark:text-emerald-400"
+                  : result.npsScore >= 0
+                  ? "text-amber-600 dark:text-amber-400"
+                  : "text-red-600 dark:text-red-400"
+              }`}
+            >
+              {result.npsScore > 0 ? "+" : ""}
+              {result.npsScore}
+            </p>
+            <p className="text-sm text-muted-foreground mt-2">
+              Would consumers recommend this to friends?
+            </p>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Purchase Frequency & Channel Preference */}
+      {(result.purchaseFrequency || result.channelPreference) && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          {result.purchaseFrequency && (
+            <HorizontalBarChart
+              data={result.purchaseFrequency}
+              title="Repurchase Intent"
+            />
+          )}
+          {result.channelPreference && (
+            <HorizontalBarChart
+              data={result.channelPreference}
+              title="Where Consumers Would Buy"
+            />
+          )}
+        </div>
+      )}
+
+      {/* Top Words */}
+      {result.topWords && result.topWords.length > 0 && (
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle className="text-lg font-semibold">
+              How Consumers Describe This Product
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-wrap gap-3 justify-center">
+              {result.topWords.map((w, i) => {
+                const maxCount = result.topWords![0].count;
+                const scale = 0.75 + (w.count / maxCount) * 0.5;
+                return (
+                  <span
+                    key={i}
+                    className="inline-block bg-teal/10 text-teal border border-teal/20 rounded-full px-4 py-1.5 font-medium"
+                    style={{ fontSize: `${scale}rem` }}
+                  >
+                    {w.word}
+                    <span className="text-teal/50 ml-1.5 text-xs font-normal">
+                      {w.count}
+                    </span>
+                  </span>
+                );
+              })}
+            </div>
+          </CardContent>
+        </Card>
       )}
 
       {/* Concerns & Positives */}

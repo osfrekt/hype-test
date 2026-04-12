@@ -90,6 +90,18 @@ function ResearchResultContent({
               ...(data.segment_breakdown && {
                 segmentBreakdown: data.segment_breakdown,
               }),
+              ...(data.purchase_frequency && {
+                purchaseFrequency: data.purchase_frequency,
+              }),
+              ...(data.channel_preference && {
+                channelPreference: data.channel_preference,
+              }),
+              ...(data.nps_score !== null && data.nps_score !== undefined && {
+                npsScore: data.nps_score,
+              }),
+              ...(data.top_words && {
+                topWords: data.top_words,
+              }),
               status: data.status,
               createdAt: data.created_at,
             },

@@ -234,6 +234,69 @@ export function ResultsCharts({ result }: { result: ResearchResult }) {
   );
 }
 
+// Horizontal bar chart for distribution data (purchase frequency, channel preference)
+const HORIZONTAL_BAR_COLOR = "#1a6b5a";
+
+export function HorizontalBarChart({
+  data,
+  title,
+}: {
+  data: { label: string; count: number }[];
+  title: string;
+}) {
+  const [mounted, setMounted] = useState(false);
+  const chart = useChartTheme();
+  useEffect(() => setMounted(true), []);
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="text-lg font-semibold">{title}</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="h-64">
+          {mounted && (
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart
+                data={data}
+                layout="vertical"
+                margin={{ top: 5, right: 30, left: 10, bottom: 5 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" stroke={chart.gridColor} />
+                <XAxis type="number" tick={{ fontSize: 11 }} />
+                <YAxis
+                  dataKey="label"
+                  type="category"
+                  tick={{ fontSize: 10 }}
+                  width={110}
+                />
+                <Tooltip
+                  contentStyle={{
+                    fontSize: 12,
+                    borderRadius: 8,
+                    border: `1px solid ${chart.tooltipBorder}`,
+                    backgroundColor: chart.tooltipBg,
+                    color: chart.tooltipColor,
+                  }}
+                />
+                <Bar dataKey="count" fill={HORIZONTAL_BAR_COLOR} radius={[0, 4, 4, 0]}>
+                  <LabelList
+                    dataKey="count"
+                    position="right"
+                    fontSize={11}
+                    fill={chart.labelColor}
+                    formatter={(v: unknown) => (Number(v) > 0 ? String(v) : "")}
+                  />
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          )}
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
 // Segment breakdown bar charts
 const SEGMENT_COLOR = "#1a6b5a";
 
