@@ -54,9 +54,6 @@ export function SampleReport() {
     <div className="space-y-8">
       {/* Product header */}
       <div className="text-center">
-        <span className="inline-flex items-center gap-1.5 text-xs font-medium text-amber-700 dark:text-amber-400 bg-amber-100 dark:bg-amber-900/40 border border-amber-200 dark:border-amber-800/30 px-2.5 py-1 rounded-full mb-3">
-          Illustrative example only
-        </span>
         <h3 className="text-xl font-bold text-primary">
           Energy Drink Category Example
         </h3>
@@ -65,14 +62,6 @@ export function SampleReport() {
           directionally to publicly available industry data for a well-known
           energy drink. All figures are approximate estimates, not exact data.
         </p>
-        <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200/60 dark:border-amber-800/30 rounded-lg px-3 py-2 mt-3 max-w-lg mx-auto">
-          <p className="text-[11px] text-amber-800 dark:text-amber-300 text-center">
-            This is not a validation study. Traditional panel figures are
-            estimated from public industry reports, not sourced directly from
-            any specific brand or research firm. HypeTest results are simulated.
-            No brand endorses or is affiliated with this comparison.
-          </p>
-        </div>
       </div>
 
       {/* ---- METRIC 1: Purchase Intent ---- */}

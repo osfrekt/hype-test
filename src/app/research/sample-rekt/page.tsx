@@ -151,7 +151,7 @@ export default function SampleRektReport() {
           <ReportView
             result={SAMPLE_RESULT}
             badge={
-              <Badge className="bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300 border-amber-200 dark:border-amber-800/30 text-xs">
+              <Badge className="bg-muted text-muted-foreground text-xs">
                 Sample report
               </Badge>
             }

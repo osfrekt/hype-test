@@ -152,12 +152,6 @@ function CompetitiveResultContent({
       <Nav />
       <main className="flex-1 py-8">
         <div className="max-w-5xl mx-auto px-6">
-          {/* AI Disclaimer */}
-          <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200/60 dark:border-amber-800/30 rounded-lg px-4 py-2.5 mb-6 text-xs text-amber-800 dark:text-amber-300">
-            <strong>Important:</strong> These results are AI-simulated, not from real consumers. Best used for directional insights.{" "}
-            <Link href="/methodology#limitations" className="text-amber-900 underline">Learn more</Link>
-          </div>
-
           {/* Header */}
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold text-primary mb-3">
@@ -241,6 +235,10 @@ function CompetitiveResultContent({
               </p>
             </CardContent>
           </Card>
+
+          <p className="text-[11px] text-muted-foreground leading-relaxed mt-6">
+            AI-simulated research using peer-reviewed methodology. Results are directional and best used for hypothesis validation, not high-stakes business decisions.
+          </p>
         </div>
       </main>
     </>

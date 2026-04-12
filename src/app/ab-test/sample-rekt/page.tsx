@@ -185,7 +185,7 @@ export default function SampleRektAbTest() {
         <div className="max-w-5xl mx-auto px-6">
           {/* Sample badge */}
           <div className="mb-6">
-            <Badge className="bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-300 border-amber-200 dark:border-amber-800/30 text-xs">
+            <Badge className="bg-muted text-muted-foreground text-xs">
               Sample report
             </Badge>
           </div>
