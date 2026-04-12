@@ -71,6 +71,64 @@ const SAMPLE_RESULT: CompetitiveResult = {
   status: "complete",
 };
 
+/* --- Extended sample data not in the CompetitiveResult type --- */
+
+const STRENGTHS_YOURS = [
+  "Clean-label formula with L-Theanine delivers smooth, jitter-free energy that appeals to health-conscious consumers",
+  "Nootropic stack (Alpha-GPC, Lion's Mane) differentiates from caffeine-only competitors and justifies a premium",
+  "Zero sugar, zero calorie positioning aligns with the dominant macro trend toward functional, guilt-free supplements",
+];
+
+const CONCERNS_YOURS = [
+  "Limited to 2 flavors (Blue Raspberry, Cherry) -- variety seekers may churn to competitors with wider selections",
+  "Newer brand with minimal social proof; consumers hesitate to switch from established names without reviews",
+  "30-serving tub at $30 yields $1/serving, slightly above the psychological threshold for daily-use powders",
+];
+
+const STRENGTHS_COMPETITOR = [
+  "40+ flavors create a collector/explorer dynamic that drives repeat purchases and social media content",
+  "Deep esports partnerships (FaZe Clan, NRG, etc.) provide authentic credibility with the core gamer audience",
+  "10-year brand tenure and 1M+ Amazon reviews provide strong social proof that lowers perceived purchase risk",
+];
+
+const CONCERNS_COMPETITOR = [
+  "Artificial dyes (Red 40, Blue 1) and sucralose are increasingly scrutinised by health-conscious consumers",
+  "150mg caffeine per serving is seen as underpowered by experienced users who have built tolerance",
+  "Brand perception is shifting toward younger teens, alienating the 25-35 professional segment willing to pay more",
+];
+
+const VERBATIMS_YOURS = [
+  {
+    persona: "Male, 28, software engineer, daily energy drink user",
+    quote:
+      "The L-Theanine combo is what sold me. I've tried everything from Monster to Celsius and they all give me the shakes by 2pm. This actually let me code for four hours straight without the crash.",
+  },
+  {
+    persona: "Female, 24, competitive gamer, health-conscious",
+    quote:
+      "I love that I can pronounce every ingredient. My only hang-up is that I've never heard of this brand -- I'd want to see some creator reviews before I commit to a full tub.",
+  },
+];
+
+const VERBATIMS_COMPETITOR = [
+  {
+    persona: "Male, 22, college student, casual gamer",
+    quote:
+      "G Fuel is just what you grab when you're gaming. The flavors are insane and I trust it because literally every streamer I watch uses it. But yeah, I know the ingredient list isn't great.",
+  },
+  {
+    persona: "Female, 31, crossfit athlete, supplement-savvy",
+    quote:
+      "I used G Fuel for years but switched away once I started reading labels more carefully. The artificial colors and sweeteners don't fit my routine anymore, and 150mg caffeine barely registers for me.",
+  },
+];
+
+const KEY_INSIGHT =
+  "Rekt holds a clear positioning advantage in the growing clean-label energy segment. Its nootropic stack and zero-sugar formula outperform G Fuel on Perceived Value (+7) and Feature Appeal (+6), the two dimensions most correlated with long-term brand switching in the category. However, G Fuel's edge in Low Concern (+3) reflects the trust premium that comes with brand tenure and massive social proof. Rekt's path to winning market share is not to out-flavor G Fuel, but to double down on the health-and-performance narrative that G Fuel cannot credibly claim. Securing creator partnerships and accumulating verified reviews should be the top priority to close the trust gap while the clean-label advantage is still differentiated.";
+
+const WINNER_REASONING =
+  "Rekt wins the composite score (69.0 vs 65.4) by leading in 4 of 5 dimensions. The largest gap is in Feature Appeal (+6), driven by the nootropic blend and clean-label positioning that resonates with health-conscious energy consumers. G Fuel's only advantage is Low Concern (+3), reflecting its established brand trust. At the stated price points, Rekt also delivers higher perceived value per serving despite a smaller tub size, because consumers weight ingredient quality over serving count.";
+
 export default function SampleRektCompetitive() {
   const result = SAMPLE_RESULT;
 
@@ -105,8 +163,8 @@ export default function SampleRektCompetitive() {
             <p className="text-2xl font-bold">
               {result.yours.input.productName}
             </p>
-            <p className="text-sm mt-1">
-              Based on composite scoring across 5 dimensions
+            <p className="text-sm mt-2 max-w-2xl mx-auto">
+              {WINNER_REASONING}
             </p>
           </div>
 
@@ -275,6 +333,239 @@ export default function SampleRektCompetitive() {
                   </tbody>
                 </table>
               </div>
+            </CardContent>
+          </Card>
+
+          {/* Strengths & Concerns */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            {/* Rekt Strengths & Concerns */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base">
+                  {result.yours.input.productName}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2 font-medium">
+                    Top Strengths
+                  </p>
+                  <ul className="space-y-2">
+                    {STRENGTHS_YOURS.map((s, i) => (
+                      <li key={i} className="flex items-start gap-2 text-sm">
+                        <svg
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="text-emerald-500 shrink-0 mt-0.5"
+                        >
+                          <path d="M20 6 9 17l-5-5" />
+                        </svg>
+                        <span className="text-foreground">{s}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <Separator />
+                <div>
+                  <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2 font-medium">
+                    Top Concerns
+                  </p>
+                  <ul className="space-y-2">
+                    {CONCERNS_YOURS.map((c, i) => (
+                      <li key={i} className="flex items-start gap-2 text-sm">
+                        <svg
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="text-red-500 shrink-0 mt-0.5"
+                        >
+                          <circle cx="12" cy="12" r="10" />
+                          <line x1="12" x2="12" y1="8" y2="12" />
+                          <line x1="12" x2="12.01" y1="16" y2="16" />
+                        </svg>
+                        <span className="text-foreground">{c}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* G Fuel Strengths & Concerns */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base">
+                  {result.competitor.input.productName}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2 font-medium">
+                    Top Strengths
+                  </p>
+                  <ul className="space-y-2">
+                    {STRENGTHS_COMPETITOR.map((s, i) => (
+                      <li key={i} className="flex items-start gap-2 text-sm">
+                        <svg
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="text-emerald-500 shrink-0 mt-0.5"
+                        >
+                          <path d="M20 6 9 17l-5-5" />
+                        </svg>
+                        <span className="text-foreground">{s}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <Separator />
+                <div>
+                  <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2 font-medium">
+                    Top Concerns
+                  </p>
+                  <ul className="space-y-2">
+                    {CONCERNS_COMPETITOR.map((c, i) => (
+                      <li key={i} className="flex items-start gap-2 text-sm">
+                        <svg
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="text-red-500 shrink-0 mt-0.5"
+                        >
+                          <circle cx="12" cy="12" r="10" />
+                          <line x1="12" x2="12" y1="8" y2="12" />
+                          <line x1="12" x2="12.01" y1="16" y2="16" />
+                        </svg>
+                        <span className="text-foreground">{c}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Consumer Verbatims */}
+          <Card className="mb-8">
+            <CardHeader>
+              <CardTitle className="text-lg font-semibold">
+                Consumer Verbatims
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div>
+                <p className="text-xs text-muted-foreground uppercase tracking-wider mb-3 font-medium">
+                  {result.yours.input.productName}
+                </p>
+                <div className="space-y-4">
+                  {VERBATIMS_YOURS.map((v, i) => (
+                    <div
+                      key={i}
+                      className="border-l-2 border-emerald-300 pl-4"
+                    >
+                      <p className="text-sm text-foreground italic">
+                        &ldquo;{v.quote}&rdquo;
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        -- {v.persona}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <Separator />
+              <div>
+                <p className="text-xs text-muted-foreground uppercase tracking-wider mb-3 font-medium">
+                  {result.competitor.input.productName}
+                </p>
+                <div className="space-y-4">
+                  {VERBATIMS_COMPETITOR.map((v, i) => (
+                    <div key={i} className="border-l-2 border-red-300 pl-4">
+                      <p className="text-sm text-foreground italic">
+                        &ldquo;{v.quote}&rdquo;
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        -- {v.persona}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Key Competitive Insight */}
+          <Card className="mb-8 border-teal/20 bg-teal/5">
+            <CardHeader>
+              <CardTitle className="text-lg font-semibold text-primary">
+                Key Competitive Insight
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-foreground leading-relaxed">
+                {KEY_INSIGHT}
+              </p>
+            </CardContent>
+          </Card>
+
+          {/* Methodology */}
+          <Card className="mb-8 border-teal/20 bg-teal/5">
+            <CardHeader>
+              <CardTitle className="text-lg font-semibold text-primary">
+                Methodology
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="text-sm text-muted-foreground space-y-2">
+              <p>
+                <strong>Panel size:</strong>{" "}
+                {result.methodology.panelSize} simulated consumers (shared
+                panel)
+              </p>
+              <p>
+                <strong>Demographic mix:</strong>{" "}
+                {result.methodology.demographicMix}
+              </p>
+              <p>
+                <strong>Scoring:</strong> Each dimension is scored 0-100 based
+                on aggregated panel responses. Composite score is the
+                unweighted average of all 5 dimensions.
+              </p>
+              <Separator className="my-3" />
+              <p className="text-xs leading-relaxed">
+                {result.methodology.confidenceNote}
+              </p>
+              <p className="text-xs leading-relaxed">
+                This research uses methodology informed by Brand, Israeli &amp;
+                Ngwe (2025), &ldquo;Using LLMs for Market Research,&rdquo;
+                Harvard Business School Working Paper 23-062.
+              </p>
+              <p className="text-xs leading-relaxed font-medium">
+                Important: These results are best used for directional insights.
+                They should not replace primary consumer research for major
+                business decisions.
+              </p>
             </CardContent>
           </Card>
 

@@ -236,6 +236,52 @@ const SAMPLE_RESULT: DiscoveryResult = {
   status: "complete",
 };
 
+/* --- Extended sample data: verbatim quotes keyed by concept name --- */
+
+const CONCEPT_VERBATIMS: Record<
+  string,
+  { persona: string; quote: string }[]
+> = {
+  "Rekt Recovery Collagen": [
+    {
+      persona: "Male, 30, crossfit athlete, daily supplement user",
+      quote:
+        "I already take collagen and electrolytes separately. If Rekt combined them into one clean-label product I'd switch tomorrow. The tart cherry extract for inflammation is a legit differentiator.",
+    },
+    {
+      persona: "Female, 26, competitive gamer, fitness enthusiast",
+      quote:
+        "Recovery is the one part of my stack that feels random -- I just grab whatever is on sale. A brand I already trust for energy making a recovery product would simplify my whole routine.",
+    },
+  ],
+  "Rekt Hydration Sticks": [
+    {
+      persona: "Male, 24, college student, daily gamer",
+      quote:
+        "I go through LMNT like crazy during long gaming sessions. If Rekt made a zero-sugar version at $25 I'd try it, but they need at least 3-4 flavors to keep me interested.",
+    },
+    {
+      persona: "Female, 32, marathon runner, health-conscious",
+      quote:
+        "The hydration stick market is saturated but most brands are loaded with sugar or artificial sweeteners. Rekt's clean-label approach could carve out a real niche if the electrolyte ratios are dialed in.",
+    },
+  ],
+  "Rekt Focus Gummies": [
+    {
+      persona: "Male, 21, esports competitor, convenience-driven",
+      quote:
+        "Gummies I can toss in my bag for LAN tournaments? Yes please. But if they have sugar, that kills the whole Rekt clean-label thing for me.",
+    },
+  ],
+  "Rekt Sleep Formula": [
+    {
+      persona: "Female, 29, product manager, poor sleeper",
+      quote:
+        "I love the idea of a morning energy / night sleep stack from the same brand. But honestly, the name 'Rekt' on a sleep product made me laugh -- they might need to think about the branding.",
+    },
+  ],
+};
+
 function rankColor(rank: number) {
   if (rank <= 2) return "bg-emerald-100 text-emerald-800";
   if (rank <= 5) return "bg-amber-100 text-amber-800";
@@ -248,6 +294,9 @@ export default function SampleRektDiscovery() {
     (a, b) => a.demandRank - b.demandRank
   );
   const topConcept = concepts[0];
+  const highestWtp = concepts.reduce((best, c) =>
+    c.wtpRange.mid > best.wtpRange.mid ? c : best
+  );
 
   return (
     <>
@@ -297,10 +346,10 @@ export default function SampleRektDiscovery() {
                   Highest WTP
                 </p>
                 <p className="text-lg font-bold text-primary leading-tight">
-                  {topConcept?.concept.name ?? "N/A"}
+                  {highestWtp?.concept.name ?? "N/A"}
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">
-                  ${topConcept?.wtpRange.mid ?? 0} estimated WTP
+                  ${highestWtp?.wtpRange.mid ?? 0} estimated WTP
                 </p>
               </CardContent>
             </Card>
@@ -326,93 +375,184 @@ export default function SampleRektDiscovery() {
             <h3 className="text-lg font-bold text-primary">
               Ranked Product Concepts
             </h3>
-            {concepts.map((c) => (
-              <Card key={c.concept.name}>
-                <CardContent className="pt-6">
-                  <div className="flex items-start gap-4">
-                    <div className="flex flex-col items-center gap-1 shrink-0">
-                      <div
-                        className={`w-10 h-10 rounded-lg flex items-center justify-center text-sm font-bold ${rankColor(c.demandRank)}`}
-                      >
-                        #{c.demandRank}
+            {concepts.map((c) => {
+              const verbatims = CONCEPT_VERBATIMS[c.concept.name];
+              return (
+                <Card key={c.concept.name}>
+                  <CardContent className="pt-6">
+                    <div className="flex items-start gap-4">
+                      <div className="flex flex-col items-center gap-1 shrink-0">
+                        <div
+                          className={`w-10 h-10 rounded-lg flex items-center justify-center text-sm font-bold ${rankColor(c.demandRank)}`}
+                        >
+                          #{c.demandRank}
+                        </div>
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="text-base font-bold text-primary mb-1">
+                          {c.concept.name}
+                        </h4>
+                        <p className="text-sm text-foreground mb-2">
+                          {c.concept.description}
+                        </p>
+                        <p className="text-xs text-muted-foreground mb-4 italic">
+                          {c.concept.rationale}
+                        </p>
+
+                        {/* Metrics row */}
+                        <div className="flex flex-wrap items-center gap-4 mb-4">
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-xs text-muted-foreground">
+                              Purchase Intent
+                            </span>
+                            <span
+                              className={`text-sm font-bold ${c.purchaseIntent.score >= 60 ? "text-emerald-600" : c.purchaseIntent.score >= 40 ? "text-amber-600" : "text-red-600"}`}
+                            >
+                              {c.purchaseIntent.score}%
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-xs text-muted-foreground">
+                              WTP Range
+                            </span>
+                            <span className="text-sm font-bold text-primary">
+                              ${c.wtpRange.low}-${c.wtpRange.high}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-xs text-muted-foreground">
+                              WTP Mid
+                            </span>
+                            <span className="text-sm font-bold text-primary">
+                              ${c.wtpRange.mid}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Excitement & Hesitation */}
+                        <div className="space-y-2 mb-4">
+                          <div className="flex items-start gap-2">
+                            <svg
+                              width="16"
+                              height="16"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              className="text-emerald-500 shrink-0 mt-0.5"
+                            >
+                              <path d="M20 6 9 17l-5-5" />
+                            </svg>
+                            <span className="text-sm text-muted-foreground">
+                              <span className="font-medium text-foreground">
+                                Top excitement:
+                              </span>{" "}
+                              {c.topExcitement}
+                            </span>
+                          </div>
+                          <div className="flex items-start gap-2">
+                            <svg
+                              width="16"
+                              height="16"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              className="text-red-500 shrink-0 mt-0.5"
+                            >
+                              <circle cx="12" cy="12" r="10" />
+                              <line x1="12" x2="12" y1="8" y2="12" />
+                              <line x1="12" x2="12.01" y1="16" y2="16" />
+                            </svg>
+                            <span className="text-sm text-muted-foreground">
+                              <span className="font-medium text-foreground">
+                                Top hesitation:
+                              </span>{" "}
+                              {c.topHesitation}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Verbatim quotes if available */}
+                        {verbatims && verbatims.length > 0 && (
+                          <div className="mt-4 space-y-3">
+                            <p className="text-xs text-muted-foreground uppercase tracking-wider font-medium">
+                              Consumer Verbatims
+                            </p>
+                            {verbatims.map((v, i) => (
+                              <div
+                                key={i}
+                                className="border-l-2 border-muted-foreground/20 pl-3"
+                              >
+                                <p className="text-sm text-foreground italic">
+                                  &ldquo;{v.quote}&rdquo;
+                                </p>
+                                <p className="text-xs text-muted-foreground mt-1">
+                                  -- {v.persona}
+                                </p>
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <h4 className="text-base font-bold text-primary mb-1">
-                        {c.concept.name}
-                      </h4>
-                      <p className="text-sm text-foreground mb-2">
-                        {c.concept.description}
-                      </p>
-                      <p className="text-xs text-muted-foreground mb-4 italic">
-                        {c.concept.rationale}
-                      </p>
-                      <div className="flex flex-wrap items-center gap-4 mb-4">
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-xs text-muted-foreground">
-                            Purchase Intent
-                          </span>
-                          <span
-                            className={`text-sm font-bold ${c.purchaseIntent.score >= 60 ? "text-emerald-600" : c.purchaseIntent.score >= 40 ? "text-amber-600" : "text-red-600"}`}
-                          >
-                            {c.purchaseIntent.score}%
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-xs text-muted-foreground">
-                            WTP
-                          </span>
-                          <span className="text-sm font-bold text-primary">
-                            ${c.wtpRange.low}-${c.wtpRange.high}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="space-y-2">
-                        <div className="flex items-start gap-2">
-                          <svg
-                            width="16"
-                            height="16"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="text-emerald-500 shrink-0 mt-0.5"
-                          >
-                            <path d="M20 6 9 17l-5-5" />
-                          </svg>
-                          <span className="text-sm text-muted-foreground">
-                            {c.topExcitement}
-                          </span>
-                        </div>
-                        <div className="flex items-start gap-2">
-                          <svg
-                            width="16"
-                            height="16"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="text-red-500 shrink-0 mt-0.5"
-                          >
-                            <circle cx="12" cy="12" r="10" />
-                            <line x1="12" x2="12" y1="8" y2="12" />
-                            <line x1="12" x2="12.01" y1="16" y2="16" />
-                          </svg>
-                          <span className="text-sm text-muted-foreground">
-                            {c.topHesitation}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                  </CardContent>
+                </Card>
+              );
+            })}
           </div>
+
+          {/* Methodology */}
+          <Card className="mb-8 border-teal/20 bg-teal/5">
+            <CardHeader>
+              <CardTitle className="text-base text-primary">
+                Methodology & Limitations
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="text-sm text-muted-foreground space-y-2">
+              <p>
+                <strong>Panel size:</strong>{" "}
+                {result.methodology.panelSize} simulated consumers per concept
+              </p>
+              <p>
+                <strong>Demographic mix:</strong>{" "}
+                {result.methodology.demographicMix}
+              </p>
+              <p>
+                <strong>Concepts generated:</strong>{" "}
+                {result.methodology.conceptsGenerated}
+              </p>
+              <p>
+                <strong>Concepts tested:</strong>{" "}
+                {result.methodology.conceptsTested}
+              </p>
+              <p>
+                <strong>Scoring:</strong> Purchase intent is the percentage of
+                panellists who responded &ldquo;Probably yes&rdquo; or
+                &ldquo;Definitely yes&rdquo; on a 5-point Likert scale. WTP is
+                derived from open-ended willingness-to-pay prompts with low,
+                mid, and high anchors.
+              </p>
+              <Separator className="my-3" />
+              <p className="text-xs leading-relaxed">
+                {result.methodology.confidenceNote}
+              </p>
+              <p className="text-xs leading-relaxed">
+                This research uses methodology informed by Brand, Israeli &amp;
+                Ngwe (2025), &ldquo;Using LLMs for Market Research,&rdquo;
+                Harvard Business School Working Paper 23-062.
+              </p>
+              <p className="text-xs leading-relaxed font-medium">
+                Important: These results are best used for directional insights
+                and hypothesis generation. They should not replace high-stakes
+                primary consumer research for major business decisions.
+              </p>
+            </CardContent>
+          </Card>
 
           {/* CTA */}
           <div className="mt-8 text-center" data-print-hide>
