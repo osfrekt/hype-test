@@ -114,7 +114,7 @@ export function Nav() {
           </button>
           <Link
             href="/pricing"
-            className="hidden sm:inline-flex items-center justify-center text-sm text-muted-foreground hover:text-foreground transition-colors"
+            className="inline-flex md:hidden items-center justify-center text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
             Pricing
           </Link>
