@@ -1,7 +1,19 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Nav } from "@/components/nav";
 import { Footer } from "@/components/footer";
 import { SampleReport } from "@/components/sample-report";
+import { EmailCapture } from "@/components/email-capture";
+
+export const metadata: Metadata = {
+  title: "HypeTest | AI Consumer Research in Minutes",
+  description: "Simulate a panel of 50+ AI consumer personas for any product. Get purchase intent, willingness-to-pay, feature importance, and a Go/No-Go verdict in under 2 minutes.",
+  openGraph: {
+    title: "HypeTest | AI Consumer Research in Minutes",
+    description: "Test any product concept with AI-simulated consumer research. Free to start.",
+    url: "https://hypetest.ai",
+  },
+};
 
 export default function Home() {
   return (
@@ -657,6 +669,10 @@ export default function Home() {
             >
               Start your first research run
             </Link>
+            <div className="mt-8 flex flex-col items-center gap-2">
+              <p className="text-xs text-muted-foreground">Not ready yet? Get product updates:</p>
+              <EmailCapture />
+            </div>
           </div>
         </section>
       </main>
