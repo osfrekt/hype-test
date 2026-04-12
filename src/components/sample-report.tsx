@@ -54,7 +54,7 @@ export function SampleReport() {
     <div className="space-y-8">
       {/* Product header */}
       <div className="text-center">
-        <span className="inline-flex items-center gap-1.5 text-xs font-medium text-amber-700 bg-amber-100 border border-amber-200 px-2.5 py-1 rounded-full mb-3">
+        <span className="inline-flex items-center gap-1.5 text-xs font-medium text-amber-700 dark:text-amber-400 bg-amber-100 dark:bg-amber-900/40 border border-amber-200 dark:border-amber-800/30 px-2.5 py-1 rounded-full mb-3">
           Illustrative example only
         </span>
         <h3 className="text-xl font-bold text-primary">
@@ -65,8 +65,8 @@ export function SampleReport() {
           directionally to publicly available industry data for a well-known
           energy drink. All figures are approximate estimates, not exact data.
         </p>
-        <div className="bg-amber-50 border border-amber-200/60 rounded-lg px-3 py-2 mt-3 max-w-lg mx-auto">
-          <p className="text-[11px] text-amber-800 text-center">
+        <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200/60 dark:border-amber-800/30 rounded-lg px-3 py-2 mt-3 max-w-lg mx-auto">
+          <p className="text-[11px] text-amber-800 dark:text-amber-300 text-center">
             This is not a validation study. Traditional panel figures are
             estimated from public industry reports, not sourced directly from
             any specific brand or research firm. HypeTest results are simulated.
@@ -100,7 +100,7 @@ export function SampleReport() {
           {mounted && (
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={traditionalIntent} margin={{ top: 10, right: 0, left: -15, bottom: 0 }} barGap={2}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="oklch(0.91 0.005 260)" vertical={false} />
                 <XAxis dataKey="label" tick={{ fontSize: 9 }} angle={-15} textAnchor="end" height={45} />
                 <YAxis tick={{ fontSize: 9 }} unit="%" />
                 <Bar dataKey="traditional" name="Traditional" radius={[3, 3, 0, 0]} opacity={0.5}>
@@ -231,35 +231,35 @@ export function SampleReport() {
       </section>
 
       {/* ---- Alignment Score ---- */}
-      <section className="bg-emerald-50 border border-emerald-200/60 rounded-2xl p-5 sm:p-6">
+      <section className="bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200/60 dark:border-emerald-800/30 rounded-2xl p-5 sm:p-6">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="20 6 9 17 4 12" />
             </svg>
-            <p className="text-sm font-bold text-emerald-800">Directional Alignment</p>
+            <p className="text-sm font-bold text-emerald-800 dark:text-emerald-300">Directional Alignment</p>
           </div>
-          <p className="text-xl font-extrabold text-emerald-700">~92%</p>
+          <p className="text-xl font-bold text-emerald-700 dark:text-emerald-400">~92%</p>
         </div>
-        <div className="w-full h-2.5 bg-emerald-200 rounded-full overflow-hidden mb-4">
+        <div className="w-full h-2.5 bg-emerald-200 dark:bg-emerald-900/50 rounded-full overflow-hidden mb-4">
           <div className="h-full bg-emerald-500 rounded-full" style={{ width: "92%" }} />
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
           <div>
-            <p className="text-lg font-bold text-emerald-700">3%</p>
-            <p className="text-[10px] text-emerald-600">Intent gap</p>
+            <p className="text-lg font-bold text-emerald-700 dark:text-emerald-400">3%</p>
+            <p className="text-[10px] text-emerald-600 dark:text-emerald-500">Intent gap</p>
           </div>
           <div>
-            <p className="text-lg font-bold text-emerald-700">$0.14</p>
-            <p className="text-[10px] text-emerald-600">WTP difference</p>
+            <p className="text-lg font-bold text-emerald-700 dark:text-emerald-400">$0.14</p>
+            <p className="text-[10px] text-emerald-600 dark:text-emerald-500">WTP difference</p>
           </div>
           <div>
-            <p className="text-lg font-bold text-emerald-700">4/4</p>
-            <p className="text-[10px] text-emerald-600">Features matched</p>
+            <p className="text-lg font-bold text-emerald-700 dark:text-emerald-400">4/4</p>
+            <p className="text-[10px] text-emerald-600 dark:text-emerald-500">Features matched</p>
           </div>
           <div>
-            <p className="text-lg font-bold text-emerald-700">3/3</p>
-            <p className="text-[10px] text-emerald-600">Concerns aligned</p>
+            <p className="text-lg font-bold text-emerald-700 dark:text-emerald-400">3/3</p>
+            <p className="text-[10px] text-emerald-600 dark:text-emerald-500">Concerns aligned</p>
           </div>
         </div>
       </section>
