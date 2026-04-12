@@ -22,9 +22,32 @@ export function ReportView({
   const verbatims = result.verbatims || [];
 
   const [formattedDate, setFormattedDate] = useState("");
+  const [benchmark, setBenchmark] = useState<{
+    avgIntent: number;
+    avgWtp: number;
+    avgNps: number | null;
+    sampleSize: number;
+  } | null>(result.categoryBenchmark ?? null);
+  const [benchmarkLoading, setBenchmarkLoading] = useState(false);
+
   useEffect(() => {
     setFormattedDate(new Date(result.createdAt).toLocaleDateString());
   }, [result.createdAt]);
+
+  // Fetch live benchmarks unless pre-populated (e.g. sample report)
+  useEffect(() => {
+    if (result.categoryBenchmark) return; // already have data
+    const category = result.input.category;
+    if (!category) return;
+    setBenchmarkLoading(true);
+    fetch(`/api/benchmarks?category=${encodeURIComponent(category)}`)
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.benchmarks) setBenchmark(d.benchmarks);
+      })
+      .catch(() => {})
+      .finally(() => setBenchmarkLoading(false));
+  }, [result.input.category, result.categoryBenchmark]);
 
   const score = result.purchaseIntent?.score ?? 0;
 
@@ -37,6 +60,13 @@ export function ReportView({
       </div>
       {/* Go/No-Go Scorecard */}
       <GoNoGoScorecard result={result} />
+
+      {/* Category Benchmark */}
+      <CategoryBenchmark
+        result={result}
+        benchmark={benchmark}
+        loading={benchmarkLoading}
+      />
 
       {/* Header */}
       <div className="mb-10">
@@ -421,6 +451,83 @@ function WtpCard({ result }: { result: ResearchResult }) {
         )}
       </CardContent>
     </Card>
+  );
+}
+
+function CategoryBenchmark({
+  result,
+  benchmark,
+  loading,
+}: {
+  result: ResearchResult;
+  benchmark: { avgIntent: number; avgWtp: number; avgNps: number | null; sampleSize: number } | null;
+  loading: boolean;
+}) {
+  const category = result.input.category;
+  if (!category) return null;
+
+  if (loading) return null;
+
+  if (!benchmark) {
+    return (
+      <div className="bg-muted/30 rounded-lg border border-border/50 px-4 py-3 mb-6 text-sm text-muted-foreground">
+        Not enough data in this category for benchmarks yet. Run more research to build category intelligence.
+      </div>
+    );
+  }
+
+  const score = result.purchaseIntent?.score ?? 0;
+  const wtpMid = result.wtpRange?.mid ?? 0;
+  const nps = result.npsScore;
+
+  const intentDiff = score - benchmark.avgIntent;
+  const wtpDiff = wtpMid - benchmark.avgWtp;
+  const npsDiff = nps !== undefined && benchmark.avgNps !== null ? nps - benchmark.avgNps : null;
+
+  const arrow = (diff: number) =>
+    diff > 0 ? (
+      <span className="text-emerald-600 dark:text-emerald-400">{"\u25B2"} +{diff}</span>
+    ) : diff < 0 ? (
+      <span className="text-red-600 dark:text-red-400">{"\u25BC"} {diff}</span>
+    ) : (
+      <span className="text-muted-foreground">=</span>
+    );
+
+  return (
+    <div className="bg-muted/30 rounded-lg border border-border/50 px-5 py-4 mb-6">
+      <p className="text-sm font-semibold text-primary mb-0.5">Category Benchmark</p>
+      <p className="text-xs text-muted-foreground mb-3">
+        Based on {benchmark.sampleSize} products tested in {category}
+      </p>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
+        <div>
+          <span className="text-muted-foreground">Purchase Intent: </span>
+          <span className="font-medium">{score}%</span>
+          <span className="text-muted-foreground"> vs avg </span>
+          <span className="font-medium">{benchmark.avgIntent}%</span>{" "}
+          {arrow(intentDiff)}
+          <span className="text-xs text-muted-foreground"> pts</span>
+        </div>
+        <div>
+          <span className="text-muted-foreground">WTP: </span>
+          <span className="font-medium">${wtpMid}</span>
+          <span className="text-muted-foreground"> vs avg </span>
+          <span className="font-medium">${benchmark.avgWtp}</span>{" "}
+          {arrow(wtpDiff)}
+          <span className="text-xs text-muted-foreground"> {wtpDiff > 0 ? `+$${wtpDiff}` : wtpDiff < 0 ? `-$${Math.abs(wtpDiff)}` : ""}</span>
+        </div>
+        {npsDiff !== null && benchmark.avgNps !== null && (
+          <div>
+            <span className="text-muted-foreground">NPS: </span>
+            <span className="font-medium">{nps! > 0 ? "+" : ""}{nps}</span>
+            <span className="text-muted-foreground"> vs avg </span>
+            <span className="font-medium">{benchmark.avgNps > 0 ? "+" : ""}{benchmark.avgNps}</span>{" "}
+            {arrow(npsDiff)}
+            <span className="text-xs text-muted-foreground"> pts</span>
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
 

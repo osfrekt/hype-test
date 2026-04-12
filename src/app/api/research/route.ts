@@ -150,6 +150,11 @@ export async function POST(request: Request) {
         (err) => console.error("Failed to send research email:", err)
       );
 
+      // Schedule follow-up email 24 hours later (non-blocking)
+      scheduleFollowUp(email, sanitizedInput.productName, result.purchaseIntent.score).catch(
+        (err) => console.error("Failed to schedule follow-up:", err)
+      );
+
       // Slack notification (non-blocking)
       notifySlack(email, sanitizedInput.productName, result).catch(
         (err) => console.error("Failed to send Slack notification:", err)
@@ -197,6 +202,17 @@ async function notifySlack(email: string, productName: string, result: ResearchR
       resultUrl
     );
   }
+}
+
+async function scheduleFollowUp(email: string, productName: string, intentScore: number) {
+  const supabase = await createClient();
+  await supabase.from("email_followups").insert({
+    email,
+    product_name: productName,
+    intent_score: intentScore,
+    send_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+    sent: false,
+  });
 }
 
 async function persistResult(result: ResearchResult, user: UserInfo) {

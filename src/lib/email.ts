@@ -22,6 +22,47 @@ const FOOTER = `
   </p>
 `;
 
+export async function sendFollowUpEmail(email: string, productName: string, intentScore: number) {
+  const suggestions = intentScore >= 60
+    ? [
+        { title: "Test your pricing", desc: "Find the revenue-maximizing price point", href: "https://hypetest.ai/pricing-test/new" },
+        { title: "A/B test concepts", desc: "Compare two versions of your product", href: "https://hypetest.ai/ab-test/new" },
+        { title: "Test your product name", desc: "See which name resonates most", href: "https://hypetest.ai/name-test/new" },
+      ]
+    : [
+        { title: "Try a different concept", desc: "Test an alternative product idea", href: "https://hypetest.ai/research/new" },
+        { title: "Find your audience", desc: "Discover which demographic wants this most", href: "https://hypetest.ai/audience-test/new" },
+        { title: "Discover new products", desc: "Let AI generate concepts for your brand", href: "https://hypetest.ai/discover/new" },
+      ];
+
+  await getResend().emails.send({
+    from: FROM_EMAIL,
+    to: email,
+    subject: `Next steps for ${productName}`,
+    html: `
+      <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 560px; margin: 0 auto; padding: 40px 20px;">
+        <strong style="font-size: 18px; color: #1a1f36;">HypeTest</strong>
+        <h1 style="font-size: 20px; color: #1a1f36; margin: 24px 0 8px;">Your research on ${productName} scored ${intentScore}% purchase intent</h1>
+        <p style="color: #64748b; font-size: 14px; line-height: 1.6; margin-bottom: 24px;">
+          ${intentScore >= 60
+            ? "Strong results. Here are the next steps to refine your product before launch:"
+            : "The results suggest room for improvement. Here are ways to iterate:"}
+        </p>
+        ${suggestions.map(s => `
+          <div style="background: #f8fafc; border-radius: 8px; padding: 12px 16px; margin-bottom: 8px;">
+            <a href="${s.href}" style="color: #1a1f36; font-weight: 600; font-size: 14px; text-decoration: none;">${s.title}</a>
+            <p style="color: #64748b; font-size: 12px; margin: 4px 0 0;">${s.desc}</p>
+          </div>
+        `).join("")}
+        <p style="color: #94a3b8; font-size: 12px; margin-top: 24px;">
+          This is a one-time follow-up based on your research results.
+        </p>
+        ${FOOTER}
+      </div>
+    `,
+  });
+}
+
 export async function sendResearchReport(email: string, productName: string, resultId: string) {
   const reportUrl = `https://hypetest.ai/research/${resultId}`;
 

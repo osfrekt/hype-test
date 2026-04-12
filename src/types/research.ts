@@ -97,6 +97,12 @@ export interface ResearchResult {
     byGender: { segment: string; intentScore: number; count: number }[];
     byIncome: { segment: string; intentScore: number; count: number }[];
   };
+  categoryBenchmark?: {
+    avgIntent: number;
+    avgWtp: number;
+    avgNps: number | null;
+    sampleSize: number;
+  };
   createdAt: string;
   status: "running" | "complete" | "error";
 }

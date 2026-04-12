@@ -132,6 +132,12 @@ const SAMPLE_RESULT: ResearchResult = {
       incomeRange: { min: 35000, max: 180000, median: 75000 },
     },
   },
+  categoryBenchmark: {
+    avgIntent: 55,
+    avgWtp: 28,
+    avgNps: 22,
+    sampleSize: 47,
+  },
   createdAt: "2026-04-10T14:30:00Z",
   status: "complete",
 };
