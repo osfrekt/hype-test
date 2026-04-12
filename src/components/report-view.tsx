@@ -30,7 +30,7 @@ export function ReportView({
 
   return (
     <div>
-      <div className="bg-amber-50 border border-amber-200/60 rounded-lg px-4 py-2.5 mb-6 text-xs text-amber-800">
+      <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200/60 dark:border-amber-800/30 rounded-lg px-4 py-2.5 mb-6 text-xs text-amber-800 dark:text-amber-300">
         <strong>Important:</strong> These results are AI-simulated, not from real consumers. Best used for directional insights and hypothesis generation.
         Not a substitute for professional market research.{" "}
         <Link href="/methodology#limitations" className="text-amber-900 underline">Learn more</Link>
@@ -330,37 +330,36 @@ function GoNoGoScorecard({ result }: { result: ResearchResult }) {
   // Determine verdict
   let verdict: "GO" | "PROCEED WITH CAUTION" | "RECONSIDER";
   let reasoning: string;
-  let borderColor: string;
   let verdictColor: string;
   let bgColor: string;
+  let borderColor: string;
 
-  const wtpCloseToPrice = userPriceMid !== null ? wtpMid >= userPriceMid * 0.85 : true;
   const wtpAbovePrice = userPriceMid !== null ? wtpMid >= userPriceMid : true;
   const wtpSignificantlyBelow = userPriceMid !== null ? wtpMid < userPriceMid * 0.75 : false;
 
   if (score >= 60 && wtpAbovePrice) {
     verdict = "GO";
-    borderColor = "border-l-emerald-500";
-    verdictColor = "text-emerald-700";
-    bgColor = "bg-emerald-50";
+    verdictColor = "text-emerald-700 dark:text-emerald-400";
+    bgColor = "bg-emerald-50 dark:bg-emerald-950/30";
+    borderColor = "border-emerald-200 dark:border-emerald-800/40";
     reasoning = `Strong purchase intent (${score}%) with willingness to pay at or above your target price. Consumer sentiment is positive, with "${topPositive}" cited most frequently.`;
   } else if (score < 40 || wtpSignificantlyBelow) {
     verdict = "RECONSIDER";
-    borderColor = "border-l-red-500";
-    verdictColor = "text-red-700";
-    bgColor = "bg-red-50";
+    verdictColor = "text-red-700 dark:text-red-400";
+    bgColor = "bg-red-50 dark:bg-red-950/30";
+    borderColor = "border-red-200 dark:border-red-800/40";
     reasoning = `Low purchase intent (${score}%) indicates the current positioning may not resonate. The primary concern is "${topConcern}". Consider repositioning or testing alternative concepts.`;
   } else {
     verdict = "PROCEED WITH CAUTION";
-    borderColor = "border-l-amber-500";
-    verdictColor = "text-amber-700";
-    bgColor = "bg-amber-50";
+    verdictColor = "text-amber-700 dark:text-amber-400";
+    bgColor = "bg-amber-50 dark:bg-amber-950/30";
+    borderColor = "border-amber-200 dark:border-amber-800/40";
     reasoning = `Moderate purchase intent (${score}%) suggests interest but not conviction. Consider addressing consumer concerns around "${topConcern}" before committing.`;
   }
 
   return (
-    <div className={`rounded-lg border border-l-4 ${borderColor} ${bgColor} p-5 mb-6`}>
-      <p className={`text-2xl font-extrabold ${verdictColor} mb-2`}>{verdict}</p>
+    <div className={`rounded-lg border ${borderColor} ${bgColor} p-5 mb-6`}>
+      <p className={`text-2xl font-bold ${verdictColor} mb-2`}>{verdict}</p>
       <p className="text-sm text-foreground/80 leading-relaxed mb-3">{reasoning}</p>
       <p className="text-xs text-muted-foreground">
         This is a directional recommendation based on AI-simulated data. Always validate with real consumers before major decisions.
