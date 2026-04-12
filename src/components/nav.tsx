@@ -4,10 +4,14 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Sun, Moon, Monitor } from "lucide-react";
 import { useTheme } from "@/components/theme-provider";
+import { createClient } from "@/lib/supabase/client";
+import type { User } from "@supabase/supabase-js";
 
 export function Nav() {
   const { theme, setTheme } = useTheme();
   const [hasMultipleResults, setHasMultipleResults] = useState(false);
+  const [authUser, setAuthUser] = useState<User | null>(null);
+  const [authChecked, setAuthChecked] = useState(false);
 
   function cycleTheme() {
     const next = theme === "light" ? "dark" : theme === "dark" ? "system" : "light";
@@ -30,6 +34,20 @@ export function Nav() {
     }
   }, []);
 
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setAuthUser(user);
+      setAuthChecked(true);
+    });
+  }, []);
+
+  const displayName =
+    authUser?.user_metadata?.name ||
+    authUser?.user_metadata?.full_name ||
+    authUser?.email;
+  const initial = (displayName || "?").charAt(0).toUpperCase();
+
   return (
     <header className="border-b border-border/50 bg-card/80 backdrop-blur-sm sticky top-0 z-50">
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
@@ -39,7 +57,7 @@ export function Nav() {
               viewBox="0 0 200 200"
               fill="none"
             >
-              {/* Magnifying glass outline — uses currentColor for light/dark */}
+              {/* Magnifying glass outline -- uses currentColor for light/dark */}
               <circle cx="88" cy="88" r="48" stroke="currentColor" strokeWidth="10" />
               <line x1="122" y1="122" x2="160" y2="160" stroke="currentColor" strokeWidth="12" strokeLinecap="round" />
               {/* Bar chart inside the lens */}
@@ -116,12 +134,24 @@ export function Nav() {
               Compare
             </Link>
           )}
-          <Link
-            href="/account"
-            className="hover:text-foreground transition-colors"
-          >
-            Account
-          </Link>
+          {authChecked && authUser ? (
+            <Link
+              href="/account"
+              className="hover:text-foreground transition-colors flex items-center gap-1.5"
+            >
+              <span className="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center text-[10px] font-semibold text-primary">
+                {initial}
+              </span>
+              Account
+            </Link>
+          ) : (
+            <Link
+              href="/login"
+              className="hover:text-foreground transition-colors"
+            >
+              Log in
+            </Link>
+          )}
         </nav>
         <div className="flex items-center gap-3">
           <button
@@ -137,12 +167,21 @@ export function Nav() {
           >
             Pricing
           </Link>
-          <Link
-            href="/research/new"
-            className="inline-flex items-center justify-center rounded-lg bg-primary text-primary-foreground text-sm font-medium px-4 h-9 hover:bg-primary/90 transition-colors"
-          >
-            Try it free
-          </Link>
+          {authChecked && authUser ? (
+            <Link
+              href="/research/new"
+              className="inline-flex items-center justify-center rounded-lg bg-primary text-primary-foreground text-sm font-medium px-4 h-9 hover:bg-primary/90 transition-colors"
+            >
+              New Research
+            </Link>
+          ) : (
+            <Link
+              href="/research/new"
+              className="inline-flex items-center justify-center rounded-lg bg-primary text-primary-foreground text-sm font-medium px-4 h-9 hover:bg-primary/90 transition-colors"
+            >
+              Try it free
+            </Link>
+          )}
         </div>
       </div>
     </header>

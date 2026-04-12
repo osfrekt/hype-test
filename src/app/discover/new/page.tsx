@@ -17,6 +17,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Lock } from "lucide-react";
+import { createClient } from "@/lib/supabase/client";
 
 const CATEGORIES = [
   { value: "food & beverage", label: "Food & Beverage" },
@@ -116,14 +117,44 @@ function DiscoverNewForm() {
   const [verificationCode, setVerificationCode] = useState("");
   const [verificationToken, setVerificationToken] = useState("");
   const [verificationError, setVerificationError] = useState("");
+  const [isAuthUser, setIsAuthUser] = useState(false);
 
   const [isRunning, setIsRunning] = useState(false);
   const [progress, setProgress] = useState(0);
   const [stage, setStage] = useState("");
   const [error, setError] = useState("");
 
-  // Restore verification from session
+  // Check Supabase Auth - if logged in, pre-fill and skip verification
   useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (user?.email) {
+        setIsAuthUser(true);
+        setEmail(user.email);
+        setVerificationStep("verified");
+        setVerificationToken("supabase-auth");
+        const meta = user.user_metadata;
+        if (meta?.name && !userName) setUserName(meta.name);
+        supabase
+          .from("users")
+          .select("name, company, role, company_size")
+          .eq("email", user.email)
+          .single()
+          .then(({ data: profile }) => {
+            if (profile) {
+              if (profile.name && !userName) setUserName(profile.name);
+              if (profile.company && !userCompany) setUserCompany(profile.company);
+              if (profile.role && !userRole) setUserRole(profile.role);
+              if (profile.company_size && !userCompanySize) setUserCompanySize(profile.company_size);
+            }
+          });
+      }
+    });
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Restore verification from session (for non-auth users)
+  useEffect(() => {
+    if (isAuthUser) return;
     const stored = sessionStorage.getItem("hypetest-verification");
     if (stored) {
       try {
@@ -135,7 +166,7 @@ function DiscoverNewForm() {
         }
       } catch { /* ignore */ }
     }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [isAuthUser]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Capture UTM params and referrer silently
   const [utmSource] = useState(() => typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("utm_source") || "" : "");
@@ -672,79 +703,95 @@ function DiscoverNewForm() {
                   <div>
                     <p className="text-sm font-semibold text-primary mb-1">About you</p>
                     <p className="text-xs text-muted-foreground">
-                      We&apos;ll send your report link to your email. No account needed.
+                      {isAuthUser
+                        ? "Signed in. Your report will be saved to your account."
+                        : "We'll send your report link to your email. No account needed."}
                     </p>
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div className="space-y-1.5">
-                      <Label htmlFor="d-userName">Name</Label>
-                      <Input
-                        id="d-userName"
-                        placeholder="Jane Smith"
-                        value={userName}
-                        onChange={(e) => setUserName(e.target.value)}
-                        required
-                      />
+                  {isAuthUser ? (
+                    <div className="flex items-center gap-3 text-sm">
+                      <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold text-xs">
+                        {(userName || email || "?").charAt(0).toUpperCase()}
+                      </div>
+                      <div>
+                        <p className="font-medium text-foreground">{userName || "User"}</p>
+                        <p className="text-xs text-muted-foreground">{email}</p>
+                      </div>
                     </div>
-                    <div className="space-y-1.5">
-                      <Label htmlFor="d-email">Work email</Label>
-                      <Input
-                        id="d-email"
-                        type="email"
-                        placeholder="jane@company.com"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                      />
-                    </div>
-                    <div className="space-y-1.5">
-                      <Label htmlFor="d-userCompany">Company</Label>
-                      <Input
-                        id="d-userCompany"
-                        placeholder="Acme Corp"
-                        value={userCompany}
-                        onChange={(e) => setUserCompany(e.target.value)}
-                        required
-                      />
-                    </div>
-                    <div className="space-y-1.5">
-                      <Label>Role</Label>
-                      <Select value={userRole} onValueChange={(v) => setUserRole(v ?? "")}>
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Select your role" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="founder">Founder / CEO</SelectItem>
-                          <SelectItem value="product">Product / CPO</SelectItem>
-                          <SelectItem value="marketing">Marketing / CMO</SelectItem>
-                          <SelectItem value="brand">Brand Manager</SelectItem>
-                          <SelectItem value="innovation">Innovation / R&amp;D</SelectItem>
-                          <SelectItem value="insights">Consumer Insights / Research</SelectItem>
-                          <SelectItem value="growth">Growth / Strategy</SelectItem>
-                          <SelectItem value="consultant">Consultant / Agency</SelectItem>
-                          <SelectItem value="investor">Investor / VC</SelectItem>
-                          <SelectItem value="student">Student / Academic</SelectItem>
-                          <SelectItem value="other">Other</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label>Company size</Label>
-                    <Select value={userCompanySize} onValueChange={(v) => setUserCompanySize(v ?? "")}>
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select company size (optional)" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="1">Just me</SelectItem>
-                        <SelectItem value="2-10">2-10</SelectItem>
-                        <SelectItem value="11-50">11-50</SelectItem>
-                        <SelectItem value="51-200">51-200</SelectItem>
-                        <SelectItem value="201-1000">201-1,000</SelectItem>
-                        <SelectItem value="1000+">1,000+</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
+                  ) : (
+                    <>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div className="space-y-1.5">
+                          <Label htmlFor="d-userName">Name</Label>
+                          <Input
+                            id="d-userName"
+                            placeholder="Jane Smith"
+                            value={userName}
+                            onChange={(e) => setUserName(e.target.value)}
+                            required
+                          />
+                        </div>
+                        <div className="space-y-1.5">
+                          <Label htmlFor="d-email">Work email</Label>
+                          <Input
+                            id="d-email"
+                            type="email"
+                            placeholder="jane@company.com"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                          />
+                        </div>
+                        <div className="space-y-1.5">
+                          <Label htmlFor="d-userCompany">Company</Label>
+                          <Input
+                            id="d-userCompany"
+                            placeholder="Acme Corp"
+                            value={userCompany}
+                            onChange={(e) => setUserCompany(e.target.value)}
+                            required
+                          />
+                        </div>
+                        <div className="space-y-1.5">
+                          <Label>Role</Label>
+                          <Select value={userRole} onValueChange={(v) => setUserRole(v ?? "")}>
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder="Select your role" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="founder">Founder / CEO</SelectItem>
+                              <SelectItem value="product">Product / CPO</SelectItem>
+                              <SelectItem value="marketing">Marketing / CMO</SelectItem>
+                              <SelectItem value="brand">Brand Manager</SelectItem>
+                              <SelectItem value="innovation">Innovation / R&amp;D</SelectItem>
+                              <SelectItem value="insights">Consumer Insights / Research</SelectItem>
+                              <SelectItem value="growth">Growth / Strategy</SelectItem>
+                              <SelectItem value="consultant">Consultant / Agency</SelectItem>
+                              <SelectItem value="investor">Investor / VC</SelectItem>
+                              <SelectItem value="student">Student / Academic</SelectItem>
+                              <SelectItem value="other">Other</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                      <div className="space-y-1.5">
+                        <Label>Company size</Label>
+                        <Select value={userCompanySize} onValueChange={(v) => setUserCompanySize(v ?? "")}>
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Select company size (optional)" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="1">Just me</SelectItem>
+                            <SelectItem value="2-10">2-10</SelectItem>
+                            <SelectItem value="11-50">11-50</SelectItem>
+                            <SelectItem value="51-200">51-200</SelectItem>
+                            <SelectItem value="201-1000">201-1,000</SelectItem>
+                            <SelectItem value="1000+">1,000+</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </>
+                  )}
                 </div>
 
                 {error && (
@@ -763,13 +810,13 @@ function DiscoverNewForm() {
                   Do not submit trade secrets or confidential information.
                 </p>
 
-                {verificationStep === "verifying" && (
+                {!isAuthUser && verificationStep === "verifying" && (
                   <div className="bg-teal/5 border border-teal/20 rounded-xl p-4 text-center">
                     <p className="text-sm text-muted-foreground">Sending verification code...</p>
                   </div>
                 )}
 
-                {verificationStep === "entering-code" && (
+                {!isAuthUser && verificationStep === "entering-code" && (
                   <div className="bg-teal/5 border border-teal/20 rounded-xl p-4 space-y-3">
                     <p className="text-sm font-medium text-primary">Verify your email</p>
                     <p className="text-xs text-muted-foreground">
@@ -796,13 +843,13 @@ function DiscoverNewForm() {
                   </div>
                 )}
 
-                {verificationStep === "verified" && (
+                {!isAuthUser && verificationStep === "verified" && (
                   <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl px-4 py-2.5">
                     <p className="text-xs text-emerald-700 font-medium">Email verified</p>
                   </div>
                 )}
 
-                {verificationError && verificationStep === "form" && (
+                {!isAuthUser && verificationError && verificationStep === "form" && (
                   <div className="bg-destructive/10 text-destructive text-sm rounded-lg p-3">
                     {verificationError}
                   </div>
@@ -814,7 +861,7 @@ function DiscoverNewForm() {
                     className="w-full bg-primary hover:bg-primary/90 text-primary-foreground h-11"
                     disabled={!isFormValid || verificationStep === "verifying"}
                   >
-                    {verificationStep === "verified" ? "Discover Products (Pro)" : "Verify Email & Discover Products"}
+                    {isAuthUser ? "Discover Products (Pro)" : verificationStep === "verified" ? "Discover Products (Pro)" : "Verify Email & Discover Products"}
                   </Button>
                 )}
 
