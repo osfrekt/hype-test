@@ -530,7 +530,7 @@ export default function Home() {
               <Link href="/research/new" className="block bg-background rounded-2xl border border-border/50 p-5 hover:border-teal/30 hover:shadow-sm transition-all group">
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="text-sm font-bold text-primary group-hover:text-teal transition-colors">Consumer Research</h3>
-                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">Free</span>
+                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/50 text-emerald-800 dark:text-emerald-400">Free</span>
                 </div>
                 <p className="text-xs text-muted-foreground leading-relaxed">50-person AI panel with purchase intent, WTP, feature ranking, concerns, and a Go/No-Go verdict.</p>
               </Link>

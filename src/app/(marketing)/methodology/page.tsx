@@ -807,11 +807,11 @@ export default function MethodologyPage() {
           </section>
 
           {/* Change 5: Validation CTA */}
-          <div className="bg-primary text-primary-foreground rounded-xl p-6 text-center">
+          <div className="bg-navy dark:bg-navy-light text-white rounded-xl p-6 text-center">
             <h2 className="text-lg font-bold mb-2">
               The best way to evaluate this? Run it against data you already have.
             </h2>
-            <p className="text-sm text-primary-foreground/70 mb-4 max-w-lg mx-auto">
+            <p className="text-sm text-white/70 mb-4 max-w-lg mx-auto">
               Pick a product you&apos;ve already done traditional consumer research
               on. Run it through HypeTest. Compare the purchase intent, WTP
               range, and feature rankings against your existing data. If the

@@ -153,7 +153,7 @@ export function SampleReport() {
             <div className="w-full h-4 bg-gradient-to-r from-emerald-200 via-teal/60 to-primary/60 rounded-md relative">
               <div className="absolute top-0 -translate-x-1/2 flex flex-col items-center" style={{ left: "39%" }}>
                 <div className="w-0.5 h-4 bg-white" />
-                <div className="mt-0.5 bg-primary text-primary-foreground text-[9px] font-bold px-1.5 py-0.5 rounded">$2.89</div>
+                <div className="mt-0.5 bg-navy dark:bg-navy-light text-white text-[9px] font-bold px-1.5 py-0.5 rounded">$2.89</div>
               </div>
             </div>
           </div>

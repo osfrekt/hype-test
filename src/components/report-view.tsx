@@ -60,15 +60,15 @@ export function ReportView({
       {/* Executive Summary */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         {/* Purchase Intent — featured with tinted background */}
-        <Card className="bg-primary text-primary-foreground border-primary">
+        <Card className="bg-navy dark:bg-navy-light text-white border-navy dark:border-navy-light">
           <CardContent className="pt-6">
-            <p className="text-xs font-medium uppercase tracking-wider mb-1 text-primary-foreground/60">
+            <p className="text-xs font-medium uppercase tracking-wider mb-1 text-white/60">
               Purchase Intent
             </p>
             <p className="text-4xl font-bold tracking-tight">
               {score}%
             </p>
-            <p className="text-xs text-primary-foreground/50 mt-1.5">
+            <p className="text-xs text-white/50 mt-1.5">
               of simulated consumers likely to buy
             </p>
           </CardContent>
