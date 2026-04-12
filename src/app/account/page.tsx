@@ -783,6 +783,18 @@ function AccountContent() {
               )}
             </CardContent>
           </Card>
+
+          {/* Admin link - only visible to admin emails */}
+          {authUser?.email && ["osf@rekt.com"].includes(authUser.email) && (
+            <div className="text-center mt-6">
+              <a
+                href="/admin/data-room"
+                className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Admin Data Room
+              </a>
+            </div>
+          )}
         </div>
       </main>
       <Footer />

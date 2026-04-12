@@ -118,6 +118,10 @@ export function Nav() {
                 </Link>
                 <div className="h-px bg-border mx-3 my-1" />
                 <p className="px-3 py-1 text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Pro</p>
+                <Link href="/market-research/new" className="flex items-center justify-between px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">
+                  Market Research
+                  <span className="text-[10px] bg-primary text-primary-foreground px-1.5 py-0.5 rounded-full font-medium">Pro</span>
+                </Link>
                 <Link href="/ad-test/new" className="flex items-center justify-between px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">
                   Ad Testing
                   <span className="text-[10px] bg-primary text-primary-foreground px-1.5 py-0.5 rounded-full font-medium">Pro</span>
@@ -255,6 +259,7 @@ export function Nav() {
             <Link href="/discover/new" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 rounded-lg text-sm hover:bg-muted transition-colors text-muted-foreground">Product Discovery</Link>
             <Link href="/audience-test/new" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 rounded-lg text-sm hover:bg-muted transition-colors text-muted-foreground">Audience Finder</Link>
             <Link href="/competitive/new" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 rounded-lg text-sm hover:bg-muted transition-colors text-muted-foreground">Competitive Teardown</Link>
+            <Link href="/market-research/new" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 rounded-lg text-sm hover:bg-muted transition-colors text-muted-foreground">Market Research</Link>
             <div className="h-px bg-border my-2" />
             <Link href="/methodology" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 rounded-lg text-sm hover:bg-muted transition-colors text-muted-foreground">Methodology</Link>
             <Link href="/pricing" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 rounded-lg text-sm hover:bg-muted transition-colors text-muted-foreground">Pricing</Link>

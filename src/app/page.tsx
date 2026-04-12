@@ -544,7 +544,7 @@ export default function Home() {
               Your complete research toolkit
             </h2>
             <p className="text-muted-foreground text-center max-w-2xl mx-auto mb-10">
-              Nine specialized tools for every stage of product development.
+              Ten specialized tools for every stage of product development.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               <Link href="/research/new" className="block bg-background rounded-2xl border border-border/50 p-5 hover:border-teal/30 hover:shadow-sm transition-all group">
@@ -609,6 +609,13 @@ export default function Home() {
                   <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-primary text-primary-foreground">Pro</span>
                 </div>
                 <p className="text-xs text-muted-foreground leading-relaxed">Test 1-5 logo designs for first impression, memorability, brand fit, distinctiveness, and trust.</p>
+              </Link>
+              <Link href="/market-research/new" className="block bg-background rounded-2xl border border-border/50 p-5 hover:border-teal/30 hover:shadow-sm transition-all group">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-sm font-bold text-primary group-hover:text-teal transition-colors">Market Research</h3>
+                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-primary text-primary-foreground">Pro</span>
+                </div>
+                <p className="text-xs text-muted-foreground leading-relaxed">Deep market analysis with trends, competitive landscape, consumer insights, gaps, and recommendations.</p>
               </Link>
             </div>
             <div className="text-center mt-8">

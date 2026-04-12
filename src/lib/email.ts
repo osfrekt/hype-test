@@ -245,3 +245,33 @@ export async function sendDiscoveryReport(email: string, brandName: string, resu
     `,
   });
 }
+
+export async function sendMarketResearchReport(email: string, category: string, resultId: string) {
+  const reportUrl = `https://hypetest.ai/market-research/${resultId}`;
+
+  await getResend().emails.send({
+    from: FROM_EMAIL,
+    to: email,
+    subject: `Market Research: ${category}`,
+    html: `
+      <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 560px; margin: 0 auto; padding: 40px 20px;">
+        <div style="margin-bottom: 32px;">
+          <strong style="font-size: 18px; color: #1a1f36;">HypeTest</strong>
+        </div>
+        <h1 style="font-size: 22px; color: #1a1f36; margin-bottom: 8px;">Your market research is ready</h1>
+        <p style="color: #64748b; font-size: 14px; line-height: 1.6; margin-bottom: 24px;">
+          AI-generated market analysis for <strong>${category}</strong> is complete.
+          Your report includes market overview, competitive landscape, consumer insights, gaps, and recommendations.
+        </p>
+        <a href="${reportUrl}" style="display: inline-block; background: #1a1f36; color: white; text-decoration: none; padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 600;">
+          View your report
+        </a>
+        <p style="color: #94a3b8; font-size: 12px; margin-top: 32px; line-height: 1.5;">
+          This link is permanent and accessible to anyone who has it.
+          <br/>Results are AI-generated and should be used for directional insights only, not high-stakes decisions.
+        </p>
+        ${FOOTER}
+      </div>
+    `,
+  });
+}

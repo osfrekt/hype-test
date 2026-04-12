@@ -95,6 +95,7 @@ const featureCategories: { category: string; features: FeatureRow[] }[] = [
       { name: "Iterative refinement rounds", free: false, starter: false, pro: true, team: true },
       { name: "Audience finder (5 segments)", free: false, starter: false, pro: true, team: true },
       { name: "Competitive teardown (radar chart)", free: false, starter: false, pro: true, team: true },
+      { name: "Market research (deep market analysis)", free: false, starter: false, pro: true, team: true },
       { name: "Brand auto-fill (URL + search)", free: false, starter: false, pro: true, team: true },
     ],
   },

@@ -121,6 +121,13 @@ const ALL_TOOLS: Tool[] = [
     sampleHref: "/competitive/sample-rekt",
     minPlan: "pro",
   },
+  {
+    name: "Market Research",
+    description: "Deep analysis of any market: trends, competition, gaps, and recommendations.",
+    runHref: "/market-research/new",
+    sampleHref: "/market-research/sample-rekt",
+    minPlan: "pro",
+  },
 ];
 
 const PLAN_RANK: Record<string, number> = { free: 0, starter: 1, pro: 2, team: 3 };
@@ -146,6 +153,7 @@ function testResultLink(type: string, id: string): string {
     case "Ad Test": return `/ad-test/${id}`;
     case "Logo Test": return `/logo-test/${id}`;
     case "Discovery": return `/discover/${id}`;
+    case "Market Research": return `/market-research/${id}`;
     default: return `/competitive/${id}`;
   }
 }
@@ -204,6 +212,7 @@ export default function DashboardPage() {
       { table: "competitive_results", type: "Competitive" },
       { table: "ad_test_results", type: "Ad Test" },
       { table: "logo_test_results", type: "Logo Test" },
+      { table: "market_research_results", type: "Market Research" },
     ];
 
     const allTests: TestResult[] = [];
