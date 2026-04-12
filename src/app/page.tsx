@@ -555,20 +555,6 @@ export default function Home() {
                 </div>
                 <p className="text-xs text-muted-foreground leading-relaxed">Test 5 price points and see the demand curve. Find the revenue-maximizing price for your product.</p>
               </Link>
-              <Link href="/ad-test/new" className="block bg-background rounded-2xl border border-border/50 p-5 hover:border-teal/30 hover:shadow-sm transition-all group">
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-sm font-bold text-primary group-hover:text-teal transition-colors">Ad / Creative Testing</h3>
-                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-teal/10 text-teal-dark">Starter</span>
-                </div>
-                <p className="text-xs text-muted-foreground leading-relaxed">Test ad creatives with attention, clarity, persuasion, and click likelihood scores.</p>
-              </Link>
-              <Link href="/logo-test/new" className="block bg-background rounded-2xl border border-border/50 p-5 hover:border-teal/30 hover:shadow-sm transition-all group">
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-sm font-bold text-primary group-hover:text-teal transition-colors">Logo Testing</h3>
-                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-teal/10 text-teal-dark">Starter</span>
-                </div>
-                <p className="text-xs text-muted-foreground leading-relaxed">Test 1-5 logo designs for first impression, memorability, brand fit, distinctiveness, and trust.</p>
-              </Link>
               <Link href="/discover/new" className="block bg-background rounded-2xl border border-border/50 p-5 hover:border-teal/30 hover:shadow-sm transition-all group">
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="text-sm font-bold text-primary group-hover:text-teal transition-colors">Product Discovery</h3>
@@ -589,6 +575,20 @@ export default function Home() {
                   <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-primary text-primary-foreground">Pro</span>
                 </div>
                 <p className="text-xs text-muted-foreground leading-relaxed">Compare your product vs a competitor with a radar chart across 5 dimensions.</p>
+              </Link>
+              <Link href="/ad-test/new" className="block bg-background rounded-2xl border border-border/50 p-5 hover:border-teal/30 hover:shadow-sm transition-all group">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-sm font-bold text-primary group-hover:text-teal transition-colors">Ad / Creative Testing</h3>
+                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-primary text-primary-foreground">Pro</span>
+                </div>
+                <p className="text-xs text-muted-foreground leading-relaxed">Test ad creatives with attention, clarity, persuasion, and click likelihood scores.</p>
+              </Link>
+              <Link href="/logo-test/new" className="block bg-background rounded-2xl border border-border/50 p-5 hover:border-teal/30 hover:shadow-sm transition-all group">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-sm font-bold text-primary group-hover:text-teal transition-colors">Logo Testing</h3>
+                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-primary text-primary-foreground">Pro</span>
+                </div>
+                <p className="text-xs text-muted-foreground leading-relaxed">Test 1-5 logo designs for first impression, memorability, brand fit, distinctiveness, and trust.</p>
               </Link>
             </div>
             <div className="text-center mt-8">

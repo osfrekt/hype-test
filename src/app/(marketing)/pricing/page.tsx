@@ -81,13 +81,13 @@ const featureCategories: { category: string; features: FeatureRow[] }[] = [
       { name: "A/B concept testing", free: false, starter: true, pro: true, team: true },
       { name: "Name testing (rank 3-5 options)", free: false, starter: true, pro: true, team: true },
       { name: "Pricing optimizer (demand curve)", free: false, starter: true, pro: true, team: true },
-      { name: "Ad/creative testing", free: false, starter: true, pro: true, team: true },
-      { name: "Logo testing", free: false, starter: true, pro: true, team: true },
     ],
   },
   {
     category: "Pro Tools",
     features: [
+      { name: "Ad/creative testing", free: false, starter: false, pro: true, team: true },
+      { name: "Logo testing", free: false, starter: false, pro: true, team: true },
       { name: "Product Discovery", free: false, starter: false, pro: true, team: true },
       { name: "Discovery rounds per month", free: false, starter: false, pro: "50", team: "200" },
       { name: "AI concept generation", free: false, starter: false, pro: true, team: true },
@@ -298,8 +298,6 @@ export default function PricingPage() {
                   <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-teal shrink-0" />A/B concept testing</li>
                   <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-teal shrink-0" />Name testing (rank 3-5 options)</li>
                   <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-teal shrink-0" />Pricing optimizer with demand curve</li>
-                  <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-teal shrink-0" />Ad/creative testing with click likelihood</li>
-                  <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-teal shrink-0" />Logo testing with 5 design metrics</li>
                   <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-teal shrink-0" />30 research runs per month</li>
                 </ul>
               </div>
@@ -314,6 +312,8 @@ export default function PricingPage() {
                   <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />Product Discovery (AI concept generation)</li>
                   <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />Audience finder across 5 segments</li>
                   <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />Competitive teardown with radar chart</li>
+                  <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />Ad/creative testing</li>
+                  <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />Logo testing</li>
                   <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />100 research runs per month</li>
                 </ul>
               </div>
@@ -423,15 +423,15 @@ export default function PricingPage() {
                 title="Ad / Creative Testing"
                 description="Test ad creatives with a 50-person panel. Get attention, clarity, persuasion, brand fit, and click likelihood scores."
                 href="/ad-test/new"
-                badge="Starter"
-                badgeColor="bg-teal/10 text-teal-dark"
+                badge="Pro"
+                badgeColor="bg-primary text-primary-foreground"
               />
               <ToolCard
                 title="Logo Testing"
                 description="Test 1-5 logo designs with a 30-person panel. Get first impression, memorability, brand fit, distinctiveness, and trust scores."
                 href="/logo-test/new"
-                badge="Starter"
-                badgeColor="bg-teal/10 text-teal-dark"
+                badge="Pro"
+                badgeColor="bg-primary text-primary-foreground"
               />
               <ToolCard
                 title="Product Discovery"

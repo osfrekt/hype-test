@@ -104,15 +104,15 @@ export function Nav() {
                   Pricing Optimizer
                   <span className="text-[10px] bg-teal/10 text-teal-dark dark:text-teal px-1.5 py-0.5 rounded-full font-medium">Starter</span>
                 </Link>
+                <div className="h-px bg-border mx-3 my-1" />
                 <Link href="/ad-test/new" className="flex items-center justify-between px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">
                   Ad Testing
-                  <span className="text-[10px] bg-teal/10 text-teal-dark dark:text-teal px-1.5 py-0.5 rounded-full font-medium">Starter</span>
+                  <span className="text-[10px] bg-primary text-primary-foreground px-1.5 py-0.5 rounded-full font-medium">Pro</span>
                 </Link>
                 <Link href="/logo-test/new" className="flex items-center justify-between px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">
                   Logo Testing
-                  <span className="text-[10px] bg-teal/10 text-teal-dark dark:text-teal px-1.5 py-0.5 rounded-full font-medium">Starter</span>
+                  <span className="text-[10px] bg-primary text-primary-foreground px-1.5 py-0.5 rounded-full font-medium">Pro</span>
                 </Link>
-                <div className="h-px bg-border mx-3 my-1" />
                 <Link href="/discover/new" className="flex items-center justify-between px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">
                   Product Discovery
                   <span className="text-[10px] bg-primary text-primary-foreground px-1.5 py-0.5 rounded-full font-medium">Pro</span>
