@@ -511,10 +511,9 @@ function NewResearchForm() {
                   />
                   <Button
                     type="button"
-                    variant="outline"
                     onClick={handleExtract}
                     disabled={isExtracting || !url.trim()}
-                    className="shrink-0"
+                    className="shrink-0 bg-teal hover:bg-teal/90 text-white"
                   >
                     {isExtracting ? "Extracting..." : "Auto-fill"}
                   </Button>

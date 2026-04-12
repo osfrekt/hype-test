@@ -489,10 +489,9 @@ function DiscoverNewForm() {
                   />
                   <Button
                     type="button"
-                    variant="outline"
                     onClick={handleAutofill}
                     disabled={isAutofilling || !autofillInput.trim()}
-                    className="shrink-0"
+                    className="shrink-0 bg-teal hover:bg-teal/90 text-white"
                   >
                     {isAutofilling
                       ? autofillMode === "url"
