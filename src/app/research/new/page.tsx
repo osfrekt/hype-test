@@ -817,17 +817,23 @@ function NewResearchForm() {
                   Do not submit trade secrets or confidential information.
                 </p>
 
+                {!isAuthUser && verificationError && (
+                  <div className="bg-destructive/10 text-destructive text-sm rounded-lg p-3">
+                    {verificationError}
+                  </div>
+                )}
+
                 {!isAuthUser && verificationStep === "verifying" && (
                   <div className="bg-teal/5 border border-teal/20 rounded-xl p-4 text-center">
                     <p className="text-sm text-muted-foreground">Sending verification code...</p>
                   </div>
                 )}
 
-                {!isAuthUser && verificationStep === "entering-code" && (
+                {!isAuthUser && verificationStep === "entering-code" ? (
                   <div className="bg-teal/5 border border-teal/20 rounded-xl p-4 space-y-3">
                     <p className="text-sm font-medium text-primary">Verify your email</p>
                     <p className="text-xs text-muted-foreground">
-                      We sent a 6-digit code to {email}. Enter it below to continue.
+                      We sent a 6-digit code to {email}. Enter it below to your research will start automatically.
                     </p>
                     <Input
                       placeholder="123456"
@@ -848,27 +854,13 @@ function NewResearchForm() {
                       Verify and run research
                     </Button>
                   </div>
-                )}
-
-                {!isAuthUser && verificationStep === "verified" && (
-                  <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl px-4 py-2.5">
-                    <p className="text-xs text-emerald-700 font-medium">Email verified</p>
-                  </div>
-                )}
-
-                {!isAuthUser && verificationError && verificationStep === "form" && (
-                  <div className="bg-destructive/10 text-destructive text-sm rounded-lg p-3">
-                    {verificationError}
-                  </div>
-                )}
-
-                {verificationStep !== "entering-code" && (
+                ) : (
                   <Button
                     type="submit"
                     className="w-full bg-primary hover:bg-primary/90 text-primary-foreground h-11"
                     disabled={!isFormValid || verificationStep === "verifying"}
                   >
-                    {isAuthUser || verificationStep === "verified" ? "Run Research (Free)" : "Verify Email & Run Research"}
+                    Run Research (Free)
                   </Button>
                 )}
 

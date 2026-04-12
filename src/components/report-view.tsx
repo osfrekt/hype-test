@@ -8,6 +8,27 @@ import type { ResearchResult } from "@/types/research";
 import { ResultsCharts, SegmentCharts, HorizontalBarChart } from "@/components/results-charts";
 import Link from "next/link";
 
+function CollapsibleSection({ title, children, defaultOpen = false }: { title: string; children: React.ReactNode; defaultOpen?: boolean }) {
+  const [open, setOpen] = useState(defaultOpen);
+  return (
+    <div className="mb-8">
+      <button
+        onClick={() => setOpen(!open)}
+        className="md:hidden flex items-center justify-between w-full text-left mb-3"
+      >
+        <h3 className="text-lg font-semibold text-primary">{title}</h3>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`transition-transform ${open ? "rotate-180" : ""}`}>
+          <path d="m6 9 6 6 6-6" />
+        </svg>
+      </button>
+      <h3 className="hidden md:block text-lg font-semibold text-primary mb-3">{title}</h3>
+      <div className={`${open ? "block" : "hidden"} md:block`}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
 export function ReportView({
   result,
   badge,
@@ -53,11 +74,6 @@ export function ReportView({
 
   return (
     <div>
-      <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200/60 dark:border-amber-800/30 rounded-lg px-4 py-2.5 mb-6 text-xs text-amber-800 dark:text-amber-300">
-        <strong>Important:</strong> These results are AI-simulated, not from real consumers. Best used for directional insights and hypothesis generation.
-        Not a substitute for professional market research.{" "}
-        <Link href="/methodology#limitations" className="text-amber-900 underline">Learn more</Link>
-      </div>
       {/* Go/No-Go Scorecard */}
       <GoNoGoScorecard result={result} />
 
@@ -88,7 +104,7 @@ export function ReportView({
       </div>
 
       {/* Executive Summary */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         {/* Purchase Intent — featured with tinted background */}
         <Card className="bg-navy dark:bg-navy-light text-white border-navy dark:border-navy-light">
           <CardContent className="pt-6">
@@ -118,41 +134,60 @@ export function ReportView({
         </div>
       </div>
 
+      {/* Upgrade prompt for free-tier users */}
+      <div className="bg-primary/5 border border-primary/20 rounded-xl p-5 mb-8" data-print-hide>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <p className="text-sm font-semibold text-primary mb-1">Go deeper with Starter</p>
+            <p className="text-xs text-muted-foreground">
+              A/B test concepts, optimize pricing, and test product names.
+              All with the same AI consumer panel.
+            </p>
+          </div>
+          <Link href="/pricing" className="inline-flex items-center justify-center rounded-lg bg-primary text-primary-foreground text-sm font-medium px-4 h-9 hover:bg-primary/90 transition-colors shrink-0">
+            See plans
+          </Link>
+        </div>
+      </div>
+
       {/* Charts */}
       <ResultsCharts result={result} />
 
       {/* Feature Importance */}
-      <Card className="mt-12 mb-8">
-        <CardHeader>
-          <CardTitle className="text-lg font-semibold">Feature Importance</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-3">
-            {featureImportance.map((f, i) => (
-              <div key={i} className="flex flex-col md:flex-row md:items-center gap-1 md:gap-4">
-                <span className="text-sm text-muted-foreground md:w-56 md:shrink-0 line-clamp-2">
-                  {f.feature}
-                </span>
-                <div className="flex items-center gap-3 flex-1">
-                  <div className="flex-1 bg-muted rounded-full h-2.5">
-                    <div
-                      className="bg-teal h-2.5 rounded-full transition-all"
-                      style={{ width: `${f.score}%` }}
-                    />
+      <div className="mt-12">
+        <CollapsibleSection title="Feature Importance">
+          <Card>
+            <CardContent className="pt-6">
+              <div className="space-y-3">
+                {featureImportance.map((f, i) => (
+                  <div key={i} className="flex flex-col md:flex-row md:items-center gap-1 md:gap-4">
+                    <span className="text-sm text-muted-foreground md:w-56 md:shrink-0 line-clamp-2">
+                      {f.feature}
+                    </span>
+                    <div className="flex items-center gap-3 flex-1">
+                      <div className="flex-1 bg-muted rounded-full h-2.5">
+                        <div
+                          className="bg-teal h-2.5 rounded-full transition-all"
+                          style={{ width: `${f.score}%` }}
+                        />
+                      </div>
+                      <span className="text-sm font-medium text-primary w-12 text-right">
+                        {f.score}%
+                      </span>
+                    </div>
                   </div>
-                  <span className="text-sm font-medium text-primary w-12 text-right">
-                    {f.score}%
-                  </span>
-                </div>
+                ))}
               </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+            </CardContent>
+          </Card>
+        </CollapsibleSection>
+      </div>
 
       {/* Segment Breakdown */}
       {result.segmentBreakdown && (
-        <SegmentCharts breakdown={result.segmentBreakdown} />
+        <CollapsibleSection title="Segment Breakdown">
+          <SegmentCharts breakdown={result.segmentBreakdown} />
+        </CollapsibleSection>
       )}
 
       {/* NPS Score */}
@@ -330,6 +365,12 @@ export function ReportView({
           </div>
         </CardContent>
       </Card>
+
+      {/* AI panel disclaimer */}
+      <div className="bg-muted/30 border border-border/50 rounded-lg px-4 py-2.5 text-xs text-muted-foreground mb-8">
+        These insights were generated by a 50-person AI consumer panel using peer-reviewed methodology. Results are directional and best used for hypothesis validation.{" "}
+        <Link href="/methodology#limitations" className="underline">Learn more</Link>
+      </div>
 
       {/* Methodology */}
       <Card className="border-teal/20 bg-teal/5">
