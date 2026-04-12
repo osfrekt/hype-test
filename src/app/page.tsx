@@ -524,7 +524,7 @@ export default function Home() {
               Your complete research toolkit
             </h2>
             <p className="text-muted-foreground text-center max-w-2xl mx-auto mb-10">
-              Seven specialized tools for every stage of product development.
+              Eight specialized tools for every stage of product development.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               <Link href="/research/new" className="block bg-background rounded-2xl border border-border/50 p-5 hover:border-teal/30 hover:shadow-sm transition-all group">
@@ -554,6 +554,13 @@ export default function Home() {
                   <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-teal/10 text-teal-dark">Starter</span>
                 </div>
                 <p className="text-xs text-muted-foreground leading-relaxed">Test 5 price points and see the demand curve. Find the revenue-maximizing price for your product.</p>
+              </Link>
+              <Link href="/ad-test/new" className="block bg-background rounded-2xl border border-border/50 p-5 hover:border-teal/30 hover:shadow-sm transition-all group">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-sm font-bold text-primary group-hover:text-teal transition-colors">Ad / Creative Testing</h3>
+                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-teal/10 text-teal-dark">Starter</span>
+                </div>
+                <p className="text-xs text-muted-foreground leading-relaxed">Test ad creatives with attention, clarity, persuasion, and click likelihood scores.</p>
               </Link>
               <Link href="/discover/new" className="block bg-background rounded-2xl border border-border/50 p-5 hover:border-teal/30 hover:shadow-sm transition-all group">
                 <div className="flex items-center justify-between mb-2">

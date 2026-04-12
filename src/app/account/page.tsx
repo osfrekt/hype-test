@@ -135,6 +135,7 @@ function AccountContent() {
       { table: "pricing_test_results", type: "Pricing Test" },
       { table: "audience_test_results", type: "Audience Test" },
       { table: "competitive_results", type: "Competitive" },
+      { table: "ad_test_results", type: "Ad Test" },
     ];
 
     const allTests: TestResult[] = [];
@@ -558,7 +559,9 @@ function AccountContent() {
                             ? `/pricing-test/${t.id}`
                             : t.type === "Audience Test"
                               ? `/audience-test/${t.id}`
-                              : `/competitive/${t.id}`;
+                              : t.type === "Ad Test"
+                                ? `/ad-test/${t.id}`
+                                : `/competitive/${t.id}`;
                     const testName =
                       (t.input as Record<string, string>)?.productName ||
                       (t.input as Record<string, string>)?.brandName ||

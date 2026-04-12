@@ -113,6 +113,37 @@ export async function sendNameTestReport(email: string, names: string[], resultI
   });
 }
 
+export async function sendAdTestReport(email: string, creativeNames: string[], resultId: string) {
+  const reportUrl = `https://hypetest.ai/ad-test/${resultId}`;
+  const nameList = creativeNames.join(" vs ");
+
+  await getResend().emails.send({
+    from: FROM_EMAIL,
+    to: email,
+    subject: `Ad Test results: ${nameList}`,
+    html: `
+      <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 560px; margin: 0 auto; padding: 40px 20px;">
+        <div style="margin-bottom: 32px;">
+          <strong style="font-size: 18px; color: #1a1f36;">HypeTest</strong>
+        </div>
+        <h1 style="font-size: 22px; color: #1a1f36; margin-bottom: 8px;">Your ad test results are ready</h1>
+        <p style="color: #64748b; font-size: 14px; line-height: 1.6; margin-bottom: 24px;">
+          AI-simulated ad creative testing for <strong>${nameList}</strong> is complete.
+          See attention, clarity, persuasion, and click likelihood scores from the consumer panel.
+        </p>
+        <a href="${reportUrl}" style="display: inline-block; background: #1a1f36; color: white; text-decoration: none; padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 600;">
+          View your results
+        </a>
+        <p style="color: #94a3b8; font-size: 12px; margin-top: 32px; line-height: 1.5;">
+          This link is permanent and accessible to anyone who has it.
+          <br/>Results are AI-simulated and should be used for directional insights only, not high-stakes decisions.
+        </p>
+        ${FOOTER}
+      </div>
+    `,
+  });
+}
+
 export async function sendDiscoveryReport(email: string, brandName: string, resultId: string) {
   const reportUrl = `https://hypetest.ai/discover/${resultId}`;
 
