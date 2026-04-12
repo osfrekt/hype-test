@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Nav } from "@/components/nav";
@@ -16,6 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { createClient } from "@/lib/supabase/client";
 import type { AbTestResult } from "@/types/ab-test";
 
 const CATEGORIES = [
@@ -68,7 +69,32 @@ function NewAbTestForm() {
   const [userName, setUserName] = useState("");
   const [userCompany, setUserCompany] = useState("");
   const [userRole, setUserRole] = useState("");
-  const [userCompanySize, setUserCompanySize] = useState("");
+  const [isAuthUser, setIsAuthUser] = useState(false);
+
+  // Check Supabase Auth - if logged in, pre-fill and skip verification
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (user?.email) {
+        setIsAuthUser(true);
+        setEmail(user.email);
+        const meta = user.user_metadata;
+        if (meta?.name && !userName) setUserName(meta.name);
+        supabase
+          .from("users")
+          .select("name, company, role")
+          .eq("email", user.email)
+          .single()
+          .then(({ data: profile }) => {
+            if (profile) {
+              if (profile.name && !userName) setUserName(profile.name);
+              if (profile.company && !userCompany) setUserCompany(profile.company);
+              if (profile.role && !userRole) setUserRole(profile.role);
+            }
+          });
+      }
+    });
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // UTM / referrer
   const [utmSource] = useState(() => typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("utm_source") || "" : "");
@@ -86,7 +112,7 @@ function NewAbTestForm() {
     nameA.trim() && descA.trim().length > 10 &&
     nameB.trim() && descB.trim().length > 10 &&
     email.trim() && email.includes("@") &&
-    userName.trim() && userCompany.trim() && userRole;
+    (isAuthUser || (userName.trim() && userCompany.trim() && userRole));
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -136,7 +162,6 @@ function NewAbTestForm() {
         userName: userName.trim(),
         userCompany: userCompany.trim(),
         userRole,
-        userCompanySize: userCompanySize || undefined,
         ...(utmSource && { utmSource }),
         ...(utmMedium && { utmMedium }),
         ...(utmCampaign && { utmCampaign }),
@@ -372,66 +397,52 @@ function NewAbTestForm() {
               </CardContent>
             </Card>
 
-            {/* About you */}
-            <div className="bg-teal/5 rounded-xl p-4 border border-teal/20 space-y-4">
-              <div>
-                <p className="text-sm font-semibold text-primary mb-1">About you</p>
-                <p className="text-xs text-muted-foreground">
-                  We&apos;ll send your report link to your email. No account needed.
-                </p>
+            {/* About you - only for non-authenticated users */}
+            {!isAuthUser && (
+              <div className="bg-teal/5 rounded-xl p-4 border border-teal/20 space-y-4">
+                <div>
+                  <p className="text-sm font-semibold text-primary mb-1">About you</p>
+                  <p className="text-xs text-muted-foreground">
+                    We&apos;ll send your report link to your email. No account needed.
+                  </p>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="space-y-1.5">
+                    <Label htmlFor="userName">Name <span className="text-red-500">*</span></Label>
+                    <Input id="userName" placeholder="Jane Smith" value={userName} onChange={(e) => setUserName(e.target.value)} required />
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="email">Work email <span className="text-red-500">*</span></Label>
+                    <Input id="email" type="email" placeholder="jane@company.com" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="userCompany">Company <span className="text-red-500">*</span></Label>
+                    <Input id="userCompany" placeholder="Acme Corp" value={userCompany} onChange={(e) => setUserCompany(e.target.value)} required />
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label>Role <span className="text-red-500">*</span></Label>
+                    <Select value={userRole} onValueChange={(v) => setUserRole(v ?? "")}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select your role" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="founder">Founder / CEO</SelectItem>
+                        <SelectItem value="product">Product / CPO</SelectItem>
+                        <SelectItem value="marketing">Marketing / CMO</SelectItem>
+                        <SelectItem value="brand">Brand Manager</SelectItem>
+                        <SelectItem value="innovation">Innovation / R&amp;D</SelectItem>
+                        <SelectItem value="insights">Consumer Insights / Research</SelectItem>
+                        <SelectItem value="growth">Growth / Strategy</SelectItem>
+                        <SelectItem value="consultant">Consultant / Agency</SelectItem>
+                        <SelectItem value="investor">Investor / VC</SelectItem>
+                        <SelectItem value="student">Student / Academic</SelectItem>
+                        <SelectItem value="other">Other</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div className="space-y-1.5">
-                  <Label htmlFor="userName">Name</Label>
-                  <Input id="userName" placeholder="Jane Smith" value={userName} onChange={(e) => setUserName(e.target.value)} required />
-                </div>
-                <div className="space-y-1.5">
-                  <Label htmlFor="email">Work email</Label>
-                  <Input id="email" type="email" placeholder="jane@company.com" value={email} onChange={(e) => setEmail(e.target.value)} required />
-                </div>
-                <div className="space-y-1.5">
-                  <Label htmlFor="userCompany">Company</Label>
-                  <Input id="userCompany" placeholder="Acme Corp" value={userCompany} onChange={(e) => setUserCompany(e.target.value)} required />
-                </div>
-                <div className="space-y-1.5">
-                  <Label>Role</Label>
-                  <Select value={userRole} onValueChange={(v) => setUserRole(v ?? "")}>
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select your role" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="founder">Founder / CEO</SelectItem>
-                      <SelectItem value="product">Product / CPO</SelectItem>
-                      <SelectItem value="marketing">Marketing / CMO</SelectItem>
-                      <SelectItem value="brand">Brand Manager</SelectItem>
-                      <SelectItem value="innovation">Innovation / R&amp;D</SelectItem>
-                      <SelectItem value="insights">Consumer Insights / Research</SelectItem>
-                      <SelectItem value="growth">Growth / Strategy</SelectItem>
-                      <SelectItem value="consultant">Consultant / Agency</SelectItem>
-                      <SelectItem value="investor">Investor / VC</SelectItem>
-                      <SelectItem value="student">Student / Academic</SelectItem>
-                      <SelectItem value="other">Other</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-              <div className="space-y-1.5">
-                <Label>Company size</Label>
-                <Select value={userCompanySize} onValueChange={(v) => setUserCompanySize(v ?? "")}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select company size (optional)" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="1">Just me</SelectItem>
-                    <SelectItem value="2-10">2-10</SelectItem>
-                    <SelectItem value="11-50">11-50</SelectItem>
-                    <SelectItem value="51-200">51-200</SelectItem>
-                    <SelectItem value="201-1000">201-1,000</SelectItem>
-                    <SelectItem value="1000+">1,000+</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
+            )}
 
             {error && (
               <div className="bg-destructive/10 text-destructive text-sm rounded-lg p-3">

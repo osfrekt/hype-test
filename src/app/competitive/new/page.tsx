@@ -17,6 +17,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { createClient } from "@/lib/supabase/client";
 
 const CATEGORIES = [
   { value: "food & beverage", label: "Food & Beverage" },
@@ -77,6 +78,31 @@ function CompetitiveForm() {
   const [email, setEmail] = useState("");
   const [userName, setUserName] = useState("");
   const [userCompany, setUserCompany] = useState("");
+  const [isAuthUser, setIsAuthUser] = useState(false);
+
+  // Check Supabase Auth - if logged in, pre-fill and skip verification
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (user?.email) {
+        setIsAuthUser(true);
+        setEmail(user.email);
+        const meta = user.user_metadata;
+        if (meta?.name && !userName) setUserName(meta.name);
+        supabase
+          .from("users")
+          .select("name, company")
+          .eq("email", user.email)
+          .single()
+          .then(({ data: profile }) => {
+            if (profile) {
+              if (profile.name && !userName) setUserName(profile.name);
+              if (profile.company && !userCompany) setUserCompany(profile.company);
+            }
+          });
+      }
+    });
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // UTM
   const [utmSource] = useState(() => typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("utm_source") || "" : "");
@@ -167,7 +193,7 @@ function CompetitiveForm() {
   const isFormValid = useMemo(() => {
     const hasYours = yourName.trim() && yourDesc.trim().length > 10;
     const hasComp = compName.trim() && compDesc.trim().length > 10;
-    const hasUser = email.trim() && email.includes("@") && userName.trim();
+    const hasUser = email.trim() && email.includes("@") && (isAuthUser || userName.trim());
     return hasYours && hasComp && hasUser;
   }, [yourName, yourDesc, compName, compDesc, email, userName]);
 
@@ -504,46 +530,48 @@ function CompetitiveForm() {
               </CardContent>
             </Card>
 
-            {/* ABOUT YOU */}
-            <Card className="bg-teal/5 border-teal/20">
-              <CardContent className="pt-6 space-y-4">
-                <div>
-                  <p className="text-sm font-semibold text-primary mb-1">About you</p>
-                  <p className="text-xs text-muted-foreground">
-                    We&apos;ll send the comparison report link to your email.
-                  </p>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div className="space-y-1.5">
-                    <Label>Name</Label>
-                    <Input
-                      placeholder="Jane Smith"
-                      value={userName}
-                      onChange={(e) => setUserName(e.target.value)}
-                      required
-                    />
+            {/* ABOUT YOU - only for non-authenticated users */}
+            {!isAuthUser && (
+              <Card className="bg-teal/5 border-teal/20">
+                <CardContent className="pt-6 space-y-4">
+                  <div>
+                    <p className="text-sm font-semibold text-primary mb-1">About you</p>
+                    <p className="text-xs text-muted-foreground">
+                      We&apos;ll send the comparison report link to your email.
+                    </p>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="space-y-1.5">
+                      <Label>Name <span className="text-red-500">*</span></Label>
+                      <Input
+                        placeholder="Jane Smith"
+                        value={userName}
+                        onChange={(e) => setUserName(e.target.value)}
+                        required
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label>Work email <span className="text-red-500">*</span></Label>
+                      <Input
+                        type="email"
+                        placeholder="jane@company.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                      />
+                    </div>
                   </div>
                   <div className="space-y-1.5">
-                    <Label>Work email</Label>
+                    <Label>Company (optional)</Label>
                     <Input
-                      type="email"
-                      placeholder="jane@company.com"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
+                      placeholder="Acme Corp"
+                      value={userCompany}
+                      onChange={(e) => setUserCompany(e.target.value)}
                     />
                   </div>
-                </div>
-                <div className="space-y-1.5">
-                  <Label>Company (optional)</Label>
-                  <Input
-                    placeholder="Acme Corp"
-                    value={userCompany}
-                    onChange={(e) => setUserCompany(e.target.value)}
-                  />
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            )}
 
             {error && (
               <div className="bg-destructive/10 text-destructive text-sm rounded-lg p-3">
