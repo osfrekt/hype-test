@@ -1,12 +1,7 @@
-import Stripe from "stripe";
+import { lemonSqueezySetup } from "@lemonsqueezy/lemonsqueezy.js";
 
-let _stripe: Stripe | null = null;
-
-export function stripe(): Stripe {
-  if (!_stripe) {
-    _stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
-  }
-  return _stripe;
+export function initLemonSqueezy() {
+  lemonSqueezySetup({ apiKey: process.env.LEMONSQUEEZY_API_KEY! });
 }
 
 export const PLANS = {

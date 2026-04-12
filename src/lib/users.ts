@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import type { PlanId } from "./stripe";
+import type { PlanId } from "./lemonsqueezy";
 
 export interface User {
   email: string;
@@ -82,7 +82,7 @@ export async function incrementUsage(email: string, type: "research" | "discover
 }
 
 export async function checkQuota(email: string, type: "research" | "discovery"): Promise<{ allowed: boolean; remaining: number; limit: number; plan: PlanId }> {
-  const { PLANS } = await import("./stripe");
+  const { PLANS } = await import("./lemonsqueezy");
   const user = await getOrCreateUser(email);
   const plan = PLANS[user.plan] || PLANS.free;
   const limit = type === "research" ? plan.researchLimit : plan.discoveryLimit;

@@ -1,66 +1,86 @@
-import { stripe } from "@/lib/stripe";
+import crypto from "crypto";
 import { createClient } from "@/lib/supabase/server";
 
 export async function POST(request: Request) {
-  const body = await request.text();
-  const sig = request.headers.get("stripe-signature");
-
-  if (!sig) {
-    return Response.json({ error: "Missing signature" }, { status: 400 });
-  }
-
-  let event;
   try {
-    event = stripe().webhooks.constructEvent(body, sig, process.env.STRIPE_WEBHOOK_SECRET!);
-  } catch {
-    return Response.json({ error: "Invalid signature" }, { status: 400 });
-  }
+    const rawBody = await request.text();
+    const signature = request.headers.get("x-signature");
+    const secret = process.env.LEMONSQUEEZY_WEBHOOK_SECRET!;
 
-  const supabase = await createClient();
+    // Verify signature
+    const hmac = crypto.createHmac("sha256", secret);
+    hmac.update(rawBody);
+    const digest = hmac.digest("hex");
 
-  switch (event.type) {
-    case "checkout.session.completed": {
-      const session = event.data.object;
-      const email = session.metadata?.email;
-      const plan = session.metadata?.plan;
-      if (email && plan) {
-        await supabase.from("users").update({
-          plan,
-          stripe_customer_id: session.customer as string,
-          stripe_subscription_id: session.subscription as string,
-          updated_at: new Date().toISOString(),
-        }).eq("email", email);
-      }
-      break;
+    if (digest !== signature) {
+      return Response.json({ error: "Invalid signature" }, { status: 401 });
     }
-    case "customer.subscription.updated": {
-      const sub = event.data.object;
-      if (sub.status === "active") {
-        const customerId = sub.customer as string;
-        const { data: user } = await supabase.from("users").select("email").eq("stripe_customer_id", customerId).single();
+
+    const event = JSON.parse(rawBody);
+    const eventName = event.meta?.event_name;
+    const customData = event.meta?.custom_data;
+    const email = customData?.email;
+    const plan = customData?.plan;
+    const subscriptionId = String(event.data?.id);
+    const customerId = String(event.data?.attributes?.customer_id);
+
+    const supabase = await createClient();
+
+    switch (eventName) {
+      case "subscription_created": {
+        if (email && plan) {
+          await supabase.from("users").update({
+            plan,
+            stripe_customer_id: customerId, // reuse column for LS customer ID
+            stripe_subscription_id: subscriptionId, // reuse for LS subscription ID
+            updated_at: new Date().toISOString(),
+          }).eq("email", email);
+        }
+        break;
+      }
+      case "subscription_updated": {
+        const status = event.data?.attributes?.status;
+        if (status === "active" && email) {
+          await supabase.from("users").update({
+            stripe_subscription_id: subscriptionId,
+            updated_at: new Date().toISOString(),
+          }).eq("email", email);
+        } else if (status === "cancelled" || status === "expired") {
+          // Find user by subscription ID
+          const { data: user } = await supabase.from("users")
+            .select("email")
+            .eq("stripe_subscription_id", subscriptionId)
+            .single();
+          if (user) {
+            await supabase.from("users").update({
+              plan: "free",
+              stripe_subscription_id: null,
+              updated_at: new Date().toISOString(),
+            }).eq("email", user.email);
+          }
+        }
+        break;
+      }
+      case "subscription_cancelled":
+      case "subscription_expired": {
+        const { data: user } = await supabase.from("users")
+          .select("email")
+          .eq("stripe_subscription_id", subscriptionId)
+          .single();
         if (user) {
           await supabase.from("users").update({
-            stripe_subscription_id: sub.id,
+            plan: "free",
+            stripe_subscription_id: null,
             updated_at: new Date().toISOString(),
           }).eq("email", user.email);
         }
+        break;
       }
-      break;
     }
-    case "customer.subscription.deleted": {
-      const sub = event.data.object;
-      const customerId = sub.customer as string;
-      const { data: user } = await supabase.from("users").select("email").eq("stripe_customer_id", customerId).single();
-      if (user) {
-        await supabase.from("users").update({
-          plan: "free",
-          stripe_subscription_id: null,
-          updated_at: new Date().toISOString(),
-        }).eq("email", user.email);
-      }
-      break;
-    }
-  }
 
-  return Response.json({ received: true });
+    return Response.json({ received: true });
+  } catch (error) {
+    console.error("Webhook error:", error);
+    return Response.json({ error: "Webhook processing failed" }, { status: 500 });
+  }
 }

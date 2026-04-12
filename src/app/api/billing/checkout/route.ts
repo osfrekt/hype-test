@@ -1,44 +1,47 @@
-import { stripe } from "@/lib/stripe";
+import { createCheckout } from "@lemonsqueezy/lemonsqueezy.js";
+import { initLemonSqueezy } from "@/lib/lemonsqueezy";
 import { getOrCreateUser } from "@/lib/users";
-import { createClient } from "@/lib/supabase/server";
 
-const PRICE_IDS: Record<string, string | undefined> = {
-  starter: process.env.STRIPE_STARTER_PRICE_ID,
-  pro: process.env.STRIPE_PRO_PRICE_ID,
-  team: process.env.STRIPE_TEAM_PRICE_ID,
+const VARIANT_IDS: Record<string, string | undefined> = {
+  starter: process.env.LEMONSQUEEZY_STARTER_VARIANT_ID,
+  pro: process.env.LEMONSQUEEZY_PRO_VARIANT_ID,
+  team: process.env.LEMONSQUEEZY_TEAM_VARIANT_ID,
 };
 
 export async function POST(request: Request) {
-  const { email, plan } = await request.json();
+  try {
+    const { email, plan } = await request.json();
 
-  if (!email || !plan || !PRICE_IDS[plan]) {
-    return Response.json({ error: "Invalid request" }, { status: 400 });
-  }
+    if (!email || !plan || !VARIANT_IDS[plan]) {
+      return Response.json({ error: "Invalid request" }, { status: 400 });
+    }
 
-  const user = await getOrCreateUser(email);
+    const user = await getOrCreateUser(email);
 
-  // Get or create Stripe customer
-  let customerId = user.stripe_customer_id;
-  if (!customerId) {
-    const customer = await stripe().customers.create({
-      email,
-      name: user.name || undefined,
-      metadata: { company: user.company || "", role: user.role || "" },
+    initLemonSqueezy();
+
+    const storeId = process.env.LEMONSQUEEZY_STORE_ID!;
+    const variantId = VARIANT_IDS[plan]!;
+
+    const checkout = await createCheckout(storeId, variantId, {
+      checkoutData: {
+        email,
+        name: user.name || undefined,
+        custom: { email, plan },
+      },
+      productOptions: {
+        redirectUrl: "https://hypetest.ai/account?checkout=success",
+      },
     });
-    customerId = customer.id;
 
-    const supabase = await createClient();
-    await supabase.from("users").update({ stripe_customer_id: customerId }).eq("email", email);
+    const url = checkout.data?.data?.attributes?.url;
+    if (!url) {
+      return Response.json({ error: "Failed to create checkout" }, { status: 500 });
+    }
+
+    return Response.json({ url });
+  } catch (error) {
+    console.error("Checkout error:", error);
+    return Response.json({ error: "Failed to create checkout" }, { status: 500 });
   }
-
-  const session = await stripe().checkout.sessions.create({
-    customer: customerId,
-    mode: "subscription",
-    line_items: [{ price: PRICE_IDS[plan]!, quantity: 1 }],
-    success_url: `https://hypetest.ai/account?checkout=success`,
-    cancel_url: `https://hypetest.ai/pricing?checkout=cancelled`,
-    metadata: { email, plan },
-  });
-
-  return Response.json({ url: session.url });
 }
