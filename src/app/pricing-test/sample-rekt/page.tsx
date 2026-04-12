@@ -9,27 +9,27 @@ import type { PricingTestResult } from "@/types/pricing-test";
 const SAMPLE_RESULT: PricingTestResult = {
   id: "sample-rekt",
   input: {
-    productName: "Rekt Focus Energy Powder",
+    productName: "Rekt Energy + Focus Powder",
     productDescription:
-      "A clean energy powder with 200mg natural caffeine, Cognizin citicoline for sustained mental focus, zero sugar, 5 calories per serving.",
-    category: "health & wellness",
-    targetMarket: "Health-conscious professionals and gamers 18-38",
-    priceUnit: "per stick pack",
+      "Energy and focus powder with 200mg natural caffeine, L-Theanine, and a nootropic blend. Zero sugar, zero calories, 30 servings per tub. Available in Blue Raspberry and Cherry.",
+    category: "Health & Household",
+    targetMarket: "Gamers, athletes, and professionals who want clean energy and focus",
+    priceUnit: "per tub (30 servings)",
   },
   pricePoints: [
-    { price: 1.5, intentScore: 82, revenueIndex: 73 },
-    { price: 2.0, intentScore: 74, revenueIndex: 88 },
-    { price: 2.5, intentScore: 65, revenueIndex: 97 },
-    { price: 3.0, intentScore: 48, revenueIndex: 86 },
-    { price: 3.5, intentScore: 31, revenueIndex: 65 },
+    { price: 19.99, intentScore: 84, revenueIndex: 72 },
+    { price: 24.99, intentScore: 76, revenueIndex: 91 },
+    { price: 29.99, intentScore: 68, revenueIndex: 98 },
+    { price: 34.99, intentScore: 52, revenueIndex: 87 },
+    { price: 39.99, intentScore: 35, revenueIndex: 67 },
   ],
-  optimalPrice: 2.5,
-  optimalIntent: 65,
+  optimalPrice: 29.99,
+  optimalIntent: 68,
   panelSize: 50,
   methodology: {
     panelSize: 50,
     demographicMix:
-      "Health-conscious professionals and gamers 18-38 (80%) + general population (20%)",
+      "Gamers, athletes, and professionals 18-38 (80%) + general population (20%)",
     confidenceNote:
       "Results based on LLM-simulated consumer panel. Best used for directional insights and hypothesis generation.",
   },

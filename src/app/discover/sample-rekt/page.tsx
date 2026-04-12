@@ -12,12 +12,12 @@ const SAMPLE_RESULT: DiscoveryResult = {
   input: {
     brandName: "Rekt",
     brandDescription:
-      "A clean energy and performance brand targeting health-conscious professionals and gamers. Known for transparent ingredient sourcing and edgy branding.",
-    category: "health & wellness",
-    targetAudience: "Health-conscious professionals and gamers 18-38",
-    existingProducts: "Rekt Focus Energy Powder",
-    priceRange: { min: 2, max: 5 },
-    priceUnit: "per serving",
+      "Energy and focus brand for gamers, athletes, and professionals. Flagship product is Rekt Energy + Focus Powder with 200mg natural caffeine, L-Theanine, and nootropics. Zero sugar, zero calories. Sold on Amazon and rekt.com.",
+    category: "Health & Household",
+    targetAudience: "Gamers, athletes, and professionals who want clean energy and focus",
+    existingProducts: "Rekt Energy + Focus Powder (Blue Raspberry, Cherry)",
+    priceRange: { min: 18, max: 40 },
+    priceUnit: "per unit",
   },
   concepts: [
     {
@@ -26,8 +26,8 @@ const SAMPLE_RESULT: DiscoveryResult = {
         description:
           "Post-workout collagen peptide powder with added electrolytes and tart cherry extract for joint and muscle recovery. Unflavored, mixes into any beverage.",
         rationale:
-          "Recovery is underserved in the Rekt lineup and collagen is trending among fitness-focused consumers.",
-        estimatedPricePoint: { low: 3, high: 5 },
+          "Recovery is underserved in the Rekt lineup and collagen is trending among fitness-focused consumers who already buy the Energy + Focus Powder.",
+        estimatedPricePoint: { low: 30, high: 40 },
       },
       purchaseIntent: {
         score: 71,
@@ -39,7 +39,7 @@ const SAMPLE_RESULT: DiscoveryResult = {
           { label: "Definitely yes", count: 15 },
         ],
       },
-      wtpRange: { low: 3.0, mid: 3.8, high: 5.0 },
+      wtpRange: { low: 28, mid: 35, high: 42 },
       topExcitement: "Collagen + electrolytes in one product fills a real gap in recovery supplements",
       topHesitation: "Unflavored collagen can have an off-putting texture in some drinks",
       demandRank: 1,
@@ -49,10 +49,10 @@ const SAMPLE_RESULT: DiscoveryResult = {
       concept: {
         name: "Rekt Hydration Sticks",
         description:
-          "Electrolyte hydration powder with sodium, potassium, magnesium, and a hint of natural flavor. Zero sugar, designed for daily use beyond just workouts.",
+          "Electrolyte hydration powder sticks with sodium, potassium, magnesium, and a hint of natural flavor. Zero sugar, designed for daily use during gaming sessions and workouts.",
         rationale:
-          "Hydration sticks are a fast-growing category and complement the Focus powder.",
-        estimatedPricePoint: { low: 1.5, high: 3 },
+          "Hydration sticks are a fast-growing category and complement the Energy + Focus Powder for all-day use.",
+        estimatedPricePoint: { low: 20, high: 30 },
       },
       purchaseIntent: {
         score: 68,
@@ -64,8 +64,8 @@ const SAMPLE_RESULT: DiscoveryResult = {
           { label: "Definitely yes", count: 13 },
         ],
       },
-      wtpRange: { low: 1.5, mid: 2.2, high: 3.0 },
-      topExcitement: "Daily hydration use case makes this a high-frequency purchase",
+      wtpRange: { low: 20, mid: 25, high: 30 },
+      topExcitement: "Daily hydration use case makes this a high-frequency purchase alongside the energy powder",
       topHesitation: "Crowded category with LMNT, Liquid IV, and Drip Drop already established",
       demandRank: 2,
       round: 1,
@@ -74,10 +74,10 @@ const SAMPLE_RESULT: DiscoveryResult = {
       concept: {
         name: "Rekt Focus Gummies",
         description:
-          "Gummy-format energy supplement with 150mg natural caffeine, B-vitamins, and L-theanine for calm focus. 3 gummies per serving.",
+          "Gummy-format energy supplement with 150mg natural caffeine, B-vitamins, and L-theanine for calm focus. 3 gummies per serving, no water needed.",
         rationale:
-          "Gummies offer a no-water alternative to the powder format and attract convenience-driven buyers.",
-        estimatedPricePoint: { low: 2.5, high: 4 },
+          "Gummies offer a no-water alternative to the powder format and attract convenience-driven buyers who want energy on the go.",
+        estimatedPricePoint: { low: 22, high: 34 },
       },
       purchaseIntent: {
         score: 65,
@@ -89,9 +89,9 @@ const SAMPLE_RESULT: DiscoveryResult = {
           { label: "Definitely yes", count: 12 },
         ],
       },
-      wtpRange: { low: 2.5, mid: 3.2, high: 4.0 },
-      topExcitement: "No water needed makes this ideal for commuting and travel",
-      topHesitation: "Sugar content in gummies contradicts the clean-label brand promise",
+      wtpRange: { low: 22, mid: 28, high: 34 },
+      topExcitement: "No water needed makes this ideal for commuting, travel, and LAN events",
+      topHesitation: "Sugar content in gummies contradicts the zero-sugar clean-label brand promise",
       demandRank: 3,
       round: 1,
     },
@@ -99,35 +99,60 @@ const SAMPLE_RESULT: DiscoveryResult = {
       concept: {
         name: "Rekt Sleep Formula",
         description:
-          "Nighttime recovery powder with magnesium glycinate, L-theanine, and ashwagandha. Designed to pair with the Focus powder as a morning/night stack.",
+          "Nighttime recovery powder with magnesium glycinate, L-theanine, and ashwagandha. Designed to pair with the Energy + Focus Powder as a morning/night stack.",
         rationale:
-          "Sleep products complement the energy lineup and increase customer lifetime value through stacking.",
-        estimatedPricePoint: { low: 2, high: 4 },
+          "Sleep products complement the energy lineup and increase customer lifetime value through daily stacking routines.",
+        estimatedPricePoint: { low: 25, high: 35 },
       },
       purchaseIntent: {
-        score: 58,
+        score: 61,
         distribution: [
           { label: "Definitely not", count: 5 },
-          { label: "Probably not", count: 8 },
+          { label: "Probably not", count: 7 },
           { label: "Maybe", count: 12 },
-          { label: "Probably yes", count: 15 },
+          { label: "Probably yes", count: 16 },
           { label: "Definitely yes", count: 10 },
         ],
       },
-      wtpRange: { low: 2.0, mid: 2.8, high: 4.0 },
-      topExcitement: "Morning/night stack concept makes the brand feel like a complete system",
+      wtpRange: { low: 25, mid: 30, high: 35 },
+      topExcitement: "Morning/night stack concept makes the brand feel like a complete performance system",
       topHesitation: "Skepticism about whether a brand called Rekt should sell sleep products",
       demandRank: 4,
       round: 1,
     },
     {
       concept: {
-        name: "Rekt Pre-Workout Ignite",
+        name: "Rekt Protein Coffee",
         description:
-          "High-stim pre-workout powder with 300mg caffeine, beta-alanine, and citrulline malate. Intense formula for serious training.",
+          "Protein-enhanced coffee powder with 20g protein, 150mg caffeine, and MCT oil. Replaces morning coffee and protein shake in one scoop.",
         rationale:
-          "Pre-workout is a natural extension of the energy brand and appeals to the gym-goer segment.",
-        estimatedPricePoint: { low: 2.5, high: 4 },
+          "Protein coffee combines two daily habits into one product and appeals to the fitness-focused segment of Rekt buyers.",
+        estimatedPricePoint: { low: 28, high: 38 },
+      },
+      purchaseIntent: {
+        score: 58,
+        distribution: [
+          { label: "Definitely not", count: 5 },
+          { label: "Probably not", count: 8 },
+          { label: "Maybe", count: 13 },
+          { label: "Probably yes", count: 15 },
+          { label: "Definitely yes", count: 9 },
+        ],
+      },
+      wtpRange: { low: 26, mid: 32, high: 38 },
+      topExcitement: "Replacing morning coffee and protein shake with one product saves time and money",
+      topHesitation: "Protein coffee flavor profiles are often disappointing compared to real coffee",
+      demandRank: 5,
+      round: 1,
+    },
+    {
+      concept: {
+        name: "Rekt Pre-Workout",
+        description:
+          "High-stim pre-workout powder with 300mg caffeine, beta-alanine, and citrulline malate. Intense formula for serious training sessions.",
+        rationale:
+          "Pre-workout is a natural extension of the energy brand and appeals to the gym-goer segment that already trusts Rekt for clean ingredients.",
+        estimatedPricePoint: { low: 30, high: 40 },
       },
       purchaseIntent: {
         score: 54,
@@ -139,20 +164,20 @@ const SAMPLE_RESULT: DiscoveryResult = {
           { label: "Definitely yes", count: 9 },
         ],
       },
-      wtpRange: { low: 2.5, mid: 3.0, high: 4.0 },
-      topExcitement: "Brand name Rekt feels perfectly suited for a pre-workout",
-      topHesitation: "Pre-workout market is extremely saturated with established players",
-      demandRank: 5,
+      wtpRange: { low: 28, mid: 35, high: 42 },
+      topExcitement: "Brand name Rekt feels perfectly suited for a pre-workout product",
+      topHesitation: "Pre-workout market is extremely saturated with established players like Ghost and C4",
+      demandRank: 6,
       round: 1,
     },
     {
       concept: {
-        name: "Rekt Greens Blend",
+        name: "Rekt Electrolyte Tabs",
         description:
-          "Daily greens powder with spirulina, chlorella, digestive enzymes, and probiotics. Mild citrus flavor.",
+          "Effervescent electrolyte tablets that dissolve in water. Portable tube format with 10 tablets per tube. Light citrus flavor.",
         rationale:
-          "Greens powders are a high-growth category and build on the clean-label positioning.",
-        estimatedPricePoint: { low: 2, high: 4 },
+          "Tablets offer an ultra-portable alternative to powder sticks and appeal to athletes and travelers.",
+        estimatedPricePoint: { low: 14, high: 22 },
       },
       purchaseIntent: {
         score: 49,
@@ -164,59 +189,34 @@ const SAMPLE_RESULT: DiscoveryResult = {
           { label: "Definitely yes", count: 8 },
         ],
       },
-      wtpRange: { low: 2.0, mid: 2.8, high: 4.0 },
-      topExcitement: "One-scoop daily habit is appealing for simplicity",
-      topHesitation: "Athletic Greens and AG1 dominate this space with strong brand loyalty",
-      demandRank: 6,
-      round: 1,
-    },
-    {
-      concept: {
-        name: "Rekt Protein Crunch Bars",
-        description:
-          "High-protein (20g) crispy bar with clean ingredients, no artificial sweeteners. Available in 3 flavors.",
-        rationale:
-          "Protein bars offer retail shelf presence and brand visibility beyond the powder format.",
-        estimatedPricePoint: { low: 2.5, high: 4 },
-      },
-      purchaseIntent: {
-        score: 46,
-        distribution: [
-          { label: "Definitely not", count: 8 },
-          { label: "Probably not", count: 11 },
-          { label: "Maybe", count: 12 },
-          { label: "Probably yes", count: 12 },
-          { label: "Definitely yes", count: 7 },
-        ],
-      },
-      wtpRange: { low: 2.5, mid: 3.0, high: 4.0 },
-      topExcitement: "Clean-label protein bar with good macros would stand out",
-      topHesitation: "Protein bar market is brutally competitive with razor-thin margins",
+      wtpRange: { low: 14, mid: 18, high: 22 },
+      topExcitement: "Tube format is more portable than powder tubs and easy to toss in a gym bag",
+      topHesitation: "Nuun and other established tab brands already dominate this niche",
       demandRank: 7,
       round: 1,
     },
     {
       concept: {
-        name: "Rekt Immunity Shots",
+        name: "Rekt Vitamin D3+K2",
         description:
-          "Liquid shot format with elderberry, zinc, vitamin C, and ginger. 2oz daily dose for immune support.",
+          "Daily vitamin D3 and K2 supplement in softgel format. 5000 IU D3 with 100mcg K2-MK7 for bone and immune health.",
         rationale:
-          "Immunity is a growing concern post-pandemic and shots are a convenient format.",
-        estimatedPricePoint: { low: 3, high: 5 },
+          "D3+K2 is a high-demand daily supplement that builds recurring revenue and expands Rekt beyond energy into general wellness.",
+        estimatedPricePoint: { low: 18, high: 28 },
       },
       purchaseIntent: {
-        score: 41,
+        score: 42,
         distribution: [
-          { label: "Definitely not", count: 10 },
+          { label: "Definitely not", count: 9 },
           { label: "Probably not", count: 11 },
-          { label: "Maybe", count: 13 },
+          { label: "Maybe", count: 14 },
           { label: "Probably yes", count: 10 },
           { label: "Definitely yes", count: 6 },
         ],
       },
-      wtpRange: { low: 3.0, mid: 3.5, high: 5.0 },
-      topExcitement: "Convenient shot format requires zero preparation",
-      topHesitation: "Brand association with energy/gaming clashes with immunity positioning",
+      wtpRange: { low: 16, mid: 22, high: 28 },
+      topExcitement: "Essential daily supplement that gamers and indoor athletes genuinely need",
+      topHesitation: "Brand association with energy/gaming feels off for a basic vitamin product",
       demandRank: 8,
       round: 1,
     },
@@ -226,7 +226,7 @@ const SAMPLE_RESULT: DiscoveryResult = {
   methodology: {
     panelSize: 50,
     demographicMix:
-      "Health-conscious professionals and gamers 18-38 (80%) + general population (20%)",
+      "Gamers, athletes, and professionals 18-38 (80%) + general population (20%)",
     conceptsGenerated: 8,
     conceptsTested: 8,
     confidenceNote:
