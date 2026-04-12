@@ -2,6 +2,7 @@ import { runAudienceTest } from "@/lib/audience-engine";
 import { createClient } from "@/lib/supabase/server";
 import { createRateLimiter } from "@/lib/rate-limit";
 import { checkQuota, incrementUsage, getOrCreateUser } from "@/lib/users";
+import { isDisposableEmail } from "@/lib/email-validation";
 import type { AudienceTestInput } from "@/types/audience-test";
 
 export const maxDuration = 300;
@@ -76,6 +77,15 @@ export async function POST(request: Request) {
 
     // Quota check
     const email = typeof body.email === "string" ? body.email.trim().slice(0, 200) : null;
+
+    // Block disposable emails
+    if (email && isDisposableEmail(email)) {
+      return Response.json(
+        { error: "Please use a work or personal email address. Disposable email addresses are not accepted." },
+        { status: 400 }
+      );
+    }
+
     if (email) {
       const quota = await checkQuota(email, "research");
       if (!quota.allowed) {

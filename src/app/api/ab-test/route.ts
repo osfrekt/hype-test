@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { sendAbTestReport } from "@/lib/email";
 import { createRateLimiter } from "@/lib/rate-limit";
 import { checkQuota, incrementUsage, getOrCreateUser } from "@/lib/users";
+import { isDisposableEmail } from "@/lib/email-validation";
 import type { ResearchInput } from "@/types/research";
 import type { AbTestResult } from "@/types/ab-test";
 
@@ -50,6 +51,15 @@ export async function POST(request: Request) {
 
     // Quota check - A/B test counts as 2 research runs
     const email = typeof body.email === "string" ? body.email.trim().slice(0, 200) : null;
+
+    // Block disposable emails
+    if (email && isDisposableEmail(email)) {
+      return Response.json(
+        { error: "Please use a work or personal email address. Disposable email addresses are not accepted." },
+        { status: 400 }
+      );
+    }
+
     if (email) {
       const quota = await checkQuota(email, "research");
       if (!quota.allowed || (quota.remaining !== -1 && quota.remaining < 2)) {

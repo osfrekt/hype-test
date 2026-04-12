@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Nav } from "@/components/nav";
@@ -111,10 +111,31 @@ function DiscoverNewForm() {
   const [isAutofilling, setIsAutofilling] = useState(false);
   const [autofillError, setAutofillError] = useState("");
 
+  // Email verification state
+  const [verificationStep, setVerificationStep] = useState<"form" | "verifying" | "entering-code" | "verified">("form");
+  const [verificationCode, setVerificationCode] = useState("");
+  const [verificationToken, setVerificationToken] = useState("");
+  const [verificationError, setVerificationError] = useState("");
+
   const [isRunning, setIsRunning] = useState(false);
   const [progress, setProgress] = useState(0);
   const [stage, setStage] = useState("");
   const [error, setError] = useState("");
+
+  // Restore verification from session
+  useEffect(() => {
+    const stored = sessionStorage.getItem("hypetest-verification");
+    if (stored) {
+      try {
+        const { email: storedEmail, token } = JSON.parse(stored);
+        if (storedEmail && token) {
+          setVerificationToken(token);
+          setVerificationStep("verified");
+          if (!email) setEmail(storedEmail);
+        }
+      } catch { /* ignore */ }
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Capture UTM params and referrer silently
   const [utmSource] = useState(() => typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("utm_source") || "" : "");
@@ -169,10 +190,75 @@ function DiscoverNewForm() {
     }
   }
 
+  async function handleSendVerification() {
+    setVerificationStep("verifying");
+    setVerificationError("");
+    try {
+      const res = await fetch("/api/auth/verify-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim() }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setVerificationError(data.error || "Failed to send verification code");
+        setVerificationStep("form");
+        return;
+      }
+      setVerificationStep("entering-code");
+    } catch {
+      setVerificationError("Failed to send verification code. Please try again.");
+      setVerificationStep("form");
+    }
+  }
+
+  async function handleConfirmCode() {
+    setVerificationError("");
+    try {
+      const res = await fetch("/api/auth/confirm-code", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim(), code: verificationCode }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setVerificationError(data.error || "Invalid code");
+        return;
+      }
+      setVerificationToken(data.verificationToken);
+      setVerificationStep("verified");
+      sessionStorage.setItem("hypetest-verification", JSON.stringify({ email: email.trim(), token: data.verificationToken }));
+      submitDiscovery(data.verificationToken);
+    } catch {
+      setVerificationError("Verification failed. Please try again.");
+    }
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!isFormValid) return;
 
+    // Check if already verified for this email
+    const storedVerification = sessionStorage.getItem("hypetest-verification");
+    let currentToken = verificationToken;
+    if (storedVerification) {
+      try {
+        const { email: storedEmail, token } = JSON.parse(storedVerification);
+        if (storedEmail === email.trim() && token) {
+          currentToken = token;
+        }
+      } catch { /* ignore */ }
+    }
+
+    if (verificationStep !== "verified" || !currentToken) {
+      handleSendVerification();
+      return;
+    }
+
+    submitDiscovery(currentToken);
+  }
+
+  async function submitDiscovery(token: string) {
     setIsRunning(true);
     setError("");
     setProgress(5);
@@ -222,6 +308,7 @@ function DiscoverNewForm() {
       if (utmMedium) payload.utmMedium = utmMedium;
       if (utmCampaign) payload.utmCampaign = utmCampaign;
       if (referrer) payload.referrer = referrer;
+      payload.verificationToken = token;
 
       const response = await fetch("/api/discovery", {
         method: "POST",
@@ -672,12 +759,57 @@ function DiscoverNewForm() {
                   Do not submit trade secrets or confidential information.
                 </p>
 
+                {verificationStep === "verifying" && (
+                  <div className="bg-teal/5 border border-teal/20 rounded-xl p-4 text-center">
+                    <p className="text-sm text-muted-foreground">Sending verification code...</p>
+                  </div>
+                )}
+
+                {verificationStep === "entering-code" && (
+                  <div className="bg-teal/5 border border-teal/20 rounded-xl p-4 space-y-3">
+                    <p className="text-sm font-medium text-primary">Verify your email</p>
+                    <p className="text-xs text-muted-foreground">
+                      We sent a 6-digit code to {email}. Enter it below to continue.
+                    </p>
+                    <Input
+                      placeholder="123456"
+                      value={verificationCode}
+                      onChange={(e) => setVerificationCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                      maxLength={6}
+                      className="text-center text-lg tracking-widest font-mono"
+                    />
+                    {verificationError && (
+                      <p className="text-xs text-destructive">{verificationError}</p>
+                    )}
+                    <Button
+                      type="button"
+                      onClick={handleConfirmCode}
+                      disabled={verificationCode.length !== 6}
+                      className="w-full"
+                    >
+                      Verify and run discovery
+                    </Button>
+                  </div>
+                )}
+
+                {verificationStep === "verified" && (
+                  <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl px-4 py-2.5">
+                    <p className="text-xs text-emerald-700 font-medium">Email verified</p>
+                  </div>
+                )}
+
+                {verificationError && verificationStep === "form" && (
+                  <div className="bg-destructive/10 text-destructive text-sm rounded-lg p-3">
+                    {verificationError}
+                  </div>
+                )}
+
                 <Button
                   type="submit"
                   className="w-full bg-primary hover:bg-primary/90 text-primary-foreground h-11"
-                  disabled={!isFormValid}
+                  disabled={!isFormValid || verificationStep === "verifying" || verificationStep === "entering-code"}
                 >
-                  Discover Products (Pro)
+                  {verificationStep === "verified" ? "Discover Products (Pro)" : "Verify Email & Discover Products"}
                 </Button>
 
                 <p className="text-xs text-muted-foreground text-center">

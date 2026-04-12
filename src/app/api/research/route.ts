@@ -4,11 +4,14 @@ import { sendResearchReport } from "@/lib/email";
 import { sendSlackNotification } from "@/lib/slack";
 import { createRateLimiter } from "@/lib/rate-limit";
 import { checkQuota, incrementUsage, getOrCreateUser } from "@/lib/users";
+import { isDisposableEmail } from "@/lib/email-validation";
+import { verifyVerificationToken } from "@/lib/magic-link";
 import type { ResearchInput, ResearchResult } from "@/types/research";
 
 export const maxDuration = 300;
 
 const isRateLimited = createRateLimiter(3);
+const isEmailRateLimited = createRateLimiter(5);
 
 const MAX_NAME_LENGTH = 200;
 const MAX_DESCRIPTION_LENGTH = 5000;
@@ -34,7 +37,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const body: ResearchInput & { email?: string; userName?: string; userCompany?: string; userRole?: string; userCompanySize?: string; utmSource?: string; utmMedium?: string; utmCampaign?: string; referrer?: string } = await request.json();
+    const body: ResearchInput & { email?: string; userName?: string; userCompany?: string; userRole?: string; userCompanySize?: string; utmSource?: string; utmMedium?: string; utmCampaign?: string; referrer?: string; verificationToken?: string } = await request.json();
 
     // Input validation and sanitization
     const productName = body.productName?.trim().slice(0, MAX_NAME_LENGTH);
@@ -51,6 +54,36 @@ export async function POST(request: Request) {
 
     // Quota check
     const email = typeof body.email === "string" ? body.email.trim().slice(0, 200) : null;
+
+    // Layer 1: Block disposable emails
+    if (email && isDisposableEmail(email)) {
+      return Response.json(
+        { error: "Please use a work or personal email address. Disposable email addresses are not accepted." },
+        { status: 400 }
+      );
+    }
+
+    // Layer 2: Email verification token
+    const verificationToken = typeof body.verificationToken === "string" ? body.verificationToken : null;
+    if (!verificationToken) {
+      return Response.json({ error: "Email verification required" }, { status: 401 });
+    }
+    const verified = verifyVerificationToken(verificationToken);
+    if (!verified || verified.email !== email?.toLowerCase()) {
+      return Response.json(
+        { error: "Invalid or expired verification. Please verify your email again." },
+        { status: 401 }
+      );
+    }
+
+    // Layer 3: Email-based rate limiting
+    if (email && isEmailRateLimited(email)) {
+      return Response.json(
+        { error: "Too many requests from this email." },
+        { status: 429 }
+      );
+    }
+
     if (email) {
       const quota = await checkQuota(email, "research");
       if (!quota.allowed) {

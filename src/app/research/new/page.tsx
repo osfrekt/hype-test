@@ -120,6 +120,27 @@ function NewResearchForm() {
   const [userCompanySize, setUserCompanySize] = useState("");
   const [showExamples, setShowExamples] = useState<Set<string>>(new Set());
 
+  // Email verification state
+  const [verificationStep, setVerificationStep] = useState<"form" | "verifying" | "entering-code" | "verified">("form");
+  const [verificationCode, setVerificationCode] = useState("");
+  const [verificationToken, setVerificationToken] = useState("");
+  const [verificationError, setVerificationError] = useState("");
+
+  // Restore verification from session
+  useEffect(() => {
+    const stored = sessionStorage.getItem("hypetest-verification");
+    if (stored) {
+      try {
+        const { email: storedEmail, token } = JSON.parse(stored);
+        if (storedEmail && token) {
+          setVerificationToken(token);
+          setVerificationStep("verified");
+          if (!email) setEmail(storedEmail);
+        }
+      } catch { /* ignore */ }
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   // Track whether user has manually edited target/competitors
   const [targetTouched, setTargetTouched] = useState(false);
   const [competitorsTouched, setCompetitorsTouched] = useState(false);
@@ -255,10 +276,78 @@ function NewResearchForm() {
     }
   }
 
+  async function handleSendVerification() {
+    setVerificationStep("verifying");
+    setVerificationError("");
+    try {
+      const res = await fetch("/api/auth/verify-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim() }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setVerificationError(data.error || "Failed to send verification code");
+        setVerificationStep("form");
+        return;
+      }
+      setVerificationStep("entering-code");
+    } catch {
+      setVerificationError("Failed to send verification code. Please try again.");
+      setVerificationStep("form");
+    }
+  }
+
+  async function handleConfirmCode() {
+    setVerificationError("");
+    try {
+      const res = await fetch("/api/auth/confirm-code", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim(), code: verificationCode }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setVerificationError(data.error || "Invalid code");
+        return;
+      }
+      setVerificationToken(data.verificationToken);
+      setVerificationStep("verified");
+      // Persist to sessionStorage
+      sessionStorage.setItem("hypetest-verification", JSON.stringify({ email: email.trim(), token: data.verificationToken }));
+      // Auto-submit after verification
+      submitResearch(data.verificationToken);
+    } catch {
+      setVerificationError("Verification failed. Please try again.");
+    }
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!isFormValid) return;
 
+    // Check if already verified for this email
+    const storedVerification = sessionStorage.getItem("hypetest-verification");
+    let currentToken = verificationToken;
+    if (storedVerification) {
+      try {
+        const { email: storedEmail, token } = JSON.parse(storedVerification);
+        if (storedEmail === email.trim() && token) {
+          currentToken = token;
+        }
+      } catch { /* ignore */ }
+    }
+
+    if (verificationStep !== "verified" || !currentToken) {
+      // Need verification first
+      handleSendVerification();
+      return;
+    }
+
+    submitResearch(currentToken);
+  }
+
+  async function submitResearch(token: string) {
     setIsRunning(true);
     setError("");
     setProgress(5);
@@ -304,6 +393,7 @@ function NewResearchForm() {
       if (utmMedium) payload.utmMedium = utmMedium;
       if (utmCampaign) payload.utmCampaign = utmCampaign;
       if (referrer) payload.referrer = referrer;
+      payload.verificationToken = token;
 
       const response = await fetch("/api/research", {
         method: "POST",
@@ -726,12 +816,57 @@ function NewResearchForm() {
                   Do not submit trade secrets or confidential information.
                 </p>
 
+                {verificationStep === "verifying" && (
+                  <div className="bg-teal/5 border border-teal/20 rounded-xl p-4 text-center">
+                    <p className="text-sm text-muted-foreground">Sending verification code...</p>
+                  </div>
+                )}
+
+                {verificationStep === "entering-code" && (
+                  <div className="bg-teal/5 border border-teal/20 rounded-xl p-4 space-y-3">
+                    <p className="text-sm font-medium text-primary">Verify your email</p>
+                    <p className="text-xs text-muted-foreground">
+                      We sent a 6-digit code to {email}. Enter it below to continue.
+                    </p>
+                    <Input
+                      placeholder="123456"
+                      value={verificationCode}
+                      onChange={(e) => setVerificationCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                      maxLength={6}
+                      className="text-center text-lg tracking-widest font-mono"
+                    />
+                    {verificationError && (
+                      <p className="text-xs text-destructive">{verificationError}</p>
+                    )}
+                    <Button
+                      type="button"
+                      onClick={handleConfirmCode}
+                      disabled={verificationCode.length !== 6}
+                      className="w-full"
+                    >
+                      Verify and run research
+                    </Button>
+                  </div>
+                )}
+
+                {verificationStep === "verified" && (
+                  <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl px-4 py-2.5">
+                    <p className="text-xs text-emerald-700 font-medium">Email verified</p>
+                  </div>
+                )}
+
+                {verificationError && verificationStep === "form" && (
+                  <div className="bg-destructive/10 text-destructive text-sm rounded-lg p-3">
+                    {verificationError}
+                  </div>
+                )}
+
                 <Button
                   type="submit"
                   className="w-full bg-primary hover:bg-primary/90 text-primary-foreground h-11"
-                  disabled={!isFormValid}
+                  disabled={!isFormValid || verificationStep === "verifying" || verificationStep === "entering-code"}
                 >
-                  Run Research (Free)
+                  {verificationStep === "verified" ? "Run Research (Free)" : "Verify Email & Run Research"}
                 </Button>
 
                 <p className="text-xs text-muted-foreground text-center">
