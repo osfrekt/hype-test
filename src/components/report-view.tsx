@@ -316,8 +316,10 @@ export function ReportView({
 }
 
 function WtpCard({ result }: { result: ResearchResult }) {
-  const unit = result.input?.priceUnit || "";
-  const unitLabel = unit ? `/${unit.replace("per ", "")}` : "";
+  const rawUnit = result.input?.priceUnit || "";
+  // Extract just the unit type from free-text pricing (e.g. "$39.99 per tub" -> "/tub")
+  const unitMatch = rawUnit.match(/per\s+(\w+)/i);
+  const unitLabel = unitMatch ? `/${unitMatch[1]}` : "";
   const mid = result.wtpRange?.mid ?? 0;
 
   // Determine user's actual price (midpoint of their price range)
@@ -378,7 +380,7 @@ function WtpCard({ result }: { result: ResearchResult }) {
           </p>
         )}
         <p className="text-xs text-muted-foreground mt-1">
-          range: ${result.wtpRange?.low ?? 0} — ${result.wtpRange?.high ?? 0}
+          range: ${result.wtpRange?.low ?? 0} - ${result.wtpRange?.high ?? 0}
           {unitLabel}
         </p>
         {perServing && (
