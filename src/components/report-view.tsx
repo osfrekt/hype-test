@@ -65,7 +65,7 @@ export function ReportView({
             <p className="text-xs font-medium uppercase tracking-wider mb-1 text-primary-foreground/60">
               Purchase Intent
             </p>
-            <p className="text-4xl font-extrabold tracking-tight">
+            <p className="text-4xl font-bold tracking-tight">
               {score}%
             </p>
             <p className="text-xs text-primary-foreground/50 mt-1.5">

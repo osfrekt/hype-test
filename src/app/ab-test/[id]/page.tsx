@@ -329,7 +329,7 @@ function ConceptCard({ label, concept, isWinner }: { label: string; concept: AbT
         {/* Purchase Intent */}
         <div>
           <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-1">Purchase Intent</p>
-          <p className="text-3xl font-extrabold text-primary">{concept.purchaseIntent.score}%</p>
+          <p className="text-3xl font-bold text-primary">{concept.purchaseIntent.score}%</p>
         </div>
 
         {/* WTP */}

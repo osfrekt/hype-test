@@ -85,12 +85,12 @@ export function SampleReport() {
         <div className="grid grid-cols-2 gap-4 mb-5">
           <div>
             <SourceBadge variant="traditional" />
-            <p className="text-3xl sm:text-4xl font-extrabold text-primary tracking-tight mt-1">64%</p>
+            <p className="text-3xl sm:text-4xl font-bold text-primary tracking-tight mt-1">64%</p>
             <p className="text-[11px] text-muted-foreground">~1,000 surveyed consumers</p>
           </div>
           <div>
             <SourceBadge variant="hypetest" />
-            <p className="text-3xl sm:text-4xl font-extrabold text-teal tracking-tight mt-1">61%</p>
+            <p className="text-3xl sm:text-4xl font-bold text-teal tracking-tight mt-1">61%</p>
             <p className="text-[11px] text-muted-foreground">50 simulated consumers</p>
           </div>
         </div>
@@ -132,12 +132,12 @@ export function SampleReport() {
         <div className="grid grid-cols-2 gap-4 mb-5">
           <div>
             <SourceBadge variant="traditional" />
-            <p className="text-2xl sm:text-3xl font-extrabold text-primary tracking-tight mt-1">$2.89</p>
+            <p className="text-2xl sm:text-3xl font-bold text-primary tracking-tight mt-1">$2.89</p>
             <p className="text-[11px] text-muted-foreground">avg per can</p>
           </div>
           <div>
             <SourceBadge variant="hypetest" />
-            <p className="text-2xl sm:text-3xl font-extrabold text-teal tracking-tight mt-1">$2.75</p>
+            <p className="text-2xl sm:text-3xl font-bold text-teal tracking-tight mt-1">$2.75</p>
             <p className="text-[11px] text-muted-foreground">avg per can</p>
           </div>
         </div>

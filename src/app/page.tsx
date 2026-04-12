@@ -45,7 +45,7 @@ export default function Home() {
         </section>
 
         {/* Social proof + accuracy */}
-        <section className="py-12 border-y border-border/50 bg-card">
+        <section className="py-14 border-y border-border/50 bg-card">
           <div className="max-w-6xl mx-auto px-6">
             {/* Stat + R-squared visual */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center mb-10">
@@ -362,15 +362,15 @@ export default function Home() {
               <div className="bg-card rounded-2xl border border-border p-6 sm:p-8 max-w-3xl mx-auto">
                 <div className="grid grid-cols-3 gap-4 mb-6">
                   <div className="text-center">
-                    <p className="text-2xl font-extrabold text-primary">68%</p>
+                    <p className="text-2xl font-bold text-primary">68%</p>
                     <p className="text-xs text-muted-foreground">Purchase Intent</p>
                   </div>
                   <div className="text-center">
-                    <p className="text-2xl font-extrabold text-primary">$2.50</p>
+                    <p className="text-2xl font-bold text-primary">$2.50</p>
                     <p className="text-xs text-muted-foreground">Estimated WTP</p>
                   </div>
                   <div className="text-center">
-                    <p className="text-2xl font-extrabold text-emerald-600">GO</p>
+                    <p className="text-2xl font-bold text-emerald-600">GO</p>
                     <p className="text-xs text-muted-foreground">Verdict</p>
                   </div>
                 </div>
