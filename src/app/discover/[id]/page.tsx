@@ -727,10 +727,10 @@ function DiscoverResultContent({
           {/* Run Another Round */}
           <div className="mt-8 mb-8" data-print-hide>
             {isRunningRound ? (
-              <Card className="border-amber-200 bg-amber-50/50">
+              <Card className="border-amber-200 dark:border-amber-800/40 bg-amber-50/50 dark:bg-amber-950/20">
                 <CardContent className="pt-6 pb-6">
                   <div className="text-center">
-                    <div className="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center mx-auto mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-amber-100 dark:bg-amber-900/40 flex items-center justify-center mx-auto mb-4">
                       <svg
                         className="animate-spin text-amber-600"
                         width="24"
