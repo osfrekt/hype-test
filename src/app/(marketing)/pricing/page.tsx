@@ -14,16 +14,7 @@ const plans = [
     name: "Free",
     price: "$0",
     period: "",
-    description: "Try HypeTest with basic research",
-    features: [
-      "3 research runs per month",
-      "50 simulated respondents per run",
-      "Purchase intent score",
-      "WTP range estimate",
-      "Feature importance ranking",
-      "Consumer verbatims",
-      "Competitive positioning",
-    ],
+    description: "Get started with core research",
     cta: "Start free",
     href: "/research/new",
     highlight: false,
@@ -33,14 +24,7 @@ const plans = [
     name: "Starter",
     price: "$49",
     period: "/mo",
-    description: "More research runs + discovery",
-    features: [
-      "15 research runs per month",
-      "3 discovery rounds per month",
-      "Everything in Free",
-      "Priority processing",
-      "Email support",
-    ],
+    description: "More runs + advanced tools",
     cta: "Get Starter",
     href: null,
     highlight: false,
@@ -50,14 +34,7 @@ const plans = [
     name: "Pro",
     price: "$149",
     period: "/mo",
-    description: "Unlimited research and discovery",
-    features: [
-      "Unlimited research runs",
-      "Unlimited discovery rounds",
-      "Everything in Starter",
-      "Advanced consumer filtering",
-      "Priority support",
-    ],
+    description: "Unlimited everything",
     cta: "Get Pro",
     href: null,
     highlight: true,
@@ -68,19 +45,89 @@ const plans = [
     price: "$349",
     period: "/mo",
     description: "For teams building together",
-    features: [
-      "Everything in Pro",
-      "5 team seats",
-      "Shared research library",
-      "Team collaboration",
-      "Dedicated support",
-    ],
     cta: "Join waitlist",
     href: null,
-    highlight: false,
     isWaitlist: true,
+    highlight: false,
   },
 ];
+
+type FeatureRow = {
+  name: string;
+  free: string | boolean;
+  starter: string | boolean;
+  pro: string | boolean;
+  team: string | boolean;
+};
+
+const featureCategories: { category: string; features: FeatureRow[] }[] = [
+  {
+    category: "Consumer Research",
+    features: [
+      { name: "Research runs per month", free: "3", starter: "15", pro: "Unlimited", team: "Unlimited" },
+      { name: "Simulated panellists per run", free: "50", starter: "50", pro: "50", team: "50" },
+      { name: "Purchase intent scoring", free: true, starter: true, pro: true, team: true },
+      { name: "WTP range estimation", free: true, starter: true, pro: true, team: true },
+      { name: "Feature importance ranking", free: true, starter: true, pro: true, team: true },
+      { name: "Consumer concerns and positives", free: true, starter: true, pro: true, team: true },
+      { name: "Consumer verbatims", free: true, starter: true, pro: true, team: true },
+      { name: "Go/No-Go scorecard", free: true, starter: true, pro: true, team: true },
+      { name: "Demographic segment breakdown", free: true, starter: true, pro: true, team: true },
+    ],
+  },
+  {
+    category: "Testing Tools",
+    features: [
+      { name: "A/B concept testing", free: false, starter: true, pro: true, team: true },
+      { name: "Name testing (3-5 options)", free: false, starter: true, pro: true, team: true },
+      { name: "Pricing optimizer (demand curve)", free: false, starter: true, pro: true, team: true },
+      { name: "Audience finder (5 segments)", free: false, starter: true, pro: true, team: true },
+      { name: "Competitive teardown (radar chart)", free: false, starter: true, pro: true, team: true },
+    ],
+  },
+  {
+    category: "Product Discovery",
+    features: [
+      { name: "Discovery rounds per month", free: false, starter: "3", pro: "Unlimited", team: "Unlimited" },
+      { name: "AI concept generation", free: false, starter: true, pro: true, team: true },
+      { name: "Iterative refinement rounds", free: false, starter: true, pro: true, team: true },
+      { name: "Brand auto-fill (URL + search)", free: false, starter: true, pro: true, team: true },
+    ],
+  },
+  {
+    category: "Insights and Delivery",
+    features: [
+      { name: "Shareable report links", free: true, starter: true, pro: true, team: true },
+      { name: "PDF export", free: true, starter: true, pro: true, team: true },
+      { name: "Email report delivery", free: true, starter: true, pro: true, team: true },
+      { name: "Performance tracking over time", free: false, starter: true, pro: true, team: true },
+      { name: "Slack notifications", free: false, starter: true, pro: true, team: true },
+    ],
+  },
+  {
+    category: "Support",
+    features: [
+      { name: "Community support", free: true, starter: true, pro: true, team: true },
+      { name: "Email support", free: false, starter: true, pro: true, team: true },
+      { name: "Priority support", free: false, starter: false, pro: true, team: true },
+      { name: "Dedicated support", free: false, starter: false, pro: false, team: true },
+      { name: "Team seats", free: "1", starter: "1", pro: "1", team: "5" },
+      { name: "Shared research library", free: false, starter: false, pro: false, team: true },
+    ],
+  },
+];
+
+function CheckIcon() {
+  return (
+    <svg className="w-4 h-4 text-teal mx-auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="20 6 9 17 4 12" />
+    </svg>
+  );
+}
+
+function DashIcon() {
+  return <span className="block w-4 h-0.5 bg-muted-foreground/20 mx-auto rounded" />;
+}
 
 export default function PricingPage() {
   const [checkoutEmail, setCheckoutEmail] = useState("");
@@ -94,7 +141,6 @@ export default function PricingPage() {
   async function handleCheckout(e: React.FormEvent) {
     e.preventDefault();
     if (!checkoutEmail.trim() || !checkoutPlan) return;
-
     setCheckoutLoading(true);
     setCheckoutError("");
     try {
@@ -119,7 +165,6 @@ export default function PricingPage() {
   async function handleWaitlist(e: React.FormEvent) {
     e.preventDefault();
     if (!waitlistEmail.trim()) return;
-
     setWaitlistStatus("loading");
     try {
       const res = await fetch("/api/waitlist", {
@@ -146,7 +191,8 @@ export default function PricingPage() {
     <>
       <Nav />
       <main className="flex-1 py-12">
-        <div className="max-w-5xl mx-auto px-6">
+        <div className="max-w-6xl mx-auto px-6">
+          {/* Header */}
           <div className="text-center mb-12">
             <h1 className="text-3xl md:text-4xl font-bold text-primary mb-3">
               Simple, transparent pricing
@@ -156,7 +202,8 @@ export default function PricingPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
+          {/* Plan cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-16">
             {plans.map((plan) => (
               <Card
                 key={plan.id}
@@ -181,26 +228,7 @@ export default function PricingPage() {
                   </div>
                   <p className="text-xs text-muted-foreground mt-1">{plan.description}</p>
                 </CardHeader>
-                <CardContent className="flex-1 flex flex-col">
-                  <ul className="space-y-2 flex-1 mb-4">
-                    {plan.features.map((feature) => (
-                      <li key={feature} className="flex items-start gap-2 text-sm text-muted-foreground">
-                        <svg
-                          className="w-4 h-4 text-teal mt-0.5 shrink-0"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <polyline points="20 6 9 17 4 12" />
-                        </svg>
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-
+                <CardContent className="flex-1 flex flex-col justify-end">
                   {plan.href ? (
                     <Link
                       href={plan.href}
@@ -229,13 +257,10 @@ export default function PricingPage() {
                       onClick={() => {
                         setCheckoutPlan(plan.id);
                         setCheckoutError("");
-                        // Try to pre-fill from sessionStorage
                         try {
                           const stored = sessionStorage.getItem("ht-email");
                           if (stored) setCheckoutEmail(stored);
-                        } catch {
-                          // ignore
-                        }
+                        } catch { /* ignore */ }
                       }}
                     >
                       {plan.cta}
@@ -244,6 +269,143 @@ export default function PricingPage() {
                 </CardContent>
               </Card>
             ))}
+          </div>
+
+          {/* Feature comparison table */}
+          <div className="mb-16">
+            <h2 className="text-2xl font-bold text-primary text-center mb-2">
+              Compare features
+            </h2>
+            <p className="text-muted-foreground text-center mb-8">
+              Everything you get with each plan, at a glance.
+            </p>
+
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                {/* Sticky header */}
+                <thead>
+                  <tr className="border-b border-border">
+                    <th className="text-left py-3 px-3 font-medium text-muted-foreground w-[40%]" />
+                    {plans.map((p) => (
+                      <th key={p.id} className="text-center py-3 px-2 font-bold text-primary min-w-[100px]">
+                        {p.name}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {featureCategories.map((cat) => (
+                    <>
+                      {/* Category header */}
+                      <tr key={cat.category}>
+                        <td
+                          colSpan={5}
+                          className="pt-6 pb-2 px-3 text-xs font-bold text-primary uppercase tracking-wider"
+                        >
+                          {cat.category}
+                        </td>
+                      </tr>
+                      {/* Feature rows */}
+                      {cat.features.map((feat) => (
+                        <tr key={feat.name} className="border-b border-border/50 hover:bg-muted/30 transition-colors">
+                          <td className="py-2.5 px-3 text-muted-foreground">{feat.name}</td>
+                          {(["free", "starter", "pro", "team"] as const).map((planId) => {
+                            const val = feat[planId];
+                            return (
+                              <td key={planId} className="py-2.5 px-2 text-center">
+                                {val === true ? (
+                                  <CheckIcon />
+                                ) : val === false ? (
+                                  <DashIcon />
+                                ) : (
+                                  <span className="text-xs font-semibold text-primary">{val}</span>
+                                )}
+                              </td>
+                            );
+                          })}
+                        </tr>
+                      ))}
+                    </>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Tools showcase */}
+          <div className="mb-16">
+            <h2 className="text-2xl font-bold text-primary text-center mb-2">
+              Your complete research toolkit
+            </h2>
+            <p className="text-muted-foreground text-center max-w-2xl mx-auto mb-8">
+              Every tool you need to validate products, pricing, names, audiences, and competitive positioning.
+            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <ToolCard
+                title="Consumer Research"
+                description="Test any product concept with a 50-person AI panel. Get purchase intent, WTP, feature importance, concerns, and a Go/No-Go verdict."
+                href="/research/new"
+                badge="Free"
+                badgeColor="bg-emerald-100 text-emerald-800"
+              />
+              <ToolCard
+                title="Product Discovery"
+                description="Enter your brand and audience. AI generates product concepts and tests them with consumers. Keep iterating until you find a winner."
+                href="/discover/new"
+                badge="Starter+"
+                badgeColor="bg-teal/10 text-teal-dark"
+              />
+              <ToolCard
+                title="A/B Concept Testing"
+                description="Test two product concepts head-to-head against the same panel. Clear winner with side-by-side metrics."
+                href="/ab-test/new"
+                badge="Starter+"
+                badgeColor="bg-teal/10 text-teal-dark"
+              />
+              <ToolCard
+                title="Name Testing"
+                description="Test 3-5 product name options for the same concept. Ranked by consumer appeal with first impressions."
+                href="/name-test/new"
+                badge="Starter+"
+                badgeColor="bg-teal/10 text-teal-dark"
+              />
+              <ToolCard
+                title="Pricing Optimizer"
+                description="Test 5 price points and see the demand curve. Find the revenue-maximizing price with a visual chart."
+                href="/pricing-test/new"
+                badge="Starter+"
+                badgeColor="bg-teal/10 text-teal-dark"
+              />
+              <ToolCard
+                title="Audience Finder"
+                description="Test your product across 5 audience segments. Find which demographic has the highest purchase intent."
+                href="/audience-test/new"
+                badge="Starter+"
+                badgeColor="bg-teal/10 text-teal-dark"
+              />
+              <ToolCard
+                title="Competitive Teardown"
+                description="Compare your product vs a competitor with a radar chart across 5 dimensions. See exactly where you win and lose."
+                href="/competitive/new"
+                badge="Starter+"
+                badgeColor="bg-teal/10 text-teal-dark"
+              />
+              <ToolCard
+                title="Segment Breakdown"
+                description="See research results broken down by age, gender, and income. Automatically included in every research run."
+                href="/research/new"
+                badge="Free"
+                badgeColor="bg-emerald-100 text-emerald-800"
+              />
+              <ToolCard
+                title="Slack Integration"
+                description="Connect a Slack webhook and get research summaries posted to your channel automatically."
+                href="/account"
+                badge="Starter+"
+                badgeColor="bg-teal/10 text-teal-dark"
+              />
+            </div>
           </div>
 
           {/* Checkout email modal */}
@@ -303,9 +465,6 @@ export default function PricingPage() {
             <Card className="bg-muted/30">
               <CardContent className="py-8">
                 <div className="text-center max-w-lg mx-auto">
-                  <div className="w-12 h-12 rounded-2xl bg-primary/5 flex items-center justify-center mx-auto mb-4">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary"><path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" /></svg>
-                  </div>
                   <h3 className="text-lg font-bold text-primary mb-2">
                     Team plan coming soon
                   </h3>
@@ -319,10 +478,7 @@ export default function PricingPage() {
                       {waitlistMessage}
                     </p>
                   ) : (
-                    <form
-                      onSubmit={handleWaitlist}
-                      className="flex gap-2 max-w-sm mx-auto"
-                    >
+                    <form onSubmit={handleWaitlist} className="flex gap-2 max-w-sm mx-auto">
                       <Input
                         type="email"
                         placeholder="you@company.com"
@@ -343,14 +499,12 @@ export default function PricingPage() {
 
                   {waitlistStatus !== "success" && (
                     <p className="text-xs text-muted-foreground mt-2">
-                      By joining, you agree to our <Link href="/privacy">Privacy Policy</Link>.
+                      By joining, you agree to our <Link href="/privacy" className="text-teal underline">Privacy Policy</Link>.
                     </p>
                   )}
 
                   {waitlistStatus === "error" && (
-                    <p className="text-sm text-destructive mt-2">
-                      {waitlistMessage}
-                    </p>
+                    <p className="text-sm text-destructive mt-2">{waitlistMessage}</p>
                   )}
                 </div>
               </CardContent>
@@ -362,12 +516,38 @@ export default function PricingPage() {
               Need enterprise features? Custom model fine-tuning? SSO?
             </p>
             <p className="text-sm font-medium text-primary">
-              Contact us for custom pricing.
+              Contact us at <a href="mailto:support@hypetest.ai" className="underline">support@hypetest.ai</a>
             </p>
           </div>
         </div>
       </main>
       <Footer />
     </>
+  );
+}
+
+function ToolCard({
+  title,
+  description,
+  href,
+  badge,
+  badgeColor,
+}: {
+  title: string;
+  description: string;
+  href: string;
+  badge: string;
+  badgeColor: string;
+}) {
+  return (
+    <Link href={href} className="block">
+      <div className="bg-card rounded-2xl border border-border/50 p-5 h-full hover:border-teal/30 hover:shadow-sm transition-all group">
+        <div className="flex items-center justify-between mb-2">
+          <h3 className="text-sm font-bold text-primary group-hover:text-teal transition-colors">{title}</h3>
+          <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${badgeColor}`}>{badge}</span>
+        </div>
+        <p className="text-xs text-muted-foreground leading-relaxed">{description}</p>
+      </div>
+    </Link>
   );
 }

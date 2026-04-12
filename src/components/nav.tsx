@@ -63,27 +63,26 @@ export function Nav() {
           >
             Methodology
           </Link>
-          <Link
-            href="/discover/new"
-            className="hover:text-foreground transition-colors"
-          >
-            Discover
-            <span className="text-[10px] bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400 px-1.5 py-0.5 rounded-full font-medium ml-1">
-              Pro
-            </span>
-          </Link>
-          <Link
-            href="/ab-test/new"
-            className="hover:text-foreground transition-colors"
-          >
-            A/B Test
-          </Link>
-          <Link
-            href="/name-test/new"
-            className="hover:text-foreground transition-colors"
-          >
-            Name Test
-          </Link>
+          <div className="relative group">
+            <button className="hover:text-foreground transition-colors flex items-center gap-1">
+              Tools
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6" /></svg>
+            </button>
+            <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 hidden group-hover:block z-50">
+              <div className="bg-card border border-border rounded-xl shadow-lg p-2 w-56">
+                <Link href="/research/new" className="block px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">Consumer Research</Link>
+                <Link href="/discover/new" className="block px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">
+                  Product Discovery
+                  <span className="text-[10px] bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400 px-1.5 py-0.5 rounded-full font-medium ml-1.5">Pro</span>
+                </Link>
+                <Link href="/ab-test/new" className="block px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">A/B Concept Testing</Link>
+                <Link href="/name-test/new" className="block px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">Name Testing</Link>
+                <Link href="/pricing-test/new" className="block px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">Pricing Optimizer</Link>
+                <Link href="/audience-test/new" className="block px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">Audience Finder</Link>
+                <Link href="/competitive/new" className="block px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">Competitive Teardown</Link>
+              </div>
+            </div>
+          </div>
           <Link
             href="/pricing"
             className="hover:text-foreground transition-colors"

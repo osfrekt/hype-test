@@ -406,6 +406,74 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Research toolkit */}
+        <section className="py-14 bg-card">
+          <div className="max-w-5xl mx-auto px-6">
+            <h2 className="font-bold text-primary text-center mb-2" style={{ fontSize: 'clamp(1.5rem, 1rem + 1.5vw, 1.875rem)' }}>
+              Your complete research toolkit
+            </h2>
+            <p className="text-muted-foreground text-center max-w-2xl mx-auto mb-10">
+              Seven specialized tools for every stage of product development.
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <Link href="/research/new" className="block bg-background rounded-2xl border border-border/50 p-5 hover:border-teal/30 hover:shadow-sm transition-all group">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-sm font-bold text-primary group-hover:text-teal transition-colors">Consumer Research</h3>
+                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">Free</span>
+                </div>
+                <p className="text-xs text-muted-foreground leading-relaxed">50-person AI panel with purchase intent, WTP, feature ranking, concerns, and a Go/No-Go verdict.</p>
+              </Link>
+              <Link href="/discover/new" className="block bg-background rounded-2xl border border-border/50 p-5 hover:border-teal/30 hover:shadow-sm transition-all group">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-sm font-bold text-primary group-hover:text-teal transition-colors">Product Discovery</h3>
+                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-teal/10 text-teal-dark">Starter+</span>
+                </div>
+                <p className="text-xs text-muted-foreground leading-relaxed">AI generates product concepts for your brand and tests them. Keep iterating until you find a winner.</p>
+              </Link>
+              <Link href="/ab-test/new" className="block bg-background rounded-2xl border border-border/50 p-5 hover:border-teal/30 hover:shadow-sm transition-all group">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-sm font-bold text-primary group-hover:text-teal transition-colors">A/B Concept Testing</h3>
+                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-teal/10 text-teal-dark">Starter+</span>
+                </div>
+                <p className="text-xs text-muted-foreground leading-relaxed">Test two product concepts head-to-head against the same panel. Clear winner with side-by-side metrics.</p>
+              </Link>
+              <Link href="/pricing-test/new" className="block bg-background rounded-2xl border border-border/50 p-5 hover:border-teal/30 hover:shadow-sm transition-all group">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-sm font-bold text-primary group-hover:text-teal transition-colors">Pricing Optimizer</h3>
+                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-teal/10 text-teal-dark">Starter+</span>
+                </div>
+                <p className="text-xs text-muted-foreground leading-relaxed">Test 5 price points and see the demand curve. Find the revenue-maximizing price for your product.</p>
+              </Link>
+              <Link href="/name-test/new" className="block bg-background rounded-2xl border border-border/50 p-5 hover:border-teal/30 hover:shadow-sm transition-all group">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-sm font-bold text-primary group-hover:text-teal transition-colors">Name Testing</h3>
+                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-teal/10 text-teal-dark">Starter+</span>
+                </div>
+                <p className="text-xs text-muted-foreground leading-relaxed">Test 3-5 product name options. Ranked by consumer appeal with first impressions.</p>
+              </Link>
+              <Link href="/audience-test/new" className="block bg-background rounded-2xl border border-border/50 p-5 hover:border-teal/30 hover:shadow-sm transition-all group">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-sm font-bold text-primary group-hover:text-teal transition-colors">Audience Finder</h3>
+                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-teal/10 text-teal-dark">Starter+</span>
+                </div>
+                <p className="text-xs text-muted-foreground leading-relaxed">Test your product across 5 audience segments. Find which demographic has the highest intent.</p>
+              </Link>
+              <Link href="/competitive/new" className="block bg-background rounded-2xl border border-border/50 p-5 hover:border-teal/30 hover:shadow-sm transition-all group sm:col-span-2 lg:col-span-1">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-sm font-bold text-primary group-hover:text-teal transition-colors">Competitive Teardown</h3>
+                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-teal/10 text-teal-dark">Starter+</span>
+                </div>
+                <p className="text-xs text-muted-foreground leading-relaxed">Compare your product vs a competitor with a radar chart across 5 dimensions.</p>
+              </Link>
+            </div>
+            <div className="text-center mt-8">
+              <Link href="/pricing" className="text-sm font-medium text-teal hover:underline">
+                See all features and pricing &rarr;
+              </Link>
+            </div>
+          </div>
+        </section>
+
         {/* CTA */}
         <section className="py-14">
           <div className="max-w-3xl mx-auto px-6 text-center">
