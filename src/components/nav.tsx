@@ -52,7 +52,7 @@ export function Nav() {
   return (
     <header className="border-b border-border/50 bg-card/80 backdrop-blur-sm sticky top-0 z-50">
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-        <Link href={authChecked && authUser ? "/dashboard" : "/"} className="flex items-center gap-2">
+        <Link href="/" className="flex items-center gap-2">
           <svg
               className="w-8 h-8 text-foreground"
               viewBox="0 0 200 200"
