@@ -37,7 +37,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const body: ResearchInput & { email?: string; userName?: string; userCompany?: string; userRole?: string; userCompanySize?: string; utmSource?: string; utmMedium?: string; utmCampaign?: string; referrer?: string; verificationToken?: string } = await request.json();
+    const body: ResearchInput & { email?: string; userName?: string; userCompany?: string; userRole?: string; userCompanySize?: string; utmSource?: string; utmMedium?: string; utmCampaign?: string; referrer?: string; verificationToken?: string; isPrivate?: boolean } = await request.json();
 
     // Input validation and sanitization
     const productName = body.productName?.trim().slice(0, MAX_NAME_LENGTH);
@@ -144,9 +144,10 @@ export async function POST(request: Request) {
     const utmMedium = typeof body.utmMedium === "string" ? body.utmMedium.slice(0, 200) : null;
     const utmCampaign = typeof body.utmCampaign === "string" ? body.utmCampaign.slice(0, 200) : null;
     const referrerUrl = typeof body.referrer === "string" ? body.referrer.slice(0, 500) : null;
+    const isPrivate = body.isPrivate === true;
 
     // Persist to Supabase (non-blocking — don't fail the response if DB write fails)
-    persistResult(result, { email, userName, userCompany, userRole, userCompanySize, utmSource, utmMedium, utmCampaign, referrer: referrerUrl }).catch((err) =>
+    persistResult(result, { email, userName, userCompany, userRole, userCompanySize, utmSource, utmMedium, utmCampaign, referrer: referrerUrl, isPrivate }).catch((err) =>
       console.error("Failed to persist research result:", err)
     );
 
@@ -191,6 +192,7 @@ interface UserInfo {
   utmMedium: string | null;
   utmCampaign: string | null;
   referrer: string | null;
+  isPrivate: boolean;
 }
 
 async function notifySlack(email: string, productName: string, result: ResearchResult) {
@@ -259,6 +261,7 @@ async function persistResult(result: ResearchResult, user: UserInfo) {
     referrer: user.referrer,
     status: result.status,
     created_at: result.createdAt,
+    is_private: user.isPrivate,
   });
   if (error) throw error;
 }

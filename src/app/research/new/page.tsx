@@ -127,6 +127,7 @@ function NewResearchForm() {
   const [verificationToken, setVerificationToken] = useState("");
   const [verificationError, setVerificationError] = useState("");
   const [isAuthUser, setIsAuthUser] = useState(false);
+  const [isPrivate, setIsPrivate] = useState(false);
 
   // Check Supabase Auth - if logged in, pre-fill and skip verification
   useEffect(() => {
@@ -427,6 +428,7 @@ function NewResearchForm() {
       if (utmCampaign) payload.utmCampaign = utmCampaign;
       if (referrer) payload.referrer = referrer;
       payload.verificationToken = token;
+      if (isPrivate) payload.isPrivate = true;
 
       const response = await fetch("/api/research", {
         method: "POST",
@@ -826,6 +828,11 @@ function NewResearchForm() {
                     {error}
                   </div>
                 )}
+
+                <label className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <input type="checkbox" checked={isPrivate} onChange={(e) => setIsPrivate(e.target.checked)} className="rounded" />
+                  Make results private (only accessible when logged in)
+                </label>
 
                 <p className="text-xs text-muted-foreground">
                   By running research, you agree to our{" "}

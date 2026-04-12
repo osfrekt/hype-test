@@ -92,7 +92,35 @@ export default function TermsPage() {
 
           <section className="space-y-4 mb-10">
             <h2 className="text-xl font-bold text-primary">
-              5. Intellectual Property
+              5. Billing and Cancellation
+            </h2>
+            <p className="text-muted-foreground leading-relaxed">
+              You may cancel your subscription at any time through the customer
+              portal accessible from your account page, or by contacting{" "}
+              <a
+                href="mailto:support@hypetest.ai"
+                className="text-primary underline"
+              >
+                support@hypetest.ai
+              </a>
+              . Cancellation takes effect at the end of your current billing
+              period. No prorated refunds are provided for partial billing
+              periods. Upon cancellation, your account reverts to the Free plan
+              and your existing research data remains accessible via existing
+              links. If you believe you were charged in error, contact{" "}
+              <a
+                href="mailto:support@hypetest.ai"
+                className="text-primary underline"
+              >
+                support@hypetest.ai
+              </a>{" "}
+              within 30 days for review.
+            </p>
+          </section>
+
+          <section className="space-y-4 mb-10">
+            <h2 className="text-xl font-bold text-primary">
+              6. Intellectual Property
             </h2>
             <p className="text-muted-foreground leading-relaxed">
               You retain full ownership of your input data, including product
@@ -109,7 +137,7 @@ export default function TermsPage() {
 
           <section className="space-y-4 mb-10">
             <h2 className="text-xl font-bold text-primary">
-              6. Data Handling and Public Accessibility
+              7. Data Handling and Public Accessibility
             </h2>
             <p className="text-muted-foreground leading-relaxed">
               Research inputs and results are stored in our database.{" "}
@@ -134,7 +162,7 @@ export default function TermsPage() {
 
           <section className="space-y-4 mb-10">
             <h2 className="text-xl font-bold text-primary">
-              7. Acceptable Use
+              8. Acceptable Use
             </h2>
             <p className="text-muted-foreground leading-relaxed">
               You agree to the following when using the Service:
@@ -179,7 +207,7 @@ export default function TermsPage() {
 
           <section className="space-y-4 mb-10">
             <h2 className="text-xl font-bold text-primary">
-              8. Indemnification
+              9. Indemnification
             </h2>
             <p className="text-muted-foreground leading-relaxed">
               You agree to indemnify and hold harmless Rekt Brands Inc., its
@@ -194,7 +222,7 @@ export default function TermsPage() {
 
           <section className="space-y-4 mb-10">
             <h2 className="text-xl font-bold text-primary">
-              9. Third-Party References
+              10. Third-Party References
             </h2>
             <p className="text-muted-foreground leading-relaxed">
               The Service and its website may reference academic research,
@@ -209,7 +237,7 @@ export default function TermsPage() {
 
           <section className="space-y-4 mb-10">
             <h2 className="text-xl font-bold text-primary">
-              10. Modifications
+              11. Modifications
             </h2>
             <p className="text-muted-foreground leading-relaxed">
               HypeTest reserves the right to modify, suspend, or discontinue the
@@ -222,7 +250,7 @@ export default function TermsPage() {
 
           <section className="space-y-4 mb-10">
             <h2 className="text-xl font-bold text-primary">
-              11. Dispute Resolution
+              12. Dispute Resolution
             </h2>
             <p className="text-muted-foreground leading-relaxed">
               Any dispute arising from these Terms or your use of the Service
@@ -238,7 +266,7 @@ export default function TermsPage() {
 
           <section className="space-y-4 mb-10">
             <h2 className="text-xl font-bold text-primary">
-              12. Trademarks and Third-Party Content
+              13. Trademarks and Third-Party Content
             </h2>
             <p className="text-muted-foreground leading-relaxed">
               All brand names, product names, and trademarks mentioned on this
@@ -256,7 +284,7 @@ export default function TermsPage() {
 
           <section className="space-y-4">
             <h2 className="text-xl font-bold text-primary">
-              13. Contact
+              14. Contact
             </h2>
             <p className="text-muted-foreground leading-relaxed">
               If you have questions about these Terms of Service, please contact

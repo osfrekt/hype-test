@@ -14,8 +14,8 @@ export default function MethodologyPage() {
           </h1>
           <p className="text-lg text-muted-foreground leading-relaxed mb-8">
             HypeTest isn&apos;t asking an AI for its opinion on your product.
-            It&apos;s running structured survey methodology through hundreds of
-            demographically-specific simulated consumers to produce statistically
+            It&apos;s running structured survey methodology through 50 to 100
+            demographically-diverse simulated consumers to produce statistically
             aggregable results.
           </p>
 

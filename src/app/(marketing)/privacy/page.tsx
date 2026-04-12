@@ -91,6 +91,13 @@ export default function PrivacyPage() {
             <p className="text-muted-foreground leading-relaxed">
               We do not sell your personal data to third parties.
             </p>
+            <p className="text-muted-foreground leading-relaxed">
+              Our legal basis for processing personal data under GDPR:
+              contractual necessity for generating and delivering research
+              results you request, legitimate interest for service improvement
+              and usage analytics, and consent for marketing communications and
+              email notifications.
+            </p>
           </section>
 
           <section className="space-y-4 mb-10">
@@ -155,6 +162,17 @@ export default function PrivacyPage() {
             <p className="text-muted-foreground leading-relaxed">
               Each of these providers has their own privacy policies governing
               how they handle data.
+            </p>
+            <p className="text-muted-foreground leading-relaxed">
+              Data Processing Agreements (DPAs) are in place with our
+              sub-processors and are available upon request by contacting{" "}
+              <a
+                href="mailto:support@hypetest.ai"
+                className="text-primary underline"
+              >
+                support@hypetest.ai
+              </a>
+              .
             </p>
           </section>
 
