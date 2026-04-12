@@ -128,25 +128,56 @@ export function ReportView({
       {/* NPS Score */}
       {result.npsScore !== undefined && (
         <Card className="mt-12 mb-8">
-          <CardContent className="pt-6 text-center">
-            <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-2">
-              Net Promoter Score
-            </p>
-            <p
-              className={`text-5xl font-bold tracking-tight ${
-                result.npsScore > 30
-                  ? "text-emerald-600 dark:text-emerald-400"
-                  : result.npsScore >= 0
-                  ? "text-amber-600 dark:text-amber-400"
-                  : "text-red-600 dark:text-red-400"
-              }`}
-            >
-              {result.npsScore > 0 ? "+" : ""}
-              {result.npsScore}
-            </p>
-            <p className="text-sm text-muted-foreground mt-2">
-              Would consumers recommend this to friends?
-            </p>
+          <CardContent className="pt-6">
+            <div className="text-center mb-4">
+              <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-2">
+                Net Promoter Score
+              </p>
+              <p
+                className={`text-5xl font-bold tracking-tight ${
+                  result.npsScore > 30
+                    ? "text-emerald-600 dark:text-emerald-400"
+                    : result.npsScore >= 0
+                    ? "text-amber-600 dark:text-amber-400"
+                    : "text-red-600 dark:text-red-400"
+                }`}
+              >
+                {result.npsScore > 0 ? "+" : ""}
+                {result.npsScore}
+              </p>
+              <p className="text-sm text-muted-foreground mt-2">
+                Would consumers recommend this to friends?
+              </p>
+            </div>
+            {/* NPS Scale */}
+            <div className="relative mt-4 pt-2">
+              <div className="flex h-3 rounded-full overflow-hidden">
+                <div className="bg-red-400 flex-1" />
+                <div className="bg-amber-400 flex-1" />
+                <div className="bg-emerald-300 flex-1" />
+                <div className="bg-emerald-500 flex-1" />
+              </div>
+              {/* Marker */}
+              <div
+                className="absolute top-0 -translate-x-1/2"
+                style={{ left: `${Math.max(2, Math.min(98, ((result.npsScore + 100) / 200) * 100))}%` }}
+              >
+                <div className="w-0.5 h-5 bg-foreground" />
+                <div className="w-2 h-2 rounded-full bg-foreground -mt-0.5 -ml-[3px]" />
+              </div>
+              <div className="flex justify-between mt-2 text-[10px] text-muted-foreground">
+                <span>-100</span>
+                <span>0</span>
+                <span>+50</span>
+                <span>+100</span>
+              </div>
+              <div className="flex justify-between mt-0.5 text-[9px] text-muted-foreground">
+                <span>Needs work</span>
+                <span>Good</span>
+                <span>Great</span>
+                <span>Excellent</span>
+              </div>
+            </div>
           </CardContent>
         </Card>
       )}
