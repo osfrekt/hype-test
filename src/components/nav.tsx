@@ -12,6 +12,7 @@ export function Nav() {
   const [hasMultipleResults, setHasMultipleResults] = useState(false);
   const [authUser, setAuthUser] = useState<User | null>(null);
   const [authChecked, setAuthChecked] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   function cycleTheme() {
     const next = theme === "light" ? "dark" : theme === "dark" ? "system" : "light";
@@ -190,8 +191,46 @@ export function Nav() {
               Try it free
             </Link>
           )}
+          {/* Mobile hamburger */}
+          <button
+            onClick={() => setMobileOpen(!mobileOpen)}
+            className="md:hidden p-2 rounded-lg hover:bg-muted transition-colors text-foreground"
+            aria-label="Menu"
+          >
+            {mobileOpen ? (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
+            ) : (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" /></svg>
+            )}
+          </button>
         </div>
       </div>
+
+      {/* Mobile menu */}
+      {mobileOpen && (
+        <div className="md:hidden border-t border-border/50 bg-card">
+          <div className="max-w-6xl mx-auto px-6 py-4 space-y-1">
+            <Link href="/research/new" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 rounded-lg text-sm hover:bg-muted transition-colors text-foreground font-medium">Consumer Research <span className="text-[10px] bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 px-1.5 py-0.5 rounded-full font-medium ml-1">Free</span></Link>
+            <Link href="/ab-test/new" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 rounded-lg text-sm hover:bg-muted transition-colors text-muted-foreground">A/B Concept Testing</Link>
+            <Link href="/name-test/new" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 rounded-lg text-sm hover:bg-muted transition-colors text-muted-foreground">Name Testing</Link>
+            <Link href="/pricing-test/new" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 rounded-lg text-sm hover:bg-muted transition-colors text-muted-foreground">Pricing Optimizer</Link>
+            <Link href="/ad-test/new" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 rounded-lg text-sm hover:bg-muted transition-colors text-muted-foreground">Ad Testing</Link>
+            <Link href="/logo-test/new" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 rounded-lg text-sm hover:bg-muted transition-colors text-muted-foreground">Logo Testing</Link>
+            <Link href="/discover/new" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 rounded-lg text-sm hover:bg-muted transition-colors text-muted-foreground">Product Discovery</Link>
+            <Link href="/audience-test/new" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 rounded-lg text-sm hover:bg-muted transition-colors text-muted-foreground">Audience Finder</Link>
+            <Link href="/competitive/new" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 rounded-lg text-sm hover:bg-muted transition-colors text-muted-foreground">Competitive Teardown</Link>
+            <div className="h-px bg-border my-2" />
+            <Link href="/methodology" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 rounded-lg text-sm hover:bg-muted transition-colors text-muted-foreground">Methodology</Link>
+            <Link href="/pricing" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 rounded-lg text-sm hover:bg-muted transition-colors text-muted-foreground">Pricing</Link>
+            <Link href="/case-studies/rekt" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 rounded-lg text-sm hover:bg-muted transition-colors text-muted-foreground">Case Study</Link>
+            {authChecked && authUser ? (
+              <Link href="/account" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 rounded-lg text-sm hover:bg-muted transition-colors text-foreground font-medium">Account</Link>
+            ) : (
+              <Link href="/login" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 rounded-lg text-sm hover:bg-muted transition-colors text-foreground font-medium">Log in</Link>
+            )}
+          </div>
+        </div>
+      )}
     </header>
   );
 }

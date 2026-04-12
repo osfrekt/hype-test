@@ -564,9 +564,8 @@ function NewResearchForm() {
               <form onSubmit={handleSubmit} className="space-y-5">
                 {/* Product Name */}
                 <FieldGroup
-                  label="Product Name"
-                  example={showExamples.has("name") ? EXAMPLES.productName : null}
-                  onToggleExample={() => toggleExample("name")}
+                  label="Product Name" required
+
                 >
                   <Input
                     placeholder="e.g., Rekt Focus Energy Powder"
@@ -598,9 +597,8 @@ function NewResearchForm() {
 
                 {/* Problem */}
                 <FieldGroup
-                  label="What problem does this solve?"
-                  example={showExamples.has("problem") ? EXAMPLES.problem : null}
-                  onToggleExample={() => toggleExample("problem")}
+                  label="What problem does this solve?" required
+
                 >
                   <Textarea
                     placeholder="e.g. People want clean energy without sugar crashes or jitters"
@@ -615,12 +613,6 @@ function NewResearchForm() {
                 {/* Top 3 Features */}
                 <FieldGroup
                   label="Top 3 features"
-                  example={
-                    showExamples.has("features")
-                      ? `1. ${EXAMPLES.feature1}\n2. ${EXAMPLES.feature2}\n3. ${EXAMPLES.feature3}`
-                      : null
-                  }
-                  onToggleExample={() => toggleExample("features")}
                 >
                   <div className="space-y-2">
                     <Input
@@ -644,11 +636,7 @@ function NewResearchForm() {
                 {/* Differentiator */}
                 <FieldGroup
                   label="What makes it different from competitors?"
-                  example={
-                    showExamples.has("diff") ? EXAMPLES.differentiator : null
-                  }
-                  onToggleExample={() => toggleExample("diff")}
-                >
+>
                   <Textarea
                     placeholder="e.g. Only energy powder with Cognizin citicoline for focus"
                     value={differentiator}
@@ -670,11 +658,7 @@ function NewResearchForm() {
                 {/* Target Consumer */}
                 <FieldGroup
                   label="Target Consumer"
-                  example={
-                    showExamples.has("target") ? EXAMPLES.targetMarket : null
-                  }
-                  onToggleExample={() => toggleExample("target")}
-                >
+>
                   <Textarea
                     placeholder="e.g., Health-conscious women 25-40, metro areas, $80k+ household income"
                     value={targetMarket}
@@ -693,11 +677,7 @@ function NewResearchForm() {
                 {/* Competitors */}
                 <FieldGroup
                   label="Competitive Products"
-                  example={
-                    showExamples.has("comp") ? EXAMPLES.competitors : null
-                  }
-                  onToggleExample={() => toggleExample("comp")}
-                >
+>
                   <Input
                     placeholder="e.g., Celsius, Ghost Energy, LMNT"
                     value={competitors}
@@ -714,9 +694,7 @@ function NewResearchForm() {
                 {/* Pricing */}
                 <FieldGroup
                   label="Pricing"
-                  example={showExamples.has("price") ? "$39.99 per tub (30 servings)" : null}
-                  onToggleExample={() => toggleExample("price")}
-                >
+>
                   <Input
                     placeholder="e.g. $39.99 per tub, $2.50 per can, $29.99/month"
                     value={priceUnit}
@@ -920,7 +898,7 @@ function NewResearchForm() {
                     className="w-full bg-primary hover:bg-primary/90 text-primary-foreground h-11"
                     disabled={!isFormValid || verificationStep === "verifying"}
                   >
-                    {isAuthUser ? "Run Research (Free)" : verificationStep === "verified" ? "Run Research (Free)" : "Verify Email & Run Research"}
+                    {isAuthUser || verificationStep === "verified" ? "Run Research (Free)" : "Verify Email & Run Research"}
                   </Button>
                 )}
 
@@ -938,32 +916,16 @@ function NewResearchForm() {
 
 function FieldGroup({
   label,
-  example,
-  onToggleExample,
+  required,
   children,
 }: {
   label: string;
-  example: string | null;
-  onToggleExample: () => void;
+  required?: boolean;
   children: React.ReactNode;
 }) {
   return (
     <div className="space-y-1.5">
-      <div className="flex items-center justify-between">
-        <Label>{label}</Label>
-        <button
-          type="button"
-          onClick={onToggleExample}
-          className="text-xs text-teal hover:underline"
-        >
-          {example !== null ? "Hide example" : "See example"}
-        </button>
-      </div>
-      {example !== null && (
-        <p className="text-xs text-teal bg-teal/5 rounded px-2 py-1.5 whitespace-pre-line">
-          {example}
-        </p>
-      )}
+      <Label>{label}{required && <span className="text-red-500 ml-0.5">*</span>}</Label>
       {children}
     </div>
   );
