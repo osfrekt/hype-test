@@ -365,6 +365,223 @@ export function ReportView({
         </Card>
       </CollapsibleSection>
 
+      {/* Usage Occasions */}
+      {result.usageOccasions && result.usageOccasions.length > 0 && (
+        <CollapsibleSection title="Usage Occasions">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg font-semibold text-primary">
+                When consumers would use this
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {result.usageOccasions.map((o, i) => {
+                  const maxCount = result.usageOccasions![0].count;
+                  return (
+                    <div key={i} className="flex flex-col md:flex-row md:items-center gap-1 md:gap-4">
+                      <span className="text-sm text-muted-foreground md:w-64 md:shrink-0 line-clamp-2">
+                        {o.occasion}
+                      </span>
+                      <div className="flex items-center gap-3 flex-1">
+                        <div className="flex-1 bg-muted rounded-full h-2.5">
+                          <div
+                            className="bg-teal h-2.5 rounded-full transition-all"
+                            style={{ width: `${Math.round((o.count / maxCount) * 100)}%` }}
+                          />
+                        </div>
+                        <span className="text-sm font-medium text-primary w-10 text-right">
+                          {o.count}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </CardContent>
+          </Card>
+        </CollapsibleSection>
+      )}
+
+      {/* Purchase Barriers */}
+      {result.purchaseBarriers && result.purchaseBarriers.length > 0 && (
+        <CollapsibleSection title="Purchase Barriers">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg font-semibold text-red-700 dark:text-red-400">
+                What would stop them buying
+              </CardTitle>
+              <p className="text-xs text-muted-foreground mt-1">
+                Specific deal-breakers, not just hesitations
+              </p>
+            </CardHeader>
+            <CardContent>
+              <ul className="space-y-3">
+                {result.purchaseBarriers.map((b, i) => (
+                  <li
+                    key={i}
+                    className="text-sm text-muted-foreground flex items-start gap-3"
+                  >
+                    <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 text-xs font-bold shrink-0 mt-0.5">
+                      {"\u2717"}
+                    </span>
+                    {b}
+                  </li>
+                ))}
+              </ul>
+            </CardContent>
+          </Card>
+        </CollapsibleSection>
+      )}
+
+      {/* Suggested Improvements */}
+      {result.improvements && result.improvements.length > 0 && (
+        <CollapsibleSection title="Suggested Improvements">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg font-semibold text-primary">
+                What consumers would change
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ol className="space-y-3">
+                {result.improvements.map((imp, i) => (
+                  <li
+                    key={i}
+                    className="text-sm text-muted-foreground flex items-start gap-3"
+                  >
+                    <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-teal/10 text-teal text-xs font-bold shrink-0 mt-0.5">
+                      {i + 1}
+                    </span>
+                    {imp}
+                  </li>
+                ))}
+              </ol>
+            </CardContent>
+          </Card>
+        </CollapsibleSection>
+      )}
+
+      {/* Price Sensitivity */}
+      {result.priceSensitivity && (
+        <CollapsibleSection title="Price Sensitivity Breakdown">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg font-semibold text-primary flex items-center gap-3">
+                Price Sensitivity
+                <Badge
+                  variant="secondary"
+                  className={
+                    result.priceSensitivity.elasticity === "price_sensitive"
+                      ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
+                      : result.priceSensitivity.elasticity === "price_insensitive"
+                      ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400"
+                      : "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400"
+                  }
+                >
+                  {result.priceSensitivity.elasticity === "price_sensitive"
+                    ? "Price Sensitive"
+                    : result.priceSensitivity.elasticity === "price_insensitive"
+                    ? "Price Insensitive"
+                    : "Moderate"}
+                </Badge>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {[
+                  { label: `Buy at low price`, value: result.priceSensitivity.buyAtLow },
+                  { label: `Buy at mid price`, value: result.priceSensitivity.buyAtMid },
+                  { label: `Buy at high price`, value: result.priceSensitivity.buyAtHigh },
+                  { label: `Would not buy`, value: result.priceSensitivity.wouldNotBuy },
+                ].map((tier, i) => (
+                  <div key={i} className="flex flex-col md:flex-row md:items-center gap-1 md:gap-4">
+                    <span className="text-sm text-muted-foreground md:w-48 md:shrink-0">
+                      {tier.label}
+                    </span>
+                    <div className="flex items-center gap-3 flex-1">
+                      <div className="flex-1 bg-muted rounded-full h-2.5">
+                        <div
+                          className={`h-2.5 rounded-full transition-all ${i === 3 ? "bg-red-400" : "bg-teal"}`}
+                          style={{ width: `${tier.value}%` }}
+                        />
+                      </div>
+                      <span className="text-sm font-medium text-primary w-12 text-right">
+                        {tier.value}%
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </CollapsibleSection>
+      )}
+
+      {/* Consumer Profiles */}
+      {result.personaDeepDives && result.personaDeepDives.length > 0 && (
+        <CollapsibleSection title="Representative Consumer Profiles">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {result.personaDeepDives.map((p, i) => {
+              const borderColor =
+                p.type === "enthusiast"
+                  ? "border-emerald-300 dark:border-emerald-700"
+                  : p.type === "skeptic"
+                  ? "border-red-300 dark:border-red-700"
+                  : "border-amber-300 dark:border-amber-700";
+              const badgeColor =
+                p.type === "enthusiast"
+                  ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400"
+                  : p.type === "skeptic"
+                  ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
+                  : "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400";
+              const typeLabel =
+                p.type === "enthusiast"
+                  ? "Enthusiast"
+                  : p.type === "skeptic"
+                  ? "Skeptic"
+                  : "On the Fence";
+              return (
+                <Card key={i} className={`border-2 ${borderColor}`}>
+                  <CardContent className="pt-5 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-semibold text-primary">{p.label}</span>
+                      <Badge variant="secondary" className={`text-xs ${badgeColor}`}>
+                        {typeLabel}
+                      </Badge>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2 text-xs">
+                      <div>
+                        <p className="text-muted-foreground">Intent</p>
+                        <p className="font-semibold text-primary">{p.intent}/5</p>
+                      </div>
+                      <div>
+                        <p className="text-muted-foreground">Price</p>
+                        <p className="font-semibold text-primary">{p.priceChoice}</p>
+                      </div>
+                    </div>
+                    <div className="space-y-2 text-xs">
+                      <div>
+                        <p className="text-muted-foreground font-medium mb-0.5">What appeals</p>
+                        <p className="text-foreground italic">&ldquo;{p.positive}&rdquo;</p>
+                      </div>
+                      <div>
+                        <p className="text-muted-foreground font-medium mb-0.5">Top concern</p>
+                        <p className="text-foreground italic">&ldquo;{p.concern}&rdquo;</p>
+                      </div>
+                      <div>
+                        <p className="text-muted-foreground font-medium mb-0.5">Would use</p>
+                        <p className="text-foreground">{p.occasion}</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+        </CollapsibleSection>
+      )}
+
       {/* AI panel disclaimer */}
       <p className="text-[11px] text-muted-foreground leading-relaxed mb-8">
         AI-simulated research using peer-reviewed methodology. Results are directional and best used for hypothesis validation, not high-stakes business decisions.

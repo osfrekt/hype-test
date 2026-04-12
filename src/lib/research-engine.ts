@@ -60,7 +60,7 @@ export async function runResearch(
   onProgress?.("Analysing results...", 75);
 
   // Aggregate results
-  const result = aggregateResults(input, allResponses, features, priceRange, panel);
+  const result = await aggregateResults(input, allResponses, features, priceRange, panel);
 
   onProgress?.("Generating insights...", 90);
 
@@ -94,6 +94,9 @@ interface PanelResponse {
   purchaseChannel: string; // A-E
   npsScore: number; // 0-10
   oneWord: string;
+  usageOccasion: string;
+  purchaseBarrier: string;
+  improvement: string;
 }
 
 async function queryPersona(
@@ -157,8 +160,14 @@ ${features.map((f, i) => `   ${String.fromCharCode(65 + i)}) ${f}`).join("\n")}
 8. RECOMMENDATION: On a scale of 0-10, how likely are you to recommend this product to a friend or colleague?
 
 9. ONE WORD: Describe this product in exactly one word.
+
+10. USAGE OCCASION: When would you most likely use this product? (one sentence, e.g. "Before my morning workout" or "During long work sessions")
+
+11. PURCHASE BARRIER: What is the single thing that would STOP you from buying this? (one sentence)
+
+12. IMPROVEMENT SUGGESTION: If you could change one thing about this product, what would it be? (one sentence)
 ${input.competitors ? `
-10. COMPETITIVE PREFERENCE: Compared to ${input.competitors}, how does ${input.productName} compare?
+13. COMPETITIVE PREFERENCE: Compared to ${input.competitors}, how does ${input.productName} compare?
    A) Much better than alternatives
    B) Somewhat better
    C) About the same
@@ -176,14 +185,17 @@ Respond in this exact JSON format:
   "purchaseFrequency": "<A, B, C, D, or E>",
   "purchaseChannel": "<A, B, C, D, or E>",
   "npsScore": <number 0-10>,
-  "oneWord": "<single word>"${input.competitors ? `,
+  "oneWord": "<single word>",
+  "usageOccasion": "<one sentence>",
+  "purchaseBarrier": "<one sentence>",
+  "improvement": "<one sentence>"${input.competitors ? `,
   "competitiveChoice": "<A, B, C, D, E, or F>"` : ""}
 }`;
 
   try {
     const response = await anthropic.messages.create({
       model: "claude-haiku-4-5-20251001",
-      max_tokens: 400,
+      max_tokens: 500,
       temperature: 1.0,
       messages: [{ role: "user", content: prompt }],
     });
@@ -241,6 +253,9 @@ Respond in this exact JSON format:
       purchaseChannel: parsed.purchaseChannel || "A",
       npsScore: Math.min(10, Math.max(0, Number(parsed.npsScore) || 5)),
       oneWord: (parsed.oneWord || "interesting").split(/\s+/)[0],
+      usageOccasion: parsed.usageOccasion || "General everyday use",
+      purchaseBarrier: parsed.purchaseBarrier || "Price compared to alternatives",
+      improvement: parsed.improvement || "More variety in product options",
       ...(parsed.competitiveChoice && {
         competitivePreference: compMap[parsed.competitiveChoice] || "unfamiliar",
       }),
@@ -265,17 +280,20 @@ Respond in this exact JSON format:
       purchaseChannel: "A",
       npsScore: 5,
       oneWord: "interesting",
+      usageOccasion: "General everyday use",
+      purchaseBarrier: "Price compared to alternatives",
+      improvement: "More variety in product options",
     };
   }
 }
 
-function aggregateResults(
+async function aggregateResults(
   input: ResearchInput,
   responses: PanelResponse[],
   features: string[],
   priceRange: { min: number; max: number },
   panel: ConsumerPersona[]
-): Omit<ResearchResult, "verbatims" | "id" | "createdAt" | "status"> {
+): Promise<Omit<ResearchResult, "verbatims" | "id" | "createdAt" | "status">> {
   const n = responses.length;
   const midPrice = Math.round((priceRange.min + priceRange.max) / 2);
 
@@ -389,7 +407,7 @@ function aggregateResults(
     .slice(0, 8)
     .map(([word, count]) => ({ word, count }));
 
-  const questionsPerPersona = input.competitors ? 10 : 9;
+  const questionsPerPersona = input.competitors ? 13 : 12;
 
   // Panel demographic breakdown
   const ages = panel.map((p) => p.age).sort((a, b) => a - b);
@@ -454,6 +472,42 @@ function aggregateResults(
     }).filter((s) => s.count > 0),
   };
 
+  // --- New aggregations ---
+
+  // Usage occasions: group and count via Claude
+  const usageOccasions = await extractTopItems(
+    responses.map((r) => r.usageOccasion).filter((o) => o !== "General everyday use"),
+    "usage occasions",
+    input.productName
+  );
+
+  // Purchase barriers: group and extract top 5
+  const purchaseBarriers = await extractTopStrings(
+    responses.map((r) => r.purchaseBarrier).filter((b) => b !== "Price compared to alternatives"),
+    "purchase barriers (specific deal-breakers that would stop someone from buying)",
+    input.productName
+  );
+
+  // Improvement suggestions: group and extract top 5
+  const improvements = await extractTopStrings(
+    responses.map((r) => r.improvement).filter((s) => s !== "More variety in product options"),
+    "improvement suggestions",
+    input.productName
+  );
+
+  // Price sensitivity analysis from existing wtpChoice data
+  const buyAtLow = Math.round((wtpCounts.low / n) * 100);
+  const buyAtMid = Math.round((wtpCounts.mid / n) * 100);
+  const buyAtHigh = Math.round((wtpCounts.high / n) * 100);
+  const wouldNotBuy = Math.round((wtpCounts.none / n) * 100);
+  const highToMidDelta = buyAtMid - buyAtHigh;
+  const elasticity: "price_sensitive" | "moderate" | "price_insensitive" =
+    highToMidDelta > 20 ? "price_sensitive" : highToMidDelta < 10 ? "price_insensitive" : "moderate";
+  const priceSensitivity = { buyAtLow, buyAtMid, buyAtHigh, wouldNotBuy, elasticity };
+
+  // Persona deep-dives: pick 3 diverse personas
+  const personaDeepDives = selectPersonaDeepDives(responses, priceRange);
+
   return {
     input,
     panelSize: n,
@@ -478,6 +532,11 @@ function aggregateResults(
     npsScore,
     topWords,
     ...(competitivePosition && { competitivePosition }),
+    ...(usageOccasions.length > 0 && { usageOccasions }),
+    ...(purchaseBarriers.length > 0 && { purchaseBarriers }),
+    ...(improvements.length > 0 && { improvements }),
+    priceSensitivity,
+    ...(personaDeepDives.length > 0 && { personaDeepDives }),
     methodology: {
       panelSize: n,
       demographicMix: input.targetMarket
@@ -534,6 +593,100 @@ function deduplicateByDiversity(
   }
 
   return selected;
+}
+
+async function extractTopItems(
+  items: string[],
+  label: string,
+  productName: string
+): Promise<{ occasion: string; count: number }[]> {
+  if (items.length === 0) return [];
+  try {
+    const response = await anthropic.messages.create({
+      model: "claude-haiku-4-5-20251001",
+      max_tokens: 300,
+      messages: [
+        {
+          role: "user",
+          content: `Here are ${label} from consumers for "${productName}":\n\n${items.map((it, i) => `${i + 1}. ${it}`).join("\n")}\n\nGroup similar responses and return the top 5 categories with counts. Return ONLY a JSON array:\n[{"occasion": "...", "count": <number>}, ...]`,
+        },
+      ],
+    });
+    const text = response.content[0].type === "text" ? response.content[0].text : "";
+    const match = text.match(/\[[\s\S]*\]/);
+    if (match) {
+      const parsed = JSON.parse(match[0]);
+      if (Array.isArray(parsed)) return parsed.slice(0, 5);
+    }
+  } catch {
+    // Fall through
+  }
+  // Fallback: return top 5 unique items with count 1
+  const unique = [...new Set(items)].slice(0, 5);
+  return unique.map((o) => ({ occasion: o, count: 1 }));
+}
+
+async function extractTopStrings(
+  items: string[],
+  label: string,
+  productName: string
+): Promise<string[]> {
+  if (items.length === 0) return [];
+  try {
+    const response = await anthropic.messages.create({
+      model: "claude-haiku-4-5-20251001",
+      max_tokens: 300,
+      messages: [
+        {
+          role: "user",
+          content: `Here are ${label} from consumers for "${productName}":\n\n${items.map((it, i) => `${i + 1}. ${it}`).join("\n")}\n\nDeduplicate and return the top 5 most common themes as actionable statements. Return ONLY a JSON array of strings:\n["...", "...", ...]`,
+        },
+      ],
+    });
+    const text = response.content[0].type === "text" ? response.content[0].text : "";
+    const match = text.match(/\[[\s\S]*\]/);
+    if (match) {
+      const parsed = JSON.parse(match[0]);
+      if (Array.isArray(parsed)) return parsed.slice(0, 5).map(String);
+    }
+  } catch {
+    // Fall through
+  }
+  return [...new Set(items)].slice(0, 5);
+}
+
+function selectPersonaDeepDives(
+  responses: PanelResponse[],
+  priceRange: { min: number; max: number }
+): NonNullable<ResearchResult["personaDeepDives"]> {
+  const midPrice = Math.round((priceRange.min + priceRange.max) / 2);
+  const priceLabel = (choice: PanelResponse["wtpChoice"]): string => {
+    if (choice === "low") return `Low ($${priceRange.min})`;
+    if (choice === "mid") return `Mid ($${midPrice})`;
+    if (choice === "high") return `High ($${priceRange.max})`;
+    return "Would not buy";
+  };
+
+  // Sort to find enthusiast (highest intent), skeptic (lowest), on-the-fence (closest to 3)
+  const sorted = [...responses].sort((a, b) => b.purchaseIntent - a.purchaseIntent);
+  const enthusiast = sorted.find((r) => r.purchaseIntent >= 4);
+  const skeptic = [...sorted].reverse().find((r) => r.purchaseIntent <= 2);
+  const onTheFence = sorted.find((r) => r.purchaseIntent === 3);
+
+  const picks: { r: PanelResponse; type: "enthusiast" | "skeptic" | "on_the_fence" }[] = [];
+  if (enthusiast) picks.push({ r: enthusiast, type: "enthusiast" });
+  if (skeptic) picks.push({ r: skeptic, type: "skeptic" });
+  if (onTheFence) picks.push({ r: onTheFence, type: "on_the_fence" });
+
+  return picks.map(({ r, type }) => ({
+    label: r.personaLabel,
+    intent: r.purchaseIntent,
+    priceChoice: priceLabel(r.wtpChoice),
+    concern: r.topConcern,
+    positive: r.topPositive,
+    occasion: r.usageOccasion,
+    type,
+  }));
 }
 
 async function generateVerbatims(

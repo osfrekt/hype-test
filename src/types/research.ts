@@ -97,6 +97,25 @@ export interface ResearchResult {
     byGender: { segment: string; intentScore: number; count: number }[];
     byIncome: { segment: string; intentScore: number; count: number }[];
   };
+  usageOccasions?: { occasion: string; count: number }[];
+  purchaseBarriers?: string[];
+  improvements?: string[];
+  priceSensitivity?: {
+    buyAtLow: number;
+    buyAtMid: number;
+    buyAtHigh: number;
+    wouldNotBuy: number;
+    elasticity: "price_sensitive" | "moderate" | "price_insensitive";
+  };
+  personaDeepDives?: {
+    label: string;
+    intent: number;
+    priceChoice: string;
+    concern: string;
+    positive: string;
+    occasion: string;
+    type: "enthusiast" | "skeptic" | "on_the_fence";
+  }[];
   categoryBenchmark?: {
     avgIntent: number;
     avgWtp: number;

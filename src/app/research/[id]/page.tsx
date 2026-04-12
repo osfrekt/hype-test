@@ -102,6 +102,21 @@ function ResearchResultContent({
               ...(data.top_words && {
                 topWords: data.top_words,
               }),
+              ...(data.usage_occasions && {
+                usageOccasions: data.usage_occasions,
+              }),
+              ...(data.purchase_barriers && {
+                purchaseBarriers: data.purchase_barriers,
+              }),
+              ...(data.improvements && {
+                improvements: data.improvements,
+              }),
+              ...(data.price_sensitivity && {
+                priceSensitivity: data.price_sensitivity,
+              }),
+              ...(data.persona_deep_dives && {
+                personaDeepDives: data.persona_deep_dives,
+              }),
               status: data.status,
               createdAt: data.created_at,
             },
