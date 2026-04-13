@@ -157,6 +157,12 @@ export default function Home() {
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src="/brands/snooz.svg" alt="Snooz" className="h-5" />
                 </a>
+                <a href="https://yeet.com" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition-opacity">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/brands/yeet-black.svg" alt="Yeet" className="h-5 dark:hidden" />
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/brands/yeet-white.svg" alt="Yeet" className="h-5 hidden dark:block" />
+                </a>
               </div>
             </div>
           </div>
