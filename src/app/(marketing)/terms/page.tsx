@@ -14,8 +14,28 @@ export default function TermsPage() {
             Last updated: April 2026
           </p>
 
+          <nav className="mb-8 bg-muted/30 rounded-xl p-4">
+            <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2">Contents</p>
+            <ol className="space-y-1 text-sm text-muted-foreground">
+              <li><a href="#acceptance" className="hover:text-primary">1. Acceptance of Terms</a></li>
+              <li><a href="#description" className="hover:text-primary">2. Description of Service</a></li>
+              <li><a href="#disclaimer" className="hover:text-primary">3. Research Output Disclaimer</a></li>
+              <li><a href="#liability" className="hover:text-primary">4. Limitation of Liability</a></li>
+              <li><a href="#billing" className="hover:text-primary">5. Billing and Cancellation</a></li>
+              <li><a href="#ip" className="hover:text-primary">6. Intellectual Property</a></li>
+              <li><a href="#data-handling" className="hover:text-primary">7. Data Handling and Public Accessibility</a></li>
+              <li><a href="#acceptable-use" className="hover:text-primary">8. Acceptable Use</a></li>
+              <li><a href="#indemnification" className="hover:text-primary">9. Indemnification</a></li>
+              <li><a href="#third-party" className="hover:text-primary">10. Third-Party References</a></li>
+              <li><a href="#modifications" className="hover:text-primary">11. Modifications</a></li>
+              <li><a href="#disputes" className="hover:text-primary">12. Dispute Resolution</a></li>
+              <li><a href="#trademarks" className="hover:text-primary">13. Trademarks and Third-Party Content</a></li>
+              <li><a href="#contact" className="hover:text-primary">14. Contact</a></li>
+            </ol>
+          </nav>
+
           <section className="space-y-4 mb-10">
-            <h2 className="text-xl font-bold text-primary">
+            <h2 id="acceptance" className="text-xl font-bold text-primary">
               1. Acceptance of Terms
             </h2>
             <p className="text-muted-foreground leading-relaxed">
@@ -30,7 +50,7 @@ export default function TermsPage() {
           </section>
 
           <section className="space-y-4 mb-10">
-            <h2 className="text-xl font-bold text-primary">
+            <h2 id="description" className="text-xl font-bold text-primary">
               2. Description of Service
             </h2>
             <p className="text-muted-foreground leading-relaxed">
@@ -44,7 +64,7 @@ export default function TermsPage() {
           </section>
 
           <section className="space-y-4 mb-10">
-            <h2 className="text-xl font-bold text-primary">
+            <h2 id="disclaimer" className="text-xl font-bold text-primary">
               3. Research Output Disclaimer
             </h2>
             <p className="text-muted-foreground leading-relaxed">
@@ -67,7 +87,7 @@ export default function TermsPage() {
           </section>
 
           <section className="space-y-4 mb-10">
-            <h2 className="text-xl font-bold text-primary">
+            <h2 id="liability" className="text-xl font-bold text-primary">
               4. Limitation of Liability
             </h2>
             <p className="text-muted-foreground leading-relaxed">
@@ -91,7 +111,7 @@ export default function TermsPage() {
           </section>
 
           <section className="space-y-4 mb-10">
-            <h2 className="text-xl font-bold text-primary">
+            <h2 id="billing" className="text-xl font-bold text-primary">
               5. Billing and Cancellation
             </h2>
             <p className="text-muted-foreground leading-relaxed">
@@ -119,7 +139,7 @@ export default function TermsPage() {
           </section>
 
           <section className="space-y-4 mb-10">
-            <h2 className="text-xl font-bold text-primary">
+            <h2 id="ip" className="text-xl font-bold text-primary">
               6. Intellectual Property
             </h2>
             <p className="text-muted-foreground leading-relaxed">
@@ -136,7 +156,7 @@ export default function TermsPage() {
           </section>
 
           <section className="space-y-4 mb-10">
-            <h2 className="text-xl font-bold text-primary">
+            <h2 id="data-handling" className="text-xl font-bold text-primary">
               7. Data Handling and Public Accessibility
             </h2>
             <p className="text-muted-foreground leading-relaxed">
@@ -161,7 +181,7 @@ export default function TermsPage() {
           </section>
 
           <section className="space-y-4 mb-10">
-            <h2 className="text-xl font-bold text-primary">
+            <h2 id="acceptable-use" className="text-xl font-bold text-primary">
               8. Acceptable Use
             </h2>
             <p className="text-muted-foreground leading-relaxed">
@@ -206,7 +226,7 @@ export default function TermsPage() {
           </section>
 
           <section className="space-y-4 mb-10">
-            <h2 className="text-xl font-bold text-primary">
+            <h2 id="indemnification" className="text-xl font-bold text-primary">
               9. Indemnification
             </h2>
             <p className="text-muted-foreground leading-relaxed">
@@ -221,7 +241,7 @@ export default function TermsPage() {
           </section>
 
           <section className="space-y-4 mb-10">
-            <h2 className="text-xl font-bold text-primary">
+            <h2 id="third-party" className="text-xl font-bold text-primary">
               10. Third-Party References
             </h2>
             <p className="text-muted-foreground leading-relaxed">
@@ -236,7 +256,7 @@ export default function TermsPage() {
           </section>
 
           <section className="space-y-4 mb-10">
-            <h2 className="text-xl font-bold text-primary">
+            <h2 id="modifications" className="text-xl font-bold text-primary">
               11. Modifications
             </h2>
             <p className="text-muted-foreground leading-relaxed">
@@ -249,7 +269,7 @@ export default function TermsPage() {
           </section>
 
           <section className="space-y-4 mb-10">
-            <h2 className="text-xl font-bold text-primary">
+            <h2 id="disputes" className="text-xl font-bold text-primary">
               12. Dispute Resolution
             </h2>
             <p className="text-muted-foreground leading-relaxed">
@@ -265,7 +285,7 @@ export default function TermsPage() {
           </section>
 
           <section className="space-y-4 mb-10">
-            <h2 className="text-xl font-bold text-primary">
+            <h2 id="trademarks" className="text-xl font-bold text-primary">
               13. Trademarks and Third-Party Content
             </h2>
             <p className="text-muted-foreground leading-relaxed">
@@ -283,7 +303,7 @@ export default function TermsPage() {
           </section>
 
           <section className="space-y-4">
-            <h2 className="text-xl font-bold text-primary">
+            <h2 id="contact" className="text-xl font-bold text-primary">
               14. Contact
             </h2>
             <p className="text-muted-foreground leading-relaxed">

@@ -190,6 +190,7 @@ export function Nav() {
                     onClick={async () => {
                       const supabase = createClient();
                       await supabase.auth.signOut();
+                      try { sessionStorage.clear(); } catch {}
                       window.location.href = "/";
                     }}
                     className="block w-full text-left px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors text-red-600 dark:text-red-400"
@@ -289,6 +290,7 @@ export function Nav() {
                   onClick={async () => {
                     const supabase = createClient();
                     await supabase.auth.signOut();
+                    try { sessionStorage.clear(); } catch {}
                     window.location.href = "/";
                   }}
                   className="block w-full text-left px-3 py-2.5 rounded-lg text-sm hover:bg-muted transition-colors text-red-600 dark:text-red-400"

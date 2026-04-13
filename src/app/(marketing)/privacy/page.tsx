@@ -14,6 +14,21 @@ export default function PrivacyPage() {
             Last updated: April 2026
           </p>
 
+          <nav className="mb-8 bg-muted/30 rounded-xl p-4">
+            <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2">Contents</p>
+            <ol className="space-y-1 text-sm text-muted-foreground">
+              <li><a href="#data-collect" className="hover:text-primary">1. Data We Collect</a></li>
+              <li><a href="#data-use" className="hover:text-primary">2. How We Use Your Data</a></li>
+              <li><a href="#data-storage" className="hover:text-primary">3. Data Storage and Accessibility</a></li>
+              <li><a href="#data-retention" className="hover:text-primary">4. Data Retention</a></li>
+              <li><a href="#third-party-services" className="hover:text-primary">5. Third-Party Services</a></li>
+              <li><a href="#cookies" className="hover:text-primary">6. Cookies and Local Storage</a></li>
+              <li><a href="#your-rights" className="hover:text-primary">7. Your Rights</a></li>
+              <li><a href="#children" className="hover:text-primary">8. Children</a></li>
+              <li><a href="#privacy-contact" className="hover:text-primary">9. Contact</a></li>
+            </ol>
+          </nav>
+
           <section className="space-y-4 mb-10">
             <p className="text-muted-foreground leading-relaxed">
               HypeTest is operated by Rekt Brands Inc., 1207 Delaware Ave,
@@ -23,7 +38,7 @@ export default function PrivacyPage() {
           </section>
 
           <section className="space-y-4 mb-10">
-            <h2 className="text-xl font-bold text-primary">
+            <h2 id="data-collect" className="text-xl font-bold text-primary">
               1. Data We Collect
             </h2>
             <p className="text-muted-foreground leading-relaxed">
@@ -64,7 +79,7 @@ export default function PrivacyPage() {
           </section>
 
           <section className="space-y-4 mb-10">
-            <h2 className="text-xl font-bold text-primary">
+            <h2 id="data-use" className="text-xl font-bold text-primary">
               2. How We Use Your Data
             </h2>
             <ul className="list-disc pl-6 space-y-2 text-muted-foreground leading-relaxed">
@@ -101,7 +116,7 @@ export default function PrivacyPage() {
           </section>
 
           <section className="space-y-4 mb-10">
-            <h2 className="text-xl font-bold text-primary">
+            <h2 id="data-storage" className="text-xl font-bold text-primary">
               3. Data Storage and Accessibility
             </h2>
             <p className="text-muted-foreground leading-relaxed">
@@ -116,7 +131,7 @@ export default function PrivacyPage() {
           </section>
 
           <section className="space-y-4 mb-10">
-            <h2 className="text-xl font-bold text-primary">
+            <h2 id="data-retention" className="text-xl font-bold text-primary">
               4. Data Retention
             </h2>
             <p className="text-muted-foreground leading-relaxed">
@@ -135,7 +150,7 @@ export default function PrivacyPage() {
           </section>
 
           <section className="space-y-4 mb-10">
-            <h2 className="text-xl font-bold text-primary">
+            <h2 id="third-party-services" className="text-xl font-bold text-primary">
               5. Third-Party Services
             </h2>
             <p className="text-muted-foreground leading-relaxed">
@@ -177,7 +192,7 @@ export default function PrivacyPage() {
           </section>
 
           <section className="space-y-4 mb-10">
-            <h2 className="text-xl font-bold text-primary">
+            <h2 id="cookies" className="text-xl font-bold text-primary">
               6. Cookies and Local Storage
             </h2>
             <p className="text-muted-foreground leading-relaxed">
@@ -190,7 +205,7 @@ export default function PrivacyPage() {
           </section>
 
           <section className="space-y-4 mb-10">
-            <h2 className="text-xl font-bold text-primary">
+            <h2 id="your-rights" className="text-xl font-bold text-primary">
               7. Your Rights
             </h2>
             <p className="text-muted-foreground leading-relaxed">
@@ -221,7 +236,7 @@ export default function PrivacyPage() {
           </section>
 
           <section className="space-y-4 mb-10">
-            <h2 className="text-xl font-bold text-primary">
+            <h2 id="children" className="text-xl font-bold text-primary">
               8. Children
             </h2>
             <p className="text-muted-foreground leading-relaxed">
@@ -233,7 +248,7 @@ export default function PrivacyPage() {
           </section>
 
           <section className="space-y-4">
-            <h2 className="text-xl font-bold text-primary">
+            <h2 id="privacy-contact" className="text-xl font-bold text-primary">
               9. Contact
             </h2>
             <p className="text-muted-foreground leading-relaxed">

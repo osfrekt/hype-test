@@ -34,11 +34,18 @@ export function UrlAutofill({ onExtracted }: { onExtracted: (data: ExtractedProd
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ url: url.trim() }),
       });
-      const data = await res.json();
       if (!res.ok) {
-        setError(data.error || "Failed to extract product info.");
+        const errorData = await res.json().catch(() => ({}));
+        if (res.status === 422) {
+          setError("Could not extract product info from that page. Try a different URL.");
+        } else if (res.status === 429) {
+          setError("Too many requests. Please wait a moment and try again.");
+        } else {
+          setError(errorData.error || "Something went wrong. Check the URL and try again.");
+        }
         return;
       }
+      const data = await res.json();
       onExtracted(data);
     } catch {
       setError("Failed to extract. Check the URL and try again.");
