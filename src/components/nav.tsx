@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { Sun, Moon, Monitor } from "lucide-react";
 import { useTheme } from "@/components/theme-provider";
 import { createClient } from "@/lib/supabase/client";
@@ -9,6 +10,7 @@ import type { User } from "@supabase/supabase-js";
 
 export function Nav() {
   const { theme, setTheme } = useTheme();
+  const pathname = usePathname();
   const [hasMultipleResults, setHasMultipleResults] = useState(false);
   const [authUser, setAuthUser] = useState<User | null>(null);
   const [authChecked, setAuthChecked] = useState(false);
@@ -87,7 +89,7 @@ export function Nav() {
           )}
           <Link
             href="/methodology"
-            className="hover:text-foreground transition-colors"
+            className={`hover:text-foreground transition-colors ${pathname === "/methodology" ? "text-foreground" : ""}`}
           >
             Methodology
           </Link>
@@ -161,14 +163,14 @@ export function Nav() {
           </div>
           <Link
             href="/pricing"
-            className="hover:text-foreground transition-colors"
+            className={`hover:text-foreground transition-colors ${pathname === "/pricing" ? "text-foreground" : ""}`}
           >
             Pricing
           </Link>
           {hasMultipleResults && (
             <Link
               href="/compare"
-              className="hover:text-foreground transition-colors"
+              className={`hover:text-foreground transition-colors ${pathname === "/compare" ? "text-foreground" : ""}`}
             >
               Compare
             </Link>

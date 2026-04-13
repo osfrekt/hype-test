@@ -447,7 +447,7 @@ function ConceptCard({ label, concept, isWinner }: { label: string; concept: AbT
             <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-1">Consumer Verbatims</p>
             <div className="space-y-2">
               {verbatims.map((v, i) => (
-                <p key={i} className="text-xs text-muted-foreground italic border-l-2 border-border pl-2">
+                <p key={i} className="text-xs text-muted-foreground italic bg-muted/50 rounded px-3 py-2">
                   &ldquo;{v}&rdquo;
                 </p>
               ))}

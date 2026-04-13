@@ -262,7 +262,7 @@ function NewNameTestForm() {
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-5">
             <UrlAutofill onExtracted={(data) => {
               const parts = [data.problem, data.feature1, data.feature2, data.feature3, data.differentiator].filter(Boolean);
               if (parts.length) setProductDescription(parts.join(". "));

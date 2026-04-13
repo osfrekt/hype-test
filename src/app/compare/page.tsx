@@ -143,7 +143,7 @@ export default function ComparePage() {
   return (
     <>
       <Nav />
-      <main className="flex-1 py-8">
+      <main className="flex-1 py-12">
         <div className="max-w-6xl mx-auto px-6">
           <div className="mb-6">
             <h1 className="text-2xl font-bold text-primary mb-1">

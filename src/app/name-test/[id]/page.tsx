@@ -245,7 +245,7 @@ function NameTestResultContent({
                         <p className="text-xs text-muted-foreground font-medium mb-1">First Impressions</p>
                         <div className="space-y-1">
                           {n.impressions.map((imp, i) => (
-                            <p key={i} className="text-xs text-muted-foreground italic border-l-2 border-border pl-2">
+                            <p key={i} className="text-xs text-muted-foreground italic bg-muted/50 rounded px-3 py-2">
                               &ldquo;{imp}&rdquo;
                             </p>
                           ))}

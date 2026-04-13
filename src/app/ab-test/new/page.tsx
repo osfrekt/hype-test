@@ -281,7 +281,7 @@ function NewAbTestForm() {
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-5">
             <UrlAutofill onExtracted={(data) => {
               if (data.productName) setNameA(data.productName);
               if (data.problem) setDescA(data.problem);

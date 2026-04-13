@@ -81,6 +81,7 @@ function CompetitiveForm() {
   const [email, setEmail] = useState("");
   const [userName, setUserName] = useState("");
   const [userCompany, setUserCompany] = useState("");
+  const [userRole, setUserRole] = useState("");
   const [isAuthUser, setIsAuthUser] = useState(false);
 
   // Check Supabase Auth - if logged in, pre-fill and skip verification
@@ -196,9 +197,9 @@ function CompetitiveForm() {
   const isFormValid = useMemo(() => {
     const hasYours = yourName.trim() && yourDesc.trim().length > 10;
     const hasComp = compName.trim() && compDesc.trim().length > 10;
-    const hasUser = email.trim() && email.includes("@") && (isAuthUser || userName.trim());
+    const hasUser = email.trim() && email.includes("@") && (isAuthUser || (userName.trim() && userCompany.trim() && userRole));
     return hasYours && hasComp && hasUser;
-  }, [yourName, yourDesc, compName, compDesc, email, userName]);
+  }, [yourName, yourDesc, compName, compDesc, email, userName, userCompany, userRole, isAuthUser]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -245,7 +246,8 @@ function CompetitiveForm() {
         ...(targetMarket.trim() && { targetMarket: targetMarket.trim() }),
         email: email.trim(),
         userName: userName.trim(),
-        ...(userCompany.trim() && { userCompany: userCompany.trim() }),
+        userCompany: userCompany.trim(),
+        userRole,
         ...(utmSource && { utmSource }),
         ...(utmMedium && { utmMedium }),
         ...(utmCampaign && { utmCampaign }),
@@ -356,7 +358,7 @@ function CompetitiveForm() {
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-5">
             {/* YOUR PRODUCT */}
             <Card>
               <CardHeader>
@@ -553,45 +555,65 @@ function CompetitiveForm() {
 
             {/* ABOUT YOU - only for non-authenticated users */}
             {!isAuthUser && (
-              <Card className="bg-teal/5 border-teal/20">
-                <CardContent className="pt-6 space-y-4">
-                  <div>
-                    <p className="text-sm font-semibold text-primary mb-1">About you</p>
-                    <p className="text-xs text-muted-foreground">
-                      We&apos;ll send the comparison report link to your email.
-                    </p>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div className="space-y-1.5">
-                      <Label>Name <span className="text-red-500">*</span></Label>
-                      <Input
-                        placeholder="Jane Smith"
-                        value={userName}
-                        onChange={(e) => setUserName(e.target.value)}
-                        required
-                      />
-                    </div>
-                    <div className="space-y-1.5">
-                      <Label>Work email <span className="text-red-500">*</span></Label>
-                      <Input
-                        type="email"
-                        placeholder="jane@company.com"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                      />
-                    </div>
+              <div className="bg-teal/5 rounded-xl p-4 border border-teal/20 space-y-4">
+                <div>
+                  <p className="text-sm font-semibold text-primary mb-1">About you</p>
+                  <p className="text-xs text-muted-foreground">
+                    We&apos;ll send the comparison report link to your email.
+                  </p>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="space-y-1.5">
+                    <Label>Name <span className="text-red-500">*</span></Label>
+                    <Input
+                      placeholder="Jane Smith"
+                      value={userName}
+                      onChange={(e) => setUserName(e.target.value)}
+                      required
+                    />
                   </div>
                   <div className="space-y-1.5">
-                    <Label>Company (optional)</Label>
+                    <Label>Work email <span className="text-red-500">*</span></Label>
+                    <Input
+                      type="email"
+                      placeholder="jane@company.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label>Company <span className="text-red-500">*</span></Label>
                     <Input
                       placeholder="Acme Corp"
                       value={userCompany}
                       onChange={(e) => setUserCompany(e.target.value)}
+                      required
                     />
                   </div>
-                </CardContent>
-              </Card>
+                  <div className="space-y-1.5">
+                    <Label>Role <span className="text-red-500">*</span></Label>
+                    <Select value={userRole} onValueChange={(v) => setUserRole(v ?? "")}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select your role" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="founder">Founder / CEO</SelectItem>
+                        <SelectItem value="product">Product / CPO</SelectItem>
+                        <SelectItem value="marketing">Marketing / CMO</SelectItem>
+                        <SelectItem value="brand">Brand Manager</SelectItem>
+                        <SelectItem value="innovation">Innovation / R&amp;D</SelectItem>
+                        <SelectItem value="insights">Consumer Insights / Research</SelectItem>
+                        <SelectItem value="growth">Growth / Strategy</SelectItem>
+                        <SelectItem value="consultant">Consultant / Agency</SelectItem>
+                        <SelectItem value="investor">Investor / VC</SelectItem>
+                        <SelectItem value="student">Student / Academic</SelectItem>
+                        <SelectItem value="other">Other</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+              </div>
             )}
 
             {error && (

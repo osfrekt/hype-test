@@ -153,13 +153,15 @@ function CompetitiveResultContent({
       <main className="flex-1 py-8">
         <div className="max-w-5xl mx-auto px-6">
           {/* Header */}
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-primary mb-3">
-              {result.yours.input.productName} vs {result.competitor.input.productName}
-            </h1>
-            <Badge variant="secondary" className="text-xs mb-4">
-              {result.panelSize} shared respondents
-            </Badge>
+          <div className="mb-8">
+            <div className="flex items-center gap-3 mb-2">
+              <h2 className="text-2xl font-bold text-primary">
+                {result.yours.input.productName} vs {result.competitor.input.productName}
+              </h2>
+              <Badge variant="secondary" className="text-xs">
+                {result.panelSize} shared respondents
+              </Badge>
+            </div>
           </div>
 
           {/* Winner Banner */}
