@@ -29,6 +29,14 @@ export async function POST(request: Request) {
         name: user.name || undefined,
         custom: { email, plan },
       },
+      checkoutOptions: {
+        dark: false,
+        logo: true,
+        media: false,
+        desc: false,
+        discount: true,
+        buttonColor: "#0e7490",
+      },
       productOptions: {
         redirectUrl: "https://hypetest.ai/account?checkout=success",
       },

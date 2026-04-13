@@ -120,6 +120,8 @@ function NewLogoTestForm() {
     });
   }
 
+  const [describingLogo, setDescribingLogo] = useState<number | null>(null);
+
   function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>, index: number) {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -129,9 +131,32 @@ function NewLogoTestForm() {
     }
     setUploadError("");
     const reader = new FileReader();
-    reader.onloadend = () => {
+    reader.onloadend = async () => {
       const base64 = reader.result as string;
       updateLogo(index, { imageBase64: base64 });
+
+      // Auto-describe the logo using AI
+      setDescribingLogo(index);
+      try {
+        const res = await fetch("/api/describe-logo", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ imageBase64: base64 }),
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.description) {
+            updateLogo(index, { description: data.description });
+          }
+          if (data.colors) {
+            updateLogo(index, { colorPalette: data.colors });
+          }
+        }
+      } catch {
+        // Auto-describe failed silently, user can fill manually
+      } finally {
+        setDescribingLogo(null);
+      }
     };
     reader.readAsDataURL(file);
   }
@@ -422,9 +447,14 @@ function NewLogoTestForm() {
                     )}
                   </div>
                   <div className="space-y-1.5">
-                    <Label>Logo Description</Label>
+                    <Label>
+                      Logo Description
+                      {describingLogo === idx && (
+                        <span className="text-xs text-teal font-normal ml-2">Describing from image...</span>
+                      )}
+                    </Label>
                     <Textarea
-                      placeholder="Describe the logo in detail: typeface, imagery, layout, colours..."
+                      placeholder={describingLogo === idx ? "Analysing your logo..." : "Describe the logo in detail: typeface, imagery, layout, colours..."}
                       value={logo.description}
                       onChange={(e) => updateLogo(idx, { description: e.target.value })}
                       rows={3}
