@@ -68,6 +68,21 @@ export default function SignupPage() {
       role: role || null,
     }, { onConflict: "email" });
 
+    // Process referral if present
+    const referralCode = sessionStorage.getItem("ht-referral-code");
+    if (referralCode) {
+      try {
+        await fetch("/api/referrals", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, referralCode }),
+        });
+        sessionStorage.removeItem("ht-referral-code");
+      } catch {
+        // Referral processing is best-effort
+      }
+    }
+
     setEmailSent(true);
     setLoading(false);
   }

@@ -22,6 +22,8 @@ interface UserData {
   plan: string;
   research_count_this_month: number;
   discovery_count_this_month: number;
+  referral_code: string | null;
+  bonus_runs: number;
 }
 
 interface ResearchResult {
@@ -169,6 +171,7 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [recentResearch, setRecentResearch] = useState<ResearchResult[]>([]);
   const [recentTests, setRecentTests] = useState<TestResult[]>([]);
+  const [refCopied, setRefCopied] = useState(false);
 
   const loadData = useCallback(async (email: string) => {
     const supabase = createClient();
@@ -176,7 +179,7 @@ export default function DashboardPage() {
     // User profile
     const { data: userData } = await supabase
       .from("users")
-      .select("email, name, plan, research_count_this_month, discovery_count_this_month")
+      .select("email, name, plan, research_count_this_month, discovery_count_this_month, referral_code, bonus_runs")
       .eq("email", email)
       .single();
 
@@ -189,6 +192,8 @@ export default function DashboardPage() {
         plan: "free",
         research_count_this_month: 0,
         discovery_count_this_month: 0,
+        referral_code: null,
+        bonus_runs: 0,
       });
     }
 
@@ -540,6 +545,48 @@ export default function DashboardPage() {
               </div>
             )}
           </section>
+
+          {/* Referral card */}
+          {user.referral_code && (
+            <section>
+              <Card className="border-teal/20 bg-teal/5">
+                <CardContent className="py-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div>
+                      <p className="text-sm font-medium text-primary">
+                        Share HypeTest, get 3 free runs
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        When friends sign up with your link, you both get 3 bonus research runs.
+                        {(user.bonus_runs || 0) > 0 && (
+                          <span className="text-emerald-600 font-medium ml-1">
+                            You have {user.bonus_runs} bonus runs!
+                          </span>
+                        )}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <code className="text-xs bg-muted px-2 py-1 rounded font-mono">
+                        hypetest.ai/?ref={user.referral_code}
+                      </code>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="text-xs"
+                        onClick={() => {
+                          navigator.clipboard.writeText(`https://hypetest.ai/?ref=${user.referral_code}`);
+                          setRefCopied(true);
+                          setTimeout(() => setRefCopied(false), 2000);
+                        }}
+                      >
+                        {refCopied ? "Copied!" : "Copy"}
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </section>
+          )}
         </div>
       </main>
       <Footer />

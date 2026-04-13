@@ -4,6 +4,8 @@ import { Nav } from "@/components/nav";
 import { Footer } from "@/components/footer";
 import { SampleReport } from "@/components/sample-report";
 import { EmailCapture } from "@/components/email-capture";
+import { Suspense } from "react";
+import { ReferralTracker } from "@/components/referral-tracker";
 
 export const metadata: Metadata = {
   title: "HypeTest | AI Consumer Research in Minutes",
@@ -18,6 +20,7 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <>
+      <Suspense><ReferralTracker /></Suspense>
       <Nav />
       <main className="flex-1">
         {/* Hero */}

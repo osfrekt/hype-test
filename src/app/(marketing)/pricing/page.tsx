@@ -13,8 +13,7 @@ const plans = [
   {
     id: "free",
     name: "Free",
-    price: "$0",
-    period: "",
+    monthlyPrice: 0,
     description: "Get started with core research",
     cta: "Start free",
     href: "/research/new",
@@ -23,8 +22,7 @@ const plans = [
   {
     id: "starter",
     name: "Starter",
-    price: "$49",
-    period: "/mo",
+    monthlyPrice: 49,
     description: "More runs + advanced tools",
     cta: "Get Starter",
     href: null,
@@ -33,8 +31,7 @@ const plans = [
   {
     id: "pro",
     name: "Pro",
-    price: "$149",
-    period: "/mo",
+    monthlyPrice: 149,
     description: "Unlimited everything",
     cta: "Get Pro",
     href: null,
@@ -43,8 +40,7 @@ const plans = [
   {
     id: "team",
     name: "Team",
-    price: "$349",
-    period: "/mo",
+    monthlyPrice: 349,
     description: "For teams building together",
     cta: "Join waitlist",
     href: null,
@@ -126,6 +122,7 @@ function DashIcon() {
 }
 
 export default function PricingPage() {
+  const [annual, setAnnual] = useState(false);
   const [authEmail, setAuthEmail] = useState<string | null>(null);
   const [checkoutEmail, setCheckoutEmail] = useState("");
   const [checkoutPlan, setCheckoutPlan] = useState<string | null>(null);
@@ -151,7 +148,7 @@ export default function PricingPage() {
       const res = await fetch("/api/billing/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: checkoutEmail.trim(), plan: checkoutPlan }),
+        body: JSON.stringify({ email: checkoutEmail.trim(), plan: checkoutPlan, interval: annual ? "year" : "month" }),
       });
       const data = await res.json();
       if (data.url) {
@@ -206,93 +203,119 @@ export default function PricingPage() {
             </p>
           </div>
 
+          {/* Billing toggle */}
+          <div className="flex items-center justify-center gap-3 mb-8">
+            <span className={`text-sm ${!annual ? "text-primary font-medium" : "text-muted-foreground"}`}>Monthly</span>
+            <button
+              onClick={() => setAnnual(!annual)}
+              className={`relative w-12 h-6 rounded-full transition-colors ${annual ? "bg-teal" : "bg-muted"}`}
+            >
+              <span className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white transition-transform ${annual ? "translate-x-6" : ""}`} />
+            </button>
+            <span className={`text-sm ${annual ? "text-primary font-medium" : "text-muted-foreground"}`}>
+              Annual <span className="text-xs text-emerald-600 font-medium ml-1">Save 20%</span>
+            </span>
+          </div>
+
           {/* Plan cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-16">
-            {plans.map((plan) => (
-              <Card
-                key={plan.id}
-                className={`relative flex flex-col ${
-                  plan.highlight ? "border-teal shadow-lg shadow-teal/10 overflow-visible" : ""
-                }`}
-              >
-                {plan.highlight && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <span className="bg-teal text-white text-xs font-semibold px-3 py-1 rounded-full whitespace-nowrap">
-                      Most popular
-                    </span>
-                  </div>
-                )}
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-base">{plan.name}</CardTitle>
-                  <div className="mt-2">
-                    <span className="text-3xl font-bold text-primary">{plan.price}</span>
-                    {plan.period && (
-                      <span className="text-sm text-muted-foreground">{plan.period}</span>
+            {plans.map((plan) => {
+              const displayPrice = plan.monthlyPrice === 0
+                ? 0
+                : annual
+                  ? Math.round(plan.monthlyPrice * 0.8)
+                  : plan.monthlyPrice;
+              const annualTotal = displayPrice * 12;
+
+              return (
+                <Card
+                  key={plan.id}
+                  className={`relative flex flex-col ${
+                    plan.highlight ? "border-teal shadow-lg shadow-teal/10 overflow-visible" : ""
+                  }`}
+                >
+                  {plan.highlight && (
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                      <span className="bg-teal text-white text-xs font-semibold px-3 py-1 rounded-full whitespace-nowrap">
+                        Most popular
+                      </span>
+                    </div>
+                  )}
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-base">{plan.name}</CardTitle>
+                    <div className="mt-2">
+                      <span className="text-3xl font-bold text-primary">${displayPrice}</span>
+                      {plan.monthlyPrice > 0 && (
+                        <span className="text-sm text-muted-foreground">/mo</span>
+                      )}
+                    </div>
+                    {annual && plan.monthlyPrice > 0 && (
+                      <p className="text-xs text-emerald-600 font-medium mt-0.5">
+                        ${annualTotal.toLocaleString()}/yr &middot; was ${plan.monthlyPrice}/mo
+                      </p>
                     )}
-                  </div>
-                  <p className="text-xs text-muted-foreground mt-1">{plan.description}</p>
-                </CardHeader>
-                <CardContent className="flex-1 flex flex-col justify-end">
-                  {plan.href ? (
-                    <Link
-                      href={plan.href}
-                      className={`block w-full text-center rounded-xl font-semibold py-2.5 text-sm transition-colors ${
-                        plan.highlight
-                          ? "bg-primary text-primary-foreground hover:bg-primary/90"
-                          : "bg-muted text-foreground hover:bg-muted/80"
-                      }`}
-                    >
-                      {plan.cta}
-                    </Link>
-                  ) : plan.isWaitlist ? (
-                    <Button
-                      variant="outline"
-                      className="w-full"
-                      onClick={() => {
-                        const el = document.getElementById("team-waitlist");
-                        el?.scrollIntoView({ behavior: "smooth" });
-                      }}
-                    >
-                      {plan.cta}
-                    </Button>
-                  ) : (
-                    <Button
-                      className={`w-full ${plan.highlight ? "" : "bg-muted text-foreground hover:bg-muted/80"}`}
-                      onClick={async () => {
-                        if (authEmail) {
-                          // Logged in: skip email modal, go straight to checkout
-                          setCheckoutLoading(true);
-                          setCheckoutError("");
-                          try {
-                            const res = await fetch("/api/billing/checkout", {
-                              method: "POST",
-                              headers: { "Content-Type": "application/json" },
-                              body: JSON.stringify({ email: authEmail, plan: plan.id }),
-                            });
-                            const data = await res.json();
-                            if (data.url) {
-                              window.location.href = data.url;
-                            } else {
-                              setCheckoutError(data.error || "Something went wrong.");
+                    <p className="text-xs text-muted-foreground mt-1">{plan.description}</p>
+                  </CardHeader>
+                  <CardContent className="flex-1 flex flex-col justify-end">
+                    {plan.href ? (
+                      <Link
+                        href={plan.href}
+                        className={`block w-full text-center rounded-xl font-semibold py-2.5 text-sm transition-colors ${
+                          plan.highlight
+                            ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                            : "bg-muted text-foreground hover:bg-muted/80"
+                        }`}
+                      >
+                        {plan.cta}
+                      </Link>
+                    ) : plan.isWaitlist ? (
+                      <Button
+                        variant="outline"
+                        className="w-full"
+                        onClick={() => {
+                          const el = document.getElementById("team-waitlist");
+                          el?.scrollIntoView({ behavior: "smooth" });
+                        }}
+                      >
+                        {plan.cta}
+                      </Button>
+                    ) : (
+                      <Button
+                        className={`w-full ${plan.highlight ? "" : "bg-muted text-foreground hover:bg-muted/80"}`}
+                        onClick={async () => {
+                          if (authEmail) {
+                            setCheckoutLoading(true);
+                            setCheckoutError("");
+                            try {
+                              const res = await fetch("/api/billing/checkout", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ email: authEmail, plan: plan.id, interval: annual ? "year" : "month" }),
+                              });
+                              const data = await res.json();
+                              if (data.url) {
+                                window.location.href = data.url;
+                              } else {
+                                setCheckoutError(data.error || "Something went wrong.");
+                                setCheckoutLoading(false);
+                              }
+                            } catch {
+                              setCheckoutError("Something went wrong.");
                               setCheckoutLoading(false);
                             }
-                          } catch {
-                            setCheckoutError("Something went wrong.");
-                            setCheckoutLoading(false);
+                          } else {
+                            setCheckoutPlan(plan.id);
+                            setCheckoutError("");
                           }
-                        } else {
-                          // Not logged in: show email modal
-                          setCheckoutPlan(plan.id);
-                          setCheckoutError("");
-                        }
-                      }}
-                    >
-                      {plan.cta}
-                    </Button>
-                  )}
-                </CardContent>
-              </Card>
-            ))}
+                        }}
+                      >
+                        {plan.cta}
+                      </Button>
+                    )}
+                  </CardContent>
+                </Card>
+              );
+            })}
           </div>
 
           {/* Pro features explainer */}
@@ -412,33 +435,40 @@ export default function PricingPage() {
 
             {/* Mobile card view */}
             <div className="md:hidden space-y-6">
-              {plans.map((plan) => (
-                <div key={plan.id} className="bg-card rounded-xl border border-border p-5">
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="font-bold text-primary">{plan.name}</h3>
-                    <span className="text-lg font-bold text-primary">{plan.price}{plan.period}</span>
-                  </div>
-                  <p className="text-xs text-muted-foreground mb-4">{plan.description}</p>
-                  {featureCategories.map(cat => (
-                    <div key={cat.category} className="mb-3">
-                      <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-1.5">{cat.category}</p>
-                      {cat.features.map(feat => {
-                        const val = feat[plan.id as keyof typeof feat];
-                        return val ? (
-                          <div key={feat.name} className="flex items-center gap-2 text-xs text-muted-foreground py-0.5">
-                            {val === true ? (
-                              <svg className="w-4 h-4 text-teal shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
-                            ) : (
-                              <span className="text-xs font-semibold text-primary">{String(val)}</span>
-                            )}
-                            <span>{feat.name}</span>
-                          </div>
-                        ) : null;
-                      })}
+              {plans.map((plan) => {
+                const mobilePrice = plan.monthlyPrice === 0
+                  ? "$0"
+                  : annual
+                    ? `$${Math.round(plan.monthlyPrice * 0.8)}/mo`
+                    : `$${plan.monthlyPrice}/mo`;
+                return (
+                  <div key={plan.id} className="bg-card rounded-xl border border-border p-5">
+                    <div className="flex items-center justify-between mb-3">
+                      <h3 className="font-bold text-primary">{plan.name}</h3>
+                      <span className="text-lg font-bold text-primary">{mobilePrice}</span>
                     </div>
-                  ))}
-                </div>
-              ))}
+                    <p className="text-xs text-muted-foreground mb-4">{plan.description}</p>
+                    {featureCategories.map(cat => (
+                      <div key={cat.category} className="mb-3">
+                        <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-1.5">{cat.category}</p>
+                        {cat.features.map(feat => {
+                          const val = feat[plan.id as keyof typeof feat];
+                          return val ? (
+                            <div key={feat.name} className="flex items-center gap-2 text-xs text-muted-foreground py-0.5">
+                              {val === true ? (
+                                <svg className="w-4 h-4 text-teal shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+                              ) : (
+                                <span className="text-xs font-semibold text-primary">{String(val)}</span>
+                              )}
+                              <span>{feat.name}</span>
+                            </div>
+                          ) : null;
+                        })}
+                      </div>
+                    ))}
+                  </div>
+                );
+              })}
             </div>
           </div>
 
@@ -542,6 +572,7 @@ export default function PricingPage() {
                 <CardHeader>
                   <CardTitle className="text-lg">
                     Subscribe to {checkoutPlan.charAt(0).toUpperCase() + checkoutPlan.slice(1)}
+                    {annual ? " (Annual)" : ""}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>

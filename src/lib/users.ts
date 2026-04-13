@@ -14,6 +14,18 @@ export interface User {
   discovery_count_this_month: number;
   month_reset_at: string;
   created_at: string;
+  referral_code: string | null;
+  referred_by: string | null;
+  bonus_runs: number;
+}
+
+function generateReferralCode(): string {
+  const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+  let code = "";
+  for (let i = 0; i < 8; i++) {
+    code += chars[Math.floor(Math.random() * chars.length)];
+  }
+  return code;
 }
 
 export async function getOrCreateUser(email: string, name?: string, company?: string, role?: string, companySize?: string): Promise<User> {
@@ -27,6 +39,15 @@ export async function getOrCreateUser(email: string, name?: string, company?: st
     .single();
 
   if (existing) {
+    // Generate referral code if missing
+    if (!existing.referral_code) {
+      await supabase
+        .from("users")
+        .update({ referral_code: generateReferralCode() })
+        .eq("email", email);
+      existing.referral_code = existing.referral_code || generateReferralCode();
+    }
+
     // Check if month needs reset
     const resetAt = new Date(existing.month_reset_at);
     if (new Date() >= resetAt) {
@@ -66,6 +87,7 @@ export async function getOrCreateUser(email: string, name?: string, company?: st
       company_size: companySize || null,
       plan: "free",
       month_reset_at: nextReset.toISOString(),
+      referral_code: generateReferralCode(),
     })
     .select()
     .single();
@@ -85,10 +107,56 @@ export async function checkQuota(email: string, type: "research" | "discovery"):
   const { PLANS } = await import("./lemonsqueezy");
   const user = await getOrCreateUser(email);
   const plan = PLANS[user.plan] || PLANS.free;
-  const limit = type === "research" ? plan.researchLimit : plan.discoveryLimit;
+  const baseLimit = type === "research" ? plan.researchLimit : plan.discoveryLimit;
+  const bonusRuns = user.bonus_runs || 0;
+  const effectiveLimit = type === "research" ? baseLimit + bonusRuns : baseLimit;
 
   const used = type === "research" ? user.research_count_this_month : user.discovery_count_this_month;
-  const remaining = Math.max(0, limit - used);
+  const remaining = Math.max(0, effectiveLimit - used);
 
-  return { allowed: remaining > 0, remaining, limit, plan: user.plan };
+  return { allowed: remaining > 0, remaining, limit: effectiveLimit, plan: user.plan };
+}
+
+export async function processReferral(referredEmail: string, referralCode: string): Promise<boolean> {
+  const supabase = await createClient();
+
+  // Find the referrer by their referral code
+  const { data: referrer } = await supabase
+    .from("users")
+    .select("email")
+    .eq("referral_code", referralCode)
+    .single();
+
+  if (!referrer || referrer.email === referredEmail) return false;
+
+  // Check if referral already exists
+  const { data: existingReferral } = await supabase
+    .from("referrals")
+    .select("id")
+    .eq("referred_email", referredEmail)
+    .single();
+
+  if (existingReferral) return false;
+
+  // Create referral record
+  await supabase.from("referrals").insert({
+    referrer_email: referrer.email,
+    referred_email: referredEmail,
+    status: "completed",
+    bonus_runs_awarded: true,
+  });
+
+  // Award 3 bonus runs to referrer
+  await supabase.rpc("increment_bonus_runs", { user_email: referrer.email, bonus: 3 });
+
+  // Award 3 bonus runs to referred user
+  await supabase.rpc("increment_bonus_runs", { user_email: referredEmail, bonus: 3 });
+
+  // Set referred_by on the new user
+  await supabase
+    .from("users")
+    .update({ referred_by: referralCode })
+    .eq("email", referredEmail);
+
+  return true;
 }
