@@ -17,6 +17,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { createClient } from "@/lib/supabase/client";
+import { ResearchLoading } from "@/components/research-loading";
 import type { ResearchResult } from "@/types/research";
 
 const CATEGORIES = [
@@ -127,7 +128,9 @@ function NewResearchForm() {
   const [verificationToken, setVerificationToken] = useState("");
   const [verificationError, setVerificationError] = useState("");
   const [isAuthUser, setIsAuthUser] = useState(false);
+  const [authChecked, setAuthChecked] = useState(false);
   const [isPrivate, setIsPrivate] = useState(false);
+  const [showErrors, setShowErrors] = useState(false);
 
   // Check Supabase Auth - if logged in, pre-fill and skip verification
   useEffect(() => {
@@ -156,6 +159,7 @@ function NewResearchForm() {
             }
           });
       }
+      setAuthChecked(true);
     });
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -358,7 +362,10 @@ function NewResearchForm() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!isFormValid) return;
+    if (!isFormValid) {
+      setShowErrors(true);
+      return;
+    }
 
     // Check if already verified for this email
     const storedVerification = sessionStorage.getItem("hypetest-verification");
@@ -388,7 +395,7 @@ function NewResearchForm() {
     setStage("Preparing research panel...");
 
     const progressInterval = setInterval(() => {
-      setProgress((p) => (p >= 90 ? p : p + Math.random() * 8));
+      setProgress((p) => Math.min(p + Math.random() * 8, 95));
       setStage((s) => {
         const stages = [
           "Generating consumer personas...",
@@ -465,41 +472,12 @@ function NewResearchForm() {
     return (
       <>
         <Nav />
-        <style>{`
-          @keyframes dot-pulse {
-            0%, 100% { opacity: 0.15; transform: scale(0.85); }
-            50% { opacity: 0.7; transform: scale(1); }
-          }
-          .dot-grid span {
-            animation: dot-pulse 1.8s cubic-bezier(0.16, 1, 0.3, 1) infinite;
-          }
-        `}</style>
         <main className="flex-1 flex items-center justify-center">
-          <div className="max-w-sm mx-auto px-6 text-center">
-            {/* Pulsing dot grid — suggests distributed consumer simulation */}
-            <div className="dot-grid grid grid-cols-6 gap-2 w-fit mx-auto mb-8">
-              {Array.from({ length: 18 }, (_, i) => (
-                <span
-                  key={i}
-                  className="block w-2.5 h-2.5 rounded-full bg-teal"
-                  style={{ animationDelay: `${i * 100}ms` }}
-                />
-              ))}
-            </div>
-            <h2 className="text-xl font-bold text-primary mb-2">
-              Running your research
-            </h2>
-            <p className="text-sm text-muted-foreground mb-8">{stage}</p>
-            <div className="w-full bg-muted rounded-full h-1.5 mb-3 overflow-hidden">
-              <div
-                className="bg-teal h-1.5 rounded-full origin-left transition-transform duration-1000 ease-out"
-                style={{ transform: `scaleX(${Math.min(progress, 100) / 100})` }}
-              />
-            </div>
-            <p className="text-xs text-muted-foreground">
-              {progress >= 95 ? "Finalizing report..." : `Surveying simulated panel (${Math.round(progress)}%)`}
-            </p>
-          </div>
+          <ResearchLoading
+            stage={stage}
+            progress={progress}
+            subtitle={progress >= 95 ? "Finalizing report..." : `Surveying simulated panel (${Math.round(progress)}%)`}
+          />
         </main>
       </>
     );
@@ -574,7 +552,11 @@ function NewResearchForm() {
                     value={productName}
                     onChange={(e) => setProductName(e.target.value)}
                     required
+                    className={showErrors && !productName.trim() ? "border-red-500 dark:border-red-400" : ""}
                   />
+                  {showErrors && !productName.trim() && (
+                    <p className="text-xs text-red-500 mt-1">Required</p>
+                  )}
                 </FieldGroup>
 
                 {/* Category */}
@@ -607,9 +589,12 @@ function NewResearchForm() {
                     value={problem}
                     onChange={(e) => setProblem(e.target.value)}
                     rows={2}
-                    className="resize-none"
+                    className={`resize-none ${showErrors && !problem.trim() ? "border-red-500 dark:border-red-400" : ""}`}
                     required
                   />
+                  {showErrors && !problem.trim() && (
+                    <p className="text-xs text-red-500 mt-1">Required</p>
+                  )}
                 </FieldGroup>
 
                 {/* Top 3 Features */}
@@ -660,6 +645,7 @@ function NewResearchForm() {
                 {/* Target Consumer */}
                 <FieldGroup
                   label="Target Consumer"
+                  badge={targetMarket && !targetTouched ? <span className="text-[10px] text-teal bg-teal/10 px-1.5 py-0.5 rounded ml-1">Auto-filled</span> : undefined}
 >
                   <Textarea
                     placeholder="e.g., Health-conscious women 25-40, metro areas, $80k+ household income"
@@ -679,6 +665,7 @@ function NewResearchForm() {
                 {/* Competitors */}
                 <FieldGroup
                   label="Competitive Products"
+                  badge={competitors && !competitorsTouched ? <span className="text-[10px] text-teal bg-teal/10 px-1.5 py-0.5 rounded ml-1">Auto-filled</span> : undefined}
 >
                   <Input
                     placeholder="e.g., Celsius, Ghost Energy, LMNT"
@@ -708,7 +695,7 @@ function NewResearchForm() {
                 </FieldGroup>
 
                 {/* Sign in or enter details - only for non-authenticated users */}
-                {!isAuthUser && (
+                {authChecked && !isAuthUser && (
                   <div className="bg-teal/5 rounded-xl p-4 border border-teal/20 space-y-4">
                     <div>
                       <p className="text-sm font-semibold text-primary mb-1">Quick sign in (recommended)</p>
@@ -756,7 +743,11 @@ function NewResearchForm() {
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
                           required
+                          className={showErrors && (!email.trim() || !email.includes("@")) ? "border-red-500 dark:border-red-400" : ""}
                         />
+                        {showErrors && (!email.trim() || !email.includes("@")) && (
+                          <p className="text-xs text-red-500 mt-1">Required</p>
+                        )}
                       </div>
                       <div className="space-y-1.5">
                         <Label htmlFor="userCompany">Company <span className="text-red-500">*</span></Label>
@@ -906,15 +897,17 @@ function NewResearchForm() {
 function FieldGroup({
   label,
   required,
+  badge,
   children,
 }: {
   label: string;
   required?: boolean;
+  badge?: React.ReactNode;
   children: React.ReactNode;
 }) {
   return (
     <div className="space-y-1.5">
-      <Label>{label}{required && <span className="text-red-500 ml-0.5">*</span>}</Label>
+      <Label>{label}{required && <span className="text-red-500 ml-0.5">*</span>}{badge}</Label>
       {children}
     </div>
   );

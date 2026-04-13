@@ -141,7 +141,7 @@ function AudienceTestForm() {
     setStage("Preparing audience panels...");
 
     const progressInterval = setInterval(() => {
-      setProgress((p) => (p >= 90 ? p : p + Math.random() * 5));
+      setProgress((p) => Math.min(p + Math.random() * 5, 95));
       setStage((s) => {
         const stages = [
           "Generating targeted personas...",

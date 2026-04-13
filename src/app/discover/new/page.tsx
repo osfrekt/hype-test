@@ -19,6 +19,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { createClient } from "@/lib/supabase/client";
+import { ResearchLoading } from "@/components/research-loading";
 
 const CATEGORIES = [
   { value: "food & beverage", label: "Food & Beverage" },
@@ -119,6 +120,8 @@ function DiscoverNewForm() {
   const [verificationToken, setVerificationToken] = useState("");
   const [verificationError, setVerificationError] = useState("");
   const [isAuthUser, setIsAuthUser] = useState(false);
+  const [authChecked, setAuthChecked] = useState(false);
+  const [showErrors, setShowErrors] = useState(false);
 
   const [isRunning, setIsRunning] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -150,6 +153,7 @@ function DiscoverNewForm() {
             }
           });
       }
+      setAuthChecked(true);
     });
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -268,7 +272,10 @@ function DiscoverNewForm() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!isFormValid) return;
+    if (!isFormValid) {
+      setShowErrors(true);
+      return;
+    }
 
     // Check if already verified for this email
     const storedVerification = sessionStorage.getItem("hypetest-verification");
@@ -298,7 +305,7 @@ function DiscoverNewForm() {
 
     let conceptIndex = 1;
     const progressInterval = setInterval(() => {
-      setProgress((p) => (p >= 90 ? p : p + Math.random() * 6));
+      setProgress((p) => Math.min(p + Math.random() * 6, 95));
       setStage((s) => {
         const stages = [
           "Analysing your brand and audience...",
@@ -396,36 +403,11 @@ function DiscoverNewForm() {
       <>
         <Nav />
         <main className="flex-1 flex items-center justify-center">
-          <div className="max-w-md mx-auto px-6 text-center">
-            <div className="w-16 h-16 rounded-2xl bg-teal/10 flex items-center justify-center mx-auto mb-6">
-              <svg
-                className="animate-spin text-teal"
-                width="28"
-                height="28"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M21 12a9 9 0 1 1-6.219-8.56" />
-              </svg>
-            </div>
-            <h2 className="text-xl font-bold text-primary mb-2">
-              Discovering product opportunities
-            </h2>
-            <p className="text-sm text-muted-foreground mb-8">{stage}</p>
-            <div className="w-full bg-muted rounded-full h-2 mb-3">
-              <div
-                className="bg-teal h-2 rounded-full transition-all duration-1000 ease-out"
-                style={{ width: `${Math.min(progress, 100)}%` }}
-              />
-            </div>
-            <p className="text-xs text-muted-foreground">
-              Generating and testing 8 product concepts with 30 consumers each
-            </p>
-          </div>
+          <ResearchLoading
+            stage={stage}
+            progress={progress}
+            subtitle="Generating and testing 8 product concepts with 30 consumers each"
+          />
         </main>
       </>
     );
@@ -544,7 +526,11 @@ function DiscoverNewForm() {
                     value={brandName}
                     onChange={(e) => setBrandName(e.target.value)}
                     required
+                    className={showErrors && !brandName.trim() ? "border-red-500 dark:border-red-400" : ""}
                   />
+                  {showErrors && !brandName.trim() && (
+                    <p className="text-xs text-red-500 mt-1">Required</p>
+                  )}
                 </div>
 
                 {/* Brand Description */}
@@ -555,9 +541,12 @@ function DiscoverNewForm() {
                     value={brandDescription}
                     onChange={(e) => setBrandDescription(e.target.value)}
                     rows={3}
-                    className="resize-none"
+                    className={`resize-none ${showErrors && !brandDescription.trim() ? "border-red-500 dark:border-red-400" : ""}`}
                     required
                   />
+                  {showErrors && !brandDescription.trim() && (
+                    <p className="text-xs text-red-500 mt-1">Required</p>
+                  )}
                 </div>
 
                 {/* Category */}
@@ -567,7 +556,7 @@ function DiscoverNewForm() {
                     value={category}
                     onValueChange={(v) => setCategory(v ?? "")}
                   >
-                    <SelectTrigger className="w-full">
+                    <SelectTrigger className={`w-full ${showErrors && !category ? "border-red-500 dark:border-red-400" : ""}`}>
                       <SelectValue placeholder="Select a category" />
                     </SelectTrigger>
                     <SelectContent>
@@ -578,6 +567,9 @@ function DiscoverNewForm() {
                       ))}
                     </SelectContent>
                   </Select>
+                  {showErrors && !category && (
+                    <p className="text-xs text-red-500 mt-1">Required</p>
+                  )}
                 </div>
 
                 {/* Target Audience */}
@@ -588,9 +580,12 @@ function DiscoverNewForm() {
                     value={targetAudience}
                     onChange={(e) => setTargetAudience(e.target.value)}
                     rows={2}
-                    className="resize-none"
+                    className={`resize-none ${showErrors && !targetAudience.trim() ? "border-red-500 dark:border-red-400" : ""}`}
                     required
                   />
+                  {showErrors && !targetAudience.trim() && (
+                    <p className="text-xs text-red-500 mt-1">Required</p>
+                  )}
                 </div>
 
                 {/* Advanced Options */}
@@ -689,7 +684,7 @@ function DiscoverNewForm() {
                 </div>
 
                 {/* About you - only for non-authenticated users */}
-                {!isAuthUser && (
+                {authChecked && !isAuthUser && (
                   <div className="bg-teal/5 rounded-xl p-4 border border-teal/20 space-y-4">
                     <div>
                       <p className="text-sm font-semibold text-primary mb-1">About you</p>

@@ -178,7 +178,7 @@ function NewMarketResearchForm() {
     setStage("Analyzing market landscape...");
 
     const progressInterval = setInterval(() => {
-      setProgress((p) => (p >= 90 ? p : p + Math.random() * 12));
+      setProgress((p) => Math.min(p + Math.random() * 12, 95));
       setStage((s) => {
         const stages = [
           "Analyzing market landscape...",

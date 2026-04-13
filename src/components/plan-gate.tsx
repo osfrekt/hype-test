@@ -32,7 +32,7 @@ export function PlanGate({
       <main className="flex-1 py-12">
         <div className="max-w-2xl mx-auto px-6">
           <div className="text-center mb-8">
-            <span className="inline-flex items-center gap-1.5 text-xs font-medium bg-primary text-primary-foreground px-2.5 py-1 rounded-full mb-4">
+            <span className="inline-flex items-center gap-1.5 text-xs font-medium bg-teal text-white px-2.5 py-1 rounded-full mb-4">
               {requiredPlan} Plan
             </span>
             <h1 className="text-2xl font-bold text-primary mb-3">
@@ -49,7 +49,7 @@ export function PlanGate({
             <ul className="space-y-2 text-sm text-muted-foreground">
               {bullets.map((bullet, i) => (
                 <li key={i} className="flex items-start gap-2">
-                  <span className="text-teal mt-0.5">&#10003;</span>
+                  <span className="text-teal mt-0.5" aria-hidden="true">&#10003;</span>
                   <span>{bullet}</span>
                 </li>
               ))}

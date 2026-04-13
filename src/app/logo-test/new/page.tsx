@@ -106,6 +106,7 @@ function NewLogoTestForm() {
   const [referrer] = useState(() => typeof window !== "undefined" ? document.referrer || "" : "");
 
   // UI state
+  const [uploadError, setUploadError] = useState("");
   const [isRunning, setIsRunning] = useState(false);
   const [progress, setProgress] = useState(0);
   const [stage, setStage] = useState("");
@@ -123,9 +124,10 @@ function NewLogoTestForm() {
     const file = e.target.files?.[0];
     if (!file) return;
     if (file.size > 5 * 1024 * 1024) {
-      alert("Image must be under 5MB");
+      setUploadError("Image must be under 5MB");
       return;
     }
+    setUploadError("");
     const reader = new FileReader();
     reader.onloadend = () => {
       const base64 = reader.result as string;
@@ -167,10 +169,7 @@ function NewLogoTestForm() {
 
     let logoIndex = 0;
     const progressInterval = setInterval(() => {
-      setProgress((p) => {
-        if (p >= 90) return p;
-        return p + Math.random() * 4;
-      });
+      setProgress((p) => Math.min(p + Math.random() * 4, 95));
       setStage(() => {
         const totalLogos = logos.length;
         if (logoIndex < totalLogos) {
@@ -417,6 +416,7 @@ function NewLogoTestForm() {
                       onChange={(e) => handleFileUpload(e, idx)}
                       className="text-sm file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-muted file:text-foreground hover:file:bg-muted/80"
                     />
+                    {uploadError && <p className="text-xs text-red-500 mt-1">{uploadError}</p>}
                     {logo.imageBase64 && (
                       <img src={logo.imageBase64} alt={logo.name} className="w-20 h-20 object-contain rounded-lg border border-border mt-2" />
                     )}

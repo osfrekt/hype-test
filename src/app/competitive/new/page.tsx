@@ -210,7 +210,7 @@ function CompetitiveForm() {
     setStage("Preparing shared consumer panel...");
 
     const progressInterval = setInterval(() => {
-      setProgress((p) => (p >= 90 ? p : p + Math.random() * 6));
+      setProgress((p) => Math.min(p + Math.random() * 6, 95));
       setStage((s) => {
         const stages = [
           "Generating consumer personas...",

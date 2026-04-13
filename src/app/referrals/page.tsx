@@ -17,9 +17,9 @@ interface Referral {
 
 function maskEmail(email: string): string {
   const [local, domain] = email.split("@");
-  if (!domain) return email;
-  const masked = local.length <= 2 ? local : local[0] + "***" + local[local.length - 1];
-  return `${masked}@${domain}`;
+  if (!local || !domain) return "***";
+  if (local.length <= 3) return local + "@" + domain;
+  return local.slice(0, 2) + "***" + local.slice(-1) + "@" + domain;
 }
 
 export default function ReferralsPage() {
@@ -96,8 +96,9 @@ export default function ReferralsPage() {
             <CardContent className="py-6">
               <p className="text-sm font-medium text-primary mb-3">Your referral link</p>
               <div className="flex items-center gap-2">
-                <code className="flex-1 text-sm bg-muted px-3 py-2 rounded font-mono overflow-x-auto">
-                  https://hypetest.ai/?ref={referralCode || "..."}
+                <code className="flex-1 text-sm bg-muted px-3 py-2 rounded font-mono overflow-x-auto break-all">
+                  <span className="hidden sm:inline">https://hypetest.ai/?ref={referralCode || "..."}</span>
+                  <span className="sm:hidden">?ref={referralCode || "..."}</span>
                 </code>
                 <Button
                   size="sm"

@@ -123,7 +123,7 @@ function NewNameTestForm() {
     setStage("Preparing name testing panel...");
 
     const progressInterval = setInterval(() => {
-      setProgress((p) => (p >= 90 ? p : p + Math.random() * 6));
+      setProgress((p) => Math.min(p + Math.random() * 6, 95));
       setStage((s) => {
         const stages = [
           "Generating consumer personas...",
