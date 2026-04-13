@@ -6,6 +6,7 @@ import type {
   ResearchResult,
 } from "@/types/research";
 import { generatePanel, generateTargetedPanel } from "./personas";
+import { llmComplete } from "./llm";
 
 const anthropic = new Anthropic();
 
@@ -193,15 +194,12 @@ Respond in this exact JSON format:
 }`;
 
   try {
-    const response = await anthropic.messages.create({
-      model: "claude-haiku-4-5-20251001",
-      max_tokens: 500,
-      temperature: 1.0,
-      messages: [{ role: "user", content: prompt }],
-    });
+    const llmResponse = await llmComplete(
+      [{ role: "user", content: prompt }],
+      { maxTokens: 500, temperature: 1.0 }
+    );
 
-    const text =
-      response.content[0].type === "text" ? response.content[0].text : "";
+    const text = llmResponse.text;
     const jsonMatch = text.match(/\{[\s\S]*\}/);
     if (!jsonMatch) throw new Error("No JSON in response");
 

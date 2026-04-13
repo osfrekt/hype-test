@@ -165,9 +165,11 @@ export default function PrivacyPage() {
                 <strong>Vercel:</strong> Web hosting and deployment platform.
               </li>
               <li>
-                <strong>Anthropic:</strong> AI model provider. Product
-                descriptions and research inputs are sent to Anthropic&apos;s API
-                for processing to generate simulated consumer research results.
+                <strong>AI model providers (including Anthropic and others):</strong>{" "}
+                Product descriptions and research inputs are sent to AI model
+                provider APIs for processing to generate simulated consumer
+                research results. We may use multiple AI providers for
+                redundancy and service reliability.
               </li>
               <li>
                 <strong>Resend:</strong> Email delivery service used to send

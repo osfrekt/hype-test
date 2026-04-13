@@ -572,6 +572,18 @@ export default function TermsPage() {
               obligated to do so.
             </p>
             <p className="text-muted-foreground leading-relaxed">
+              The Service relies on third-party artificial intelligence
+              infrastructure providers to generate research results. These
+              providers operate independently and may experience outages,
+              degraded performance, or changes to their services that are
+              beyond our control. We maintain redundant AI provider
+              relationships to minimize disruption, but we cannot guarantee
+              uninterrupted AI service availability. In the event of an AI
+              provider outage, research runs may be delayed or temporarily
+              unavailable. No refunds or credits will be issued for delays
+              caused by third-party AI provider issues.
+            </p>
+            <p className="text-muted-foreground leading-relaxed">
               We are not liable for any damages, losses, or costs resulting
               from Service downtime or unavailability, regardless of cause.
             </p>
