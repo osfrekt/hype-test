@@ -114,7 +114,7 @@ export default function ReferralsPage() {
                 </Button>
               </div>
               {bonusRuns > 0 && (
-                <p className="text-sm text-emerald-600 font-medium mt-3">
+                <p className="text-sm text-emerald-600 dark:text-emerald-400 font-medium mt-3">
                   You have {bonusRuns} bonus research runs from referrals!
                 </p>
               )}
