@@ -70,7 +70,7 @@ export function CompetitiveRadarChart({
               fontSize: 12,
               borderRadius: 8,
               border: "1px solid oklch(0.91 0.005 260)",
-              backgroundColor: "#ffffff",
+
             }}
           />
           <Legend wrapperStyle={{ fontSize: 12 }} />

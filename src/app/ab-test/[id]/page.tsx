@@ -378,7 +378,7 @@ function ConceptCard({ label, concept, isWinner }: { label: string; concept: AbT
         {/* NPS */}
         <div>
           <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-1">NPS Score</p>
-          <p className={`text-xl font-bold ${npsScore >= 0 ? "text-emerald-600" : "text-red-500"}`}>
+          <p className={`text-xl font-bold ${npsScore >= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-red-500 dark:text-red-400"}`}>
             {npsScore > 0 ? "+" : ""}{npsScore}
           </p>
         </div>

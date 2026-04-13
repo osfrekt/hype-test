@@ -254,7 +254,6 @@ function PricingTestResultContent({
                         "Purchase Intent",
                       ]}
                       contentStyle={{
-                        background: "#fff",
                         border: "1px solid oklch(0.91 0.005 260)",
                         borderRadius: "8px",
                         fontSize: "13px",
@@ -313,7 +312,6 @@ function PricingTestResultContent({
                           String(name ?? ""),
                         ]}
                         contentStyle={{
-                          background: "#fff",
                           border: "1px solid oklch(0.91 0.005 260)",
                           borderRadius: "8px",
                           fontSize: "13px",
@@ -365,7 +363,6 @@ function PricingTestResultContent({
                       <Tooltip
                         formatter={(value: unknown, name: unknown) => [`${value}%`, String(name ?? "")]}
                         contentStyle={{
-                          background: "#fff",
                           border: "1px solid oklch(0.91 0.005 260)",
                           borderRadius: "8px",
                           fontSize: "13px",
@@ -425,11 +422,11 @@ function PricingTestResultContent({
                         <td className="py-3 px-3 text-center">
                           {pp.priceComparison ? (
                             <div className="flex items-center justify-center gap-1 text-[10px]">
-                              <span className="text-amber-500">{pp.priceComparison.tooCheap}%</span>
+                              <span className="text-amber-500 dark:text-amber-400">{pp.priceComparison.tooCheap}%</span>
                               <span className="text-muted-foreground">/</span>
-                              <span className="text-emerald-600">{pp.priceComparison.aboutRight}%</span>
+                              <span className="text-emerald-600 dark:text-emerald-400">{pp.priceComparison.aboutRight}%</span>
                               <span className="text-muted-foreground">/</span>
-                              <span className="text-red-500">{pp.priceComparison.tooExpensive}%</span>
+                              <span className="text-red-500 dark:text-red-400">{pp.priceComparison.tooExpensive}%</span>
                             </div>
                           ) : "-"}
                         </td>

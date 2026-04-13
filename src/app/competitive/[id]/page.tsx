@@ -142,10 +142,10 @@ function CompetitiveResultContent({
       : "It's a tie";
 
   const winnerColor = result.winner === "yours"
-    ? "bg-emerald-100 text-emerald-800 border-emerald-300"
+    ? "bg-emerald-100 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700"
     : result.winner === "competitor"
-      ? "bg-red-100 text-red-800 border-red-300"
-      : "bg-amber-100 text-amber-800 border-amber-300";
+      ? "bg-red-100 dark:bg-red-950/40 text-red-800 dark:text-red-300 border-red-300 dark:border-red-700"
+      : "bg-amber-100 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border-amber-300 dark:border-amber-700";
 
   return (
     <>
@@ -255,11 +255,11 @@ function ProductCard({
   isWinner: boolean;
 }) {
   return (
-    <Card className={isWinner ? "border-emerald-300 ring-1 ring-emerald-200" : ""}>
+    <Card className={isWinner ? "border-emerald-300 dark:border-emerald-700 ring-1 ring-emerald-200 dark:ring-emerald-800" : ""}>
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle className="text-base">{product.input.productName}</CardTitle>
-          {isWinner && <Badge className="bg-emerald-100 text-emerald-800 border-emerald-300">Winner</Badge>}
+          {isWinner && <Badge className="bg-emerald-100 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700">Winner</Badge>}
         </div>
         <p className="text-xs text-muted-foreground">{label}</p>
       </CardHeader>

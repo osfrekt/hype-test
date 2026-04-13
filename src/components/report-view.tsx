@@ -651,19 +651,19 @@ function WtpCard({ result }: { result: ResearchResult }) {
     const ratio = mid / userPrice;
     if (ratio >= 1.1) {
       priceIndicator = {
-        color: "text-emerald-600",
+        color: "text-emerald-600 dark:text-emerald-400",
         icon: "\u2713",
         label: `your price: $${userPrice}`,
       };
     } else if (ratio >= 0.9) {
       priceIndicator = {
-        color: "text-amber-600",
+        color: "text-amber-600 dark:text-amber-400",
         icon: "\u2248",
         label: `your price: $${userPrice}`,
       };
     } else {
       priceIndicator = {
-        color: "text-red-600",
+        color: "text-red-600 dark:text-red-400",
         icon: "\u2717",
         label: `your price: $${userPrice}`,
       };

@@ -240,7 +240,6 @@ function AudienceTestResultContent({
                     <Tooltip
                       formatter={(value: unknown) => [`${value}%`, "Purchase Intent"]}
                       contentStyle={{
-                        background: "#fff",
                         border: "1px solid oklch(0.91 0.005 260)",
                         borderRadius: "8px",
                         fontSize: "13px",

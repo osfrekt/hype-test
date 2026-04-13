@@ -235,9 +235,9 @@ function NewResearchForm() {
     if (targetMarket.trim()) score++;
     if (competitors.trim()) score++;
 
-    if (score <= 3) return { level: "Fair", color: "text-amber-600", bg: "bg-amber-500" };
+    if (score <= 3) return { level: "Fair", color: "text-amber-600 dark:text-amber-400", bg: "bg-amber-500" };
     if (score <= 5) return { level: "Good", color: "text-teal", bg: "bg-teal" };
-    return { level: "Excellent", color: "text-emerald-600", bg: "bg-emerald-500" };
+    return { level: "Excellent", color: "text-emerald-600 dark:text-emerald-400", bg: "bg-emerald-500" };
   }, [
     productName, problem, feature1, feature2, feature3,
     differentiator, category, priceUnit, targetMarket, competitors,

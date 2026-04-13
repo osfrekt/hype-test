@@ -256,11 +256,11 @@ function NameTestResultContent({
                     {/* Positive / Concern */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
                       <div>
-                        <span className="text-emerald-600 font-medium">Positive: </span>
+                        <span className="text-emerald-600 dark:text-emerald-400 font-medium">Positive: </span>
                         <span className="text-muted-foreground">{n.topPositive}</span>
                       </div>
                       <div>
-                        <span className="text-red-500 font-medium">Concern: </span>
+                        <span className="text-red-500 dark:text-red-400 font-medium">Concern: </span>
                         <span className="text-muted-foreground">{n.topNegative}</span>
                       </div>
                     </div>

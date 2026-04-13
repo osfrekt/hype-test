@@ -357,9 +357,9 @@ function DiscoverResultContent({
   }
 
   function rankColor(rank: number) {
-    if (rank <= 2) return "bg-emerald-100 text-emerald-800";
-    if (rank <= 5) return "bg-amber-100 text-amber-800";
-    return "bg-gray-100 text-gray-600";
+    if (rank <= 2) return "bg-emerald-100 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300";
+    if (rank <= 5) return "bg-amber-100 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300";
+    return "bg-gray-100 dark:bg-gray-800/40 text-gray-600 dark:text-gray-400";
   }
 
   const totalRounds = result.rounds ?? 1;
@@ -479,7 +479,7 @@ function DiscoverResultContent({
                     >
                       <CartesianGrid
                         strokeDasharray="3 3"
-                        stroke="#e5e7eb"
+                        stroke="oklch(0.91 0.005 260)"
                       />
                       <XAxis
                         type="number"
@@ -497,7 +497,7 @@ function DiscoverResultContent({
                         contentStyle={{
                           fontSize: 12,
                           borderRadius: 8,
-                          border: "1px solid #e5e7eb",
+                          border: "1px solid oklch(0.91 0.005 260)",
                         }}
                         formatter={(value: unknown) => [`${value}%`, "Intent"]}
                       />
@@ -512,7 +512,7 @@ function DiscoverResultContent({
                           dataKey="score"
                           position="right"
                           fontSize={11}
-                          fill="#374151"
+                          fill="oklch(0.50 0.02 260)"
                           formatter={(v: unknown) => `${v}%`}
                         />
                       </Bar>
@@ -567,7 +567,7 @@ function DiscoverResultContent({
                             Purchase Intent
                           </span>
                           <span
-                            className={`text-sm font-bold ${c.purchaseIntent.score >= 60 ? "text-emerald-600" : c.purchaseIntent.score >= 40 ? "text-amber-600" : "text-red-600"}`}
+                            className={`text-sm font-bold ${c.purchaseIntent.score >= 60 ? "text-emerald-600 dark:text-emerald-400" : c.purchaseIntent.score >= 40 ? "text-amber-600 dark:text-amber-400" : "text-red-600 dark:text-red-400"}`}
                           >
                             {c.purchaseIntent.score}%
                           </span>
