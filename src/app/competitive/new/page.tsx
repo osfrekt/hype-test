@@ -4,6 +4,8 @@ import { Suspense, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Nav } from "@/components/nav";
+import { PlanGate } from "@/components/plan-gate";
+import { usePlanAccess } from "@/hooks/use-plan-access";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -50,6 +52,7 @@ export default function CompetitiveNewPage() {
 
 function CompetitiveForm() {
   const router = useRouter();
+  const { planChecked, hasAccess, isAuthenticated } = usePlanAccess("pro");
 
   // Your product
   const [yourMode, setYourMode] = useState<"new" | "past">("new");
@@ -275,6 +278,24 @@ function CompetitiveForm() {
       setProgress(0);
       setError(err instanceof Error ? err.message : "Something went wrong");
     }
+  }
+
+  if (planChecked && !hasAccess) {
+    return (
+      <PlanGate
+        requiredPlan="Pro"
+        toolTitle="Competitive Teardown"
+        toolDescription="Compare your product against a competitor. Same panel, same questions, side-by-side results."
+        bullets={[
+          "Your product vs a competitor",
+          "Radar chart across 5 dimensions",
+          "Side-by-side strengths/weaknesses",
+          "Strategic positioning insights",
+        ]}
+        sampleReportHref="/competitive/sample-rekt"
+        isAuthenticated={isAuthenticated}
+      />
+    );
   }
 
   if (isRunning) {

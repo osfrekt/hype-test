@@ -4,6 +4,8 @@ import { Suspense, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Nav } from "@/components/nav";
+import { PlanGate } from "@/components/plan-gate";
+import { usePlanAccess } from "@/hooks/use-plan-access";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -41,6 +43,7 @@ export default function NewAdTestPage() {
 
 function NewAdTestForm() {
   const router = useRouter();
+  const { planChecked, hasAccess, isAuthenticated } = usePlanAccess("pro");
 
   // Mode
   const [mode, setMode] = useState<"single" | "ab">("single");
@@ -194,6 +197,24 @@ function NewAdTestForm() {
       setProgress(0);
       setError(err instanceof Error ? err.message : "Something went wrong");
     }
+  }
+
+  if (planChecked && !hasAccess) {
+    return (
+      <PlanGate
+        requiredPlan="Pro"
+        toolTitle="Ad / Creative Testing"
+        toolDescription="Test ad creatives with a panel of simulated consumers. Get attention, clarity, persuasion, and click likelihood scores."
+        bullets={[
+          "Test ad copy and creatives",
+          "Attention/clarity/persuasion/brand fit scores",
+          "Click likelihood",
+          "A/B creative comparison",
+        ]}
+        sampleReportHref="/ad-test/sample-rekt"
+        isAuthenticated={isAuthenticated}
+      />
+    );
   }
 
   if (isRunning) {

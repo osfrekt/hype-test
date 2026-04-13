@@ -4,6 +4,8 @@ import { Suspense, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Nav } from "@/components/nav";
+import { PlanGate } from "@/components/plan-gate";
+import { usePlanAccess } from "@/hooks/use-plan-access";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -16,7 +18,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Lock } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
 const CATEGORIES = [
@@ -89,7 +90,7 @@ export default function DiscoverNewPage() {
 
 function DiscoverNewForm() {
   const router = useRouter();
-  const isPro = true; // TODO: gate behind auth/billing when ready
+  const { planChecked, hasAccess, isAuthenticated } = usePlanAccess("pro");
 
   const [brandName, setBrandName] = useState("");
   const [brandDescription, setBrandDescription] = useState("");
@@ -372,32 +373,21 @@ function DiscoverNewForm() {
     }
   }
 
-  if (!isPro) {
+  if (planChecked && !hasAccess) {
     return (
-      <>
-        <Nav />
-        <main className="flex-1 flex items-center justify-center">
-          <div className="max-w-md mx-auto px-6 text-center">
-            <div className="w-16 h-16 rounded-2xl bg-muted flex items-center justify-center mx-auto mb-6">
-              <Lock className="w-8 h-8 text-muted-foreground" />
-            </div>
-            <h2 className="text-xl font-bold text-primary mb-2">
-              Product Discovery is a Pro feature
-            </h2>
-            <p className="text-sm text-muted-foreground mb-6">
-              Discover untapped product opportunities for your brand. Our AI
-              generates and tests product concepts with a simulated consumer
-              panel to find what your audience actually wants.
-            </p>
-            <Link
-              href="/pricing"
-              className="inline-flex items-center justify-center rounded-md bg-primary hover:bg-primary/90 text-primary-foreground h-11 px-8 text-sm font-medium transition-colors"
-            >
-              View Pricing
-            </Link>
-          </div>
-        </main>
-      </>
+      <PlanGate
+        requiredPlan="Pro"
+        toolTitle="Product Discovery"
+        toolDescription="AI generates product concepts for your brand and tests them with a simulated consumer panel to find untapped opportunities."
+        bullets={[
+          "AI generates product concepts",
+          "Each tested with consumer panel",
+          "Iterative refinement rounds",
+          "One-click to full research on winners",
+        ]}
+        sampleReportHref="/discover/sample-rekt"
+        isAuthenticated={isAuthenticated}
+      />
     );
   }
 

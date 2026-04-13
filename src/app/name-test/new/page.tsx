@@ -4,6 +4,8 @@ import { Suspense, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Nav } from "@/components/nav";
+import { PlanGate } from "@/components/plan-gate";
+import { usePlanAccess } from "@/hooks/use-plan-access";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -41,6 +43,7 @@ export default function NewNameTestPage() {
 
 function NewNameTestForm() {
   const router = useRouter();
+  const { planChecked, hasAccess, isAuthenticated } = usePlanAccess("starter");
 
   // Product
   const [productDescription, setProductDescription] = useState("");
@@ -174,6 +177,24 @@ function NewNameTestForm() {
       setProgress(0);
       setError(err instanceof Error ? err.message : "Something went wrong");
     }
+  }
+
+  if (planChecked && !hasAccess) {
+    return (
+      <PlanGate
+        requiredPlan="Starter"
+        toolTitle="Name Testing"
+        toolDescription="Test 2-5 name options for the same product. A consumer panel ranks each name by appeal."
+        bullets={[
+          "Test 3-5 name options",
+          "Ranked by consumer appeal",
+          "Emotional associations per name",
+          "First impression quotes",
+        ]}
+        sampleReportHref="/name-test/sample-rekt"
+        isAuthenticated={isAuthenticated}
+      />
+    );
   }
 
   if (isRunning) {

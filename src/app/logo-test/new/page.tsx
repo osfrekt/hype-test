@@ -4,6 +4,8 @@ import { Suspense, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Nav } from "@/components/nav";
+import { PlanGate } from "@/components/plan-gate";
+import { usePlanAccess } from "@/hooks/use-plan-access";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -53,6 +55,7 @@ export default function NewLogoTestPage() {
 
 function NewLogoTestForm() {
   const router = useRouter();
+  const { planChecked, hasAccess, isAuthenticated } = usePlanAccess("pro");
 
   // Brand context
   const [brandName, setBrandName] = useState("");
@@ -226,6 +229,24 @@ function NewLogoTestForm() {
       setProgress(0);
       setError(err instanceof Error ? err.message : "Something went wrong");
     }
+  }
+
+  if (planChecked && !hasAccess) {
+    return (
+      <PlanGate
+        requiredPlan="Pro"
+        toolTitle="Logo Testing"
+        toolDescription="Test logo designs with a panel of simulated consumers. Get first impression, memorability, brand fit, and trust scores."
+        bullets={[
+          "Upload and test logo designs",
+          "First impression/memorability/brand fit/trust scores",
+          "Compare up to 5 options",
+          "Industry association analysis",
+        ]}
+        sampleReportHref="/logo-test/sample-rekt"
+        isAuthenticated={isAuthenticated}
+      />
+    );
   }
 
   if (isRunning) {

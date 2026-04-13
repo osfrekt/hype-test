@@ -4,6 +4,8 @@ import { Suspense, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Nav } from "@/components/nav";
+import { PlanGate } from "@/components/plan-gate";
+import { usePlanAccess } from "@/hooks/use-plan-access";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -41,6 +43,7 @@ export default function NewAbTestPage() {
 
 function NewAbTestForm() {
   const router = useRouter();
+  const { planChecked, hasAccess, isAuthenticated } = usePlanAccess("starter");
 
   // Concept A
   const [nameA, setNameA] = useState("");
@@ -193,6 +196,24 @@ function NewAbTestForm() {
       setProgress(0);
       setError(err instanceof Error ? err.message : "Something went wrong");
     }
+  }
+
+  if (planChecked && !hasAccess) {
+    return (
+      <PlanGate
+        requiredPlan="Starter"
+        toolTitle="A/B Concept Testing"
+        toolDescription="Test two product concepts head-to-head with the same consumer panel. See which one wins."
+        bullets={[
+          "Test two concepts head-to-head",
+          "Same panel evaluates both",
+          "Clear winner with margin",
+          "Side-by-side metrics comparison",
+        ]}
+        sampleReportHref="/ab-test/sample-rekt"
+        isAuthenticated={isAuthenticated}
+      />
+    );
   }
 
   if (isRunning) {

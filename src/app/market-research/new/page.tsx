@@ -4,6 +4,8 @@ import { Suspense, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Nav } from "@/components/nav";
+import { PlanGate } from "@/components/plan-gate";
+import { usePlanAccess } from "@/hooks/use-plan-access";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -36,6 +38,7 @@ export default function NewMarketResearchPage() {
 
 function NewMarketResearchForm() {
   const router = useRouter();
+  const { planChecked, hasAccess, isAuthenticated } = usePlanAccess("pro");
   const [category, setCategory] = useState("");
   const [geography, setGeography] = useState("");
   const [questions, setQuestions] = useState("");
@@ -226,6 +229,24 @@ function NewMarketResearchForm() {
       setProgress(0);
       setError(err instanceof Error ? err.message : "Something went wrong");
     }
+  }
+
+  if (planChecked && !hasAccess) {
+    return (
+      <PlanGate
+        requiredPlan="Pro"
+        toolTitle="Market Research"
+        toolDescription="Get a deep analysis of any market or category. Understand trends, competition, consumer insights, and opportunities."
+        bullets={[
+          "Deep analysis of your market",
+          "Competitive landscape mapping",
+          "Consumer insight extraction",
+          "Market gaps and opportunities",
+        ]}
+        sampleReportHref="/market-research/sample-rekt"
+        isAuthenticated={isAuthenticated}
+      />
+    );
   }
 
   if (isRunning) {
