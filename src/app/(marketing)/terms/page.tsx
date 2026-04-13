@@ -86,9 +86,12 @@ export default function TermsPage() {
             </p>
             <p className="text-muted-foreground leading-relaxed">
               The features, functionality, and scope of the Service may vary
-              depending on your subscription plan. We reserve the right to
-              modify, enhance, or discontinue any feature at any time in
-              accordance with Section 16.
+              depending on your subscription plan and may change at any time.
+              We reserve the sole right to modify, enhance, replace, or
+              discontinue any feature, tool, report type, AI model, or aspect
+              of the Service at any time, with or without notice, in accordance
+              with Section 16. Your subscription provides access to the Service
+              as it exists at the time of use, not to any fixed set of features.
             </p>
           </section>
 
@@ -651,24 +654,40 @@ export default function TermsPage() {
             </h2>
             <p className="text-muted-foreground leading-relaxed">
               <strong>Modifications to the Service.</strong> We reserve the
-              right to modify, update, suspend, or discontinue the Service (or
-              any part of it) at any time. We will make reasonable efforts to
-              provide advance notice of material changes that significantly
-              affect your use of the Service, but we are not obligated to do
-              so.
+              sole and absolute right to modify, update, replace, suspend,
+              limit, or discontinue the Service, or any features, tools,
+              functionality, content, APIs, panel sizes, AI models, report
+              formats, or other aspects of the Service, at any time, for any
+              reason, with or without notice. This includes, without limitation,
+              the right to add, change, or remove features; alter plan
+              inclusions, usage limits, or quotas; change the AI models or
+              methodologies used; restructure or rebrand the platform; modify
+              pricing tiers and what each tier includes; and sunset any tool
+              or report type. No modification to the Service shall entitle you
+              to a refund, credit, or claim of any kind unless expressly
+              provided otherwise in our refund policy.
+            </p>
+            <p className="text-muted-foreground leading-relaxed">
+              <strong>No Guaranteed Feature Set.</strong> The Service is
+              provided on an &quot;as available&quot; basis with respect to
+              features and functionality. We do not guarantee that any specific
+              feature, tool, report type, or capability will remain available,
+              unchanged, or supported for any period of time. Your subscription
+              grants access to the Service as it exists at the time of use, not
+              to any particular feature set, configuration, or version of the
+              platform.
             </p>
             <p className="text-muted-foreground leading-relaxed">
               <strong>Modifications to Terms.</strong> We may update these
               Terms at any time by posting the revised version on this page and
               updating the &quot;Last updated&quot; date. For material changes
-              to these Terms, we will provide at least 15 days&apos; prior
-              notice via email or in-app notification before the changes take
-              effect.
+              to these Terms, we will make reasonable efforts to provide notice
+              via email or in-app notification, but are not obligated to do so.
             </p>
             <p className="text-muted-foreground leading-relaxed">
               Your continued use of the Service after any changes to these
-              Terms take effect constitutes your acceptance of the revised
-              Terms. If you do not agree to the revised Terms, you must stop
+              Terms or the Service constitutes your acceptance of the revised
+              Terms and modified Service. If you do not agree, you must stop
               using the Service and may cancel your account.
             </p>
           </section>
