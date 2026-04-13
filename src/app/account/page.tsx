@@ -306,9 +306,19 @@ function AccountContent() {
                 <p className="text-sm text-muted-foreground">{userEmail}</p>
               </div>
             </div>
-            <Badge variant="outline" className="text-sm px-3 py-1">
-              {planName} plan
-            </Badge>
+            <div className="flex items-center gap-2">
+              {isAdmin && (
+                <a
+                  href="/admin/data-room"
+                  className="inline-flex items-center gap-1.5 rounded-md bg-primary text-primary-foreground text-xs font-medium px-3 py-1.5 hover:bg-primary/90 transition-colors"
+                >
+                  Admin Panel
+                </a>
+              )}
+              <Badge variant="outline" className="text-sm px-3 py-1">
+                {isAdmin ? "Admin" : `${planName} plan`}
+              </Badge>
+            </div>
           </div>
 
           {searchParams.get("checkout") === "success" && (
@@ -792,17 +802,6 @@ function AccountContent() {
             </CardContent>
           </Card>
 
-          {/* Admin link - visible to admin users */}
-          {isAdmin && (
-            <div className="text-center mt-6">
-              <a
-                href="/admin/data-room"
-                className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Admin Data Room
-              </a>
-            </div>
-          )}
         </div>
       </main>
       <Footer />

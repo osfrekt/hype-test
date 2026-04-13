@@ -16,6 +16,7 @@ export function Nav() {
   const [authChecked, setAuthChecked] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [toolsOpen, setToolsOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   function cycleTheme() {
     const next = theme === "light" ? "dark" : theme === "dark" ? "system" : "light";
@@ -43,6 +44,11 @@ export function Nav() {
     supabase.auth.getUser().then(({ data: { user } }) => {
       setAuthUser(user);
       setAuthChecked(true);
+      if (user?.email) {
+        fetch("/api/admin/check").then((r) => r.json()).then((d) => {
+          setIsAdmin(d.isAdmin === true);
+        }).catch(() => {});
+      }
     });
   }, []);
 
@@ -191,6 +197,9 @@ export function Nav() {
                 <div className="bg-card border border-border rounded-xl shadow-lg p-1.5 w-40">
                   <Link href="/dashboard" className="block px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">Dashboard</Link>
                   <Link href="/account" className="block px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">Account</Link>
+                  {isAdmin && (
+                    <Link href="/admin/data-room" className="block px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors text-teal-600 dark:text-teal font-medium">Admin Panel</Link>
+                  )}
                   <div className="h-px bg-border mx-3 my-1" />
                   <button
                     onClick={async () => {
@@ -293,6 +302,9 @@ export function Nav() {
               <>
                 <Link href="/dashboard" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 rounded-lg text-sm hover:bg-muted transition-colors text-foreground font-medium">Dashboard</Link>
                 <Link href="/account" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 rounded-lg text-sm hover:bg-muted transition-colors text-foreground font-medium">Account</Link>
+                {isAdmin && (
+                  <Link href="/admin/data-room" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 rounded-lg text-sm hover:bg-muted transition-colors text-teal-600 dark:text-teal font-medium">Admin Panel</Link>
+                )}
                 <button
                   onClick={async () => {
                     const supabase = createClient();
