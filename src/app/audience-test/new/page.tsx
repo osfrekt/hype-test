@@ -19,6 +19,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { createClient } from "@/lib/supabase/client";
+import { UrlAutofill } from "@/components/url-autofill";
 import type { AudienceTestResult } from "@/types/audience-test";
 
 const CATEGORIES = [
@@ -295,6 +296,17 @@ function AudienceTestForm() {
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-5">
+                <UrlAutofill onExtracted={(data) => {
+                  if (data.productName) setProductName(data.productName);
+                  const descParts = [data.problem, data.feature1, data.feature2, data.feature3].filter(Boolean);
+                  if (descParts.length) setProductDescription(descParts.join(". "));
+                  const featureParts = [data.feature1, data.feature2, data.feature3].filter(Boolean);
+                  if (featureParts.length) setKeyFeatures(featureParts.join(", "));
+                  if (data.category) setCategory(data.category);
+                  if (data.priceMin) setPriceMin(String(data.priceMin));
+                  if (data.priceMax) setPriceMax(String(data.priceMax));
+                }} />
+
                 {/* Product Name */}
                 <div className="space-y-1.5">
                   <Label>Product Name</Label>

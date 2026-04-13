@@ -19,6 +19,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { createClient } from "@/lib/supabase/client";
+import { UrlAutofill } from "@/components/url-autofill";
 import type { AbTestResult } from "@/types/ab-test";
 
 const CATEGORIES = [
@@ -281,6 +282,18 @@ function NewAbTestForm() {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
+            <UrlAutofill onExtracted={(data) => {
+              if (data.productName) setNameA(data.productName);
+              if (data.problem) setDescA(data.problem);
+              if (data.feature1) setFeatureA1(data.feature1);
+              if (data.feature2) setFeatureA2(data.feature2);
+              if (data.feature3) setFeatureA3(data.feature3);
+              if (data.priceMin) setPriceMinA(String(data.priceMin));
+              if (data.priceMax) setPriceMaxA(String(data.priceMax));
+              if (data.category) setCategory(data.category);
+              if (data.targetMarket) setTargetConsumer(data.targetMarket);
+            }} />
+
             {/* Concept A */}
             <Card>
               <CardHeader>

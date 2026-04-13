@@ -19,6 +19,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { createClient } from "@/lib/supabase/client";
+import { UrlAutofill } from "@/components/url-autofill";
 import type { MarketResearchResult } from "@/types/market-research";
 
 const GEOGRAPHIES = [
@@ -300,6 +301,10 @@ function NewMarketResearchForm() {
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-5">
+                <UrlAutofill onExtracted={(data) => {
+                  if (data.category) setCategory(data.category);
+                }} />
+
                 {/* Industry/Category */}
                 <div className="space-y-1.5">
                   <Label>Industry / Category <span className="text-red-500">*</span></Label>

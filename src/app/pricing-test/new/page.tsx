@@ -19,6 +19,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { createClient } from "@/lib/supabase/client";
+import { UrlAutofill } from "@/components/url-autofill";
 import type { PricingTestResult } from "@/types/pricing-test";
 
 const CATEGORIES = [
@@ -273,6 +274,28 @@ function PricingTestForm() {
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-5">
+                <UrlAutofill onExtracted={(data) => {
+                  if (data.productName) setProductName(data.productName);
+                  const descParts = [data.problem, data.feature1, data.feature2, data.feature3].filter(Boolean);
+                  if (descParts.length) setProductDescription(descParts.join(". "));
+                  const featureParts = [data.feature1, data.feature2, data.feature3].filter(Boolean);
+                  if (featureParts.length) setKeyFeatures(featureParts.join(", "));
+                  if (data.category) setCategory(data.category);
+                  if (data.targetMarket) setTargetMarket(data.targetMarket);
+                  if (data.priceUnit) setPriceUnit(data.priceUnit);
+                  if (data.priceMin && data.priceMax) {
+                    const min = data.priceMin;
+                    const max = data.priceMax;
+                    const range = max - min;
+                    const step = range / 4;
+                    setPrice1(String(Math.round(min)));
+                    setPrice2(String(Math.round(min + step)));
+                    setPrice3(String(Math.round(min + step * 2)));
+                    setPrice4(String(Math.round(min + step * 3)));
+                    setPrice5(String(Math.round(max)));
+                  }
+                }} />
+
                 {/* Product Name */}
                 <div className="space-y-1.5">
                   <Label>Product Name</Label>

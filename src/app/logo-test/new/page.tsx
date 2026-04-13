@@ -19,6 +19,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { createClient } from "@/lib/supabase/client";
+import { UrlAutofill } from "@/components/url-autofill";
 import type { LogoTestResult } from "@/types/logo-test";
 
 const CATEGORIES = [
@@ -321,6 +322,12 @@ function NewLogoTestForm() {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
+            <UrlAutofill onExtracted={(data) => {
+              if (data.productName) setBrandName(data.productName);
+              if (data.category) setCategory(data.category);
+              if (data.targetMarket) setTargetAudience(data.targetMarket);
+            }} />
+
             {/* Brand context */}
             <Card>
               <CardHeader>

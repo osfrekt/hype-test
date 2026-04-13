@@ -19,6 +19,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { createClient } from "@/lib/supabase/client";
+import { UrlAutofill } from "@/components/url-autofill";
 import type { AdTestResult } from "@/types/ad-test";
 
 const CATEGORIES = [
@@ -282,6 +283,12 @@ function NewAdTestForm() {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
+            <UrlAutofill onExtracted={(data) => {
+              if (data.productName) setBrandName(data.productName);
+              if (data.category) setCategory(data.category);
+              if (data.targetMarket) setTargetAudience(data.targetMarket);
+            }} />
+
             {/* Mode toggle */}
             <div className="flex gap-2">
               <button
