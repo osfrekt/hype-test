@@ -124,6 +124,7 @@ function DashIcon() {
 export default function PricingPage() {
   const [annual, setAnnual] = useState(false);
   const [authEmail, setAuthEmail] = useState<string | null>(null);
+  const [currentPlan, setCurrentPlan] = useState<string | null>(null);
   const [checkoutEmail, setCheckoutEmail] = useState("");
   const [checkoutPlan, setCheckoutPlan] = useState<string | null>(null);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
@@ -132,8 +133,16 @@ export default function PricingPage() {
 
   useEffect(() => {
     const supabase = createClient();
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      if (user?.email) setAuthEmail(user.email);
+    supabase.auth.getUser().then(async ({ data: { user } }) => {
+      if (user?.email) {
+        setAuthEmail(user.email);
+        const { data: profile } = await supabase
+          .from("users")
+          .select("plan")
+          .eq("email", user.email)
+          .single();
+        if (profile?.plan) setCurrentPlan(profile.plan);
+      }
     });
   }, []);
   const [waitlistStatus, setWaitlistStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
@@ -257,61 +266,111 @@ export default function PricingPage() {
                     <p className="text-xs text-muted-foreground mt-1">{plan.description}</p>
                   </CardHeader>
                   <CardContent className="flex-1 flex flex-col justify-end">
-                    {plan.href ? (
-                      <Link
-                        href={plan.href}
-                        className={`block w-full text-center rounded-xl font-semibold py-2.5 text-sm transition-colors ${
-                          plan.highlight
-                            ? "bg-primary text-primary-foreground hover:bg-primary/90"
-                            : "bg-muted text-foreground hover:bg-muted/80"
-                        }`}
-                      >
-                        {plan.cta}
-                      </Link>
-                    ) : plan.isWaitlist ? (
-                      <Button
-                        variant="outline"
-                        className="w-full"
-                        onClick={() => {
-                          const el = document.getElementById("team-waitlist");
-                          el?.scrollIntoView({ behavior: "smooth" });
-                        }}
-                      >
-                        {plan.cta}
-                      </Button>
-                    ) : (
-                      <Button
-                        className={`w-full ${plan.highlight ? "" : "bg-muted text-foreground hover:bg-muted/80"}`}
-                        onClick={async () => {
-                          if (authEmail) {
-                            setCheckoutLoading(true);
-                            setCheckoutError("");
-                            try {
-                              const res = await fetch("/api/billing/checkout", {
-                                method: "POST",
-                                headers: { "Content-Type": "application/json" },
-                                body: JSON.stringify({ email: authEmail, plan: plan.id, interval: annual ? "year" : "month" }),
-                              });
-                              const data = await res.json();
-                              if (data.url) {
-                                window.location.href = data.url;
-                              } else {
-                                setCheckoutError(data.error || "Something went wrong.");
+                    {(() => {
+                      const planOrder = ["free", "starter", "pro", "team"];
+                      const currentIdx = currentPlan ? planOrder.indexOf(currentPlan) : -1;
+                      const thisIdx = planOrder.indexOf(plan.id);
+                      const isCurrentPlan = currentPlan === plan.id;
+                      const isUpgrade = currentIdx >= 0 && thisIdx > currentIdx;
+                      const isDowngrade = currentIdx >= 0 && thisIdx < currentIdx;
+
+                      if (isCurrentPlan) {
+                        return (
+                          <div className="w-full text-center rounded-xl font-semibold py-2.5 text-sm bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400">
+                            Current plan
+                          </div>
+                        );
+                      }
+
+                      if (isDowngrade) {
+                        return (
+                          <button
+                            onClick={async () => {
+                              if (authEmail) {
+                                const res = await fetch("/api/billing/portal", {
+                                  method: "POST",
+                                  headers: { "Content-Type": "application/json" },
+                                  body: JSON.stringify({ email: authEmail }),
+                                });
+                                const data = await res.json();
+                                if (data.url) window.location.href = data.url;
+                              }
+                            }}
+                            className="w-full text-center text-xs text-muted-foreground hover:text-foreground py-2 transition-colors"
+                          >
+                            Downgrade
+                          </button>
+                        );
+                      }
+
+                      // Free plan link
+                      if (plan.href) {
+                        return (
+                          <Link
+                            href={plan.href}
+                            className={`block w-full text-center rounded-xl font-semibold py-2.5 text-sm transition-colors ${
+                              plan.highlight
+                                ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                                : "bg-muted text-foreground hover:bg-muted/80"
+                            }`}
+                          >
+                            {plan.cta}
+                          </Link>
+                        );
+                      }
+
+                      // Waitlist (Team)
+                      if (plan.isWaitlist) {
+                        return (
+                          <Button
+                            variant="outline"
+                            className="w-full"
+                            onClick={() => {
+                              const el = document.getElementById("team-waitlist");
+                              el?.scrollIntoView({ behavior: "smooth" });
+                            }}
+                          >
+                            {plan.cta}
+                          </Button>
+                        );
+                      }
+
+                      // Upgrade button
+                      return (
+                        <Button
+                          className={`w-full ${plan.highlight ? "" : "bg-muted text-foreground hover:bg-muted/80"}`}
+                          disabled={checkoutLoading}
+                          onClick={async () => {
+                            if (authEmail) {
+                              setCheckoutLoading(true);
+                              setCheckoutError("");
+                              try {
+                                const res = await fetch("/api/billing/checkout", {
+                                  method: "POST",
+                                  headers: { "Content-Type": "application/json" },
+                                  body: JSON.stringify({ email: authEmail, plan: plan.id, interval: annual ? "year" : "month" }),
+                                });
+                                const data = await res.json();
+                                if (data.url) {
+                                  window.location.href = data.url;
+                                } else {
+                                  setCheckoutError(data.error || "Something went wrong.");
+                                  setCheckoutLoading(false);
+                                }
+                              } catch {
+                                setCheckoutError("Something went wrong.");
                                 setCheckoutLoading(false);
                               }
-                            } catch {
-                              setCheckoutError("Something went wrong.");
-                              setCheckoutLoading(false);
+                            } else {
+                              setCheckoutPlan(plan.id);
+                              setCheckoutError("");
                             }
-                          } else {
-                            setCheckoutPlan(plan.id);
-                            setCheckoutError("");
-                          }
-                        }}
-                      >
-                        {plan.cta}
-                      </Button>
-                    )}
+                          }}
+                        >
+                          {isUpgrade ? `Upgrade to ${plan.name}` : plan.cta}
+                        </Button>
+                      );
+                    })()}
                   </CardContent>
                 </Card>
               );
