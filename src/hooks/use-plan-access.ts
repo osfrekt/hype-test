@@ -14,6 +14,19 @@ export function usePlanAccess(requiredPlan: "starter" | "pro") {
     supabase.auth.getUser().then(async ({ data: { user } }) => {
       if (user?.email) {
         setIsAuthenticated(true);
+
+        // Admin users get full access to everything
+        const adminRes = await fetch("/api/admin/check");
+        if (adminRes.ok) {
+          const adminData = await adminRes.json();
+          if (adminData.isAdmin) {
+            setUserPlan("team");
+            setHasAccess(true);
+            setPlanChecked(true);
+            return;
+          }
+        }
+
         const { data: profile } = await supabase
           .from("users")
           .select("plan")

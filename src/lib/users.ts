@@ -104,6 +104,12 @@ export async function incrementUsage(email: string, type: "research" | "discover
 }
 
 export async function checkQuota(email: string, type: "research" | "discovery"): Promise<{ allowed: boolean; remaining: number; limit: number; plan: PlanId }> {
+  // Admin users get unlimited access
+  const { isAdminEmail } = await import("./admin");
+  if (await isAdminEmail(email)) {
+    return { allowed: true, remaining: 999, limit: 999, plan: "team" };
+  }
+
   const { PLANS } = await import("./lemonsqueezy");
   const user = await getOrCreateUser(email);
   const plan = PLANS[user.plan] || PLANS.free;
