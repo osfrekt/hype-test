@@ -1,7 +1,6 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
-
-const ADMIN_EMAILS = ["osf@rekt.com"];
+import { isAdminEmail } from "@/lib/admin";
 
 const PLAN_PRICES: Record<string, number> = {
   free: 0,
@@ -18,10 +17,14 @@ export async function GET(request: Request) {
   if (cronSecret && envCronSecret && cronSecret === envCronSecret) {
     // Authenticated via cron secret
   } else {
-    // Check Supabase auth
+    // Check Supabase auth against admin_users table
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user?.email || !ADMIN_EMAILS.includes(user.email)) {
+    if (!user?.email) {
+      return Response.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    const authorized = await isAdminEmail(user.email);
+    if (!authorized) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
   }

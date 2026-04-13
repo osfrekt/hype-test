@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { Download, Link2, Trash2 } from "lucide-react";
-import type { PlatformAdResult } from "@/types/platform-ad";
+import type { PlatformAdResult, PlatformSpecificMetrics } from "@/types/platform-ad";
 import { createClient } from "@/lib/supabase/client";
 
 type FetchState =
@@ -37,6 +37,232 @@ export default function PlatformAdResultPage({
     >
       <PlatformAdResultContent params={params} />
     </Suspense>
+  );
+}
+
+function MetricBar({ label, value, color = "bg-teal" }: { label: string; value: number; color?: string }) {
+  return (
+    <div>
+      <div className="flex justify-between text-xs mb-1">
+        <span className="text-foreground font-medium">{label}</span>
+        <span className="text-muted-foreground">{value}%</span>
+      </div>
+      <div className="w-full bg-muted rounded-full h-2">
+        <div className={`${color} h-2 rounded-full`} style={{ width: `${value}%` }} />
+      </div>
+    </div>
+  );
+}
+
+function PlatformMetricsSection({
+  platform,
+  metrics,
+  platformLabel,
+}: {
+  platform: string;
+  metrics: PlatformSpecificMetrics;
+  platformLabel: string;
+}) {
+  return (
+    <Card className="mb-6 border-teal/30">
+      <CardHeader>
+        <CardTitle className="text-base">{platformLabel}-Specific Insights</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        {/* Amazon */}
+        {platform === "amazon" && (
+          <>
+            {metrics.buyBoxAppeal !== undefined && (
+              <MetricBar label="Buy Box Appeal" value={metrics.buyBoxAppeal} color="bg-amber-500" />
+            )}
+            {metrics.listingQuality !== undefined && (
+              <MetricBar label="Listing Quality & Trust" value={metrics.listingQuality} />
+            )}
+            {metrics.pricePerception && (
+              <div>
+                <p className="text-xs font-medium text-foreground mb-2">Price Perception</p>
+                <div className="flex rounded-full overflow-hidden h-6 text-[10px] font-medium">
+                  {metrics.pricePerception.bargain > 0 && (
+                    <div className="bg-emerald-500 text-white flex items-center justify-center" style={{ width: `${metrics.pricePerception.bargain}%` }}>
+                      {metrics.pricePerception.bargain >= 12 ? `${metrics.pricePerception.bargain}% Bargain` : ""}
+                    </div>
+                  )}
+                  {metrics.pricePerception.fair > 0 && (
+                    <div className="bg-blue-400 text-white flex items-center justify-center" style={{ width: `${metrics.pricePerception.fair}%` }}>
+                      {metrics.pricePerception.fair >= 10 ? `${metrics.pricePerception.fair}% Fair` : ""}
+                    </div>
+                  )}
+                  {metrics.pricePerception.overpriced > 0 && (
+                    <div className="bg-red-400 text-white flex items-center justify-center" style={{ width: `${metrics.pricePerception.overpriced}%` }}>
+                      {metrics.pricePerception.overpriced >= 15 ? `${metrics.pricePerception.overpriced}% Overpriced` : ""}
+                    </div>
+                  )}
+                </div>
+                <div className="flex justify-between mt-1 text-[10px] text-muted-foreground">
+                  <span>Bargain: {metrics.pricePerception.bargain}%</span>
+                  <span>Fair: {metrics.pricePerception.fair}%</span>
+                  <span>Overpriced: {metrics.pricePerception.overpriced}%</span>
+                </div>
+              </div>
+            )}
+          </>
+        )}
+
+        {/* Instagram */}
+        {platform === "instagram" && (
+          <>
+            {metrics.visualImpact !== undefined && (
+              <MetricBar label="Visual Impact" value={metrics.visualImpact} color="bg-pink-500" />
+            )}
+            {metrics.saveRate !== undefined && (
+              <MetricBar label="Save Rate Prediction" value={metrics.saveRate} color="bg-purple-500" />
+            )}
+            {metrics.feedVsStoryFit && (
+              <div>
+                <p className="text-xs font-medium text-foreground mb-1">Best Format Fit</p>
+                <Badge className={
+                  metrics.feedVsStoryFit === "feed" ? "bg-blue-500 text-white" :
+                  metrics.feedVsStoryFit === "story" ? "bg-purple-500 text-white" :
+                  "bg-teal text-white"
+                }>
+                  {metrics.feedVsStoryFit === "feed" ? "Feed Post" : metrics.feedVsStoryFit === "story" ? "Stories" : "Works for Both"}
+                </Badge>
+              </div>
+            )}
+          </>
+        )}
+
+        {/* TikTok */}
+        {platform === "tiktok" && (
+          <>
+            {metrics.hookEffectiveness !== undefined && (
+              <MetricBar label="Hook Effectiveness (First 1-3s)" value={metrics.hookEffectiveness} color="bg-cyan-500" />
+            )}
+            {metrics.watchThrough !== undefined && (
+              <MetricBar label="Watch-Through Rate" value={metrics.watchThrough} />
+            )}
+            {metrics.viralPotential !== undefined && (
+              <MetricBar label="Viral / Share Potential" value={metrics.viralPotential} color="bg-pink-500" />
+            )}
+          </>
+        )}
+
+        {/* Google Search */}
+        {platform === "google_search" && (
+          <>
+            {metrics.searchIntentMatch !== undefined && (
+              <MetricBar label="Search Intent Match" value={metrics.searchIntentMatch} color="bg-blue-500" />
+            )}
+            {metrics.ctaStrength !== undefined && (
+              <MetricBar label="CTA Strength" value={metrics.ctaStrength} color="bg-emerald-500" />
+            )}
+            {metrics.headlineRanking && metrics.headlineRanking.length > 0 && (
+              <div>
+                <p className="text-xs font-medium text-foreground mb-2">Headline Performance Ranking</p>
+                <div className="space-y-2">
+                  {metrics.headlineRanking.map((h, i) => (
+                    <div key={i} className="flex items-center gap-3">
+                      <span className="text-xs font-bold text-teal shrink-0 w-4">{i + 1}.</span>
+                      <div className="flex-1">
+                        <p className="text-xs text-foreground mb-0.5 truncate">{h.headline}</p>
+                        <div className="w-full bg-muted rounded-full h-1.5">
+                          <div className="bg-blue-500 h-1.5 rounded-full" style={{ width: `${h.score}%` }} />
+                        </div>
+                      </div>
+                      <span className="text-xs text-muted-foreground shrink-0">{h.score}%</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </>
+        )}
+
+        {/* Google Display */}
+        {platform === "google_display" && (
+          <>
+            {metrics.bannerBlindnessResistance !== undefined && (
+              <MetricBar label="Banner Blindness Resistance" value={metrics.bannerBlindnessResistance} color="bg-orange-500" />
+            )}
+            {metrics.visualHierarchy !== undefined && (
+              <MetricBar label="Visual Hierarchy Clarity" value={metrics.visualHierarchy} color="bg-blue-500" />
+            )}
+          </>
+        )}
+
+        {/* Facebook */}
+        {platform === "facebook" && (
+          <>
+            {metrics.shareability !== undefined && (
+              <MetricBar label="Shareability" value={metrics.shareability} color="bg-blue-600" />
+            )}
+            {metrics.audienceTargetFit !== undefined && (
+              <MetricBar label="Audience Target Fit" value={metrics.audienceTargetFit} />
+            )}
+            {metrics.adFatigueRisk && (
+              <div>
+                <p className="text-xs font-medium text-foreground mb-1">Ad Fatigue Risk</p>
+                <Badge className={
+                  metrics.adFatigueRisk === "low" ? "bg-emerald-500 text-white" :
+                  metrics.adFatigueRisk === "medium" ? "bg-amber-500 text-white" :
+                  "bg-red-500 text-white"
+                }>
+                  {metrics.adFatigueRisk === "low" ? "Low Risk" : metrics.adFatigueRisk === "medium" ? "Medium Risk" : "High Risk"}
+                </Badge>
+                <p className="text-[10px] text-muted-foreground mt-1">
+                  {metrics.adFatigueRisk === "low" ? "Creative feels fresh and unlikely to fatigue quickly" :
+                   metrics.adFatigueRisk === "medium" ? "Consider rotating creative after 2-3 weeks" :
+                   "High risk of fatigue. Plan creative refresh cycles."}
+                </p>
+              </div>
+            )}
+          </>
+        )}
+
+        {/* LinkedIn */}
+        {platform === "linkedin" && (
+          <>
+            {metrics.professionalRelevance !== undefined && (
+              <MetricBar label="Professional Relevance" value={metrics.professionalRelevance} color="bg-blue-700" />
+            )}
+            {metrics.thoughtLeadershipFit !== undefined && (
+              <MetricBar label="Thought Leadership Fit" value={metrics.thoughtLeadershipFit} />
+            )}
+            {metrics.b2bConversionPotential !== undefined && (
+              <MetricBar label="B2B Conversion Potential" value={metrics.b2bConversionPotential} color="bg-emerald-500" />
+            )}
+          </>
+        )}
+
+        {/* YouTube */}
+        {platform === "youtube" && (
+          <>
+            {metrics.first5sEffectiveness !== undefined && (
+              <MetricBar label="First 5 Seconds Effectiveness" value={metrics.first5sEffectiveness} color="bg-red-500" />
+            )}
+            {metrics.skipRate !== undefined && (
+              <div>
+                <div className="flex justify-between text-xs mb-1">
+                  <span className="text-foreground font-medium">Predicted Skip Rate</span>
+                  <span className="text-muted-foreground">{metrics.skipRate}%</span>
+                </div>
+                <div className="w-full bg-muted rounded-full h-2">
+                  <div className="bg-red-400 h-2 rounded-full" style={{ width: `${metrics.skipRate}%` }} />
+                </div>
+                <p className="text-[10px] text-muted-foreground mt-1">
+                  {metrics.skipRate <= 40 ? "Below average skip rate. Strong creative." :
+                   metrics.skipRate <= 60 ? "Average skip rate. Room for improvement in the hook." :
+                   "High skip rate. Rework the opening to grab attention faster."}
+                </p>
+              </div>
+            )}
+            {metrics.audioOffComprehension !== undefined && (
+              <MetricBar label="Audio-Off Comprehension" value={metrics.audioOffComprehension} color="bg-amber-500" />
+            )}
+          </>
+        )}
+      </CardContent>
+    </Card>
   );
 }
 
@@ -79,6 +305,7 @@ function PlatformAdResultContent({
               clickLikelihood: data.click_likelihood,
               scrollStopPower: data.scroll_stop_power,
               purchaseIntent: data.purchase_intent ?? undefined,
+              platformMetrics: data.platform_metrics ?? undefined,
               emotionalResponses: data.emotional_responses,
               topStrengths: data.top_strengths,
               topWeaknesses: data.top_weaknesses,
@@ -219,31 +446,36 @@ function PlatformAdResultContent({
               <CardTitle className="text-base">Click / Engage Likelihood</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex rounded-full overflow-hidden h-6 text-[10px] font-medium">
+              <div className="flex rounded-full overflow-hidden h-8 text-xs font-medium">
                 {result.clickLikelihood.yes > 0 && (
                   <div
-                    className="bg-emerald-500 text-white flex items-center justify-center"
+                    className="bg-emerald-500 text-white flex items-center justify-center overflow-hidden whitespace-nowrap"
                     style={{ width: `${result.clickLikelihood.yes}%` }}
                   >
-                    {result.clickLikelihood.yes}% Yes
+                    {result.clickLikelihood.yes >= 12 ? `${result.clickLikelihood.yes}% Yes` : result.clickLikelihood.yes >= 6 ? `${result.clickLikelihood.yes}%` : ""}
                   </div>
                 )}
                 {result.clickLikelihood.maybe > 0 && (
                   <div
-                    className="bg-amber-400 text-amber-900 flex items-center justify-center"
+                    className="bg-amber-400 text-amber-900 flex items-center justify-center overflow-hidden whitespace-nowrap"
                     style={{ width: `${result.clickLikelihood.maybe}%` }}
                   >
-                    {result.clickLikelihood.maybe}% Maybe
+                    {result.clickLikelihood.maybe >= 12 ? `${result.clickLikelihood.maybe}% Maybe` : result.clickLikelihood.maybe >= 6 ? `${result.clickLikelihood.maybe}%` : ""}
                   </div>
                 )}
                 {result.clickLikelihood.no > 0 && (
                   <div
-                    className="bg-red-400 text-white flex items-center justify-center"
+                    className="bg-red-400 text-white flex items-center justify-center overflow-hidden whitespace-nowrap"
                     style={{ width: `${result.clickLikelihood.no}%` }}
                   >
-                    {result.clickLikelihood.no}% No
+                    {result.clickLikelihood.no >= 12 ? `${result.clickLikelihood.no}% No` : result.clickLikelihood.no >= 6 ? `${result.clickLikelihood.no}%` : ""}
                   </div>
                 )}
+              </div>
+              <div className="flex justify-between mt-2 text-[10px] text-muted-foreground">
+                <span>Yes: {result.clickLikelihood.yes}%</span>
+                <span>Maybe: {result.clickLikelihood.maybe}%</span>
+                <span>No: {result.clickLikelihood.no}%</span>
               </div>
             </CardContent>
           </Card>
@@ -291,6 +523,9 @@ function PlatformAdResultContent({
               </CardContent>
             </Card>
           )}
+
+          {/* Platform-specific metrics */}
+          {result.platformMetrics && <PlatformMetricsSection platform={result.input.platform} metrics={result.platformMetrics} platformLabel={result.platformLabel} />}
 
           {/* Emotional responses */}
           <Card className="mb-6">

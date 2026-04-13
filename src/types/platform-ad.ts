@@ -31,6 +31,40 @@ export interface PlatformAdInput {
   descriptions?: string[];
 }
 
+export interface PlatformSpecificMetrics {
+  // Amazon
+  pricePerception?: { overpriced: number; fair: number; bargain: number };
+  buyBoxAppeal?: number;
+  listingQuality?: number;
+  // Instagram
+  saveRate?: number;
+  visualImpact?: number;
+  feedVsStoryFit?: "feed" | "story" | "both";
+  // TikTok
+  watchThrough?: number;
+  hookEffectiveness?: number;
+  viralPotential?: number;
+  // Google Search
+  headlineRanking?: { headline: string; score: number }[];
+  searchIntentMatch?: number;
+  ctaStrength?: number;
+  // Google Display
+  bannerBlindnessResistance?: number;
+  visualHierarchy?: number;
+  // Facebook
+  shareability?: number;
+  adFatigueRisk?: "low" | "medium" | "high";
+  audienceTargetFit?: number;
+  // LinkedIn
+  professionalRelevance?: number;
+  thoughtLeadershipFit?: number;
+  b2bConversionPotential?: number;
+  // YouTube
+  skipRate?: number;
+  first5sEffectiveness?: number;
+  audioOffComprehension?: number;
+}
+
 export interface PlatformAdResult {
   id: string;
   input: PlatformAdInput;
@@ -43,6 +77,7 @@ export interface PlatformAdResult {
   clickLikelihood: { yes: number; maybe: number; no: number };
   scrollStopPower: number;
   purchaseIntent?: number;
+  platformMetrics?: PlatformSpecificMetrics;
   emotionalResponses: { word: string; count: number }[];
   topStrengths: string[];
   topWeaknesses: string[];

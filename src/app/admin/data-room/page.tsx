@@ -6,9 +6,9 @@ import { Nav } from "@/components/nav";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import { Trash2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
-
-const ADMIN_EMAILS = ["osf@rekt.com"];
 
 interface Metrics {
   totalUsers: number;
@@ -42,13 +42,25 @@ const PLAN_PRICES: Record<string, number> = {
   team: 349,
 };
 
+interface AdminUser {
+  email: string;
+  role: string;
+  addedBy: string;
+  createdAt: string;
+}
+
 export default function DataRoomPage() {
   const router = useRouter();
   const [authorized, setAuthorized] = useState(false);
+  const [isMaster, setIsMaster] = useState(false);
   const [loading, setLoading] = useState(true);
   const [metrics, setMetrics] = useState<Metrics | null>(null);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const [refreshing, setRefreshing] = useState(false);
+  const [adminUsers, setAdminUsers] = useState<AdminUser[]>([]);
+  const [newAdminEmail, setNewAdminEmail] = useState("");
+  const [adminError, setAdminError] = useState("");
+  const [adminLoading, setAdminLoading] = useState(false);
 
   const loadMetrics = useCallback(async () => {
     setRefreshing(true);
@@ -66,12 +78,28 @@ export default function DataRoomPage() {
     }
   }, []);
 
+  const loadAdminUsers = useCallback(async () => {
+    try {
+      const res = await fetch("/api/admin/users");
+      if (res.ok) {
+        const data = await res.json();
+        setAdminUsers(data.admins || []);
+        setIsMaster(data.isMaster || false);
+      }
+    } catch {
+      // failed to load admins
+    }
+  }, []);
+
   useEffect(() => {
     async function checkAuth() {
-      const supabase = createClient();
-      const { data: { user } } = await supabase.auth.getUser();
-
-      if (!user?.email || !ADMIN_EMAILS.includes(user.email)) {
+      const res = await fetch("/api/admin/check");
+      if (!res.ok) {
+        router.replace("/");
+        return;
+      }
+      const data = await res.json();
+      if (!data.isAdmin) {
         router.replace("/");
         return;
       }
@@ -79,9 +107,54 @@ export default function DataRoomPage() {
       setAuthorized(true);
       setLoading(false);
       loadMetrics();
+      loadAdminUsers();
     }
     checkAuth();
-  }, [router, loadMetrics]);
+  }, [router, loadMetrics, loadAdminUsers]);
+
+  async function handleAddAdmin(e: React.FormEvent) {
+    e.preventDefault();
+    if (!newAdminEmail.trim()) return;
+    setAdminError("");
+    setAdminLoading(true);
+    try {
+      const res = await fetch("/api/admin/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: newAdminEmail.trim() }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setAdminError(data.error || "Failed to add admin");
+      } else {
+        setNewAdminEmail("");
+        loadAdminUsers();
+      }
+    } catch {
+      setAdminError("Failed to add admin");
+    } finally {
+      setAdminLoading(false);
+    }
+  }
+
+  async function handleRemoveAdmin(email: string) {
+    if (!confirm(`Remove ${email} from admin access?`)) return;
+    try {
+      const res = await fetch("/api/admin/users", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      if (res.ok) {
+        loadAdminUsers();
+      } else {
+        const data = await res.json();
+        alert(data.error || "Failed to remove admin");
+      }
+    } catch {
+      alert("Failed to remove admin");
+    }
+  }
 
   if (loading || !authorized) {
     return (
@@ -248,6 +321,78 @@ export default function DataRoomPage() {
                     <p className="text-sm text-muted-foreground text-center py-4">No recent activity</p>
                   )}
                 </div>
+              </CardContent>
+            </Card>
+          </section>
+
+          <Separator />
+
+          {/* Admin Access Management */}
+          <section>
+            <h2 className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-4">
+              Admin Access
+            </h2>
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base">Team Members with Admin Access</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  {adminUsers.map((admin) => (
+                    <div key={admin.email} className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm text-foreground">{admin.email}</span>
+                        <Badge variant={admin.role === "master" ? "default" : "secondary"} className="text-[10px]">
+                          {admin.role === "master" ? "Master" : "Admin"}
+                        </Badge>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {admin.role !== "master" && (
+                          <span className="text-[10px] text-muted-foreground">
+                            Added by {admin.addedBy}
+                          </span>
+                        )}
+                        {isMaster && admin.role !== "master" && (
+                          <button
+                            onClick={() => handleRemoveAdmin(admin.email)}
+                            className="text-muted-foreground hover:text-destructive transition-colors"
+                            title="Remove admin access"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                  {adminUsers.length === 0 && (
+                    <p className="text-sm text-muted-foreground">Loading admin users...</p>
+                  )}
+                </div>
+
+                {isMaster && (
+                  <>
+                    <Separator className="my-4" />
+                    <form onSubmit={handleAddAdmin} className="flex gap-2">
+                      <input
+                        type="email"
+                        placeholder="email@example.com"
+                        value={newAdminEmail}
+                        onChange={(e) => setNewAdminEmail(e.target.value)}
+                        className="flex-1 rounded-md border border-border bg-background px-3 py-1.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-teal/50"
+                        required
+                      />
+                      <Button type="submit" size="sm" disabled={adminLoading}>
+                        {adminLoading ? "Adding..." : "Add Admin"}
+                      </Button>
+                    </form>
+                    {adminError && (
+                      <p className="text-xs text-destructive mt-2">{adminError}</p>
+                    )}
+                    <p className="text-[10px] text-muted-foreground mt-2">
+                      Only the master account (osf@rekt.com) can add or remove admin users. Admin users can view the data room but cannot manage access.
+                    </p>
+                  </>
+                )}
               </CardContent>
             </Card>
           </section>

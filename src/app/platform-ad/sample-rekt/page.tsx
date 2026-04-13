@@ -5,81 +5,91 @@ import { Nav } from "@/components/nav";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import type { PlatformAdResult } from "@/types/platform-ad";
+import type { PlatformAdResult, PlatformSpecificMetrics } from "@/types/platform-ad";
 
 const SAMPLE_RESULT: PlatformAdResult = {
   id: "sample-rekt",
   input: {
     platform: "amazon",
     brandName: "Rekt Energy + Focus Powder",
-    targetAudience: "Health-conscious professionals and gamers 18-38",
-    adCopy: `Product: Rekt Energy + Focus Powder - Natural Caffeine & Nootropics
-Price: $34.99 (30 servings)
+    targetAudience: "Health-conscious professionals, gamers, and fitness enthusiasts 18-38",
+    adCopy: `Rekt Energy + Focus Powder, Cherry - Clean Energy, Zero Sugar, Zero Calories, 200mg Natural Caffeine, Nootropics, L-Theanine, Energy Drink Mix (30 Servings)
 
 Key Features:
-- 200mg natural caffeine from green tea extract
-- L-Theanine + Alpha-GPC for smooth, jitter-free focus
-- Zero sugar, zero crash, zero artificial colors
-- Mixes instantly in cold water - no blender needed
-- NSF Certified for Sport
+- Clean energy with 200mg natural caffeine from green tea
+- Nootropic stack with L-Theanine for smooth, jitter-free focus
+- Zero sugar, zero calories -- no crash, no compromise
+- Mixes instantly in cold water, no blender needed
+- Available in Cherry and Blue Raspberry
 
-About: Clean energy powder designed for gamers, professionals, and athletes who want sustained focus without the crash of traditional energy drinks. Each tub contains 30 servings of science-backed nootropics and natural caffeine.`,
+About: From the makers of Rekt Drinks, the flavoured sparkling water brand known for bold collaborations with X Games, OpenSea, and WorldStar. Rekt Energy + Focus Powder brings the same clean ingredient philosophy to a pre-workout and focus supplement. Each tub delivers 30 servings of nootropic-powered energy designed for gamers, professionals, and athletes who refuse to settle for sugar-loaded alternatives.`,
+    url: "https://www.amazon.com/Rekt-Energy-Focus-Powder-Cherry/dp/B0GSGB13LJ",
   },
   platformLabel: "Amazon",
-  attention: 68,
-  clarity: 74,
-  persuasion: 62,
-  brandFit: 71,
-  platformFit: 76,
-  clickLikelihood: { yes: 38, maybe: 30, no: 32 },
-  scrollStopPower: 55,
-  purchaseIntent: 58,
+  attention: 66,
+  clarity: 72,
+  persuasion: 59,
+  brandFit: 74,
+  platformFit: 73,
+  clickLikelihood: { yes: 34, maybe: 32, no: 34 },
+  scrollStopPower: 52,
+  purchaseIntent: 55,
+  platformMetrics: {
+    pricePerception: { overpriced: 16, fair: 56, bargain: 28 },
+    buyBoxAppeal: 58,
+    listingQuality: 68,
+  },
   emotionalResponses: [
-    { word: "intrigued", count: 11 },
-    { word: "curious", count: 9 },
-    { word: "skeptical", count: 7 },
+    { word: "curious", count: 12 },
+    { word: "intrigued", count: 9 },
+    { word: "skeptical", count: 8 },
     { word: "interested", count: 6 },
     { word: "indifferent", count: 5 },
     { word: "excited", count: 4 },
+    { word: "confused", count: 3 },
   ],
   topStrengths: [
-    "NSF Certified for Sport badge instantly builds credibility with fitness-oriented shoppers who check certifications",
-    "Clear ingredient callouts (200mg caffeine, L-Theanine, Alpha-GPC) appeal to label-readers who compare supplements",
-    "Zero sugar / zero crash messaging directly addresses the #1 complaint about energy drinks in Amazon reviews",
-    "30 servings at $34.99 ($1.17/serving) is competitive with Monster and Red Bull on a per-serving basis",
-    "Multiple use cases (gamers, professionals, athletes) broadens the consideration set for Amazon's recommendation engine",
+    "Zero sugar / zero calorie positioning directly addresses the #1 consumer complaint about energy drinks and powders in Amazon reviews",
+    "200mg natural caffeine from green tea is a strong differentiator vs synthetic caffeine competitors like G Fuel and Sneak",
+    "L-Theanine + nootropics stack signals a more sophisticated product -- appeals to ingredient-aware shoppers who compare supplement facts panels",
+    "Brand crossover from Rekt Drinks (sparkling water with X Games, WorldStar collabs) gives credibility that this isn't another generic supplement brand",
+    "Cherry and Blue Raspberry flavor options cover the two most popular powder flavor profiles on Amazon in this category",
   ],
   topWeaknesses: [
-    "Bullet points lead with ingredients instead of benefits -- move 'zero crash energy' to the first bullet for scanners",
-    "No social proof in the listing copy -- missing star rating callout, review count, or 'Amazon's Choice' context",
-    "Brand name 'Rekt' may confuse older demographics who associate the word with negative connotations",
-    "Listing reads like a supplement facts panel rather than a compelling product story -- needs more emotional hooks",
-    "Missing comparison table or 'vs competitors' section that drives conversion on Amazon supplement listings",
+    "Brand name 'Rekt' reads as gaming/crypto slang -- older demographics (30+) and female shoppers may not connect with the positioning",
+    "Listing title is keyword-stuffed and hard to scan -- 'Clean Energy, Zero Sugar, Zero Calories, 200mg Natural Caffeine, Nootropics, L-Theanine' is information overload",
+    "No social proof in the listing -- missing review count callout, star rating highlight, or 'Amazon's Choice' badge context",
+    "The listing doesn't explain what nootropics are -- shoppers unfamiliar with the term may skip the product entirely",
+    "No clear comparison to competitors -- shoppers in this category actively compare Rekt vs G Fuel vs Celsius vs Ghost",
   ],
   platformTips: [
-    "Your bullet points focus on ingredients but don't lead with the benefit. Move 'zero crash energy' to the first bullet -- Amazon shoppers scan the first 2-3 words of each bullet.",
-    "Add A+ Content with a comparison chart showing Rekt vs Red Bull vs G Fuel vs Celsius on sugar, caffeine source, and price per serving. Amazon shoppers convert 5-10% higher with comparison tables.",
-    "Include a 'Subscribe & Save' callout in the description. Repeat-purchase supplements perform 30-40% better with subscription pricing on Amazon.",
-    "Your product title should front-load the category keyword: 'Energy + Focus Powder' should come before the brand name for Amazon SEO.",
-    "Add lifestyle images showing the product being used in gaming, office, and gym contexts. Amazon listings with 6+ images see significantly higher conversion rates.",
+    "Front-load the product title with the primary benefit keyword: lead with 'Energy + Focus Powder' before brand name. Amazon's A9 algorithm weights the first 80 characters most heavily for search ranking.",
+    "Add A+ Content (Brand Story + Enhanced Product Description) with a comparison chart: Rekt vs G Fuel vs Ghost vs Celsius on sugar content, caffeine source, calorie count, and price per serving. Comparison tables lift conversion 5-12% on Amazon supplement listings.",
+    "Create a Subscribe & Save offer at 10-15% discount. Energy powder is a repeat-purchase category and Amazon's algorithm boosts Subscribe & Save listings in search results. Products with S&S see 25-40% higher reorder rates.",
+    "Add a 'How To Use' infographic as image #4 or #5 showing scoop size, water ratio, and timing (pre-workout, morning focus, gaming session). Supplement listings with usage context images reduce return rates.",
+    "Include a short video (30-60s) on the listing showing the powder mixing, the cherry color, and someone drinking it. Amazon listings with video see 9-15% higher conversion vs static images only.",
+    "Target Sponsored Brand Ads for category keywords like 'clean energy powder', 'nootropic drink mix', and 'zero sugar pre workout'. Bid on competitor brand names (G Fuel, Ghost, Sneak) to capture comparison shoppers.",
+    "Add 'Frequently Bought Together' bundle suggestions -- pair with a shaker bottle or Rekt Drinks sparkling water variety pack to increase average order value and cross-promote the drinks line.",
   ],
   verbatims: [
-    { persona: "28yo male, Austin TX", quote: "The ingredients look legit but I'd need to see reviews before buying. Too many supplement brands overpromise on Amazon." },
-    { persona: "34yo female, Chicago IL", quote: "I like that it's NSF certified -- that's the first thing I look for in supplements. But the brand name 'Rekt' feels very bro-culture." },
-    { persona: "22yo male, Los Angeles CA", quote: "This is exactly what I've been looking for. Natural caffeine, no sugar, and it works for gaming sessions. I'd buy this." },
-    { persona: "41yo female, Seattle WA", quote: "Too many supplements make these same claims. What makes this one different from Athletic Greens or Mudwater?" },
-    { persona: "26yo male, Miami FL", quote: "The price is fair for 30 servings. I spend more than that on energy drinks in a week. I'd try it." },
-    { persona: "31yo female, Denver CO", quote: "I'd want to see the supplement facts panel and third-party testing before adding to cart." },
+    { persona: "24yo male, Austin TX", quote: "I already buy Rekt sparkling water so I'd definitely try the powder. The cherry flavor is exactly what I'd pick." },
+    { persona: "33yo female, Chicago IL", quote: "The listing throws too many buzzwords at me. Just tell me what it tastes like and if it actually works without the jitters." },
+    { persona: "21yo male, Los Angeles CA", quote: "200mg caffeine with L-Theanine is the perfect stack. I'd switch from G Fuel for this if the reviews are decent." },
+    { persona: "38yo female, Seattle WA", quote: "I don't know what 'nootropics' means and the brand name makes me think this is for teenage gamers, not someone like me." },
+    { persona: "27yo male, Miami FL", quote: "At 30 servings this is way cheaper than buying energy drinks every day. I'd subscribe and save on this for sure." },
+    { persona: "29yo female, Denver CO", quote: "I want to see the supplement facts panel and third-party testing results before I'd even consider adding this to cart." },
+    { persona: "19yo male, Brooklyn NY", quote: "The X Games and WorldStar collabs make Rekt feel legit. Most energy powder brands feel like drop-shipping scams." },
+    { persona: "35yo male, Nashville TN", quote: "Clean ingredients are great but the listing doesn't tell me how it actually tastes. Cherry could mean anything." },
   ],
   panelSize: 50,
   methodology: {
     panelSize: 50,
-    demographicMix: "Health-conscious professionals and gamers 18-38 (80%) + general population (20%)",
-    questionsAsked: 600,
+    demographicMix: "Health-conscious professionals, gamers, and fitness enthusiasts 18-38 (80%) + general population (20%)",
+    questionsAsked: 750,
     confidenceNote:
       "Results based on LLM-simulated consumer panel. Best used for directional insights and hypothesis generation.",
   },
-  createdAt: "2026-04-11T14:30:00Z",
+  createdAt: "2026-04-13T10:15:00Z",
   status: "complete",
 };
 
@@ -140,16 +150,21 @@ export default function SampleRektPlatformAd() {
               <CardTitle className="text-base">Click / Engage Likelihood</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex rounded-full overflow-hidden h-6 text-[10px] font-medium">
-                <div className="bg-emerald-500 text-white flex items-center justify-center" style={{ width: `${result.clickLikelihood.yes}%` }}>
+              <div className="flex rounded-full overflow-hidden h-8 text-xs font-medium">
+                <div className="bg-emerald-500 text-white flex items-center justify-center overflow-hidden whitespace-nowrap" style={{ width: `${result.clickLikelihood.yes}%` }}>
                   {result.clickLikelihood.yes}% Yes
                 </div>
-                <div className="bg-amber-400 text-amber-900 flex items-center justify-center" style={{ width: `${result.clickLikelihood.maybe}%` }}>
+                <div className="bg-amber-400 text-amber-900 flex items-center justify-center overflow-hidden whitespace-nowrap" style={{ width: `${result.clickLikelihood.maybe}%` }}>
                   {result.clickLikelihood.maybe}% Maybe
                 </div>
-                <div className="bg-red-400 text-white flex items-center justify-center" style={{ width: `${result.clickLikelihood.no}%` }}>
+                <div className="bg-red-400 text-white flex items-center justify-center overflow-hidden whitespace-nowrap" style={{ width: `${result.clickLikelihood.no}%` }}>
                   {result.clickLikelihood.no}% No
                 </div>
+              </div>
+              <div className="flex justify-between mt-2 text-[10px] text-muted-foreground">
+                <span>Yes: {result.clickLikelihood.yes}%</span>
+                <span>Maybe: {result.clickLikelihood.maybe}%</span>
+                <span>No: {result.clickLikelihood.no}%</span>
               </div>
             </CardContent>
           </Card>
@@ -170,6 +185,66 @@ export default function SampleRektPlatformAd() {
                     <p className="text-xs text-muted-foreground mt-1">Moderate purchase intent -- listing may need optimization</p>
                   </div>
                 </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Amazon-Specific Insights */}
+          {result.platformMetrics && (
+            <Card className="mb-6 border-teal/30">
+              <CardHeader>
+                <CardTitle className="text-base">Amazon-Specific Insights</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {result.platformMetrics.buyBoxAppeal !== undefined && (
+                  <div>
+                    <div className="flex justify-between text-xs mb-1">
+                      <span className="text-foreground font-medium">Buy Box Appeal</span>
+                      <span className="text-muted-foreground">{result.platformMetrics.buyBoxAppeal}%</span>
+                    </div>
+                    <div className="w-full bg-muted rounded-full h-2">
+                      <div className="bg-amber-500 h-2 rounded-full" style={{ width: `${result.platformMetrics.buyBoxAppeal}%` }} />
+                    </div>
+                  </div>
+                )}
+                {result.platformMetrics.listingQuality !== undefined && (
+                  <div>
+                    <div className="flex justify-between text-xs mb-1">
+                      <span className="text-foreground font-medium">Listing Quality & Trust</span>
+                      <span className="text-muted-foreground">{result.platformMetrics.listingQuality}%</span>
+                    </div>
+                    <div className="w-full bg-muted rounded-full h-2">
+                      <div className="bg-teal h-2 rounded-full" style={{ width: `${result.platformMetrics.listingQuality}%` }} />
+                    </div>
+                  </div>
+                )}
+                {result.platformMetrics.pricePerception && (
+                  <div>
+                    <p className="text-xs font-medium text-foreground mb-2">Price Perception</p>
+                    <div className="flex rounded-full overflow-hidden h-6 text-[10px] font-medium">
+                      {result.platformMetrics.pricePerception.bargain > 0 && (
+                        <div className="bg-emerald-500 text-white flex items-center justify-center" style={{ width: `${result.platformMetrics.pricePerception.bargain}%` }}>
+                          {result.platformMetrics.pricePerception.bargain >= 12 ? `${result.platformMetrics.pricePerception.bargain}% Bargain` : ""}
+                        </div>
+                      )}
+                      {result.platformMetrics.pricePerception.fair > 0 && (
+                        <div className="bg-blue-400 text-white flex items-center justify-center" style={{ width: `${result.platformMetrics.pricePerception.fair}%` }}>
+                          {result.platformMetrics.pricePerception.fair >= 10 ? `${result.platformMetrics.pricePerception.fair}% Fair` : ""}
+                        </div>
+                      )}
+                      {result.platformMetrics.pricePerception.overpriced > 0 && (
+                        <div className="bg-red-400 text-white flex items-center justify-center" style={{ width: `${result.platformMetrics.pricePerception.overpriced}%` }}>
+                          {result.platformMetrics.pricePerception.overpriced >= 15 ? `${result.platformMetrics.pricePerception.overpriced}% Overpriced` : ""}
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex justify-between mt-1 text-[10px] text-muted-foreground">
+                      <span>Bargain: {result.platformMetrics.pricePerception.bargain}%</span>
+                      <span>Fair: {result.platformMetrics.pricePerception.fair}%</span>
+                      <span>Overpriced: {result.platformMetrics.pricePerception.overpriced}%</span>
+                    </div>
+                  </div>
+                )}
               </CardContent>
             </Card>
           )}

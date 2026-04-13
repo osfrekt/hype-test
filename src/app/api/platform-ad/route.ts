@@ -176,6 +176,7 @@ async function persistResult(result: PlatformAdResult, user: UserInfo) {
     click_likelihood: result.clickLikelihood,
     scroll_stop_power: result.scrollStopPower,
     purchase_intent: result.purchaseIntent ?? null,
+    platform_metrics: result.platformMetrics ?? null,
     emotional_responses: result.emotionalResponses,
     top_strengths: result.topStrengths,
     top_weaknesses: result.topWeaknesses,

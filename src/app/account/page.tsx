@@ -83,6 +83,7 @@ function AccountContent() {
   const [slackStatus, setSlackStatus] = useState<
     "idle" | "saving" | "saved" | "error" | "testing" | "tested" | "test-error"
   >("idle");
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const loadUserData = useCallback(async (email: string) => {
     const supabase = createClient();
@@ -181,6 +182,10 @@ function AccountContent() {
       if (authUserData) {
         setAuthUser(authUserData);
         await loadUserData(authUserData.email!);
+        // Check admin status
+        fetch("/api/admin/check").then((res) => res.json()).then((data) => {
+          setIsAdmin(data.isAdmin === true);
+        }).catch(() => {});
       }
       setLoading(false);
     }
@@ -787,12 +792,12 @@ function AccountContent() {
             </CardContent>
           </Card>
 
-          {/* Admin link - only visible to admin emails */}
-          {authUser?.email && ["osf@rekt.com"].includes(authUser.email) && (
+          {/* Admin link - visible to admin users */}
+          {isAdmin && (
             <div className="text-center mt-6">
               <a
                 href="/admin/data-room"
-                className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+                className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
               >
                 Admin Data Room
               </a>
