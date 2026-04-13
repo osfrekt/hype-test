@@ -292,6 +292,12 @@ function DistributionBar({ distribution, panelSize }: { distribution: { label: s
   );
 }
 
+const LOGO_IMAGES: Record<string, { light: string; dark?: string }> = {
+  "Bold Angular": { light: "/brands/rekt-black.svg", dark: "/brands/rekt-yellow.svg" },
+  "Clean Minimalist": { light: "/brands/rekt-logo-b-minimal.svg" },
+  "Mascot": { light: "/brands/rekt-logo-c-mascot.svg" },
+};
+
 function LogoCard({
   logoResult,
   isWinner,
@@ -309,6 +315,8 @@ function LogoCard({
     { label: "Trust", data: logoResult.trust },
   ];
 
+  const logoImg = LOGO_IMAGES[logoResult.logo.name];
+
   return (
     <Card className={isWinner ? "ring-2 ring-teal" : ""}>
       <CardHeader>
@@ -321,6 +329,25 @@ function LogoCard({
           )}
           <span className="ml-auto text-2xl font-bold text-primary">{logoResult.overallScore}%</span>
         </div>
+        {/* Logo image preview */}
+        {logoImg && (
+          <div className="my-3 flex justify-center">
+            <div className="bg-muted/50 rounded-xl p-4 inline-block">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={logoImg.light}
+                alt={logoResult.logo.name}
+                className={`h-12 object-contain dark:hidden`}
+              />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={logoImg.dark || logoImg.light}
+                alt={logoResult.logo.name}
+                className={`h-12 object-contain hidden dark:block`}
+              />
+            </div>
+          </div>
+        )}
         <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{logoResult.logo.description}</p>
         {(logoResult.logo.colorPalette || logoResult.logo.styleTags) && (
           <p className="text-xs text-muted-foreground mt-0.5">
@@ -466,7 +493,7 @@ export default function SampleRektLogoTest() {
           <div className="mb-8">
             <div className="flex items-center gap-3 mb-2">
               <h2 className="text-2xl font-bold text-primary">
-                {result.input.brandName} &mdash; Logo Test
+                {result.input.brandName} | Logo Test
               </h2>
               <Badge variant="secondary" className="text-xs">
                 {result.panelSize} respondents
@@ -483,6 +510,41 @@ export default function SampleRektLogoTest() {
             <p className="text-sm text-muted-foreground mt-0.5">
               <span className="font-medium">Category:</span> {result.input.category} | <span className="font-medium">Audience:</span> {result.input.targetAudience}
             </p>
+          </div>
+
+          {/* Visual Logo Comparison */}
+          <div className="mb-8">
+            <h3 className="text-sm font-bold text-primary mb-4">Logos tested</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {result.results.map((lr) => {
+                const img = LOGO_IMAGES[lr.logo.name];
+                return (
+                  <div
+                    key={lr.logo.name}
+                    className={`bg-card rounded-xl border p-6 text-center ${
+                      lr.rank === 1 ? "border-teal ring-2 ring-teal/30" : "border-border"
+                    }`}
+                  >
+                    <div className="h-16 flex items-center justify-center mb-3">
+                      {img && (
+                        <>
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img src={img.light} alt={lr.logo.name} className="h-14 object-contain dark:hidden" />
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img src={img.dark || img.light} alt={lr.logo.name} className="h-14 object-contain hidden dark:block" />
+                        </>
+                      )}
+                    </div>
+                    <p className="text-sm font-bold text-primary">{lr.logo.name}</p>
+                    <p className="text-2xl font-bold text-primary mt-1">{lr.overallScore}%</p>
+                    <p className="text-[10px] text-muted-foreground">overall score</p>
+                    {lr.rank === 1 && (
+                      <span className="inline-block mt-2 text-[10px] bg-teal text-white px-2 py-0.5 rounded-full font-medium">Winner</span>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
           </div>
 
           {/* Winner Banner */}

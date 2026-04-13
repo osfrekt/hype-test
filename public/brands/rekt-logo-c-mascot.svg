@@ -1,0 +1,19 @@
+<svg width="200" height="80" viewBox="0 0 200 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Option C: Mascot - skull with headphones + graffiti text -->
+  <!-- Skull -->
+  <circle cx="40" cy="30" r="20" fill="#a855f7" opacity="0.9"/>
+  <circle cx="33" cy="26" r="4" fill="#1a1f36"/>
+  <circle cx="47" cy="26" r="4" fill="#1a1f36"/>
+  <rect x="33" y="34" width="14" height="3" rx="1" fill="#1a1f36"/>
+  <!-- Sunglasses -->
+  <rect x="27" y="22" width="12" height="7" rx="2" fill="#1a1f36"/>
+  <rect x="41" y="22" width="12" height="7" rx="2" fill="#1a1f36"/>
+  <line x1="39" y1="25" x2="41" y2="25" stroke="#1a1f36" stroke-width="1.5"/>
+  <!-- Headphones -->
+  <path d="M20 28 Q20 12 40 12 Q60 12 60 28" stroke="#22d3ee" stroke-width="3" fill="none"/>
+  <rect x="16" y="24" width="6" height="10" rx="2" fill="#22d3ee"/>
+  <rect x="58" y="24" width="6" height="10" rx="2" fill="#22d3ee"/>
+  <!-- Text -->
+  <text x="70" y="42" font-family="Impact, sans-serif" font-size="32" font-weight="900" letter-spacing="2" fill="#a855f7" transform="rotate(-3, 70, 42)">REKT</text>
+  <text x="70" y="62" font-family="system-ui, sans-serif" font-size="11" fill="#22d3ee" letter-spacing="3">ENERGY</text>
+</svg>
