@@ -51,7 +51,7 @@ function NewPlatformAdForm() {
 
   // Platform-specific inputs
   const [adCopy, setAdCopy] = useState("");
-  const [url, setUrl] = useState("");
+  const [url, setUrl] = useState("https://");
   const [videoDescription, setVideoDescription] = useState("");
   const [headline1, setHeadline1] = useState("");
   const [headline2, setHeadline2] = useState("");
@@ -368,7 +368,12 @@ function NewPlatformAdForm() {
                           <Input
                             placeholder="https://www.amazon.com/dp/..."
                             value={url}
-                            onChange={(e) => setUrl(e.target.value)}
+                            onChange={(e) => {
+                              let v = e.target.value;
+                              if (v.startsWith("https://https://")) v = v.slice("https://".length);
+                              else if (v.startsWith("https://http://")) v = v.slice("https://".length);
+                              setUrl(v);
+                            }}
                             type="url"
                             className="flex-1"
                           />
