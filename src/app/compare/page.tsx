@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Nav } from "@/components/nav";
+import { Footer } from "@/components/footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import type { ResearchResult } from "@/types/research";
@@ -288,7 +289,7 @@ export default function ComparePage() {
                       >
                         <CartesianGrid
                           strokeDasharray="3 3"
-                          stroke="#e5e7eb"
+                          stroke="oklch(0.91 0.005 260)"
                         />
                         <XAxis dataKey="label" tick={{ fontSize: 11 }} />
                         <YAxis tick={{ fontSize: 11 }} />
@@ -296,7 +297,7 @@ export default function ComparePage() {
                           contentStyle={{
                             fontSize: 12,
                             borderRadius: 8,
-                            border: "1px solid #e5e7eb",
+                            border: "1px solid oklch(0.91 0.005 260)",
                           }}
                         />
                         <Legend />
@@ -331,7 +332,7 @@ export default function ComparePage() {
                       >
                         <CartesianGrid
                           strokeDasharray="3 3"
-                          stroke="#e5e7eb"
+                          stroke="oklch(0.91 0.005 260)"
                         />
                         <XAxis type="number" tick={{ fontSize: 11 }} />
                         <YAxis
@@ -344,7 +345,7 @@ export default function ComparePage() {
                           contentStyle={{
                             fontSize: 12,
                             borderRadius: 8,
-                            border: "1px solid #e5e7eb",
+                            border: "1px solid oklch(0.91 0.005 260)",
                           }}
                         />
                         <Legend />
@@ -365,6 +366,7 @@ export default function ComparePage() {
           )}
         </div>
       </main>
+      <Footer />
     </>
   );
 }
