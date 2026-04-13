@@ -12,7 +12,9 @@ export async function POST(request: Request) {
     hmac.update(rawBody);
     const digest = hmac.digest("hex");
 
-    if (digest !== signature) {
+    const isValid = signature && digest.length === signature.length &&
+      crypto.timingSafeEqual(Buffer.from(digest), Buffer.from(signature));
+    if (!isValid) {
       return Response.json({ error: "Invalid signature" }, { status: 401 });
     }
 

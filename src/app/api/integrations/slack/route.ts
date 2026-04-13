@@ -52,11 +52,15 @@ export async function POST(request: Request) {
     }
 
     // Validate webhook URL format if provided
-    if (webhookUrl && !webhookUrl.startsWith("https://hooks.slack.com/")) {
-      return Response.json(
-        { error: "Invalid Slack webhook URL. It should start with https://hooks.slack.com/" },
-        { status: 400 }
-      );
+    if (webhookUrl) {
+      try {
+        const parsed = new URL(webhookUrl);
+        if (parsed.hostname !== "hooks.slack.com") {
+          return Response.json({ error: "Invalid Slack webhook URL" }, { status: 400 });
+        }
+      } catch {
+        return Response.json({ error: "Invalid URL" }, { status: 400 });
+      }
     }
 
     const supabase = await createClient();

@@ -4,7 +4,7 @@ import { sendDiscoveryReport } from "@/lib/email";
 import { sendDiscoverySlackNotification } from "@/lib/slack";
 import { createRateLimiter } from "@/lib/rate-limit";
 import { checkQuota, incrementUsage, getOrCreateUser } from "@/lib/users";
-import { isDisposableEmail } from "@/lib/email-validation";
+import { isDisposableEmail, normalizeEmail } from "@/lib/email-validation";
 import { verifyVerificationToken } from "@/lib/magic-link";
 import type { DiscoveryInput, DiscoveryResult } from "@/types/discovery";
 
@@ -65,7 +65,7 @@ export async function POST(request: Request) {
     }
 
     // Quota check
-    const email = typeof body.email === "string" ? body.email.trim().slice(0, 200) : null;
+    const email = typeof body.email === "string" ? normalizeEmail(body.email.trim().slice(0, 200)) : null;
 
     // Layer 1: Block disposable emails
     if (email && isDisposableEmail(email)) {
@@ -131,7 +131,21 @@ export async function POST(request: Request) {
       }),
     };
 
-    const result = await runDiscovery(sanitizedInput);
+    // Increment usage BEFORE discovery to prevent quota bypass on concurrent requests
+    if (email) {
+      await incrementUsage(email, "discovery");
+    }
+
+    let result;
+    try {
+      result = await runDiscovery(sanitizedInput);
+    } catch (error) {
+      // Discovery failed after incrementing usage — log for manual review
+      if (email) {
+        console.error("Discovery failed after incrementing usage for:", email);
+      }
+      throw error;
+    }
 
     const userName = typeof body.userName === "string" ? body.userName.trim().slice(0, 200) : null;
     const userCompany = typeof body.userCompany === "string" ? body.userCompany.trim().slice(0, 200) : null;
@@ -147,10 +161,9 @@ export async function POST(request: Request) {
       console.error("Failed to persist discovery result:", err)
     );
 
-    // Track usage and ensure user record exists
+    // Ensure user record exists with latest info
     if (email) {
       getOrCreateUser(email, userName || undefined, userCompany || undefined, userRole || undefined, userCompanySize || undefined).catch(console.error);
-      incrementUsage(email, "discovery").catch(console.error);
 
       sendDiscoveryReport(email, sanitizedInput.brandName, result.id).catch(
         (err) => console.error("Failed to send discovery email:", err)
