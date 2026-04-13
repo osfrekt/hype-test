@@ -296,8 +296,8 @@ export default function ValidatePage() {
                                 <span
                                   className={
                                     parseFloat(diff) >= 0
-                                      ? "text-emerald-600"
-                                      : "text-red-600"
+                                      ? "text-emerald-600 dark:text-emerald-400"
+                                      : "text-red-600 dark:text-red-400"
                                   }
                                 >
                                   {parseFloat(diff) >= 0 ? "+" : ""}

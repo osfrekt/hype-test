@@ -219,10 +219,10 @@ export default function PricingPage() {
               onClick={() => setAnnual(!annual)}
               className={`relative w-12 h-6 rounded-full transition-colors ${annual ? "bg-teal" : "bg-muted"}`}
             >
-              <span className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white transition-transform ${annual ? "translate-x-6" : ""}`} />
+              <span className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white dark:bg-foreground transition-transform ${annual ? "translate-x-6" : ""}`} />
             </button>
             <span className={`text-sm ${annual ? "text-primary font-medium" : "text-muted-foreground"}`}>
-              Annual <span className="text-xs text-emerald-600 font-medium ml-1">Save 20%</span>
+              Annual <span className="text-xs text-emerald-600 dark:text-emerald-400 font-medium ml-1">Save 20%</span>
             </span>
           </div>
 
@@ -259,7 +259,7 @@ export default function PricingPage() {
                       )}
                     </div>
                     {annual && plan.monthlyPrice > 0 && (
-                      <p className="text-xs text-emerald-600 font-medium mt-0.5">
+                      <p className="text-xs text-emerald-600 dark:text-emerald-400 font-medium mt-0.5">
                         ${annualTotal.toLocaleString()}/yr &middot; was ${plan.monthlyPrice}/mo
                       </p>
                     )}
@@ -388,7 +388,7 @@ export default function PricingPage() {
             </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
               <div className="bg-card rounded-2xl border border-border p-6">
-                <span className="text-xs font-bold text-emerald-600 uppercase tracking-wider">Free</span>
+                <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Free</span>
                 <h3 className="text-base font-bold text-primary mt-2 mb-3">Core consumer research</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed mb-4">
                   50-person AI panel with purchase intent, WTP, feature ranking,
@@ -691,7 +691,7 @@ export default function PricingPage() {
                   </p>
 
                   {waitlistStatus === "success" ? (
-                    <p className="text-sm font-medium text-emerald-600">
+                    <p className="text-sm font-medium text-emerald-600 dark:text-emerald-400">
                       {waitlistMessage}
                     </p>
                   ) : (

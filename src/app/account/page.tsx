@@ -762,7 +762,7 @@ function AccountContent() {
                 </div>
               </div>
               {slackStatus === "saved" && (
-                <p className="text-xs text-emerald-600 mt-2">
+                <p className="text-xs text-emerald-600 dark:text-emerald-400 mt-2">
                   Webhook URL saved successfully.
                 </p>
               )}
@@ -772,7 +772,7 @@ function AccountContent() {
                 </p>
               )}
               {slackStatus === "tested" && (
-                <p className="text-xs text-emerald-600 mt-2">
+                <p className="text-xs text-emerald-600 dark:text-emerald-400 mt-2">
                   Test message sent. Check your Slack channel.
                 </p>
               )}
