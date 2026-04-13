@@ -154,6 +154,10 @@ export function Nav() {
                   Audience Finder
                   <span className="text-[10px] bg-primary text-primary-foreground px-1.5 py-0.5 rounded-full font-medium">Pro</span>
                 </Link>
+                <Link href="/platform-ad/new" role="menuitem" className="flex items-center justify-between px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">
+                  Platform Ad Analyzer
+                  <span className="text-[10px] bg-primary text-primary-foreground px-1.5 py-0.5 rounded-full font-medium">Pro</span>
+                </Link>
                 <Link href="/competitive/new" role="menuitem" className="flex items-center justify-between px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">
                   Competitive Teardown
                   <span className="text-[10px] bg-primary text-primary-foreground px-1.5 py-0.5 rounded-full font-medium">Pro</span>
@@ -279,6 +283,7 @@ export function Nav() {
             <Link href="/logo-test/new" onClick={() => setMobileOpen(false)} className="flex items-center justify-between px-3 py-2.5 rounded-lg text-sm hover:bg-muted transition-colors text-muted-foreground">Logo Testing <span className="text-[10px] bg-primary text-primary-foreground px-1.5 py-0.5 rounded-full font-medium">Pro</span></Link>
             <Link href="/discover/new" onClick={() => setMobileOpen(false)} className="flex items-center justify-between px-3 py-2.5 rounded-lg text-sm hover:bg-muted transition-colors text-muted-foreground">Product Discovery <span className="text-[10px] bg-primary text-primary-foreground px-1.5 py-0.5 rounded-full font-medium">Pro</span></Link>
             <Link href="/audience-test/new" onClick={() => setMobileOpen(false)} className="flex items-center justify-between px-3 py-2.5 rounded-lg text-sm hover:bg-muted transition-colors text-muted-foreground">Audience Finder <span className="text-[10px] bg-primary text-primary-foreground px-1.5 py-0.5 rounded-full font-medium">Pro</span></Link>
+            <Link href="/platform-ad/new" onClick={() => setMobileOpen(false)} className="flex items-center justify-between px-3 py-2.5 rounded-lg text-sm hover:bg-muted transition-colors text-muted-foreground">Platform Ad Analyzer <span className="text-[10px] bg-primary text-primary-foreground px-1.5 py-0.5 rounded-full font-medium">Pro</span></Link>
             <Link href="/competitive/new" onClick={() => setMobileOpen(false)} className="flex items-center justify-between px-3 py-2.5 rounded-lg text-sm hover:bg-muted transition-colors text-muted-foreground">Competitive Teardown <span className="text-[10px] bg-primary text-primary-foreground px-1.5 py-0.5 rounded-full font-medium">Pro</span></Link>
             <div className="h-px bg-border my-2" />
             <Link href="/methodology" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 rounded-lg text-sm hover:bg-muted transition-colors text-muted-foreground">Methodology</Link>

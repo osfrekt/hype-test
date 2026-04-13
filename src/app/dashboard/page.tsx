@@ -96,6 +96,13 @@ const ALL_TOOLS: Tool[] = [
     minPlan: "pro",
   },
   {
+    name: "Platform Ad Analyzer",
+    description: "Analyze ads across Amazon, Instagram, TikTok, Google, Facebook, LinkedIn, and YouTube.",
+    runHref: "/platform-ad/new",
+    sampleHref: "/platform-ad/sample-rekt",
+    minPlan: "pro",
+  },
+  {
     name: "Logo Testing",
     description: "Test logo concepts for brand fit, appeal, and memorability.",
     runHref: "/logo-test/new",
@@ -153,6 +160,7 @@ function testResultLink(type: string, id: string): string {
     case "Pricing Test": return `/pricing-test/${id}`;
     case "Audience Test": return `/audience-test/${id}`;
     case "Ad Test": return `/ad-test/${id}`;
+    case "Platform Ad": return `/platform-ad/${id}`;
     case "Logo Test": return `/logo-test/${id}`;
     case "Discovery": return `/discover/${id}`;
     case "Market Research": return `/market-research/${id}`;
@@ -216,6 +224,7 @@ export default function DashboardPage() {
       { table: "audience_test_results", type: "Audience Test" },
       { table: "competitive_results", type: "Competitive" },
       { table: "ad_test_results", type: "Ad Test" },
+      { table: "platform_ad_results", type: "Platform Ad" },
       { table: "logo_test_results", type: "Logo Test" },
       { table: "market_research_results", type: "Market Research" },
     ];

@@ -136,6 +136,7 @@ function AccountContent() {
       { table: "audience_test_results", type: "Audience Test" },
       { table: "competitive_results", type: "Competitive" },
       { table: "ad_test_results", type: "Ad Test" },
+      { table: "platform_ad_results", type: "Platform Ad" },
       { table: "logo_test_results", type: "Logo Test" },
     ];
 
@@ -562,6 +563,8 @@ function AccountContent() {
                               ? `/audience-test/${t.id}`
                               : t.type === "Ad Test"
                                 ? `/ad-test/${t.id}`
+                                : t.type === "Platform Ad"
+                                  ? `/platform-ad/${t.id}`
                                 : t.type === "Logo Test"
                                   ? `/logo-test/${t.id}`
                                   : `/competitive/${t.id}`;

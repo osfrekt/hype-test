@@ -606,6 +606,13 @@ export default function Home() {
                 </div>
                 <p className="text-xs text-muted-foreground leading-relaxed">Test ad creatives with attention, clarity, persuasion, and click likelihood scores.</p>
               </Link>
+              <Link href="/platform-ad/new" className="block bg-background rounded-2xl border border-border/50 p-5 hover:border-teal/30 hover:shadow-sm transition-all group">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-sm font-bold text-primary group-hover:text-teal transition-colors">Platform Ad Analyzer</h3>
+                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-primary text-primary-foreground">Pro</span>
+                </div>
+                <p className="text-xs text-muted-foreground leading-relaxed">Analyze ads across Amazon, Instagram, TikTok, Google, Facebook, LinkedIn, and YouTube.</p>
+              </Link>
               <Link href="/logo-test/new" className="block bg-background rounded-2xl border border-border/50 p-5 hover:border-teal/30 hover:shadow-sm transition-all group">
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="text-sm font-bold text-primary group-hover:text-teal transition-colors">Logo Testing</h3>

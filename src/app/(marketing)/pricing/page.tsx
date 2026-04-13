@@ -84,6 +84,7 @@ const featureCategories: { category: string; features: FeatureRow[] }[] = [
     category: "Pro Tools",
     features: [
       { name: "Ad/creative testing", free: false, starter: false, pro: true, team: true },
+      { name: "Platform Ad Analyzer", free: false, starter: false, pro: true, team: true },
       { name: "Logo testing", free: false, starter: false, pro: true, team: true },
       { name: "Product Discovery", free: false, starter: false, pro: true, team: true },
       { name: "Discovery rounds per month", free: false, starter: false, pro: "50", team: "200" },
@@ -425,6 +426,7 @@ export default function PricingPage() {
                   <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />Audience finder across 5 segments</li>
                   <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />Competitive teardown with radar chart</li>
                   <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />Ad/creative testing</li>
+                  <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />Platform Ad Analyzer (8 platforms)</li>
                   <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />Logo testing</li>
                   <li className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />100 research runs per month</li>
                 </ul>
@@ -597,6 +599,13 @@ export default function PricingPage() {
                 title="Ad / Creative Testing"
                 description="Test ad creatives with a 50-person panel. Get attention, clarity, persuasion, brand fit, and click likelihood scores."
                 href="/ad-test/new"
+                badge="Pro"
+                badgeColor="bg-primary text-primary-foreground"
+              />
+              <ToolCard
+                title="Platform Ad Analyzer"
+                description="Analyze ads across Amazon, Instagram, TikTok, Google, Facebook, LinkedIn, and YouTube with platform-specific tips."
+                href="/platform-ad/new"
                 badge="Pro"
                 badgeColor="bg-primary text-primary-foreground"
               />
