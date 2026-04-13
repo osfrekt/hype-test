@@ -589,7 +589,7 @@ function CompetitiveForm() {
             <Button
               type="submit"
               className="w-full bg-primary hover:bg-primary/90 text-primary-foreground h-11"
-              disabled={!isFormValid}
+              disabled={!isFormValid || isRunning}
             >
               Run Competitive Teardown (Free)
             </Button>

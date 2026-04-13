@@ -57,6 +57,10 @@ export async function sendFollowUpEmail(email: string, productName: string, inte
         <p style="color: #94a3b8; font-size: 12px; margin-top: 24px;">
           This is a one-time follow-up based on your research results.
         </p>
+        <p style="color: #94a3b8; font-size: 10px; margin-top: 16px;">
+          This is a one-time follow-up based on your research. To stop receiving emails,
+          reply with &quot;unsubscribe&quot; or contact support@hypetest.ai.
+        </p>
         ${FOOTER}
       </div>
     `,

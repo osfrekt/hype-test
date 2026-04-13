@@ -13,6 +13,7 @@ export function Nav() {
   const [authUser, setAuthUser] = useState<User | null>(null);
   const [authChecked, setAuthChecked] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [toolsOpen, setToolsOpen] = useState(false);
 
   function cycleTheme() {
     const next = theme === "light" ? "dark" : theme === "dark" ? "system" : "light";
@@ -90,55 +91,68 @@ export function Nav() {
           >
             Methodology
           </Link>
-          <div className="relative group">
-            <button className="hover:text-foreground transition-colors flex items-center gap-1">
+          <div className="relative group"
+            onKeyDown={(e) => { if (e.key === "Escape") setToolsOpen(false); }}
+          >
+            <button
+              className="hover:text-foreground transition-colors flex items-center gap-1"
+              aria-haspopup="true"
+              aria-expanded={toolsOpen}
+              onClick={() => setToolsOpen(!toolsOpen)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  setToolsOpen(!toolsOpen);
+                }
+              }}
+            >
               Tools
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6" /></svg>
             </button>
-            <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50">
-              <div className="bg-card border border-border rounded-xl shadow-lg p-1.5 w-64">
+            <div className={`absolute top-full left-1/2 -translate-x-1/2 pt-2 ${toolsOpen ? "opacity-100 visible" : "opacity-0 invisible"} group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50`}>
+              <div className="bg-card border border-border rounded-xl shadow-lg p-1.5 w-64" role="menu">
                 <p className="px-3 py-1 text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Free</p>
-                <Link href="/research/new" className="flex items-center justify-between px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">
+                <Link href="/research/new" role="menuitem" className="flex items-center justify-between px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">
                   Consumer Research
                   <span className="text-[10px] bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 px-1.5 py-0.5 rounded-full font-medium">Free</span>
                 </Link>
                 <div className="h-px bg-border mx-3 my-1" />
                 <p className="px-3 py-1 text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Starter</p>
-                <Link href="/ab-test/new" className="flex items-center justify-between px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">
+                <Link href="/ab-test/new" role="menuitem" className="flex items-center justify-between px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">
                   A/B Concept Testing
                   <span className="text-[10px] bg-teal/10 text-teal-dark dark:text-teal px-1.5 py-0.5 rounded-full font-medium">Starter</span>
                 </Link>
-                <Link href="/name-test/new" className="flex items-center justify-between px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">
+                <Link href="/name-test/new" role="menuitem" className="flex items-center justify-between px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">
                   Name Testing
                   <span className="text-[10px] bg-teal/10 text-teal-dark dark:text-teal px-1.5 py-0.5 rounded-full font-medium">Starter</span>
                 </Link>
-                <Link href="/pricing-test/new" className="flex items-center justify-between px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">
+                <Link href="/pricing-test/new" role="menuitem" className="flex items-center justify-between px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">
                   Pricing Optimizer
                   <span className="text-[10px] bg-teal/10 text-teal-dark dark:text-teal px-1.5 py-0.5 rounded-full font-medium">Starter</span>
                 </Link>
                 <div className="h-px bg-border mx-3 my-1" />
                 <p className="px-3 py-1 text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Pro</p>
-                <Link href="/market-research/new" className="flex items-center justify-between px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">
+                <Link href="/market-research/new" role="menuitem" className="flex items-center justify-between px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">
                   Market Research
                   <span className="text-[10px] bg-primary text-primary-foreground px-1.5 py-0.5 rounded-full font-medium">Pro</span>
                 </Link>
-                <Link href="/ad-test/new" className="flex items-center justify-between px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">
+                <Link href="/ad-test/new" role="menuitem" className="flex items-center justify-between px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">
                   Ad Testing
                   <span className="text-[10px] bg-primary text-primary-foreground px-1.5 py-0.5 rounded-full font-medium">Pro</span>
                 </Link>
-                <Link href="/logo-test/new" className="flex items-center justify-between px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">
+                <Link href="/logo-test/new" role="menuitem" className="flex items-center justify-between px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">
                   Logo Testing
                   <span className="text-[10px] bg-primary text-primary-foreground px-1.5 py-0.5 rounded-full font-medium">Pro</span>
                 </Link>
-                <Link href="/discover/new" className="flex items-center justify-between px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">
+                <Link href="/discover/new" role="menuitem" className="flex items-center justify-between px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">
                   Product Discovery
                   <span className="text-[10px] bg-primary text-primary-foreground px-1.5 py-0.5 rounded-full font-medium">Pro</span>
                 </Link>
-                <Link href="/audience-test/new" className="flex items-center justify-between px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">
+                <Link href="/audience-test/new" role="menuitem" className="flex items-center justify-between px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">
                   Audience Finder
                   <span className="text-[10px] bg-primary text-primary-foreground px-1.5 py-0.5 rounded-full font-medium">Pro</span>
                 </Link>
-                <Link href="/competitive/new" className="flex items-center justify-between px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">
+                <Link href="/competitive/new" role="menuitem" className="flex items-center justify-between px-3 py-2 rounded-lg text-sm hover:bg-muted transition-colors">
                   Competitive Teardown
                   <span className="text-[10px] bg-primary text-primary-foreground px-1.5 py-0.5 rounded-full font-medium">Pro</span>
                 </Link>

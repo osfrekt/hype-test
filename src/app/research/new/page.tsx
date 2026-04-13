@@ -860,7 +860,7 @@ function NewResearchForm() {
                   <div className="bg-teal/5 border border-teal/20 rounded-xl p-4 space-y-3">
                     <p className="text-sm font-medium text-primary">Verify your email</p>
                     <p className="text-xs text-muted-foreground">
-                      We sent a 6-digit code to {email}. Enter it below to your research will start automatically.
+                      We sent a 6-digit code to {email}. Enter it below. Your research will start automatically.
                     </p>
                     <Input
                       placeholder="123456"
@@ -885,7 +885,7 @@ function NewResearchForm() {
                   <Button
                     type="submit"
                     className="w-full bg-primary hover:bg-primary/90 text-primary-foreground h-11"
-                    disabled={!isFormValid || verificationStep === "verifying"}
+                    disabled={!isFormValid || isRunning || verificationStep === "verifying"}
                   >
                     Run Research (Free)
                   </Button>
