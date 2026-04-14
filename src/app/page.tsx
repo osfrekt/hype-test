@@ -150,7 +150,7 @@ export default function Home() {
           <div className="max-w-4xl mx-auto px-6">
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8">
               <p className="text-xs text-muted-foreground/60 uppercase tracking-wider shrink-0">
-                Built by the team behind
+                Used by
               </p>
               <div className="flex items-center gap-8">
                 <a href="https://rekt.com" target="_blank" rel="noopener noreferrer" className="hover:opacity-80 transition-opacity">
