@@ -57,11 +57,15 @@ export default function Home() {
                 <svg className="ml-2" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
               </Link>
             </div>
-            <div data-animate="5" className="mt-6">
-              <Suspense>
-                <ReportCounter />
-              </Suspense>
-            </div>
+          </div>
+        </section>
+
+        {/* Report counter */}
+        <section className="border-b border-border/50">
+          <div className="max-w-5xl mx-auto px-6">
+            <Suspense>
+              <ReportCounter />
+            </Suspense>
           </div>
         </section>
 

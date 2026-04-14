@@ -17,17 +17,19 @@ export function ReportCounter() {
   const formatted = count.toLocaleString();
 
   return (
-    <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
-      <span className="inline-flex items-center gap-1.5">
-        <span className="relative flex h-2 w-2">
+    <div className="py-10 text-center">
+      <div className="flex items-center justify-center gap-3 mb-2">
+        <span className="relative flex h-3 w-3">
           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal opacity-75" />
-          <span className="relative inline-flex rounded-full h-2 w-2 bg-teal" />
+          <span className="relative inline-flex rounded-full h-3 w-3 bg-teal" />
         </span>
-        <span>
-          <span className="font-bold text-primary tabular-nums">{formatted}</span>
-          {" "}research reports generated
+        <span className="font-extrabold text-primary tabular-nums" style={{ fontSize: "clamp(2.5rem, 2rem + 3vw, 4rem)" }}>
+          {formatted}
         </span>
-      </span>
+      </div>
+      <p className="text-lg text-muted-foreground">
+        reports generated so far...and counting.
+      </p>
     </div>
   );
 }
