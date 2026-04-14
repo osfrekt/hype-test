@@ -280,8 +280,49 @@ function ResearchResultContent({
             <PerformanceOverTime history={history} currentId={id} />
           )}
 
+          {/* Bottom Enhance section */}
+          <EnhanceButton
+            originalResultId={result.id}
+            toolType="research"
+            originalInput={result.input as unknown as Record<string, unknown>}
+            topConcerns={result.topConcerns}
+            topPositives={result.topPositives}
+            verbatims={result.verbatims?.map((v) => ({ text: (v as { text?: string; quote?: string }).text || (v as { quote?: string }).quote || "" }))}
+            featureImportance={result.featureImportance}
+            variant="full"
+          />
+
+          {/* Bottom action buttons */}
+          <div className="flex flex-wrap justify-center gap-2 mt-6 mb-4" data-print-hide>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={async () => {
+                try {
+                  await navigator.clipboard.writeText(window.location.href);
+                  setCopied(true);
+                  setTimeout(() => setCopied(false), 2000);
+                } catch {}
+              }}
+            >
+              <Link2 className="w-4 h-4 mr-1.5" />
+              {copied ? "Copied!" : "Copy share link"}
+            </Button>
+            <Button variant="outline" size="sm" onClick={() => window.print()}>
+              <Download className="w-4 h-4 mr-1.5" />
+              Download PDF
+            </Button>
+            <Link
+              href={`/research/new?${runAgainParams.toString()}`}
+              className={buttonVariants({ variant: "outline", size: "sm" })}
+            >
+              <RotateCcw className="w-4 h-4 mr-1.5" />
+              Run again
+            </Link>
+          </div>
+
           {/* Delete button */}
-          <div className="mt-12 mb-8 text-center" data-print-hide>
+          <div className="mt-6 mb-8 text-center" data-print-hide>
             <button
               type="button"
               disabled={deleting}

@@ -3,6 +3,7 @@
 import { Suspense, useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { Sparkles } from "lucide-react";
 import { Nav } from "@/components/nav";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -190,14 +191,29 @@ function NewResearchForm() {
   const [utmCampaign] = useState(() => typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("utm_campaign") || "" : "");
   const [referrer] = useState(() => typeof window !== "undefined" ? document.referrer || "" : "");
 
-  // Pre-fill from search params (e.g. "Run again" from results page)
+  // Pre-fill from search params (e.g. "Run again" or "Enhance" from results page)
   useEffect(() => {
-    const name = searchParams.get("name");
-    const desc = searchParams.get("desc");
-    const cat = searchParams.get("cat");
+    const name = searchParams.get("productName") || searchParams.get("name");
+    const desc = searchParams.get("productDescription") || searchParams.get("desc");
+    const cat = searchParams.get("category") || searchParams.get("cat");
+    const pu = searchParams.get("priceUnit");
+    const tm = searchParams.get("targetMarket");
+    const comp = searchParams.get("competitors");
     if (name) setProductName(name);
-    if (desc) setProblem(desc); // best effort — put old description into problem field
+    if (desc) setProblem(desc);
     if (cat) setCategory(cat);
+    if (pu) {
+      // Try to split into price + unit if it contains a dollar sign
+      const priceMatch = pu.match(/^(\$[\d.,]+(?:\s*-\s*\$?[\d.,]+)?)\s*(.*)/);
+      if (priceMatch) {
+        setPrice(priceMatch[1]);
+        if (priceMatch[2]) setPriceUnit(priceMatch[2]);
+      } else {
+        setPriceUnit(pu);
+      }
+    }
+    if (tm) { setTargetMarket(tm); setTargetTouched(true); }
+    if (comp) { setCompetitors(comp); setCompetitorsTouched(true); }
   }, [searchParams]);
 
   // Smart defaults when category changes
@@ -488,7 +504,7 @@ function NewResearchForm() {
         <div className="max-w-2xl mx-auto px-6">
           <div className="mb-8">
             <h1 className="text-2xl font-bold text-primary mb-2">
-              New Research Run
+              {searchParams.get("enhanced") ? "Enhanced Research Run" : "New Research Run"}
             </h1>
             <p className="text-muted-foreground">
               Tell us about your product. The more detail you give, the better
@@ -500,6 +516,18 @@ function NewResearchForm() {
               </Link>
             </p>
           </div>
+          {searchParams.get("enhanced") && (
+            <div className="mb-6 rounded-xl border-2 border-purple-300 dark:border-purple-700 bg-purple-50 dark:bg-purple-950/30 p-4" >
+              <div className="flex items-center gap-2 mb-1">
+                <Sparkles className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+                <p className="text-sm font-semibold text-purple-700 dark:text-purple-300">Enhanced positioning applied</p>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Your product description has been updated with consumer feedback from your previous report.
+                Review the changes below, edit if needed, then run your enhanced report. Uses 1 report credit.
+              </p>
+            </div>
+          )}
 
           <Card>
             <CardHeader>

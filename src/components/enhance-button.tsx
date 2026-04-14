@@ -15,20 +15,43 @@ interface EnhanceButtonProps {
   topPositives?: string[];
   verbatims?: { text?: string; quote?: string }[];
   featureImportance?: { feature: string; score: number }[];
+  variant?: "compact" | "full";
 }
 
-export function EnhanceButton({
-  originalResultId,
-  toolType,
-  originalInput,
-  topConcerns = [],
-  topPositives = [],
-  verbatims = [],
-  featureImportance = [],
-}: EnhanceButtonProps) {
-  const router = useRouter();
-  const [enhancing, setEnhancing] = useState(false);
-  const [error, setError] = useState("");
+function buildEnhancedUrl(props: EnhanceButtonProps): string {
+  const { originalInput, topConcerns = [], topPositives = [], featureImportance = [] } = props;
+
+  const concernsList = topConcerns.slice(0, 5).join("; ");
+  const positivesList = topPositives.slice(0, 5).join("; ");
+  const topFeatures = featureImportance
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 5)
+    .map((f) => f.feature)
+    .join("; ");
+
+  const originalDesc = String(originalInput.productDescription || "");
+  const enhancement = [
+    concernsList ? `Address these consumer concerns: ${concernsList}` : "",
+    positivesList ? `Double down on these strengths: ${positivesList}` : "",
+    topFeatures ? `Prioritise these features in messaging: ${topFeatures}` : "",
+  ].filter(Boolean).join("\n");
+
+  const enhancedDesc = `${originalDesc}\n\nENHANCED POSITIONING (based on consumer feedback):\n${enhancement}`;
+
+  const params = new URLSearchParams();
+  if (originalInput.productName) params.set("productName", String(originalInput.productName));
+  params.set("productDescription", enhancedDesc);
+  if (originalInput.category) params.set("category", String(originalInput.category));
+  if (originalInput.priceUnit) params.set("priceUnit", String(originalInput.priceUnit));
+  if (originalInput.targetMarket) params.set("targetMarket", String(originalInput.targetMarket));
+  if (originalInput.competitors) params.set("competitors", String(originalInput.competitors));
+  params.set("enhanced", "true");
+
+  return `/research/new?${params.toString()}`;
+}
+
+export function EnhanceButton(props: EnhanceButtonProps) {
+  const { variant = "compact" } = props;
   const [userPlan, setUserPlan] = useState<string | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [checkDone, setCheckDone] = useState(false);
@@ -38,7 +61,6 @@ export function EnhanceButton({
     supabase.auth.getUser().then(async ({ data: { user } }) => {
       if (user?.email) {
         setIsAuthenticated(true);
-        // Check admin status first
         const adminRes = await fetch("/api/admin/check");
         if (adminRes.ok) {
           const adminData = await adminRes.json();
@@ -59,87 +81,89 @@ export function EnhanceButton({
     });
   }, []);
 
-  const hasPro = userPlan === "pro" || userPlan === "team";
-
-  async function handleEnhance() {
-    setError("");
-    setEnhancing(true);
-
-    try {
-      const res = await fetch("/api/enhance", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          originalResultId,
-          toolType,
-          originalInput,
-          topConcerns,
-          topPositives,
-          verbatims: verbatims.map((v) => ({ text: v.text || v.quote || "" })),
-          featureImportance,
-        }),
-      });
-
-      if (!res.ok) {
-        const data = await res.json();
-        setError(data.error || "Enhancement failed");
-        setEnhancing(false);
-        return;
-      }
-
-      const result = await res.json();
-      // Store in sessionStorage as backup
-      try {
-        sessionStorage.setItem(`research-${result.id}`, JSON.stringify(result));
-      } catch {}
-      router.push(`/research/${result.id}`);
-    } catch {
-      setError("Enhancement failed. Please try again.");
-      setEnhancing(false);
-    }
-  }
-
   if (!checkDone) return null;
 
-  // Not logged in
-  if (!isAuthenticated) {
-    return (
-      <Link href="/login">
-        <Button variant="outline" size="sm" className="border-purple-300 dark:border-purple-700 text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-950/30">
-          <Sparkles className="w-4 h-4 mr-1.5" />
-          Enhance with AI
-        </Button>
-      </Link>
-    );
-  }
+  const hasPro = userPlan === "pro" || userPlan === "team";
+  const enhanceUrl = buildEnhancedUrl(props);
 
-  // Free/Starter — show upgrade prompt
-  if (!hasPro) {
+  // ── Compact variant (top action bar) ──
+  if (variant === "compact") {
+    if (!isAuthenticated || !hasPro) {
+      return (
+        <Link href="/pricing">
+          <Button size="sm" className="bg-purple-600 hover:bg-purple-700 text-white">
+            <Sparkles className="w-4 h-4 mr-1.5" />
+            Enhance
+            <span className="ml-1.5 text-[10px] bg-white/20 px-1.5 py-0.5 rounded-full font-medium">Pro</span>
+          </Button>
+        </Link>
+      );
+    }
+
     return (
-      <Link href="/pricing">
-        <Button variant="outline" size="sm" className="border-purple-300 dark:border-purple-700 text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-950/30">
+      <Link href={enhanceUrl}>
+        <Button size="sm" className="bg-purple-600 hover:bg-purple-700 text-white">
           <Sparkles className="w-4 h-4 mr-1.5" />
           Enhance
-          <span className="ml-1.5 text-[10px] bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 px-1.5 py-0.5 rounded-full font-medium">Pro</span>
         </Button>
       </Link>
     );
   }
 
-  // Pro/Team — functional button
+  // ── Full variant (bottom section) ──
+  if (!isAuthenticated || !hasPro) {
+    return (
+      <div className="rounded-2xl border-2 border-purple-300 dark:border-purple-700 bg-purple-50 dark:bg-purple-950/30 p-6 my-8" data-print-hide>
+        <div className="flex items-start gap-4">
+          <div className="w-12 h-12 rounded-xl bg-purple-600 flex items-center justify-center shrink-0">
+            <Sparkles className="w-6 h-6 text-white" />
+          </div>
+          <div className="flex-1">
+            <h3 className="font-bold text-lg text-primary mb-1">Enhance this report</h3>
+            <p className="text-sm text-muted-foreground mb-3">
+              Automatically improve your product positioning based on the consumer feedback in this report.
+              Enhance creates a new research report with your description updated to address concerns,
+              double down on strengths, and prioritise the features that matter most to consumers.
+            </p>
+            <p className="text-xs text-muted-foreground mb-4">
+              Uses 1 research report credit. You can review and edit the enhanced description before running.
+            </p>
+            <Link href="/pricing">
+              <Button className="bg-purple-600 hover:bg-purple-700 text-white">
+                <Sparkles className="w-4 h-4 mr-1.5" />
+                Upgrade to Pro to Enhance
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div>
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={handleEnhance}
-        disabled={enhancing}
-        className="border-purple-300 dark:border-purple-700 text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-950/30"
-      >
-        <Sparkles className="w-4 h-4 mr-1.5" />
-        {enhancing ? "Enhancing..." : "Enhance"}
-      </Button>
-      {error && <p className="text-xs text-destructive mt-1">{error}</p>}
+    <div className="rounded-2xl border-2 border-purple-300 dark:border-purple-700 bg-purple-50 dark:bg-purple-950/30 p-6 my-8" data-print-hide>
+      <div className="flex items-start gap-4">
+        <div className="w-12 h-12 rounded-xl bg-purple-600 flex items-center justify-center shrink-0">
+          <Sparkles className="w-6 h-6 text-white" />
+        </div>
+        <div className="flex-1">
+          <h3 className="font-bold text-lg text-primary mb-1">Enhance this report</h3>
+          <p className="text-sm text-muted-foreground mb-3">
+            Automatically improve your product positioning based on the consumer feedback above.
+            Enhance creates a new research report with your description updated to address concerns,
+            double down on strengths, and prioritise the features consumers care about most.
+          </p>
+          <p className="text-xs text-muted-foreground mb-4">
+            Uses 1 research report credit. You can review and edit the enhanced description before running.
+          </p>
+          <Link href={enhanceUrl}>
+            <Button className="bg-purple-600 hover:bg-purple-700 text-white">
+              <Sparkles className="w-4 h-4 mr-1.5" />
+              Enhance this report
+            </Button>
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }
