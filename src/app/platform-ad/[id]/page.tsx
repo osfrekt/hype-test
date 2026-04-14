@@ -10,6 +10,8 @@ import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { Download, Link2, Trash2 } from "lucide-react";
 import type { PlatformAdResult, PlatformSpecificMetrics } from "@/types/platform-ad";
+import { EnhanceButton } from "@/components/enhance-button";
+import { UpgradeCta } from "@/components/upgrade-cta";
 import { createClient } from "@/lib/supabase/client";
 
 type FetchState =
@@ -410,6 +412,14 @@ function PlatformAdResultContent({
               <Download className="w-4 h-4 mr-1.5" />
               Download PDF
             </Button>
+            <EnhanceButton
+              originalResultId={result.id}
+              toolType="platform-ad"
+              originalInput={result.input as unknown as Record<string, unknown>}
+              topConcerns={result.topWeaknesses}
+              topPositives={result.topStrengths}
+              verbatims={result.verbatims?.map((v) => ({ text: v.quote }))}
+            />
           </div>
 
           {/* Header */}
@@ -625,6 +635,9 @@ function PlatformAdResultContent({
               </CardContent>
             </Card>
           )}
+
+          {/* Upgrade CTA */}
+          <UpgradeCta />
 
           {/* Methodology */}
           <Card className="border-teal/20 bg-teal/5 mb-8">

@@ -9,6 +9,7 @@ import { Download, Link2, RotateCcw, Trash2 } from "lucide-react";
 import type { ResearchResult } from "@/types/research";
 import { ReportView } from "@/components/report-view";
 import { PerformanceOverTime } from "@/components/performance-over-time";
+import { EnhanceButton } from "@/components/enhance-button";
 import { createClient } from "@/lib/supabase/client";
 
 type FetchState =
@@ -263,6 +264,15 @@ function ResearchResultContent({
               <RotateCcw className="w-4 h-4 mr-1.5" />
               Run again
             </Link>
+            <EnhanceButton
+              originalResultId={result.id}
+              toolType="research"
+              originalInput={result.input as unknown as Record<string, unknown>}
+              topConcerns={result.topConcerns}
+              topPositives={result.topPositives}
+              verbatims={result.verbatims?.map((v) => ({ text: (v as { text?: string; quote?: string }).text || (v as { quote?: string }).quote || "" }))}
+              featureImportance={result.featureImportance}
+            />
           </div>
           <ReportView result={result} />
 

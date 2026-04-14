@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { Download, Link2, Trash2 } from "lucide-react";
+import { EnhanceButton } from "@/components/enhance-button";
 import type { LogoTestResult, LogoOptionResult } from "@/types/logo-test";
 import { createClient } from "@/lib/supabase/client";
 
@@ -161,6 +162,11 @@ function LogoTestResultContent({
               <Download className="w-4 h-4 mr-1.5" />
               Download PDF
             </Button>
+            <EnhanceButton
+              originalResultId={result.id}
+              toolType="logo-test"
+              originalInput={result.input as unknown as Record<string, unknown>}
+            />
           </div>
 
           {/* Header */}

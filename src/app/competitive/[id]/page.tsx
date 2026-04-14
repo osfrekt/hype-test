@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { EnhanceButton } from "@/components/enhance-button";
 import type { CompetitiveResult } from "@/types/competitive";
 import { CompetitiveRadarChart } from "@/components/competitive-radar-chart";
 import { createClient } from "@/lib/supabase/client";
@@ -152,6 +153,17 @@ function CompetitiveResultContent({
       <Nav />
       <main className="flex-1 py-8">
         <div className="max-w-5xl mx-auto px-6">
+          {/* Action buttons */}
+          <div className="flex justify-end gap-2 mb-6" data-print-hide>
+            <EnhanceButton
+              originalResultId={result.id}
+              toolType="competitive"
+              originalInput={{ yours: result.yours.input, competitor: result.competitor.input } as unknown as Record<string, unknown>}
+              topConcerns={[result.yours.topConcern, result.competitor.topConcern].filter(Boolean)}
+              topPositives={[result.yours.topPositive, result.competitor.topPositive].filter(Boolean)}
+            />
+          </div>
+
           {/* Header */}
           <div className="mb-8">
             <div className="flex items-center gap-3 mb-2">

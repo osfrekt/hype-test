@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { Download, Link2, Trash2 } from "lucide-react";
+import { EnhanceButton } from "@/components/enhance-button";
 import type { AdTestResult, AdCreativeResult } from "@/types/ad-test";
 import { createClient } from "@/lib/supabase/client";
 
@@ -162,6 +163,14 @@ function AdTestResultContent({
               <Download className="w-4 h-4 mr-1.5" />
               Download PDF
             </Button>
+            <EnhanceButton
+              originalResultId={result.id}
+              toolType="ad-test"
+              originalInput={result.input as unknown as Record<string, unknown>}
+              topConcerns={result.results.flatMap((r) => r.topWeaknesses)}
+              topPositives={result.results.flatMap((r) => r.topStrengths)}
+              verbatims={result.results.flatMap((r) => r.keyTakeaways.map((t) => ({ text: t })))}
+            />
           </div>
 
           {/* Header */}

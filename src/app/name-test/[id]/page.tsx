@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { Download, Link2, Trash2 } from "lucide-react";
+import { EnhanceButton } from "@/components/enhance-button";
 import type { NameTestResult } from "@/types/name-test";
 import { createClient } from "@/lib/supabase/client";
 
@@ -164,6 +165,13 @@ function NameTestResultContent({
               <Download className="w-4 h-4 mr-1.5" />
               Download PDF
             </Button>
+            <EnhanceButton
+              originalResultId={result.id}
+              toolType="name-test"
+              originalInput={{ productDescription: result.productDescription, names: result.names.map((n) => n.name) }}
+              topConcerns={result.names.map((n) => n.topNegative).filter(Boolean)}
+              topPositives={result.names.map((n) => n.topPositive).filter(Boolean)}
+            />
           </div>
 
           {/* Header */}

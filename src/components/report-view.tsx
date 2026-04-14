@@ -7,6 +7,7 @@ import { Separator } from "@/components/ui/separator";
 import type { ResearchResult } from "@/types/research";
 import { ResultsCharts, SegmentCharts, HorizontalBarChart } from "@/components/results-charts";
 import Link from "next/link";
+import { UpgradeCta } from "@/components/upgrade-cta";
 
 function CollapsibleSection({ title, children, defaultOpen = false }: { title: string; children: React.ReactNode; defaultOpen?: boolean }) {
   const [open, setOpen] = useState(defaultOpen);
@@ -586,6 +587,9 @@ export function ReportView({
       <p className="text-[11px] text-muted-foreground leading-relaxed mb-8">
         AI-simulated research using peer-reviewed methodology. Results are directional and best used for hypothesis validation, not high-stakes business decisions.
       </p>
+
+      {/* Upgrade CTA */}
+      <UpgradeCta />
 
       {/* Methodology */}
       <Card className="border-teal/20 bg-teal/5">
