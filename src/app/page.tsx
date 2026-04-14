@@ -6,6 +6,7 @@ import { SampleReport } from "@/components/sample-report";
 import { EmailCapture } from "@/components/email-capture";
 import { Suspense } from "react";
 import { ReferralTracker } from "@/components/referral-tracker";
+import { ReportCounter } from "@/components/report-counter";
 
 export const metadata: Metadata = {
   title: "HypeTest | AI Consumer Research in Minutes",
@@ -55,6 +56,11 @@ export default function Home() {
                 How it works
                 <svg className="ml-2" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
               </Link>
+            </div>
+            <div data-animate="5" className="mt-6">
+              <Suspense>
+                <ReportCounter />
+              </Suspense>
             </div>
           </div>
         </section>
