@@ -105,10 +105,11 @@ function NewResearchForm() {
   const [feature3, setFeature3] = useState("");
   const [differentiator, setDifferentiator] = useState("");
   const [category, setCategory] = useState("");
-  const [priceUnit, setPriceUnit] = useState("per unit");
+  const [price, setPrice] = useState("");
+  const [priceUnit, setPriceUnit] = useState("");
   const [targetMarket, setTargetMarket] = useState("");
   const [competitors, setCompetitors] = useState("");
-  const [url, setUrl] = useState("");
+  const [url, setUrl] = useState("https://");
   const [isExtracting, setIsExtracting] = useState(false);
   const [extractError, setExtractError] = useState("");
   const [isRunning, setIsRunning] = useState(false);
@@ -231,7 +232,7 @@ function NewResearchForm() {
       score++;
     if (differentiator.trim().length > 10) score++;
     if (category) score++;
-    if (priceUnit.trim()) score++;
+    if (price.trim()) score++;
     if (targetMarket.trim()) score++;
     if (competitors.trim()) score++;
 
@@ -240,7 +241,7 @@ function NewResearchForm() {
     return { level: "Excellent", color: "text-emerald-600 dark:text-emerald-400", bg: "bg-emerald-500" };
   }, [
     productName, problem, feature1, feature2, feature3,
-    differentiator, category, priceUnit, targetMarket, competitors,
+    differentiator, category, price, targetMarket, competitors,
   ]);
 
   const qualityNudge = useMemo(() => {
@@ -248,12 +249,12 @@ function NewResearchForm() {
       return "Adding competitors enables head-to-head analysis";
     if (!targetMarket.trim())
       return "Specifying a target consumer skews the panel for more relevant results";
-    if (!priceUnit.trim())
+    if (!price.trim())
       return "Adding pricing improves willingness-to-pay accuracy";
     if ([feature1, feature2, feature3].filter((f) => f.trim()).length < 2)
       return "Adding more features gives consumers more to evaluate";
     return null;
-  }, [competitors, targetMarket, priceUnit, feature1, feature2, feature3]);
+  }, [competitors, targetMarket, price, feature1, feature2, feature3]);
 
   function toggleExample(field: string) {
     setShowExamples((prev) => {
@@ -265,7 +266,7 @@ function NewResearchForm() {
   }
 
   async function handleExtract() {
-    if (!url.trim()) return;
+    if (url.trim().length <= "https://".length) return;
     setIsExtracting(true);
     setExtractError("");
     try {
@@ -287,14 +288,10 @@ function NewResearchForm() {
       if (data.differentiator) setDifferentiator(data.differentiator);
       if (data.category) setCategory(data.category);
       if (data.priceMin != null && data.priceMax != null) {
-        setPriceUnit(`$${data.priceMin}-${data.priceMax}${data.priceUnit ? ` ${data.priceUnit}` : " per unit"}`);
+        setPrice(`$${data.priceMin}-${data.priceMax}`);
       }
       if (data.priceUnit) {
-        const unitOptions = ["per unit", "per pack", "per serving", "per month", "per subscription"];
-        const match = unitOptions.find((o) =>
-          data.priceUnit.toLowerCase().includes(o.replace("per ", ""))
-        );
-        setPriceUnit(match || "per unit");
+        setPriceUnit(data.priceUnit);
       }
 
       if (data.competitors) {
@@ -417,7 +414,8 @@ function NewResearchForm() {
         productDescription: assembledDescription,
       };
       if (category && category !== "other") payload.category = category;
-      if (priceUnit.trim()) payload.priceUnit = priceUnit.trim();
+      const combinedPrice = [price.trim(), priceUnit.trim()].filter(Boolean).join(" ");
+      if (combinedPrice) payload.priceUnit = combinedPrice;
       if (targetMarket.trim()) payload.targetMarket = targetMarket.trim();
       if (competitors.trim()) payload.competitors = competitors.trim();
 
@@ -519,13 +517,18 @@ function NewResearchForm() {
                     type="url"
                     placeholder="https://example.com/product"
                     value={url}
-                    onChange={(e) => setUrl(e.target.value)}
+                    onChange={(e) => {
+                      let v = e.target.value;
+                      if (v.startsWith("https://https://")) v = v.slice("https://".length);
+                      else if (v.startsWith("https://http://")) v = v.slice("https://".length);
+                      setUrl(v);
+                    }}
                     className="flex-1"
                   />
                   <Button
                     type="button"
                     onClick={handleExtract}
-                    disabled={isExtracting || !url.trim()}
+                    disabled={isExtracting || url.trim().length <= "https://".length}
                     className="shrink-0 bg-teal hover:bg-teal/90 text-white"
                   >
                     {isExtracting ? "Extracting..." : "Auto-fill"}
@@ -681,16 +684,27 @@ function NewResearchForm() {
                 </FieldGroup>
 
                 {/* Pricing */}
-                <FieldGroup
-                  label="Pricing"
->
-                  <Input
-                    placeholder="e.g. $39.99 per tub, $2.50 per can, $29.99/month"
-                    value={priceUnit}
-                    onChange={(e) => setPriceUnit(e.target.value)}
-                  />
-                  <p className="text-xs text-muted-foreground">
-                    Include the price range and what unit it applies to.
+                <FieldGroup label="Pricing">
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="text-xs font-medium text-muted-foreground mb-1 block">Price (USD)</label>
+                      <Input
+                        placeholder="e.g. $34.99"
+                        value={price}
+                        onChange={(e) => setPrice(e.target.value)}
+                      />
+                    </div>
+                    <div>
+                      <label className="text-xs font-medium text-muted-foreground mb-1 block">Unit</label>
+                      <Input
+                        placeholder="e.g. per tub, per can, per month"
+                        value={priceUnit}
+                        onChange={(e) => setPriceUnit(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-1.5">
+                    Examples: $2.50 per can, $34.99 per tub (30 servings), $29.99/month, $149 per pair
                   </p>
                 </FieldGroup>
 
