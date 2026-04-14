@@ -18,43 +18,20 @@ interface EnhanceButtonProps {
   variant?: "compact" | "full";
 }
 
-function buildEnhancedUrl(props: EnhanceButtonProps): string {
-  const { originalInput, topConcerns = [], topPositives = [], featureImportance = [] } = props;
-
-  const concernsList = topConcerns.slice(0, 5).join("; ");
-  const positivesList = topPositives.slice(0, 5).join("; ");
-  const topFeatures = featureImportance
-    .sort((a, b) => b.score - a.score)
-    .slice(0, 5)
-    .map((f) => f.feature)
-    .join("; ");
-
-  const originalDesc = String(originalInput.productDescription || "");
-  const enhancement = [
-    concernsList ? `Address these consumer concerns: ${concernsList}` : "",
-    positivesList ? `Double down on these strengths: ${positivesList}` : "",
-    topFeatures ? `Prioritise these features in messaging: ${topFeatures}` : "",
-  ].filter(Boolean).join("\n");
-
-  const enhancedDesc = `${originalDesc}\n\nENHANCED POSITIONING (based on consumer feedback):\n${enhancement}`;
-
-  const params = new URLSearchParams();
-  if (originalInput.productName) params.set("productName", String(originalInput.productName));
-  params.set("productDescription", enhancedDesc);
-  if (originalInput.category) params.set("category", String(originalInput.category));
-  if (originalInput.priceUnit) params.set("priceUnit", String(originalInput.priceUnit));
-  if (originalInput.targetMarket) params.set("targetMarket", String(originalInput.targetMarket));
-  if (originalInput.competitors) params.set("competitors", String(originalInput.competitors));
-  params.set("enhanced", "true");
-
-  return `/research/new?${params.toString()}`;
-}
-
 export function EnhanceButton(props: EnhanceButtonProps) {
-  const { variant = "compact" } = props;
+  const {
+    originalInput,
+    topConcerns = [],
+    topPositives = [],
+    featureImportance = [],
+    variant = "compact",
+  } = props;
+  const router = useRouter();
   const [userPlan, setUserPlan] = useState<string | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [checkDone, setCheckDone] = useState(false);
+  const [enhancing, setEnhancing] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const supabase = createClient();
@@ -81,10 +58,48 @@ export function EnhanceButton(props: EnhanceButtonProps) {
     });
   }, []);
 
+  async function handleEnhance() {
+    setError("");
+    setEnhancing(true);
+    try {
+      const res = await fetch("/api/enhance", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          originalInput,
+          topConcerns,
+          topPositives,
+          featureImportance,
+        }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        setError(data.error || "Enhancement failed");
+        setEnhancing(false);
+        return;
+      }
+
+      const enhanced = await res.json();
+      const params = new URLSearchParams();
+      if (enhanced.productName) params.set("productName", enhanced.productName);
+      if (enhanced.productDescription) params.set("productDescription", enhanced.productDescription);
+      if (enhanced.category) params.set("category", enhanced.category);
+      if (enhanced.priceUnit) params.set("priceUnit", enhanced.priceUnit);
+      if (enhanced.targetMarket) params.set("targetMarket", enhanced.targetMarket);
+      if (enhanced.competitors) params.set("competitors", enhanced.competitors);
+      params.set("enhanced", "true");
+
+      router.push(`/research/new?${params.toString()}`);
+    } catch {
+      setError("Enhancement failed. Please try again.");
+      setEnhancing(false);
+    }
+  }
+
   if (!checkDone) return null;
 
   const hasPro = userPlan === "pro" || userPlan === "team";
-  const enhanceUrl = buildEnhancedUrl(props);
 
   // ── Compact variant (top action bar) ──
   if (variant === "compact") {
@@ -101,12 +116,18 @@ export function EnhanceButton(props: EnhanceButtonProps) {
     }
 
     return (
-      <Link href={enhanceUrl}>
-        <Button size="sm" className="bg-purple-600 hover:bg-purple-700 text-white">
+      <div>
+        <Button
+          size="sm"
+          className="bg-purple-600 hover:bg-purple-700 text-white"
+          onClick={handleEnhance}
+          disabled={enhancing}
+        >
           <Sparkles className="w-4 h-4 mr-1.5" />
-          Enhance
+          {enhancing ? "Generating..." : "Enhance"}
         </Button>
-      </Link>
+        {error && <p className="text-xs text-destructive mt-1">{error}</p>}
+      </div>
     );
   }
 
@@ -121,12 +142,12 @@ export function EnhanceButton(props: EnhanceButtonProps) {
           <div className="flex-1">
             <h3 className="font-bold text-lg text-primary mb-1">Enhance this report</h3>
             <p className="text-sm text-muted-foreground mb-3">
-              Automatically improve your product positioning based on the consumer feedback in this report.
-              Enhance creates a new research report with your description updated to address concerns,
-              double down on strengths, and prioritise the features that matter most to consumers.
+              Use AI to rewrite your product positioning based on the consumer feedback in this report.
+              Enhance analyses the concerns, strengths, and feature preferences from your panel and
+              generates a clean, improved product description ready for a second research run.
             </p>
             <p className="text-xs text-muted-foreground mb-4">
-              Uses 1 research report credit. You can review and edit the enhanced description before running.
+              You can review and edit the enhanced description before running. Uses 1 research report credit.
             </p>
             <Link href="/pricing">
               <Button className="bg-purple-600 hover:bg-purple-700 text-white">
@@ -149,19 +170,22 @@ export function EnhanceButton(props: EnhanceButtonProps) {
         <div className="flex-1">
           <h3 className="font-bold text-lg text-primary mb-1">Enhance this report</h3>
           <p className="text-sm text-muted-foreground mb-3">
-            Automatically improve your product positioning based on the consumer feedback above.
-            Enhance creates a new research report with your description updated to address concerns,
-            double down on strengths, and prioritise the features consumers care about most.
+            Use AI to rewrite your product positioning based on the consumer feedback above.
+            Enhance analyses the concerns, strengths, and feature preferences from your panel and
+            generates a clean, improved product description ready for a second research run.
           </p>
           <p className="text-xs text-muted-foreground mb-4">
-            Uses 1 research report credit. You can review and edit the enhanced description before running.
+            You can review and edit the enhanced description before running. Uses 1 research report credit.
           </p>
-          <Link href={enhanceUrl}>
-            <Button className="bg-purple-600 hover:bg-purple-700 text-white">
-              <Sparkles className="w-4 h-4 mr-1.5" />
-              Enhance this report
-            </Button>
-          </Link>
+          <Button
+            className="bg-purple-600 hover:bg-purple-700 text-white"
+            onClick={handleEnhance}
+            disabled={enhancing}
+          >
+            <Sparkles className="w-4 h-4 mr-1.5" />
+            {enhancing ? "Generating enhanced description..." : "Enhance this report"}
+          </Button>
+          {error && <p className="text-xs text-destructive mt-2">{error}</p>}
         </div>
       </div>
     </div>

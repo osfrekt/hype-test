@@ -1,19 +1,22 @@
 import { createClient } from "@/lib/supabase/server";
-import { checkQuota, incrementUsage, getOrCreateUser } from "@/lib/users";
 import { isAdminEmail } from "@/lib/admin";
-import { runResearch } from "@/lib/research-engine";
-import { sendResearchReport } from "@/lib/email";
-import type { ResearchInput } from "@/types/research";
+import Anthropic from "@anthropic-ai/sdk";
 
-export const maxDuration = 300;
+export const maxDuration = 60;
+
+const anthropic = new Anthropic();
 
 interface EnhanceRequest {
-  originalResultId: string;
-  toolType: string;
-  originalInput: ResearchInput;
+  originalInput: {
+    productName?: string;
+    productDescription?: string;
+    category?: string;
+    priceUnit?: string;
+    targetMarket?: string;
+    competitors?: string;
+  };
   topConcerns: string[];
   topPositives: string[];
-  verbatims: { text: string }[];
   featureImportance: { feature: string; score: number }[];
 }
 
@@ -45,91 +48,61 @@ export async function POST(request: Request) {
       }
     }
 
-    // Quota check — counts as a research run
-    if (!admin) {
-      const quota = await checkQuota(email, "research");
-      if (!quota.allowed) {
-        return Response.json(
-          { error: `You've used all ${quota.limit} research runs this month.` },
-          { status: 403 }
-        );
-      }
-    }
-
     const body: EnhanceRequest = await request.json();
-    const { originalInput, topConcerns, topPositives, featureImportance } = body;
+    const { originalInput, topConcerns = [], topPositives = [], featureImportance = [] } = body;
 
     if (!originalInput?.productName || !originalInput?.productDescription) {
       return Response.json({ error: "Original input data is required" }, { status: 400 });
     }
 
-    // Build enhanced description that addresses the feedback
-    const concernsList = (topConcerns || []).slice(0, 5).join("; ");
-    const positivesList = (topPositives || []).slice(0, 5).join("; ");
-    const topFeatures = (featureImportance || [])
+    const topFeatures = featureImportance
       .sort((a, b) => b.score - a.score)
       .slice(0, 5)
-      .map((f) => f.feature)
-      .join("; ");
+      .map((f) => f.feature);
 
-    const enhancedDescription = `${originalInput.productDescription}
+    const response = await anthropic.messages.create({
+      model: "claude-haiku-4-5-20251001",
+      max_tokens: 1500,
+      messages: [
+        {
+          role: "user",
+          content: `You are a product positioning expert. A consumer research panel tested this product and provided feedback. Rewrite the product description to be stronger and more compelling, incorporating the learnings from the research.
 
-ENHANCED POSITIONING (based on consumer feedback from previous research):
-- Address these consumer concerns: ${concernsList || "None identified"}
-- Double down on these strengths: ${positivesList || "None identified"}
-- Prioritise these features in messaging: ${topFeatures || "None identified"}
-- This is a second-round test with an improved product positioning based on real consumer feedback.`;
+ORIGINAL PRODUCT DESCRIPTION:
+${originalInput.productDescription}
 
-    const enhancedInput: ResearchInput = {
-      ...originalInput,
-      productDescription: enhancedDescription,
-    };
+CONSUMER FEEDBACK SUMMARY:
+Top concerns (address these): ${topConcerns.slice(0, 5).join(" | ") || "None"}
+Top strengths (lean into these): ${topPositives.slice(0, 5).join(" | ") || "None"}
+Most valued features: ${topFeatures.join(", ") || "None identified"}
 
-    const result = await runResearch(enhancedInput);
-
-    // Persist to Supabase
-    const userName = user.user_metadata?.name || user.user_metadata?.full_name || null;
-
-    const { error: insertError } = await supabase.from("research_results").insert({
-      id: result.id,
-      input: enhancedInput,
-      panel_size: result.panelSize,
-      purchase_intent: result.purchaseIntent,
-      wtp_range: result.wtpRange,
-      feature_importance: result.featureImportance,
-      top_concerns: result.topConcerns,
-      top_positives: result.topPositives,
-      verbatims: result.verbatims,
-      methodology: result.methodology,
-      competitive_position: result.competitivePosition || null,
-      segment_breakdown: result.segmentBreakdown || null,
-      purchase_frequency: result.purchaseFrequency || null,
-      channel_preference: result.channelPreference || null,
-      nps_score: result.npsScore ?? null,
-      top_words: result.topWords || null,
-      usage_occasions: result.usageOccasions || null,
-      purchase_barriers: result.purchaseBarriers || null,
-      improvements: result.improvements || null,
-      price_sensitivity: result.priceSensitivity || null,
-      persona_deep_dives: result.personaDeepDives || null,
-      email,
-      user_name: userName,
-      status: result.status,
-      created_at: result.createdAt,
+INSTRUCTIONS:
+- Write a clean, polished product description that naturally addresses the concerns and emphasises the strengths
+- Do NOT include any meta-commentary, section headers like "ENHANCED POSITIONING", or references to "consumer feedback"
+- Do NOT list the concerns or strengths as bullet points
+- Write it as if this is the original product description - natural, compelling, ready to test
+- Keep approximately the same length as the original
+- Maintain the same tone and style as the original
+- Return ONLY the rewritten product description, nothing else`,
+        },
+      ],
     });
 
-    if (insertError) {
-      console.error("Failed to persist enhanced result:", insertError);
+    const enhancedDescription =
+      response.content[0].type === "text" ? response.content[0].text.trim() : "";
+
+    if (!enhancedDescription) {
+      return Response.json({ error: "Failed to generate enhanced description" }, { status: 500 });
     }
 
-    // Increment usage
-    await incrementUsage(email, "research").catch(console.error);
-    await getOrCreateUser(email).catch(console.error);
-
-    // Email the report
-    sendResearchReport(email, originalInput.productName, result.id).catch(console.error);
-
-    return Response.json(result);
+    return Response.json({
+      productName: originalInput.productName,
+      productDescription: enhancedDescription,
+      category: originalInput.category || "",
+      priceUnit: originalInput.priceUnit || "",
+      targetMarket: originalInput.targetMarket || "",
+      competitors: originalInput.competitors || "",
+    });
   } catch (error) {
     console.error("Enhance error:", error);
     return Response.json({ error: "Enhancement failed. Please try again." }, { status: 500 });
