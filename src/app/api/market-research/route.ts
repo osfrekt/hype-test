@@ -60,16 +60,23 @@ export async function POST(request: Request) {
       );
     }
 
-    const verificationToken = typeof body.verificationToken === "string" ? body.verificationToken : null;
-    if (!verificationToken) {
-      return Response.json({ error: "Email verification required" }, { status: 401 });
-    }
-    const verified = verifyVerificationToken(verificationToken);
-    if (!verified || verified.email !== email?.toLowerCase()) {
-      return Response.json(
-        { error: "Invalid or expired verification. Please verify your email again." },
-        { status: 401 }
-      );
+    // Email verification — skip for authenticated Supabase users
+    const supabase = await createClient();
+    const { data: { user: authUser } } = await supabase.auth.getUser();
+    const isAuthenticated = !!authUser?.email;
+
+    if (!isAuthenticated) {
+      const verificationToken = typeof body.verificationToken === "string" ? body.verificationToken : null;
+      if (!verificationToken) {
+        return Response.json({ error: "Email verification required" }, { status: 401 });
+      }
+      const verified = verifyVerificationToken(verificationToken);
+      if (!verified || verified.email !== email?.toLowerCase()) {
+        return Response.json(
+          { error: "Invalid or expired verification. Please verify your email again." },
+          { status: 401 }
+        );
+      }
     }
 
     if (email && isEmailRateLimited(email)) {
