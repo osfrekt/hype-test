@@ -1,53 +1,54 @@
-import { createCheckout } from "@lemonsqueezy/lemonsqueezy.js";
-import { initLemonSqueezy } from "@/lib/lemonsqueezy";
+import { stripe, PRICE_IDS } from "@/lib/stripe";
 import { getOrCreateUser } from "@/lib/users";
-
-const VARIANT_IDS: Record<string, string | undefined> = {
-  starter: process.env.LEMONSQUEEZY_STARTER_VARIANT_ID,
-  pro: process.env.LEMONSQUEEZY_PRO_VARIANT_ID,
-  team: process.env.LEMONSQUEEZY_TEAM_VARIANT_ID,
-};
 
 export async function POST(request: Request) {
   try {
     const { email, plan } = await request.json();
 
-    if (!email || !plan || !VARIANT_IDS[plan]) {
+    if (!email || !plan || !PRICE_IDS[plan]) {
       return Response.json({ error: "Invalid request" }, { status: 400 });
     }
 
     const user = await getOrCreateUser(email);
 
-    initLemonSqueezy();
-
-    const storeId = process.env.LEMONSQUEEZY_STORE_ID!;
-    const variantId = VARIANT_IDS[plan]!;
-
-    const checkout = await createCheckout(storeId, variantId, {
-      checkoutData: {
+    // Reuse existing Stripe customer or create new one
+    let customerId = user.stripe_customer_id;
+    if (!customerId) {
+      const customer = await stripe.customers.create({
         email,
         name: user.name || undefined,
-        custom: { email, plan },
+        metadata: { plan },
+      });
+      customerId = customer.id;
+    }
+
+    const session = await stripe.checkout.sessions.create({
+      customer: customerId,
+      mode: "subscription",
+      line_items: [
+        {
+          price: PRICE_IDS[plan]!,
+          quantity: 1,
+        },
+      ],
+      subscription_data: {
+        metadata: { email, plan },
       },
-      checkoutOptions: {
-        dark: false,
-        logo: true,
-        media: false,
-        desc: false,
-        discount: true,
-        buttonColor: "#0e7490",
+      automatic_tax: { enabled: true },
+      customer_update: {
+        address: "auto",
       },
-      productOptions: {
-        redirectUrl: "https://hypetest.ai/account?checkout=success",
-      },
+      tax_id_collection: { enabled: true },
+      success_url: "https://hypetest.ai/account?checkout=success",
+      cancel_url: "https://hypetest.ai/pricing",
+      metadata: { email, plan },
     });
 
-    const url = checkout.data?.data?.attributes?.url;
-    if (!url) {
+    if (!session.url) {
       return Response.json({ error: "Failed to create checkout" }, { status: 500 });
     }
 
-    return Response.json({ url });
+    return Response.json({ url: session.url });
   } catch (error) {
     console.error("Checkout error:", error);
     return Response.json({ error: "Failed to create checkout" }, { status: 500 });
