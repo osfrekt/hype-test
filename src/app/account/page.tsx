@@ -717,6 +717,11 @@ function AccountContent() {
                     size="sm"
                     disabled={slackStatus === "saving"}
                     onClick={async () => {
+                      const trimmed = slackWebhookUrl.trim();
+                      if (trimmed && !trimmed.startsWith("https://hooks.slack.com/")) {
+                        alert("Please enter a valid Slack webhook URL starting with https://hooks.slack.com/");
+                        return;
+                      }
                       setSlackStatus("saving");
                       try {
                         const res = await fetch("/api/integrations/slack", {
@@ -724,7 +729,7 @@ function AccountContent() {
                           headers: { "Content-Type": "application/json" },
                           body: JSON.stringify({
                             email: userEmail,
-                            webhookUrl: slackWebhookUrl.trim(),
+                            webhookUrl: trimmed,
                           }),
                         });
                         if (res.ok) {
@@ -752,9 +757,14 @@ function AccountContent() {
                       !slackWebhookUrl.trim() || slackStatus === "testing"
                     }
                     onClick={async () => {
+                      const trimmed = slackWebhookUrl.trim();
+                      if (!trimmed.startsWith("https://hooks.slack.com/")) {
+                        alert("Please enter a valid Slack webhook URL starting with https://hooks.slack.com/");
+                        return;
+                      }
                       setSlackStatus("testing");
                       try {
-                        const res = await fetch(slackWebhookUrl.trim(), {
+                        const res = await fetch(trimmed, {
                           method: "POST",
                           headers: { "Content-Type": "application/json" },
                           body: JSON.stringify({

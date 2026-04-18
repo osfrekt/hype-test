@@ -21,6 +21,7 @@ import {
 import { createClient } from "@/lib/supabase/client";
 import { UrlAutofill } from "@/components/url-autofill";
 import type { AdTestResult } from "@/types/ad-test";
+import { isValidEmail } from "@/lib/email-validation";
 
 const CATEGORIES = [
   { value: "food & beverage", label: "Food & Beverage" },
@@ -115,7 +116,7 @@ function NewAdTestForm() {
     brandName.trim() &&
     hasValidCreativeA &&
     hasValidCreativeB &&
-    email.trim() && email.includes("@") &&
+    isValidEmail(email) &&
     (isAuthUser || (userName.trim() && userCompany.trim() && userRole));
 
   async function handleSubmit(e: React.FormEvent) {
@@ -133,7 +134,7 @@ function NewAdTestForm() {
         const stages = [
           "Assembling consumer panel...",
           "Testing creative with consumers...",
-          "Analysing responses...",
+          "Analyzing responses...",
           "Complete!",
         ];
         const idx = stages.indexOf(s);

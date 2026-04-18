@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/select";
 import { createClient } from "@/lib/supabase/client";
 import { ResearchLoading } from "@/components/research-loading";
+import { isValidEmail } from "@/lib/email-validation";
 
 const CATEGORIES = [
   { value: "food & beverage", label: "Food & Beverage" },
@@ -185,7 +186,7 @@ function DiscoverNewForm() {
     category &&
     targetAudience.trim().length > 5 &&
     email.trim() &&
-    email.includes("@") &&
+    isValidEmail(email) &&
     userName.trim() &&
     userCompany.trim() &&
     userRole;
@@ -301,14 +302,14 @@ function DiscoverNewForm() {
     setIsRunning(true);
     setError("");
     setProgress(5);
-    setStage("Analysing your brand and audience...");
+    setStage("Analyzing your brand and audience...");
 
     let conceptIndex = 1;
     const progressInterval = setInterval(() => {
       setProgress((p) => Math.min(p + Math.random() * 6, 95));
       setStage((s) => {
         const stages = [
-          "Analysing your brand and audience...",
+          "Analyzing your brand and audience...",
           "Generating product concepts...",
           "Testing concepts with consumer panel...",
           `Evaluating concept ${conceptIndex} of 8...`,

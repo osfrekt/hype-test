@@ -21,6 +21,7 @@ import {
 import { createClient } from "@/lib/supabase/client";
 import type { AdPlatform } from "@/types/platform-ad";
 import type { PlatformAdResult } from "@/types/platform-ad";
+import { isValidEmail } from "@/lib/email-validation";
 
 const PLATFORMS: { value: AdPlatform; label: string }[] = [
   { value: "amazon", label: "Amazon" },
@@ -164,7 +165,7 @@ function NewPlatformAdForm() {
     platform &&
     brandName.trim() &&
     hasContent &&
-    email.trim() && email.includes("@") &&
+    isValidEmail(email) &&
     (isAuthUser || (userName.trim() && userCompany.trim() && userRole));
 
   async function handleSubmit(e: React.FormEvent) {
@@ -182,7 +183,7 @@ function NewPlatformAdForm() {
         const stages = [
           "Assembling consumer panel...",
           "Testing ad with consumers...",
-          "Analysing platform-specific responses...",
+          "Analyzing platform-specific responses...",
           "Generating platform tips...",
           "Complete!",
         ];

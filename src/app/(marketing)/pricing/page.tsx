@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { Fragment, useState, useEffect } from "react";
 import Link from "next/link";
 import { Nav } from "@/components/nav";
 import { Footer } from "@/components/footer";
@@ -458,9 +458,9 @@ export default function PricingPage() {
                 </thead>
                 <tbody>
                   {featureCategories.map((cat) => (
-                    <>
+                    <Fragment key={cat.category}>
                       {/* Category header */}
-                      <tr key={cat.category}>
+                      <tr>
                         <td
                           colSpan={5}
                           className="pt-6 pb-2 px-3 text-xs font-bold text-primary uppercase tracking-wider"
@@ -488,7 +488,7 @@ export default function PricingPage() {
                           })}
                         </tr>
                       ))}
-                    </>
+                    </Fragment>
                   ))}
                 </tbody>
               </table>

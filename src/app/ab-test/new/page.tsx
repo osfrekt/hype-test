@@ -21,6 +21,7 @@ import {
 import { createClient } from "@/lib/supabase/client";
 import { UrlAutofill } from "@/components/url-autofill";
 import type { AbTestResult } from "@/types/ab-test";
+import { isValidEmail } from "@/lib/email-validation";
 
 const CATEGORIES = [
   { value: "food & beverage", label: "Food & Beverage" },
@@ -115,7 +116,7 @@ function NewAbTestForm() {
   const isFormValid =
     nameA.trim() && descA.trim().length > 10 &&
     nameB.trim() && descB.trim().length > 10 &&
-    email.trim() && email.includes("@") &&
+    isValidEmail(email) &&
     (isAuthUser || (userName.trim() && userCompany.trim() && userRole));
 
   async function handleSubmit(e: React.FormEvent) {
@@ -135,7 +136,7 @@ function NewAbTestForm() {
           "Testing Concept A with panel...",
           "Testing Concept B with panel...",
           "Comparing purchase intent...",
-          "Analysing feature preferences...",
+          "Analyzing feature preferences...",
           "Determining winner...",
         ];
         const idx = stages.indexOf(s);

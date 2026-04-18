@@ -196,10 +196,10 @@ function DiscoverResultContent({
     setIsRunningRound(true);
     setRoundError("");
     setRoundProgress(5);
-    setRoundStage("Analysing top performers...");
+    setRoundStage("Analyzing top performers...");
 
     const stages = [
-      "Analysing top performers...",
+      "Analyzing top performers...",
       "Evolving winning concepts...",
       "Testing new concepts with consumer panel...",
       "Evaluating concept 1 of 8...",

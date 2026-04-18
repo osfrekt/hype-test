@@ -21,6 +21,7 @@ import {
 import { createClient } from "@/lib/supabase/client";
 import { UrlAutofill } from "@/components/url-autofill";
 import type { PricingTestResult } from "@/types/pricing-test";
+import { isValidEmail } from "@/lib/email-validation";
 
 const CATEGORIES = [
   { value: "food & beverage", label: "Food & Beverage" },
@@ -107,7 +108,7 @@ function PricingTestForm() {
     productDescription.trim().length > 10 &&
     validPrices.length >= 2 &&
     email.trim() &&
-    email.includes("@") &&
+    isValidEmail(email) &&
     (isAuthUser || (userName.trim() && userCompany.trim() && userRole));
 
   async function handleSubmit(e: React.FormEvent) {
@@ -127,7 +128,7 @@ function PricingTestForm() {
           "Testing price point 1...",
           "Testing price point 2...",
           "Testing price point 3...",
-          "Analysing price sensitivity...",
+          "Analyzing price sensitivity...",
           "Computing demand curve...",
           "Finding optimal price...",
         ];

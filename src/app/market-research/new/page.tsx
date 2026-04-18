@@ -21,6 +21,7 @@ import {
 import { createClient } from "@/lib/supabase/client";
 import { UrlAutofill } from "@/components/url-autofill";
 import type { MarketResearchResult } from "@/types/market-research";
+import { isValidEmail } from "@/lib/email-validation";
 
 const GEOGRAPHIES = [
   { value: "US", label: "United States" },
@@ -102,7 +103,7 @@ function NewMarketResearchForm() {
     }
   }, [isAuthUser]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const isFormValid = category.trim() && geography && email.trim() && email.includes("@") && (isAuthUser || (userName.trim() && userCompany.trim() && userRole));
+  const isFormValid = category.trim() && geography && isValidEmail(email) && (isAuthUser || (userName.trim() && userCompany.trim() && userRole));
 
   async function handleSendVerification() {
     setVerificationStep("verifying");

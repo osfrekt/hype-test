@@ -20,6 +20,7 @@ import {
 import { createClient } from "@/lib/supabase/client";
 import { ResearchLoading } from "@/components/research-loading";
 import type { ResearchResult } from "@/types/research";
+import { isValidEmail } from "@/lib/email-validation";
 
 const CATEGORIES = [
   { value: "food & beverage", label: "Food & Beverage" },
@@ -237,7 +238,7 @@ function NewResearchForm() {
     return parts.join(" ");
   }, [problem, feature1, feature2, feature3, differentiator]);
 
-  const isFormValid = productName.trim() && assembledDescription.length > 10 && email.trim() && email.includes("@") && (isAuthUser || (userName.trim() && userCompany.trim() && userRole));
+  const isFormValid = productName.trim() && assembledDescription.length > 10 && isValidEmail(email) && (isAuthUser || (userName.trim() && userCompany.trim() && userRole));
 
   // Quality indicator
   const quality = useMemo(() => {
@@ -414,7 +415,7 @@ function NewResearchForm() {
           "Generating consumer personas...",
           "Running structured surveys...",
           "Simulating purchase decisions...",
-          "Analysing feature preferences...",
+          "Analyzing feature preferences...",
           "Aggregating panel responses...",
           "Computing willingness-to-pay...",
           "Generating consumer insights...",
@@ -785,9 +786,9 @@ function NewResearchForm() {
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
                           required
-                          className={showErrors && (!email.trim() || !email.includes("@")) ? "border-red-500 dark:border-red-400" : ""}
+                          className={showErrors && (!email.trim() || !isValidEmail(email)) ? "border-red-500 dark:border-red-400" : ""}
                         />
-                        {showErrors && (!email.trim() || !email.includes("@")) && (
+                        {showErrors && (!email.trim() || !isValidEmail(email)) && (
                           <p className="text-xs text-red-500 mt-1">Required</p>
                         )}
                       </div>

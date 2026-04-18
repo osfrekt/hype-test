@@ -21,6 +21,7 @@ import {
 import { createClient } from "@/lib/supabase/client";
 import { UrlAutofill } from "@/components/url-autofill";
 import type { LogoTestResult } from "@/types/logo-test";
+import { isValidEmail } from "@/lib/email-validation";
 
 const CATEGORIES = [
   { value: "food & beverage", label: "Food & Beverage" },
@@ -180,7 +181,7 @@ function NewLogoTestForm() {
   const isFormValid =
     brandName.trim() &&
     hasValidLogos &&
-    email.trim() && email.includes("@") &&
+    isValidEmail(email) &&
     (isAuthUser || (userName.trim() && userCompany.trim() && userRole));
 
   async function handleSubmit(e: React.FormEvent) {
@@ -202,7 +203,7 @@ function NewLogoTestForm() {
           logoIndex++;
           return current;
         }
-        return "Analysing responses...";
+        return "Analyzing responses...";
       });
     }, 6000);
 
@@ -454,7 +455,7 @@ function NewLogoTestForm() {
                       )}
                     </Label>
                     <Textarea
-                      placeholder={describingLogo === idx ? "Analysing your logo..." : "Describe the logo in detail: typeface, imagery, layout, colours..."}
+                      placeholder={describingLogo === idx ? "Analyzing your logo..." : "Describe the logo in detail: typeface, imagery, layout, colours..."}
                       value={logo.description}
                       onChange={(e) => updateLogo(idx, { description: e.target.value })}
                       rows={3}

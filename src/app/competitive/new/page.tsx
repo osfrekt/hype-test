@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { createClient } from "@/lib/supabase/client";
+import { isValidEmail } from "@/lib/email-validation";
 
 const CATEGORIES = [
   { value: "food & beverage", label: "Food & Beverage" },
@@ -197,7 +198,7 @@ function CompetitiveForm() {
   const isFormValid = useMemo(() => {
     const hasYours = yourName.trim() && yourDesc.trim().length > 10;
     const hasComp = compName.trim() && compDesc.trim().length > 10;
-    const hasUser = email.trim() && email.includes("@") && (isAuthUser || (userName.trim() && userCompany.trim() && userRole));
+    const hasUser = isValidEmail(email) && (isAuthUser || (userName.trim() && userCompany.trim() && userRole));
     return hasYours && hasComp && hasUser;
   }, [yourName, yourDesc, compName, compDesc, email, userName, userCompany, userRole, isAuthUser]);
 

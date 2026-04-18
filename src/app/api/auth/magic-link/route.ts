@@ -12,8 +12,13 @@ export async function POST(request: Request) {
     return Response.json({ error: "Too many requests" }, { status: 429 });
   }
 
-  const { email } = await request.json();
-  if (!email || !email.includes("@")) {
+  let email: unknown;
+  try {
+    ({ email } = await request.json());
+  } catch {
+    return Response.json({ error: "Invalid request body" }, { status: 400 });
+  }
+  if (typeof email !== "string" || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
     return Response.json({ error: "Valid email required" }, { status: 400 });
   }
 

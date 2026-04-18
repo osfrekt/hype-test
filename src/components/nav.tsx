@@ -236,6 +236,7 @@ export function Nav() {
           <button
             onClick={cycleTheme}
             title={themeLabel}
+            aria-label={`Switch theme. Current: ${themeLabel}`}
             className="p-2 rounded-lg hover:bg-muted transition-colors text-foreground"
           >
             {themeIcon}
@@ -265,7 +266,8 @@ export function Nav() {
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
             className="md:hidden p-2 rounded-lg hover:bg-muted transition-colors text-foreground"
-            aria-label="Menu"
+            aria-label={mobileOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-expanded={mobileOpen}
           >
             {mobileOpen ? (
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
